@@ -59,6 +59,7 @@ const MateriasConOpcionales = [CalculoDIV, CalculoDIVV, P1, GAL1, MD1, P2, Ec, F
 const MateriasSinOpcionales = [MD1, CalculoDIV, P1, GAL1, CalculoDIVV, P2, GAL2, MD2, LG, PYE, MN, P4, TP, IIO, P3, AC, TL, SO, FBD, RC, IIS, IPF, PL, PIS]
 const MateriasPrimero = [LG, P4, FVC, IIO, TL, SO, FO, ICG, CG,IIS, IPF, PL, AA, FSI];
 const MateriasSegundo = [P2, MN, ED, TP, P3, AC, OCA, FBD, AE, RC, CGA, PIS];
+const MateriasCalidadLibre = [F1, CalculoDIV, CalculoDIVV, CV, FVC, GAL1, GAL2, ED, MD1, MD2, PYE]
 let MateriasPersona = [];
 let creditos = 0;
 let opcionales = true;
@@ -171,6 +172,9 @@ function actualizar(){
         case "segundo":
             segundo();
             break;
+        case "libre":
+            libre();
+            break;
 
         default:
             ambos();
@@ -195,6 +199,7 @@ function primero(){
     document.getElementById('primero').style.backgroundColor = "lightskyblue"
     document.getElementById('segundo').style.backgroundColor = "white"
     document.getElementById('ambos').style.backgroundColor = "white"
+    document.getElementById('libre').style.backgroundColor = "white"
 
     Materias.forEach( (materia) => {
         document.getElementById(materia.nombre).style.display = "block";
@@ -212,6 +217,7 @@ function segundo(){
     document.getElementById('primero').style.backgroundColor = "white"
     document.getElementById('segundo').style.backgroundColor = "lightskyblue"
     document.getElementById('ambos').style.backgroundColor = "white"
+    document.getElementById('libre').style.backgroundColor = "white"
 
     Materias.forEach( (materia) => {
         document.getElementById(materia.nombre).style.display = "block";
@@ -229,12 +235,31 @@ function ambos(){
     document.getElementById('primero').style.backgroundColor = "white"
     document.getElementById('segundo').style.backgroundColor = "white"
     document.getElementById('ambos').style.backgroundColor = "lightskyblue"
+    document.getElementById('libre').style.backgroundColor = "white"
 
     Materias.forEach( (materia) => {
         document.getElementById(materia.nombre).style.display = "block";
     } )
 
     semestreAct = "ambos";
+    localStorage.setItem('semestre', semestreAct);
+
+}
+
+function libre(){
+    document.getElementById('primero').style.backgroundColor = "white"
+    document.getElementById('segundo').style.backgroundColor = "white"
+    document.getElementById('ambos').style.backgroundColor = "white"
+    document.getElementById('libre').style.backgroundColor = "lightskyblue"
+
+    Materias.forEach( (materia) => {
+        document.getElementById(materia.nombre).style.display = "none";
+    } )
+    MateriasCalidadLibre.forEach( (materia) => {
+        document.getElementById(materia.nombre).style.display = "block";
+    } )
+
+    semestreAct = "libre";
     localStorage.setItem('semestre', semestreAct);
 
 }
