@@ -1,6 +1,4 @@
 //falta ver Matematica Inicial
-//falta ver tema de salvar curso (4 estados de cada materia)
-//revisar font del h1 para celulares chicos
 //agregar logica para ver cuando se activa y desactiva el PG
 
 class Materia {
@@ -46,7 +44,7 @@ const IIS = new Materia("IIS", 10, [TP.curso, FBD.curso, P4.curso])
 const IPF = new Materia("IPF", 7, [TL, P2, LG, MD1]) 
 const PL = new Materia("PL", 10, [TL, P3, MD2, LG]) 
 const PIS = new Materia("PIS", 15, [IIS.curso, P4]) 
-const AA = new Materia("AA", 12, [LG, PYE, P3, FBD, P4, MD2]) 
+const AA = new Materia("AA", 12, [LG, PYE, P3.curso, FBD.curso, P4, MD2]) 
 const AE = new Materia("AE", 10, [P4, PYE, IIO]) 
 const ICG = new Materia("ICG", 10, [P3, P4, GAL2.curso, GAL1]) 
 const CGA = new Materia("CGA", 12, [ICG.curso]) 
