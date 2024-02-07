@@ -33,7 +33,7 @@ main{
 }
 
 .section{
-    height: 100px;
+    height: 120px;
     display: flex;
     justify-content: space-around;
     align-items: center;
@@ -99,9 +99,10 @@ transform: scale(1.05);
     }
     .section button{
         margin: 10px 0 10px 0;
+        width: 90%;
     }
     header h1{
-        font-size: 20px;
+        font-size: 17px;
     }
   }
 
