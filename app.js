@@ -39,14 +39,45 @@ const IIS = new Materia("IIS", 10, [TP, FBD])
 const IPF = new Materia("IPF", 7, [TL, P2, LG])
 const PL = new Materia("PL", 10, [TL, P3, MD2, LG])
 const PIS = new Materia("PIS", 15, [IIS])
+const AA = new Materia("AA", 12, [LG, PYE, P3, FBD, P4, MD2])
+const AE = new Materia("AE", 10, [P4, PYE, IIO])
+const ICG = new Materia("ICG", 10, [P3, P4, GAL2])
+const CGA = new Materia("CGA", 12, [ICG])
+const CG = new Materia("CG", 10, [MD2, P3])
+const FSI = new Materia("FSI", 12, [SO, FBD, P3, LG, RC])
 
-const Materias = [CalculoDIV, CalculoDIVV, P1, GAL1, MD1, P2, Ec, F1, GAL2, PYE, MD2, LG, MN, P4, IIO, P3, AC, CV, ED, TL, FVC, SO, FO, OCA, FBD, RC, TP, IIS, IPF, PL, PIS];
+let Materias = [CalculoDIV, CalculoDIVV, P1, GAL1, MD1, P2, Ec, F1, GAL2, PYE, MD2, LG, MN, P4, IIO, P3, AC, CV, ED, TL, FVC, SO, FO, OCA, FBD, RC, TP, IIS, IPF, PL, PIS, AA, AE, ICG, CGA, CG, FSI];
+const MateriasConOpcionales = [CalculoDIV, CalculoDIVV, P1, GAL1, MD1, P2, Ec, F1, GAL2, PYE, MD2, LG, MN, P4, IIO, P3, AC, CV, ED, TL, FVC, SO, FO, OCA, FBD, RC, TP, IIS, IPF, PL, PIS, AA, AE, ICG, CGA, CG, FSI];
+const MateriasSinOpcionales = [MD1, CalculoDIV, P1, GAL1, CalculoDIVV, P2, GAL2, MD2, LG, PYE, MN, P4, TP, IIO, P3, AC, TL, SO, FBD, RC, IIS, IPF, PL, PIS]
+const MateriasPrimero = [LG, P4, FVC, IIO, TL, SO, FO, ICG, CG,IIS, IPF, PL, AA, FSI];
+const MateriasSegundo = [P2, MN, ED, TP, P3, AC, OCA, FBD, AE, RC, CGA, PIS];
 let MateriasPersona = [];
 let creditos = 0;
+let opcionales = true;
+let semestreAct = "ambos";
 
 function reset(){
     MateriasPersona = [];
     actualizar();
+}
+
+function toggleOpcionales(){
+    if (opcionales){
+        Materias.forEach( (materia) => {
+            document.getElementById(materia.nombre).style.display = "none";
+        } )
+        Materias = MateriasSinOpcionales;
+        actualizar();
+        opcionales = false;
+    }else{
+        Materias.forEach( (materia) => {
+            document.getElementById(materia.nombre).style.display = "none";
+        } )
+        Materias = MateriasConOpcionales;
+        actualizar();
+        opcionales = true;
+    }
+    
 }
 
 function toggleMateria(nombre){
@@ -64,6 +95,8 @@ function toggleMateria(nombre){
 function actualizar(){
 
     Materias.forEach( (materia) => {
+
+        document.getElementById(materia.nombre).style.display = "block";
         
         let estanTodas = true;
 
@@ -100,6 +133,20 @@ function actualizar(){
 
     document.getElementById('titulo').textContent = `Materias | Créditos: ${creditos}`
 
+    switch (semestreAct) {
+        case "primero":
+            primero();
+            break;
+    
+        case "segundo":
+            segundo();
+            break;
+            
+        default:
+            ambos();
+            break;
+    }
+
 }
 
 function primero(){
@@ -107,13 +154,15 @@ function primero(){
     document.getElementById('segundo').style.backgroundColor = "white"
     document.getElementById('ambos').style.backgroundColor = "white"
 
-    document.querySelectorAll('[class="section"] button').forEach( (elemento) => {
-        elemento.style.display = "block";
+    Materias.forEach( (materia) => {
+        document.getElementById(materia.nombre).style.display = "block";
     } )
-    document.querySelectorAll('[class="segundo"]').forEach( (elemento) => {
-        elemento.style.display = "none";
+    MateriasSegundo.forEach( (materia) => {
+        document.getElementById(materia.nombre).style.display = "none";
     } )
     
+    semestreAct = "primero";
+
 }
 
 function segundo(){
@@ -121,12 +170,15 @@ function segundo(){
     document.getElementById('segundo').style.backgroundColor = "lightskyblue"
     document.getElementById('ambos').style.backgroundColor = "white"
 
-    document.querySelectorAll('[class="section"] button').forEach( (elemento) => {
-        elemento.style.display = "block";
+    Materias.forEach( (materia) => {
+        document.getElementById(materia.nombre).style.display = "block";
     } )
-    document.querySelectorAll('[class="primero"]').forEach( (elemento) => {
-        elemento.style.display = "none";
+    MateriasPrimero.forEach( (materia) => {
+        document.getElementById(materia.nombre).style.display = "none";
     } )
+
+    semestreAct = "segundo";
+
 }
 
 function ambos(){
@@ -134,8 +186,8 @@ function ambos(){
     document.getElementById('segundo').style.backgroundColor = "white"
     document.getElementById('ambos').style.backgroundColor = "lightskyblue"
 
-    document.querySelectorAll('[class="section"] button').forEach( (elemento) => {
-        elemento.style.display = "block";
+    Materias.forEach( (materia) => {
+        document.getElementById(materia.nombre).style.display = "block";
     } )
 }
 
