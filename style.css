@@ -65,6 +65,29 @@ transform: scale(1.05);
     transform: scale(0.95);
 }
 
+.semestres{
+    width: 100%;
+    display: flex;
+}
+.semestres button{
+    width: calc( 100% / 3 );
+    height: 40px;   
+}
+
+.semestre{
+    border: none;
+    border-bottom: 1px solid black;
+    border-right: 1px solid black;
+}
+
+.no-br{
+    border-right: none;
+}
+
+.activo{
+    background-color: lightskyblue;
+}
+
 @media (max-width: 630px) {
     .section{
         flex-direction: column;

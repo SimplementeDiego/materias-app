@@ -102,4 +102,41 @@ function actualizar(){
 
 }
 
+function primero(){
+    document.getElementById('primero').style.backgroundColor = "lightskyblue"
+    document.getElementById('segundo').style.backgroundColor = "white"
+    document.getElementById('ambos').style.backgroundColor = "white"
+
+    document.querySelectorAll('[class="section"] button').forEach( (elemento) => {
+        elemento.style.display = "block";
+    } )
+    document.querySelectorAll('[class="segundo"]').forEach( (elemento) => {
+        elemento.style.display = "none";
+    } )
+    
+}
+
+function segundo(){
+    document.getElementById('primero').style.backgroundColor = "white"
+    document.getElementById('segundo').style.backgroundColor = "lightskyblue"
+    document.getElementById('ambos').style.backgroundColor = "white"
+
+    document.querySelectorAll('[class="section"] button').forEach( (elemento) => {
+        elemento.style.display = "block";
+    } )
+    document.querySelectorAll('[class="primero"]').forEach( (elemento) => {
+        elemento.style.display = "none";
+    } )
+}
+
+function ambos(){
+    document.getElementById('primero').style.backgroundColor = "white"
+    document.getElementById('segundo').style.backgroundColor = "white"
+    document.getElementById('ambos').style.backgroundColor = "lightskyblue"
+
+    document.querySelectorAll('[class="section"] button').forEach( (elemento) => {
+        elemento.style.display = "block";
+    } )
+}
+
 actualizar();
