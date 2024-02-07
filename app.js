@@ -141,7 +141,7 @@ function actualizar(){
         case "segundo":
             segundo();
             break;
-            
+
         default:
             ambos();
             break;
@@ -189,6 +189,9 @@ function ambos(){
     Materias.forEach( (materia) => {
         document.getElementById(materia.nombre).style.display = "block";
     } )
+
+    semestreAct = "ambos";
+
 }
 
 actualizar();
