@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Materias</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    
+    <header>
+
+        <h1 id="titulo">Materias | Créditos: 0</h1>
+        <button class="reset" onclick="reset()">Reset</button>
+
+    </header>
+
+    <main>
+
+        <div class="section no-mt">
+
+            <button onclick="toggleMateria('MD1')" id="MD1" >Matemática Discreta 1 (9)</button>
+            <button onclick="toggleMateria('CalculoDIV')" id="CalculoDIV" >Cálculo DIV (13)</button>
+            <button onclick="toggleMateria('P1')" id="P1" >Programación 1 (10)</button>
+            <button onclick="toggleMateria('GAL1')" id="GAL1" >Geometría y Álgebra Lineal 1 (9)</button>
+            <button onclick="toggleMateria('Ec')" id="Ec" >Economía (7)</button>
+            <button onclick="toggleMateria('F1')" id="F1" >Física 1 (10)</button>
+
+        </div>
+        <div class="section">
+
+            <button onclick="toggleMateria('CalculoDIVV')" id="CalculoDIVV">Cálculo DIVV (13)</button>
+            <button onclick="toggleMateria('P2')" id="P2">Programación 2 (12)</button>
+            <button onclick="toggleMateria('GAL2')" id="GAL2">Geometría y Álgebra Lineal 2 (9)</button>
+            <button onclick="toggleMateria('MD2')" id="MD2">Matemática Discreta 2 (9)</button>
+            <button onclick="toggleMateria('LG')" id="LG">Lógica (12)</button>
+
+        </div>
+        <div class="section">
+            <button onclick="toggleMateria('PYE')" id="PYE">Probabilidad y Estadistica (10)</button>
+            <button onclick="toggleMateria('MN')" id="MN">Métodos Numéricos (8)</button>
+            <button onclick="toggleMateria('P4')" id="P4">Programación 4 (15)</button>
+            <button onclick="toggleMateria('CV')" id="CV">Cálculo Vectorial (10)</button>
+            <button onclick="toggleMateria('ED')" id="ED">Int. a las Ec. Diferenciales (10)</button>
+        </div>
+        <div class="section">
+            <button onclick="toggleMateria('TP')" id="TP">Taller de Programación (15)</button>
+            <button onclick="toggleMateria('FVC')" id="FVC">Func. de Variables Complejas (5)</button>
+            <button onclick="toggleMateria('IIO')" id="IIO">Int. a la Investigación de Operaciones (10)</button>
+            <button onclick="toggleMateria('P3')" id="P3">Programación 3 (15)</button>
+            <button onclick="toggleMateria('AC')" id="AC">Arq. de Computadoras (12)</button>
+        </div>
+        <div class="section">
+            <button onclick="toggleMateria('TL')" id="TL">Teoría de Lenguajes (12)</button>
+            <button onclick="toggleMateria('SO')" id="SO">Sistemas Operativos (12)</button>
+            <button onclick="toggleMateria('FO')" id="FO">Fundamentos de Optimización (6)</button>
+            <button onclick="toggleMateria('OCA')" id="OCA">Optimización Continua y Aplicaciones (10)</button>
+            <button onclick="toggleMateria('FBD')" id="FBD">Fundamentos de Bases de Datos (15)</button>
+        </div>
+        <div class="section">
+            <button onclick="toggleMateria('RC')" id="RC">Redes de Computadoras (12)</button>
+            <button onclick="toggleMateria('IIS')" id="IIS">Int. a la Ingeniería de Software (10)</button>
+            <button onclick="toggleMateria('IPF')" id="IPF">Int. a la Programación Funcional (7)</button>
+            <button onclick="toggleMateria('PL')" id="PL">Programación Lógica (10)</button>
+        </div>
+        <div class="section">
+            <button onclick="toggleMateria('PIS')" id="PIS">Proyecto de Ingeniería de Software (15)</button>
+        </div>
+
+    </main>
+
+    <script src="./app.js"></script>
+
+</body>
+</html>
