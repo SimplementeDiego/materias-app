@@ -1,3 +1,8 @@
+//falta ver Matematica Inicial
+//falta ver tema de salvar curso (4 estados de cada materia)
+//revisar font del h1 para celulares chicos
+//agregar logica para ver cuando se activa y desactiva el PG
+
 class Materia {
 
     constructor(nombre, creditos, previas){
@@ -45,6 +50,7 @@ const ICG = new Materia("ICG", 10, [P3, P4, GAL2])
 const CGA = new Materia("CGA", 12, [ICG])
 const CG = new Materia("CG", 10, [MD2, P3])
 const FSI = new Materia("FSI", 12, [SO, FBD, P3, LG, RC])
+const PG = new Materia("PG", 30, [P3, P4, TL, SO, IIO, IIS, AC, RC, TP, PIS, MN, FBD]) //falta agregar
 
 let Materias = [CalculoDIV, CalculoDIVV, P1, GAL1, MD1, P2, Ec, F1, GAL2, PYE, MD2, LG, MN, P4, IIO, P3, AC, CV, ED, TL, FVC, SO, FO, OCA, FBD, RC, TP, IIS, IPF, PL, PIS, AA, AE, ICG, CGA, CG, FSI];
 const MateriasConOpcionales = [CalculoDIV, CalculoDIVV, P1, GAL1, MD1, P2, Ec, F1, GAL2, PYE, MD2, LG, MN, P4, IIO, P3, AC, CV, ED, TL, FVC, SO, FO, OCA, FBD, RC, TP, IIS, IPF, PL, PIS, AA, AE, ICG, CGA, CG, FSI];
@@ -147,6 +153,18 @@ function actualizar(){
             break;
     }
 
+    localStorage.setItem('semestre', semestreAct);
+    localStorage.setItem('materias', JSON.stringify(MateriasPersona))
+
+}
+
+function firstLoad(){
+    if(localStorage.getItem('semestre')){
+        semestreAct = localStorage.getItem('semestre');
+    }
+    if(localStorage.getItem('materias')){
+        MateriasPersona = JSON.parse(localStorage.getItem('materias'))
+    }
 }
 
 function primero(){
@@ -162,6 +180,7 @@ function primero(){
     } )
     
     semestreAct = "primero";
+    localStorage.setItem('semestre', semestreAct);
 
 }
 
@@ -178,6 +197,7 @@ function segundo(){
     } )
 
     semestreAct = "segundo";
+    localStorage.setItem('semestre', semestreAct);
 
 }
 
@@ -191,7 +211,9 @@ function ambos(){
     } )
 
     semestreAct = "ambos";
+    localStorage.setItem('semestre', semestreAct);
 
 }
 
+firstLoad();
 actualizar();
