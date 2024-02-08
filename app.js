@@ -195,7 +195,7 @@ function firstLoad(){
         MateriasPersona = JSON.parse(localStorage.getItem('materias'))
     }
     document.getElementById('MI').style.display = "none";
-    if (localStorage.getItem('MI') != "none"){
+    if (localStorage.getItem('MI') == "block"){
         toggleMI();
     }
 }
