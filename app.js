@@ -2,6 +2,10 @@
 
 //comentar y revisar codigo
 
+//dar clic muestre las previas
+
+//cambiar estructura del HTML para poder tener un titulo en cada section
+
 class Materia {
 
     constructor(nombre, creditos, previas){
@@ -52,13 +56,15 @@ const CGA = new Materia("CGA", 12, [ICG.curso])
 const CG = new Materia("CG", 10, [MD2, P3, MD1]) 
 const FSI = new Materia("FSI", 12, [SO, FBD, P3, LG, RC]) //hasta aca revise
 const PG = new Materia("PG", 30, [P3, P4, TL, SO, IIO, IIS, AC, RC, TP, PIS, MN, FBD]) //falta agregar
-const MI = new Materia("MI", 4, []);
+const Aux = new Materia("Aux", 4, []);
+const MI = new Materia("MI", 4, [Aux]);
+
 
 //Revisar todos otra vez
 
-let Materias = [CalculoDIV, CalculoDIVV, P1, GAL1, MD1, P2, Ec, F1, GAL2, PYE, MD2, LG, MN, P4, IIO, P3, AC, CV, ED, TL, FVC, SO, FO, OCA, FBD, RC, TP, IIS, IPF, PL, PIS, AA, AE, ICG, CGA, CG, FSI];
-let MateriasConOpcionales = [CalculoDIV, CalculoDIVV, P1, GAL1, MD1, P2, Ec, F1, GAL2, PYE, MD2, LG, MN, P4, IIO, P3, AC, CV, ED, TL, FVC, SO, FO, OCA, FBD, RC, TP, IIS, IPF, PL, PIS, AA, AE, ICG, CGA, CG, FSI];
-let MateriasSinOpcionales = [MD1, CalculoDIV, P1, GAL1, CalculoDIVV, P2, GAL2, MD2, LG, PYE, MN, P4, TP, IIO, P3, AC, TL, SO, FBD, RC, IIS, IPF, PL, PIS]
+let Materias = [MI, CalculoDIV, CalculoDIVV, P1, GAL1, MD1, P2, Ec, F1, GAL2, PYE, MD2, LG, MN, P4, IIO, P3, AC, CV, ED, TL, FVC, SO, FO, OCA, FBD, RC, TP, IIS, IPF, PL, PIS, AA, AE, ICG, CGA, CG, FSI];
+let MateriasConOpcionales = [MI, CalculoDIV, CalculoDIVV, P1, GAL1, MD1, P2, Ec, F1, GAL2, PYE, MD2, LG, MN, P4, IIO, P3, AC, CV, ED, TL, FVC, SO, FO, OCA, FBD, RC, TP, IIS, IPF, PL, PIS, AA, AE, ICG, CGA, CG, FSI];
+let MateriasSinOpcionales = [MI, MD1, CalculoDIV, P1, GAL1, CalculoDIVV, P2, GAL2, MD2, LG, PYE, MN, P4, TP, IIO, P3, AC, TL, SO, FBD, RC, IIS, IPF, PL, PIS]
 let MateriasPrimero = [LG, P4, FVC, IIO, TL, SO, FO, ICG, CG,IIS, IPF, PL, AA, FSI];
 let MateriasSegundo = [P2, MN, ED, TP, P3, AC, OCA, FBD, AE, RC, CGA, PIS];
 let MateriasCalidadLibre = [F1, CalculoDIV, CalculoDIVV, CV, FVC, GAL1, GAL2, ED, MD1, MD2, PYE]
@@ -183,7 +189,7 @@ function actualizar(){
 
     localStorage.setItem('semestre', semestreAct);
     localStorage.setItem('materias', JSON.stringify(MateriasPersona))
-    localStorage.setItem('MI', document.getElementById('MI').style.display)
+    localStorage.setItem('MI', document.getElementById('MI').disabled)
 
 }
 
@@ -194,38 +200,22 @@ function firstLoad(){
     if(localStorage.getItem('materias')){
         MateriasPersona = JSON.parse(localStorage.getItem('materias'))
     }
-    document.getElementById('MI').style.display = "none";
-    if (localStorage.getItem('MI') == "block"){
+    document.getElementById('MI').disabled = true;
+    if (localStorage.getItem('MI') == "false"){
         toggleMI();
     }
 }
 
 function toggleMI(){
-    if (document.getElementById('MI').style.display == "none"){
-        document.getElementById('MI').style.display = "block";
+    if (document.getElementById('MI').disabled == true){
+        document.getElementById('MI').disabled = false;
+        MI.previas = [];
         CalculoDIV.previas = [MI];
-        Materias.push(MI);
-        MateriasConOpcionales.push(MI);
-        MateriasSinOpcionales.push(MI);
         actualizar();
     }else{
-        document.getElementById('MI').style.display = "none";
+        document.getElementById('MI').disabled = true;
+        MI.previas = [Aux];
         CalculoDIV.previas = [];
-        if (Materias.indexOf(MI)!=-1){
-            Materias.splice(Materias.indexOf(MI), 1);
-        }
-        if (MateriasConOpcionales.indexOf(MI)!=-1){
-            MateriasConOpcionales.splice(MateriasConOpcionales.indexOf(MI), 1);
-        }
-        if (MateriasSinOpcionales.indexOf(MI)!=-1){
-            MateriasSinOpcionales.splice(MateriasSinOpcionales.indexOf(MI), 1);
-        }
-        if (MateriasPersona.indexOf(MI.curso)!=-1){
-            MateriasPersona.splice(MateriasPersona.indexOf(MI.curso), 1);
-        }
-        if (MateriasPersona.indexOf(MI.nombre)!=-1){
-            MateriasPersona.splice(MateriasPersona.indexOf(MI.nombre), 1);
-        }
         actualizar();
     }
 }
