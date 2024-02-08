@@ -1,5 +1,6 @@
-//falta ver Matematica Inicial
 //agregar logica para ver cuando se activa y desactiva el PG
+
+//comentar y revisar codigo
 
 class Materia {
 
@@ -51,15 +52,16 @@ const CGA = new Materia("CGA", 12, [ICG.curso])
 const CG = new Materia("CG", 10, [MD2, P3, MD1]) 
 const FSI = new Materia("FSI", 12, [SO, FBD, P3, LG, RC]) //hasta aca revise
 const PG = new Materia("PG", 30, [P3, P4, TL, SO, IIO, IIS, AC, RC, TP, PIS, MN, FBD]) //falta agregar
+const MI = new Materia("MI", 4, []);
 
 //Revisar todos otra vez
 
 let Materias = [CalculoDIV, CalculoDIVV, P1, GAL1, MD1, P2, Ec, F1, GAL2, PYE, MD2, LG, MN, P4, IIO, P3, AC, CV, ED, TL, FVC, SO, FO, OCA, FBD, RC, TP, IIS, IPF, PL, PIS, AA, AE, ICG, CGA, CG, FSI];
-const MateriasConOpcionales = [CalculoDIV, CalculoDIVV, P1, GAL1, MD1, P2, Ec, F1, GAL2, PYE, MD2, LG, MN, P4, IIO, P3, AC, CV, ED, TL, FVC, SO, FO, OCA, FBD, RC, TP, IIS, IPF, PL, PIS, AA, AE, ICG, CGA, CG, FSI];
-const MateriasSinOpcionales = [MD1, CalculoDIV, P1, GAL1, CalculoDIVV, P2, GAL2, MD2, LG, PYE, MN, P4, TP, IIO, P3, AC, TL, SO, FBD, RC, IIS, IPF, PL, PIS]
-const MateriasPrimero = [LG, P4, FVC, IIO, TL, SO, FO, ICG, CG,IIS, IPF, PL, AA, FSI];
-const MateriasSegundo = [P2, MN, ED, TP, P3, AC, OCA, FBD, AE, RC, CGA, PIS];
-const MateriasCalidadLibre = [F1, CalculoDIV, CalculoDIVV, CV, FVC, GAL1, GAL2, ED, MD1, MD2, PYE]
+let MateriasConOpcionales = [CalculoDIV, CalculoDIVV, P1, GAL1, MD1, P2, Ec, F1, GAL2, PYE, MD2, LG, MN, P4, IIO, P3, AC, CV, ED, TL, FVC, SO, FO, OCA, FBD, RC, TP, IIS, IPF, PL, PIS, AA, AE, ICG, CGA, CG, FSI];
+let MateriasSinOpcionales = [MD1, CalculoDIV, P1, GAL1, CalculoDIVV, P2, GAL2, MD2, LG, PYE, MN, P4, TP, IIO, P3, AC, TL, SO, FBD, RC, IIS, IPF, PL, PIS]
+let MateriasPrimero = [LG, P4, FVC, IIO, TL, SO, FO, ICG, CG,IIS, IPF, PL, AA, FSI];
+let MateriasSegundo = [P2, MN, ED, TP, P3, AC, OCA, FBD, AE, RC, CGA, PIS];
+let MateriasCalidadLibre = [F1, CalculoDIV, CalculoDIVV, CV, FVC, GAL1, GAL2, ED, MD1, MD2, PYE]
 let MateriasPersona = [];
 let creditos = 0;
 let opcionales = true;
@@ -75,18 +77,17 @@ function toggleOpcionales(){
         Materias.forEach( (materia) => {
             document.getElementById(materia.nombre).style.display = "none";
         } )
-        Materias = MateriasSinOpcionales;
+        Materias = [...MateriasSinOpcionales];
         actualizar();
         opcionales = false;
     }else{
         Materias.forEach( (materia) => {
             document.getElementById(materia.nombre).style.display = "none";
         } )
-        Materias = MateriasConOpcionales;
+        Materias = [...MateriasConOpcionales];
         actualizar();
         opcionales = true;
     }
-    
 }
 
 function toggleMateria(nombre){
@@ -137,7 +138,6 @@ function actualizar(){
             }
             if (MateriasPersona.find( elemento => elemento == materia.curso )){
                 document.getElementById(materia.nombre).style.background = "lightblue";
-                //creditos += materia.creditos;
                 materia.estado = 2;
             }
             if (MateriasPersona.find(elemento => elemento == materia.nombre)){
@@ -183,6 +183,7 @@ function actualizar(){
 
     localStorage.setItem('semestre', semestreAct);
     localStorage.setItem('materias', JSON.stringify(MateriasPersona))
+    localStorage.setItem('MI', document.getElementById('MI').style.display)
 
 }
 
@@ -193,13 +194,48 @@ function firstLoad(){
     if(localStorage.getItem('materias')){
         MateriasPersona = JSON.parse(localStorage.getItem('materias'))
     }
+    document.getElementById('MI').style.display = "none";
+    if (localStorage.getItem('MI') != "none"){
+        toggleMI();
+    }
+}
+
+function toggleMI(){
+    if (document.getElementById('MI').style.display == "none"){
+        document.getElementById('MI').style.display = "block";
+        CalculoDIV.previas = [MI];
+        Materias.push(MI);
+        MateriasConOpcionales.push(MI);
+        MateriasSinOpcionales.push(MI);
+        actualizar();
+    }else{
+        document.getElementById('MI').style.display = "none";
+        CalculoDIV.previas = [];
+        if (Materias.indexOf(MI)!=-1){
+            Materias.splice(Materias.indexOf(MI), 1);
+        }
+        if (MateriasConOpcionales.indexOf(MI)!=-1){
+            MateriasConOpcionales.splice(MateriasConOpcionales.indexOf(MI), 1);
+        }
+        if (MateriasSinOpcionales.indexOf(MI)!=-1){
+            MateriasSinOpcionales.splice(MateriasSinOpcionales.indexOf(MI), 1);
+        }
+        if (MateriasPersona.indexOf(MI.curso)!=-1){
+            MateriasPersona.splice(MateriasPersona.indexOf(MI.curso), 1);
+        }
+        if (MateriasPersona.indexOf(MI.nombre)!=-1){
+            MateriasPersona.splice(MateriasPersona.indexOf(MI.nombre), 1);
+        }
+        actualizar();
+    }
 }
 
 function primero(){
-    document.getElementById('primero').style.backgroundColor = "lightskyblue"
-    document.getElementById('segundo').style.backgroundColor = "white"
-    document.getElementById('ambos').style.backgroundColor = "white"
-    document.getElementById('libre').style.backgroundColor = "white"
+    document.getElementById('primero').style.backgroundColor = "lightskyblue";
+    document.getElementById('segundo').style.backgroundColor = "white";
+    document.getElementById('ambos').style.backgroundColor = "white";
+    document.getElementById('libre').style.backgroundColor = "white";
+    document.getElementById('activarMI').style.display = "block";
 
     Materias.forEach( (materia) => {
         document.getElementById(materia.nombre).style.display = "block";
@@ -214,10 +250,11 @@ function primero(){
 }
 
 function segundo(){
-    document.getElementById('primero').style.backgroundColor = "white"
-    document.getElementById('segundo').style.backgroundColor = "lightskyblue"
-    document.getElementById('ambos').style.backgroundColor = "white"
-    document.getElementById('libre').style.backgroundColor = "white"
+    document.getElementById('primero').style.backgroundColor = "white";
+    document.getElementById('segundo').style.backgroundColor = "lightskyblue";
+    document.getElementById('ambos').style.backgroundColor = "white";
+    document.getElementById('libre').style.backgroundColor = "white";
+    document.getElementById('activarMI').style.display = "block";
 
     Materias.forEach( (materia) => {
         document.getElementById(materia.nombre).style.display = "block";
@@ -232,10 +269,11 @@ function segundo(){
 }
 
 function ambos(){
-    document.getElementById('primero').style.backgroundColor = "white"
-    document.getElementById('segundo').style.backgroundColor = "white"
-    document.getElementById('ambos').style.backgroundColor = "lightskyblue"
-    document.getElementById('libre').style.backgroundColor = "white"
+    document.getElementById('primero').style.backgroundColor = "white";
+    document.getElementById('segundo').style.backgroundColor = "white";
+    document.getElementById('ambos').style.backgroundColor = "lightskyblue";
+    document.getElementById('libre').style.backgroundColor = "white";
+    document.getElementById('activarMI').style.display = "block";
 
     Materias.forEach( (materia) => {
         document.getElementById(materia.nombre).style.display = "block";
@@ -247,10 +285,11 @@ function ambos(){
 }
 
 function libre(){
-    document.getElementById('primero').style.backgroundColor = "white"
-    document.getElementById('segundo').style.backgroundColor = "white"
-    document.getElementById('ambos').style.backgroundColor = "white"
-    document.getElementById('libre').style.backgroundColor = "lightskyblue"
+    document.getElementById('primero').style.backgroundColor = "white";
+    document.getElementById('segundo').style.backgroundColor = "white";
+    document.getElementById('ambos').style.backgroundColor = "white";
+    document.getElementById('libre').style.backgroundColor = "lightskyblue";
+    document.getElementById('activarMI').style.display = "none";
 
     Materias.forEach( (materia) => {
         document.getElementById(materia.nombre).style.display = "none";

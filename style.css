@@ -71,7 +71,7 @@ transform: scale(1.05);
     display: flex;
 }
 .semestres button{
-    width: calc( 100% / 3 );
+    width: calc( 100% / 4 );
     height: 40px;   
 }
 
