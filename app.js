@@ -2,72 +2,70 @@
 
 //comentar y revisar codigo
 
-//dar clic muestre las previas
-
-//cambiar estructura del HTML para poder tener un titulo en cada section
-
 class Materia {
 
-    constructor(nombre, creditos, previas){
+    constructor(nombre, creditos, previas, nombreCompleto){
         this.creditos = creditos;
         this.nombre = nombre;
         this.previas = previas;
         this.curso = `${nombre}Curso`
         this.estado = 0;
+        this.nombreCompleto = nombreCompleto
     }
 
 }
 
-const CalculoDIV = new Materia("CalculoDIV", 13, []);
-const CalculoDIVV = new Materia("CalculoDIVV", 13, [CalculoDIV.curso]);
-const MD1 = new Materia("MD1", 9, []);
-const P1 = new Materia("P1", 10, []);
-const GAL1 = new Materia("GAL1", 9, [])
-const P2 = new Materia("P2", 12, [P1.curso]);
-const Ec = new Materia("Ec", 7, [])
-const F1 = new Materia("F1", 10, [])
-const GAL2 = new Materia("GAL2", 9, [GAL1.curso])
-const PYE = new Materia("PYE", 10, [CalculoDIVV.curso, GAL1, CalculoDIV])
-const MD2 = new Materia("MD2", 9, [MD1.curso, GAL1.curso]) 
-const LG = new Materia("LG", 12, [MD1.curso]) 
-const MN = new Materia("MN", 8, [CalculoDIVV, P1, GAL2, GAL1, CalculoDIV]) 
-const P4 = new Materia("P4", 15, [GAL1, CalculoDIV, MD1, P2]) 
-const IIO = new Materia("IIO", 10, [GAL2, PYE, CalculoDIVV, CalculoDIV, GAL1]) 
-const P3 = new Materia("P3", 15, [P2.curso, PYE.curso, P1, MD1]) 
-const AC = new Materia("AC", 12, [CalculoDIV, LG.curso, P2.curso, P1, MD1]) 
-const CV = new Materia("CV", 10, [CalculoDIVV.curso, GAL1, CalculoDIV]) 
-const ED = new Materia("ED", 10, [GAL2,CalculoDIVV.curso, GAL1, CalculoDIV]) 
-const TL = new Materia("TL", 12, [P3.curso, CalculoDIV, GAL1, LG, MD1]) 
-const FVC = new Materia("FVC", 5, [CV.curso, CalculoDIVV]) 
-const SO = new Materia("SO", 12, [AC.curso, GAL1, CalculoDIV, P2, MD1])
-const FO = new Materia("FO", 6, [IIO])
-const OCA = new Materia("OCA", 10, [IIO]) 
-const FBD = new Materia("FBD", 15, [LG, P3, MD2]) 
-const RC = new Materia("RC", 12, [P3, SO.curso, CalculoDIV, AC.curso])
-const TP = new Materia("TP", 15, [P4]) //Hay otra forma de poder cursar TP, P4.curso + P3 | Tengo que revisar como mostrarlo
-const IIS = new Materia("IIS", 10, [TP.curso, FBD.curso, P4.curso]) 
-const IPF = new Materia("IPF", 7, [TL, P2, LG, MD1]) 
-const PL = new Materia("PL", 10, [TL, P3, MD2, LG]) 
-const PIS = new Materia("PIS", 15, [IIS.curso, P4]) 
-const AA = new Materia("AA", 12, [LG, PYE, P3.curso, FBD.curso, P4, MD2]) 
-const AE = new Materia("AE", 10, [P4, PYE, IIO]) 
-const ICG = new Materia("ICG", 10, [P3, P4, GAL2.curso, GAL1]) 
-const CGA = new Materia("CGA", 12, [ICG.curso]) 
-const CG = new Materia("CG", 10, [MD2, P3, MD1]) 
-const FSI = new Materia("FSI", 12, [SO, FBD, P3, LG, RC]) //hasta aca revise
-const PG = new Materia("PG", 30, [P3, P4, TL, SO, IIO, IIS, AC, RC, TP, PIS, MN, FBD]) //falta agregar
+const CDIV = new Materia("CDIV", 13, [] , 'Cálculo DIV');
+const CDIVV = new Materia("CDIVV", 13, [CDIV.curso],'Cálculo DIVV');
+const MD1 = new Materia("MD1", 9, [], 'Matemática Discreta 1');
+const P1 = new Materia("P1", 10, [], 'Programación 1');
+const GAL1 = new Materia("GAL1", 9, [], 'Geometría y Álgebra Lineal 1')
+const P2 = new Materia("P2", 12, [P1.curso], 'Programación 2');
+const Ec = new Materia("Ec", 7, [], 'Economía')
+const F1 = new Materia("F1", 10, [], 'Física 1')
+const GAL2 = new Materia("GAL2", 9, [GAL1.curso], 'Geometría y Álgebra Lineal 2')
+const PYE = new Materia("PYE", 10, [CDIVV.curso, GAL1, CDIV], 'Probabilidad y Estadistica')
+const MD2 = new Materia("MD2", 9, [MD1.curso, GAL1.curso], 'Matemática Discreta 2') 
+const LG = new Materia("LG", 12, [MD1.curso], 'Lógica') 
+const MN = new Materia("MN", 8, [CDIVV, P1, GAL2, GAL1, CDIV], 'Métodos Numéricos') 
+const P4 = new Materia("P4", 15, [GAL1, CDIV, MD1, P2], 'Programación 4') 
+const IIO = new Materia("IIO", 10, [GAL2, PYE, CDIVV, CDIV, GAL1], 'Int. a la Investigación de Operaciones') 
+const P3 = new Materia("P3", 15, [P2.curso, PYE.curso, P1, MD1], 'Programación 3') 
+const AC = new Materia("AC", 12, [CDIV, LG.curso, P2.curso, P1, MD1], 'Arquitectura de Computadoras') 
+const CV = new Materia("CV", 10, [CDIVV.curso, GAL1, CDIV], 'Cálculo Vectorial') 
+const ED = new Materia("ED", 10, [GAL2,CDIVV.curso, GAL1, CDIV], 'Int. a las Ec. Diferenciales') 
+const TL = new Materia("TL", 12, [P3.curso, CDIV, GAL1, LG, MD1], 'Teoría de Lenguajes') 
+const FVC = new Materia("FVC", 5, [CV.curso, CDIVV], 'Funciones de Variable Compleja') 
+const SO = new Materia("SO", 12, [AC.curso, GAL1, CDIV, P2, MD1], 'Sistemas Operativos')
+const FO = new Materia("FO", 6, [IIO], 'Fundamentos de Optimización')
+const OCA = new Materia("OCA", 10, [IIO], 'Optimización Continua y Aplicaciones') 
+const FBD = new Materia("FBD", 15, [LG, P3, MD2], 'Fundamentos de Bases de Datos') 
+const RC = new Materia("RC", 12, [P3, SO.curso, CDIV, AC.curso] , 'Redes de Computadoras')
+const TP = new Materia("TP", 15, [P4], 'Taller de Programación') //Hay otra forma de poder cursar TP, P4.curso + P3 | Tengo que revisar como mostrarlo
+const IIS = new Materia("IIS", 10, [TP.curso, FBD.curso, P4.curso], 'Int. a la Ingeniería de Software') 
+const IPF = new Materia("IPF", 7, [TL, P2, LG, MD1], 'Int. a la Programación Funcional') 
+const PL = new Materia("PL", 10, [TL, P3, MD2, LG], 'Programación Lógica') 
+const PIS = new Materia("PIS", 15, [IIS.curso, P4], 'Proyecto de Ingeniería de Software') 
+const AA = new Materia("AA", 12, [LG, PYE, P3.curso, FBD.curso, P4, MD2], 'Aprendizaje Automático') 
+const AE = new Materia("AE", 10, [P4, PYE, IIO], 'Algoritmos Evolutivos') 
+const ICG = new Materia("ICG", 10, [P3, P4, GAL2.curso, GAL1], 'Int. a la Computación Gráfica') 
+const CGA = new Materia("CGA", 12, [ICG.curso], 'Computación Gráfica Avanzada') 
+const CG = new Materia("CG", 10, [MD2, P3, MD1], 'Criptografía') 
+const FSI = new Materia("FSI", 12, [SO, FBD, P3, LG, RC], 'Fundamentos de la Seguridad Informática') 
 const Aux = new Materia("Aux", 4, []);
-const MI = new Materia("MI", 4, [Aux]);
+const MI = new Materia("MI", 4, [Aux], 'Matemática Inicial'); //hasta aca revise
+const PG = new Materia("PG", 30, [P3, P4, TL, SO, IIO, IIS, AC, RC, TP, PIS, MN, FBD]) //falta agregar
+
 
 
 //Revisar todos otra vez
 
-let Materias = [MI, CalculoDIV, CalculoDIVV, P1, GAL1, MD1, P2, Ec, F1, GAL2, PYE, MD2, LG, MN, P4, IIO, P3, AC, CV, ED, TL, FVC, SO, FO, OCA, FBD, RC, TP, IIS, IPF, PL, PIS, AA, AE, ICG, CGA, CG, FSI];
-let MateriasConOpcionales = [MI, CalculoDIV, CalculoDIVV, P1, GAL1, MD1, P2, Ec, F1, GAL2, PYE, MD2, LG, MN, P4, IIO, P3, AC, CV, ED, TL, FVC, SO, FO, OCA, FBD, RC, TP, IIS, IPF, PL, PIS, AA, AE, ICG, CGA, CG, FSI];
-let MateriasSinOpcionales = [MI, MD1, CalculoDIV, P1, GAL1, CalculoDIVV, P2, GAL2, MD2, LG, PYE, MN, P4, TP, IIO, P3, AC, TL, SO, FBD, RC, IIS, IPF, PL, PIS]
+let Materias = [MI, CDIV, CDIVV, P1, GAL1, MD1, P2, Ec, F1, GAL2, PYE, MD2, LG, MN, P4, IIO, P3, AC, CV, ED, TL, FVC, SO, FO, OCA, FBD, RC, TP, IIS, IPF, PL, PIS, AA, AE, ICG, CGA, CG, FSI];
+let MateriasConOpcionales = [MI, CDIV, CDIVV, P1, GAL1, MD1, P2, Ec, F1, GAL2, PYE, MD2, LG, MN, P4, IIO, P3, AC, CV, ED, TL, FVC, SO, FO, OCA, FBD, RC, TP, IIS, IPF, PL, PIS, AA, AE, ICG, CGA, CG, FSI];
+let MateriasSinOpcionales = [MI, MD1, CDIV, P1, GAL1, CDIVV, P2, GAL2, MD2, LG, PYE, MN, P4, TP, IIO, P3, AC, TL, SO, FBD, RC, IIS, IPF, PL, PIS]
 let MateriasPrimero = [LG, P4, FVC, IIO, TL, SO, FO, ICG, CG,IIS, IPF, PL, AA, FSI];
 let MateriasSegundo = [P2, MN, ED, TP, P3, AC, OCA, FBD, AE, RC, CGA, PIS];
-let MateriasCalidadLibre = [F1, CalculoDIV, CalculoDIVV, CV, FVC, GAL1, GAL2, ED, MD1, MD2, PYE]
+let MateriasCalidadLibre = [F1, CDIV, CDIVV, CV, FVC, GAL1, GAL2, ED, MD1, MD2, PYE]
 let MateriasPersona = [];
 let creditos = 0;
 let opcionales = true;
@@ -75,7 +73,25 @@ let semestreAct = "ambos";
 
 function reset(){
     MateriasPersona = [];
+    resetParrafos();
     actualizar();
+}
+
+function resetParrafos(){
+    document.getElementById('S1').innerText = '';
+    document.getElementById('S2').innerText = '';
+    document.getElementById('S3').innerText = '';
+    document.getElementById('S4').innerText = '';
+    document.getElementById('S5').innerText = '';
+    document.getElementById('S6').innerText = '';
+    document.getElementById('S7').innerText = '';
+    document.getElementById('S1').style.display = 'none';
+    document.getElementById('S2').style.display = 'none';
+    document.getElementById('S3').style.display = 'none';
+    document.getElementById('S4').style.display = 'none';
+    document.getElementById('S5').style.display = 'none';
+    document.getElementById('S6').style.display = 'none';
+    document.getElementById('S7').style.display = 'none';
 }
 
 function toggleOpcionales(){
@@ -96,12 +112,12 @@ function toggleOpcionales(){
     }
 }
 
-function toggleMateria(nombre){
+function toggleMateria(nombre, seccion){
 
     let materiaActual = Materias.find( nombreAux => nombreAux.nombre == nombre );
     switch (materiaActual.estado) {
         case 0:
-            
+            indicarPrevias(nombre, seccion);
             break;
         case 1:
             MateriasPersona.push(materiaActual.curso);
@@ -117,6 +133,36 @@ function toggleMateria(nombre){
             break;
     }
     actualizar();
+
+}
+
+function indicarPrevias(nombre, seccion){
+
+    let materiaAct = Materias.find( materia => materia.nombre == nombre )
+
+    let MateriasQueFaltan = []
+    
+    materiaAct.previas.filter( (materia)=>{ 
+
+        if (typeof(materia)=="string"){
+            if (!MateriasPersona.find( elemento => elemento == materia)){
+                let materiaAux = Materias.find( elemento => elemento.curso == materia )
+                MateriasQueFaltan.push(` Curso ${materiaAux.nombreCompleto} `)
+            }
+        }else{
+            if (!MateriasPersona.find( elemento => elemento == materia.nombre)){
+                MateriasQueFaltan.push(` ${materia.nombreCompleto} `)
+            }
+            if (!MateriasPersona.find(elemento => elemento == materia.curso)){
+                MateriasQueFaltan.push(` Curso ${materia.nombreCompleto} `)
+            }
+        }
+
+        
+    } )
+
+    document.getElementById(seccion).style.display = "block"
+    document.getElementById(seccion).innerText = `[Clic para cerrar] Para poder cursar ${materiaAct.nombreCompleto} hacen falta {${MateriasQueFaltan}}`;
 
 }
 
@@ -161,7 +207,6 @@ function actualizar(){
                 MateriasPersona.splice(MateriasPersona.indexOf(materia.curso), 1);
             }
             materia.estado = 0;
-            document.getElementById(materia.nombre).disabled = true;
             document.getElementById(materia.nombre).style.background = "gray";
 
         }
@@ -210,12 +255,12 @@ function toggleMI(){
     if (document.getElementById('MI').disabled == true){
         document.getElementById('MI').disabled = false;
         MI.previas = [];
-        CalculoDIV.previas = [MI];
+        CDIV.previas = [MI];
         actualizar();
     }else{
         document.getElementById('MI').disabled = true;
         MI.previas = [Aux];
-        CalculoDIV.previas = [];
+        CDIV.previas = [];
         actualizar();
     }
 }

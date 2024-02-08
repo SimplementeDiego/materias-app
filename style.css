@@ -105,6 +105,19 @@ transform: scale(1.05);
     transform: scale(0.95);
 }
 
+.indicarPrevias{
+    color: gray;
+    font-size: 14px;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    cursor: pointer;
+    display: none;
+}
+
+.tituloSeccion{
+    text-decoration: underline;
+}
+
 @media (max-width: 675px) {
     .section{
         flex-direction: column;
@@ -115,7 +128,7 @@ transform: scale(1.05);
     }
     .section button{
         margin: 10px 0 10px 0;
-        width: 90%;
+        width: 100%;
     }
     header h1{
         font-size: 17px;
