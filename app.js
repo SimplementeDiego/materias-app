@@ -54,16 +54,19 @@ const CG = new Materia("CG", 10, [MD2, P3, MD1], 'Criptografía')
 const FSI = new Materia("FSI", 12, [SO, FBD, P3, LG, RC], 'Fundamentos de la Seguridad Informática') 
 const Aux = new Materia("Aux", 4, []);
 const MI = new Materia("MI", 4, [Aux], 'Matemática Inicial'); //hasta aca revise
+const CTS = new Materia("CTS", 8, [], 'Ciencia, Tecnología y Sociedad');
+const TRE = new Materia("TRE", 6, [P1], 'Taller de Robótica Educativa');
+const F2 = new Materia("F2", 10, [F1.curso, CDIV.curso], 'Física 2');
 const PG = new Materia("PG", 30, [P3, P4, TL, SO, IIO, IIS, AC, RC, TP, PIS, MN, FBD]) //falta agregar
 
 
 
 //Revisar todos otra vez
 
-let Materias = [MI, CDIV, CDIVV, P1, GAL1, MD1, P2, Ec, F1, GAL2, PYE, MD2, LG, MN, P4, IIO, P3, AC, CV, ED, TL, FVC, SO, FO, OCA, FBD, RC, TP, IIS, IPF, PL, PIS, AA, AE, ICG, CGA, CG, FSI];
-let MateriasConOpcionales = [MI, CDIV, CDIVV, P1, GAL1, MD1, P2, Ec, F1, GAL2, PYE, MD2, LG, MN, P4, IIO, P3, AC, CV, ED, TL, FVC, SO, FO, OCA, FBD, RC, TP, IIS, IPF, PL, PIS, AA, AE, ICG, CGA, CG, FSI];
+let Materias = [MI, CDIV, CDIVV, P1, GAL1, MD1, P2, Ec, F1, GAL2, PYE, MD2, LG, MN, P4, IIO, P3, AC, CV, ED, TL, FVC, SO, FO, OCA, FBD, RC, TP, IIS, IPF, PL, PIS, AA, AE, ICG, CGA, CG, FSI, CTS, TRE, F2];
+let MateriasConOpcionales = [MI, CDIV, CDIVV, P1, GAL1, MD1, P2, Ec, F1, GAL2, PYE, MD2, LG, MN, P4, IIO, P3, AC, CV, ED, TL, FVC, SO, FO, OCA, FBD, RC, TP, IIS, IPF, PL, PIS, AA, AE, ICG, CGA, CG, FSI, CTS, TRE, F2];
 let MateriasSinOpcionales = [MI, MD1, CDIV, P1, GAL1, CDIVV, P2, GAL2, MD2, LG, PYE, MN, P4, TP, IIO, P3, AC, TL, SO, FBD, RC, IIS, IPF, PL, PIS]
-let MateriasPrimero = [LG, P4, FVC, IIO, TL, SO, FO, ICG, CG,IIS, IPF, PL, AA, FSI];
+let MateriasPrimero = [LG, P4, FVC, IIO, TL, SO, FO, ICG, CG,IIS, IPF, PL, AA, FSI, CTS, TRE];
 let MateriasSegundo = [P2, MN, ED, TP, P3, AC, OCA, FBD, AE, RC, CGA, PIS];
 let MateriasCalidadLibre = [F1, CDIV, CDIVV, CV, FVC, GAL1, GAL2, ED, MD1, MD2, PYE]
 let MateriasPersona = [];
