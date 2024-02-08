@@ -10,17 +10,14 @@
     
     <header>
 
-        <h1 id="titulo">Materias | Créditos: 0</h1>
-        <div>
-            <button class="reset" onclick="reset()">Reset</button>
-            <button class="reset" onclick="toggleOpcionales()">Opcionales</button>
+        <div class="titulo-container">
+            <h1 id="titulo">Materias | Créditos: 0</h1>
+            <div>
+                <button class="reset" onclick="reset()">Reset</button>
+                <button class="reset" onclick="toggleOpcionales()">Opcionales</button>
+            </div>
         </div>
         
-
-    </header>
-
-    <main>
-
         <div class="semestres">
             
             <button onclick="primero()" class="semestre" id="primero">1er Semestre</button>
@@ -30,62 +27,92 @@
 
         </div>
         
-        <div class="section no-mt">
-            <button onclick="toggleMI()" style="background-color: lightcyan;" id="activarMI">(Activar | Desactivar) Matemática Inicial</button>
-            <button onclick="toggleMateria('MI')" id="MI" >Matemática Inicial (4)</button>
-        </div>
 
-        <div class="section">
-            <button onclick="toggleMateria('MD1')" id="MD1" >Matemática Discreta 1 (9)</button>
-            <button onclick="toggleMateria('CalculoDIV')" id="CalculoDIV" >Cálculo DIV (13)</button>
-            <button onclick="toggleMateria('P1')" id="P1" >Programación 1 (10)</button>
-            <button onclick="toggleMateria('GAL1')" id="GAL1" >Geometría y Álgebra Lineal 1 (9)</button>
-            <button onclick="toggleMateria('Ec')" id="Ec" >Economía (7)*</button>
-            <button onclick="toggleMateria('F1')" id="F1" >Física 1 (10)*</button>
+    </header>
+
+    <main>
+
+        <div class="container-section no-mt">
+            <p>Sección 0: Opcional</p>
+            <div class="section">
+                <button onclick="toggleMI()" style="background-color: lightcyan;" id="activarMI">(Activar | Desactivar) Matemática Inicial</button>
+                <button onclick="toggleMateria('MI')" id="MI" >Matemática Inicial (4)</button>
+            </div>
         </div>
-        <div class="section">
-            <button onclick="toggleMateria('CalculoDIVV')" id="CalculoDIVV">Cálculo DIVV (13)</button>
-            <button onclick="toggleMateria('P2')" id="P2">Programación 2 (12)</button>
-            <button onclick="toggleMateria('GAL2')" id="GAL2">Geometría y Álgebra Lineal 2 (9)</button>
-            <button onclick="toggleMateria('MD2')" id="MD2">Matemática Discreta 2 (9)</button>
-            <button onclick="toggleMateria('LG')" id="LG">Lógica (12)</button>
+        
+        <div class="container-section">
+            <p>Sección 1: Materias sin previas</p>
+            <div class="section">
+                <button onclick="toggleMateria('MD1')" id="MD1" >Matemática Discreta 1 (9)</button>
+                <button onclick="toggleMateria('CalculoDIV')" id="CalculoDIV" >Cálculo DIV (13)</button>
+                <button onclick="toggleMateria('P1')" id="P1" >Programación 1 (10)</button>
+                <button onclick="toggleMateria('GAL1')" id="GAL1" >Geometría y Álgebra Lineal 1 (9)</button>
+                <button onclick="toggleMateria('Ec')" id="Ec" >Economía (7)*</button>
+                <button onclick="toggleMateria('F1')" id="F1" >Física 1 (10)*</button>
+            </div>
         </div>
-        <div class="section">
-            <button onclick="toggleMateria('AC')" id="AC">Arq. de Computadoras (12)</button>
-            <button onclick="toggleMateria('PYE')" id="PYE">Probabilidad y Estadistica (10)</button>
-            <button onclick="toggleMateria('MN')" id="MN">Métodos Numéricos (8)</button>
-            <button onclick="toggleMateria('P4')" id="P4">Programación 4 (15)</button>
-            <button onclick="toggleMateria('CV')" id="CV">Cálculo Vectorial (10)*</button>
-            <button onclick="toggleMateria('ED')" id="ED">Int. a las Ec. Diferenciales (10)*</button>
+        <div class="container-section">
+            <p>Sección 2: Materias con al menos 1 previa de Sección 1</p>
+            <div class="section">
+                <button onclick="toggleMateria('CalculoDIVV')" id="CalculoDIVV">Cálculo DIVV (13)</button>
+                <button onclick="toggleMateria('P2')" id="P2">Programación 2 (12)</button>
+                <button onclick="toggleMateria('GAL2')" id="GAL2">Geometría y Álgebra Lineal 2 (9)</button>
+                <button onclick="toggleMateria('MD2')" id="MD2">Matemática Discreta 2 (9)</button>
+                <button onclick="toggleMateria('LG')" id="LG">Lógica (12)</button>
+            </div>
         </div>
-        <div class="section">
-            <button onclick="toggleMateria('TP')" id="TP">Taller de Programación (15)</button>
-            <button onclick="toggleMateria('IIO')" id="IIO">Int. a la Investigación de Operaciones (10)</button>
-            <button onclick="toggleMateria('P3')" id="P3">Programación 3 (15)</button>
-            <button onclick="toggleMateria('SO')" id="SO">Sistemas Operativos (12)</button>
-            <button onclick="toggleMateria('FVC')" id="FVC">Func. de Variables Complejas (5)*</button>
+        <div class="container-section">
+            <p>Sección 3: Materias con al menos 1 previa de Sección 2</p>
+            <div class="section">
+                <button onclick="toggleMateria('AC')" id="AC">Arq. de Computadoras (12)</button>
+                <button onclick="toggleMateria('PYE')" id="PYE">Probabilidad y Estadistica (10)</button>
+                <button onclick="toggleMateria('MN')" id="MN">Métodos Numéricos (8)</button>
+                <button onclick="toggleMateria('P4')" id="P4">Programación 4 (15)</button>
+                <button onclick="toggleMateria('CV')" id="CV">Cálculo Vectorial (10)*</button>
+                <button onclick="toggleMateria('ED')" id="ED">Int. a las Ec. Diferenciales (10)*</button>
+            </div>
         </div>
-        <div class="section">
-            <button onclick="toggleMateria('TL')" id="TL">Teoría de Lenguajes (12)</button>
-            <button onclick="toggleMateria('FBD')" id="FBD">Fundamentos de Bases de Datos (15)</button>
-            <button onclick="toggleMateria('RC')" id="RC">Redes de Computadoras (12)</button>
-            <button onclick="toggleMateria('FO')" id="FO">Fundamentos de Optimización (6)*</button>
-            <button onclick="toggleMateria('OCA')" id="OCA">Optimización Continua y Aplicaciones (10)*</button>
-            <button onclick="toggleMateria('AE')" id="AE">Algoritmos Evolutivos (10)*</button>
-            <button onclick="toggleMateria('ICG')" id="ICG">Int. a la Computación Gráfica (10)*</button>
-            <button onclick="toggleMateria('CG')" id="CG">Criptografía (10)*</button>
+        <div class="container-section">
+            <p>Sección 4: Materias con al menos 1 previa de Sección 3</p>
+            <div class="section">
+                <button onclick="toggleMateria('TP')" id="TP">Taller de Programación (15)</button>
+                <button onclick="toggleMateria('IIO')" id="IIO">Int. a la Investigación de Operaciones (10)</button>
+                <button onclick="toggleMateria('P3')" id="P3">Programación 3 (15)</button>
+                <button onclick="toggleMateria('SO')" id="SO">Sistemas Operativos (12)</button>
+                <button onclick="toggleMateria('FVC')" id="FVC">Func. de Variables Complejas (5)*</button>
+            </div>
         </div>
-        <div class="section">
-            <button onclick="toggleMateria('IIS')" id="IIS">Int. a la Ingeniería de Software (10)</button>
-            <button onclick="toggleMateria('IPF')" id="IPF">Int. a la Programación Funcional (7)</button>
-            <button onclick="toggleMateria('PL')" id="PL">Programación Lógica (10)</button>
-            <button onclick="toggleMateria('AA')" id="AA">Aprendizaje Automático (12)*</button>
-            <button onclick="toggleMateria('CGA')" id="CGA">Computación Gráfica Avanzada (12)*</button>
-            <button onclick="toggleMateria('FSI')" id="FSI">Fundamentos de la Seguridad Informática (12)*</button>
+        <div class="container-section">
+            <p>Sección 5: Materias con al menos 1 previa de Sección 4</p>
+            <div class="section">
+                <button onclick="toggleMateria('TL')" id="TL">Teoría de Lenguajes (12)</button>
+                <button onclick="toggleMateria('FBD')" id="FBD">Fundamentos de Bases de Datos (15)</button>
+                <button onclick="toggleMateria('RC')" id="RC">Redes de Computadoras (12)</button>
+                <button onclick="toggleMateria('FO')" id="FO">Fundamentos de Optimización (6)*</button>
+                <button onclick="toggleMateria('OCA')" id="OCA">Optimización Continua y Aplicaciones (10)*</button>
+                <button onclick="toggleMateria('AE')" id="AE">Algoritmos Evolutivos (10)*</button>
+                <button onclick="toggleMateria('ICG')" id="ICG">Int. a la Computación Gráfica (10)*</button>
+                <button onclick="toggleMateria('CG')" id="CG">Criptografía (10)*</button>
+            </div>
         </div>
-        <div class="section">
-            <button onclick="toggleMateria('PIS')" id="PIS">Proyecto de Ingeniería de Software (15)</button> 
+        <div class="container-section">
+            <p>Sección 6: Materias con al menos 1 previa de Sección 5</p>
+            <div class="section">
+                <button onclick="toggleMateria('IIS')" id="IIS">Int. a la Ingeniería de Software (10)</button>
+                <button onclick="toggleMateria('IPF')" id="IPF">Int. a la Programación Funcional (7)</button>
+                <button onclick="toggleMateria('PL')" id="PL">Programación Lógica (10)</button>
+                <button onclick="toggleMateria('AA')" id="AA">Aprendizaje Automático (12)*</button>
+                <button onclick="toggleMateria('CGA')" id="CGA">Computación Gráfica Avanzada (12)*</button>
+                <button onclick="toggleMateria('FSI')" id="FSI">Fundamentos de la Seguridad Informática (12)*</button>
+            </div>
         </div>
+        <div class="container-section">
+            <p>Sección 7: Materias con al menos 1 previa de Sección 6</p>
+            <div class="section">
+                <button onclick="toggleMateria('PIS')" id="PIS">Proyecto de Ingeniería de Software (15)</button> 
+            </div>
+        </div>
+        
 
     </main>
 
