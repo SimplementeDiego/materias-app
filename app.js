@@ -221,7 +221,9 @@ function actualizar(){
 
     let porcentaje = Math.round((creditos/450)*100) 
 
-    document.getElementById('titulo').textContent = `Materias: ${materias} | Créditos: ${creditos} (${porcentaje}%)`
+    //document.getElementById('titulo').textContent = `Materias: ${materias} | Créditos: ${creditos} (${porcentaje}%)`
+
+    document.getElementById('titulo').textContent = `Materias | Créditos: ${creditos}`
 
     switch (semestreAct) {
         case "primero":
