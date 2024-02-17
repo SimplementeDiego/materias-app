@@ -71,6 +71,7 @@ let MateriasSegundo = [P2, MN, ED, TP, P3, AC, OCA, FBD, AE, RC, CGA, PIS];
 let MateriasCalidadLibre = [F1, CDIV, CDIVV, CV, FVC, GAL1, GAL2, ED, MD1, MD2, PYE]
 let MateriasPersona = [];
 let creditos = 0;
+let materias = 0;
 let opcionales = true;
 let semestreAct = "ambos";
 
@@ -172,6 +173,7 @@ function indicarPrevias(nombre, seccion){
 function actualizar(){
 
     creditos = 0;
+    materias = 0;
 
     Materias.forEach( (materia) => {
 
@@ -198,6 +200,7 @@ function actualizar(){
             if (MateriasPersona.find(elemento => elemento == materia.nombre)){
                 document.getElementById(materia.nombre).style.background = "lightgreen";
                 creditos += materia.creditos;
+                materias += 1;
                 materia.estado = 3;
             }      
 
@@ -216,7 +219,9 @@ function actualizar(){
 
     });
 
-    document.getElementById('titulo').textContent = `Materias | Créditos: ${creditos}`
+    let porcentaje = Math.round((creditos/450)*100) 
+
+    document.getElementById('titulo').textContent = `Materias: ${materias} | Créditos: ${creditos} (${porcentaje}%)`
 
     switch (semestreAct) {
         case "primero":

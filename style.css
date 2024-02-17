@@ -95,6 +95,8 @@ main{
     transition: 0.3s;
     cursor: pointer;
     margin: 10px;
+    position: sticky;
+    top: 100px;
 }
 
 .section button:hover{
