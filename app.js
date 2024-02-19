@@ -1,5 +1,387 @@
-const _0x2682c5=_0x433e;(function(_0x1dc8b0,_0x1bf539){const _0x31690c=_0x433e,_0x336e82=_0x1dc8b0();while(!![]){try{const _0x501a13=-parseInt(_0x31690c(0x1cb))/0x1+-parseInt(_0x31690c(0x1ca))/0x2+-parseInt(_0x31690c(0x1dc))/0x3*(parseInt(_0x31690c(0x1d9))/0x4)+-parseInt(_0x31690c(0x1e4))/0x5*(parseInt(_0x31690c(0x1d5))/0x6)+parseInt(_0x31690c(0x1d2))/0x7+parseInt(_0x31690c(0x1f8))/0x8*(parseInt(_0x31690c(0x203))/0x9)+-parseInt(_0x31690c(0x220))/0xa*(-parseInt(_0x31690c(0x1ec))/0xb);if(_0x501a13===_0x1bf539)break;else _0x336e82['push'](_0x336e82['shift']());}catch(_0x17c380){_0x336e82['push'](_0x336e82['shift']());}}}(_0x9f0d,0x35438));class Materia{constructor(_0x284e28,_0x1b6972,_0x475b95,_0x82607a,_0x36253d,_0x517168,_0xf704a3){const _0xb80802=_0x433e;this[_0xb80802(0x20b)]=_0x1b6972,this[_0xb80802(0x1f6)]=_0x284e28,this[_0xb80802(0x21f)]=_0x475b95,this['curso']=_0x284e28+_0xb80802(0x205),this[_0xb80802(0x1f9)]=0x0,this['nombreCompleto']=_0x82607a,this['prioridad']=0x0,this['semestre']=_0x36253d,this[_0xb80802(0x1e3)]=_0x517168,this[_0xb80802(0x213)]=_0xf704a3;}}const CDIV=new Materia(_0x2682c5(0x214),0xd,[],_0x2682c5(0x210),'ambos','no','si'),CDIVV=new Materia('CDIVV',0xd,[CDIV[_0x2682c5(0x1ee)]],_0x2682c5(0x219),_0x2682c5(0x1f7),'no','si'),MD1=new Materia(_0x2682c5(0x1fe),0x9,[],_0x2682c5(0x21b),_0x2682c5(0x1f7),'no','si'),P1=new Materia('P1',0xa,[],_0x2682c5(0x222),_0x2682c5(0x1f7),'no','no'),GAL1=new Materia(_0x2682c5(0x208),0x9,[],'Geometría\x20y\x20Álgebra\x20Lineal\x201','ambos','no','si'),P2=new Materia('P2',0xc,[P1[_0x2682c5(0x1ee)]],_0x2682c5(0x201),'segundo','no','no'),Ec=new Materia('Ec',0x7,[],_0x2682c5(0x209),_0x2682c5(0x1f7),'si','no'),F1=new Materia('F1',0xa,[],_0x2682c5(0x1dd),_0x2682c5(0x1f7),'si','si'),GAL2=new Materia(_0x2682c5(0x1cd),0x9,[GAL1[_0x2682c5(0x1ee)]],_0x2682c5(0x215),_0x2682c5(0x1f7),'no','si'),PYE=new Materia(_0x2682c5(0x225),0xa,[CDIVV[_0x2682c5(0x1ee)],GAL1,CDIV],_0x2682c5(0x212),'ambos','no','si'),MD2=new Materia(_0x2682c5(0x1db),0x9,[MD1['curso'],GAL1[_0x2682c5(0x1ee)]],_0x2682c5(0x22a),'ambos','no','si'),LG=new Materia('LG',0xc,[MD1[_0x2682c5(0x1ee)]],_0x2682c5(0x1f0),_0x2682c5(0x229),'no','no'),MN=new Materia('MN',0x8,[CDIVV,P1,GAL2,GAL1,CDIV],_0x2682c5(0x1e5),_0x2682c5(0x204),'no','no'),P4=new Materia('P4',0xf,[GAL1,CDIV,MD1,P2],_0x2682c5(0x216),_0x2682c5(0x229),'no','no'),IIO=new Materia(_0x2682c5(0x1cf),0xa,[GAL2,PYE,CDIVV,CDIV,GAL1],'Int.\x20a\x20la\x20Investigación\x20de\x20Operaciones',_0x2682c5(0x229),'no','no'),P3=new Materia('P3',0xf,[P2[_0x2682c5(0x1ee)],PYE[_0x2682c5(0x1ee)],P1,MD1],'Programación\x203','segundo','no','no'),AC=new Materia('AC',0xc,[CDIV,LG[_0x2682c5(0x1ee)],P2[_0x2682c5(0x1ee)],P1,MD1],'Arquitectura\x20de\x20Computadoras',_0x2682c5(0x204),'no','no'),CV=new Materia('CV',0xa,[CDIVV[_0x2682c5(0x1ee)],GAL1,CDIV],_0x2682c5(0x224),_0x2682c5(0x1f7),'si','si'),ED=new Materia('ED',0xa,[GAL2,CDIVV[_0x2682c5(0x1ee)],GAL1,CDIV],'Int.\x20a\x20las\x20Ec.\x20Diferenciales','segundo','si','si'),TL=new Materia('TL',0xc,[P3[_0x2682c5(0x1ee)],CDIV,GAL1,LG,MD1],_0x2682c5(0x20d),_0x2682c5(0x229),'no','no'),FVC=new Materia(_0x2682c5(0x1d4),0x5,[CV[_0x2682c5(0x1ee)],CDIVV],_0x2682c5(0x1eb),_0x2682c5(0x229),'si','si'),SO=new Materia('SO',0xc,[AC[_0x2682c5(0x1ee)],GAL1,CDIV,P2,MD1],_0x2682c5(0x21c),_0x2682c5(0x229),'no','no'),FO=new Materia('FO',0x6,[IIO],'Fundamentos\x20de\x20Optimización',_0x2682c5(0x229),'si','no'),OCA=new Materia(_0x2682c5(0x1e6),0xa,[IIO],_0x2682c5(0x1f5),'segundo','si','no'),FBD=new Materia(_0x2682c5(0x1ed),0xf,[LG,P3,MD2],'Fundamentos\x20de\x20Bases\x20de\x20Datos',_0x2682c5(0x204),'no','no'),RC=new Materia('RC',0xc,[P3,SO[_0x2682c5(0x1ee)],CDIV,AC[_0x2682c5(0x1ee)]],'Redes\x20de\x20Computadoras',_0x2682c5(0x204),'no','no'),TP=new Materia('TP',0xf,[P4],_0x2682c5(0x217),_0x2682c5(0x204),'no','no'),IIS=new Materia(_0x2682c5(0x1fd),0xa,[TP[_0x2682c5(0x1ee)],FBD[_0x2682c5(0x1ee)],P4['curso']],_0x2682c5(0x1e9),_0x2682c5(0x229),'no','no'),IPF=new Materia('IPF',0x7,[TL,P2,LG,MD1],_0x2682c5(0x1ea),_0x2682c5(0x229),'no','no'),PL=new Materia('PL',0xa,[TL,P3,MD2,LG],_0x2682c5(0x20c),_0x2682c5(0x229),'no','no'),PIS=new Materia(_0x2682c5(0x1e7),0xf,[IIS['curso'],P4],_0x2682c5(0x1f4),_0x2682c5(0x204),'no','no'),AA=new Materia('AA',0xc,[LG,PYE,P3['curso'],FBD[_0x2682c5(0x1ee)],P4,MD2],'Aprendizaje\x20Automático',_0x2682c5(0x229),'si','no'),AE=new Materia('AE',0xa,[P4,PYE,IIO],_0x2682c5(0x221),'segundo','si','no'),ICG=new Materia('ICG',0xa,[P3,P4,GAL2[_0x2682c5(0x1ee)],GAL1],'Int.\x20a\x20la\x20Computación\x20Gráfica','primero','si','no'),CGA=new Materia('CGA',0xc,[ICG['curso']],'Computación\x20Gráfica\x20Avanzada',_0x2682c5(0x204),'si','no'),CG=new Materia('CG',0xa,[MD2,P3,MD1],_0x2682c5(0x1e0),'primero','si','no'),FSI=new Materia(_0x2682c5(0x1ef),0xc,[SO,FBD,P3,LG,RC],_0x2682c5(0x228),_0x2682c5(0x229),'si','no'),Aux=new Materia('Aux',0x4,[]),MI=new Materia('MI',0x4,[Aux],'Matemática\x20Inicial',_0x2682c5(0x1f7),'no','no'),CTS=new Materia(_0x2682c5(0x202),0x8,[],_0x2682c5(0x1de),'primero','si','no'),TRE=new Materia(_0x2682c5(0x1f2),0x6,[P1],'Taller\x20de\x20Robótica\x20Educativa',_0x2682c5(0x229),'si','no'),F2=new Materia('F2',0xa,[F1[_0x2682c5(0x1ee)],CDIV[_0x2682c5(0x1ee)]],_0x2682c5(0x1d6),_0x2682c5(0x1f7),'si','no');let Materias=[MI,CDIV,CDIVV,P1,GAL1,MD1,P2,Ec,F1,GAL2,PYE,MD2,LG,MN,P4,IIO,P3,AC,CV,ED,TL,FVC,SO,FO,OCA,FBD,RC,TP,IIS,IPF,PL,PIS,AA,AE,ICG,CGA,CG,FSI,CTS,TRE,F2],MateriasPersona=[],creditos=0x0,materias=0x0,opcionales=!![],semestreAct=_0x2682c5(0x1f7);function reset(){MateriasPersona=[],resetParrafos(),actualizar();}function resetParrafos(){const _0x1abfab=_0x2682c5;for(let _0x2783b0=0x1;_0x2783b0<0x8;_0x2783b0++){document['getElementById']('S'+_0x2783b0)[_0x1abfab(0x1fc)]='',document[_0x1abfab(0x21a)]('S'+_0x2783b0)[_0x1abfab(0x1d7)][_0x1abfab(0x1da)]=_0x1abfab(0x1c8);}}function toggleOpcionales(){opcionales?(opcionales=![],actualizar()):(opcionales=!![],actualizar());}function toggleMateria(_0x10540a,_0xe5002e){const _0x3f3407=_0x2682c5;let _0x11c5a7=Materias['find'](_0x251c56=>_0x251c56[_0x3f3407(0x1f6)]==_0x10540a);switch(_0x11c5a7[_0x3f3407(0x1f9)]){case 0x0:indicarPrevias(_0x10540a,_0xe5002e);break;case 0x1:MateriasPersona[_0x3f3407(0x1df)](_0x11c5a7[_0x3f3407(0x1ee)]);break;case 0x2:MateriasPersona[_0x3f3407(0x1df)](_0x11c5a7['nombre']);break;case 0x3:MateriasPersona['splice'](MateriasPersona[_0x3f3407(0x223)](_0x11c5a7[_0x3f3407(0x1ee)]),0x1),MateriasPersona['splice'](MateriasPersona[_0x3f3407(0x223)](_0x11c5a7[_0x3f3407(0x1f6)]),0x1);break;default:break;}actualizar();}function indicarPrevias(_0x2f5127,_0x3f79f7){const _0x5783ad=_0x2682c5;let _0x36f8ce=Materias[_0x5783ad(0x1ff)](_0x137d37=>_0x137d37[_0x5783ad(0x1f6)]==_0x2f5127),_0x1f42d4=[];_0x36f8ce['previas']['filter'](_0x5ca91d=>{const _0x3b3566=_0x5783ad;if(typeof _0x5ca91d==_0x3b3566(0x1c9)){if(!MateriasPersona[_0x3b3566(0x1ff)](_0x383e02=>_0x383e02==_0x5ca91d)){let _0x2c773c=Materias[_0x3b3566(0x1ff)](_0x377a9c=>_0x377a9c[_0x3b3566(0x1ee)]==_0x5ca91d);_0x1f42d4[_0x3b3566(0x1df)](_0x3b3566(0x211)+_0x2c773c[_0x3b3566(0x20e)]+'\x20');}}else!MateriasPersona[_0x3b3566(0x1ff)](_0x13c07e=>_0x13c07e==_0x5ca91d['nombre'])&&_0x1f42d4[_0x3b3566(0x1df)]('\x20'+_0x5ca91d[_0x3b3566(0x20e)]+'\x20'),!MateriasPersona[_0x3b3566(0x1ff)](_0x434a79=>_0x434a79==_0x5ca91d['curso'])&&_0x1f42d4[_0x3b3566(0x1df)]('\x20Curso\x20'+_0x5ca91d['nombreCompleto']+'\x20');}),document[_0x5783ad(0x21a)](_0x3f79f7)[_0x5783ad(0x1d7)][_0x5783ad(0x1da)]=_0x5783ad(0x227),document[_0x5783ad(0x21a)](_0x3f79f7)[_0x5783ad(0x1fc)]=_0x5783ad(0x1e1)+_0x36f8ce['nombreCompleto']+'\x20hacen\x20falta\x20{'+_0x1f42d4+'}';}function _0x9f0d(){const _0x1207a6=['Programación\x201','indexOf','Cálculo\x20Vectorial','PYE','textContent','block','Fundamentos\x20de\x20la\x20Seguridad\x20Informática','primero','Matemática\x20Discreta\x202','none','string','680062npISvu','256639vFWqaU','splice','GAL2','white','IIO','background','includes','1029658tPuYRn','disabled','FVC','90HkJyaN','Física\x202','style','setItem','12Gyphao','display','MD2','92655NufZoA','Física\x201','Ciencia,\x20Tecnología\x20y\x20Sociedad','push','Criptografía','[Clic\x20para\x20cerrar]\x20Para\x20poder\x20cursar\x20','false','opcional','48695DZAbch','Métodos\x20Numéricos','OCA','PIS','activarMI','Int.\x20a\x20la\x20Ingeniería\x20de\x20Software','Int.\x20a\x20la\x20Programación\x20Funcional','Funciones\x20de\x20Variable\x20Compleja','242nyTdJU','FBD','curso','FSI','Lógica','gray','TRE','lightgreen','Proyecto\x20de\x20Ingeniería\x20de\x20Software','Optimización\x20Continua\x20y\x20Aplicaciones','nombre','ambos','56PhRKxX','estado','materias','lightskyblue','innerText','IIS','MD1','find','lightblue','Programación\x202','CTS','354726BWvOBb','segundo','Curso','backgroundColor','Materias\x20|\x20Créditos:\x20','GAL1','Economía','semestre','creditos','Programación\x20Lógica','Teoría\x20de\x20Lenguajes','nombreCompleto','stringify','Cálculo\x20DIV','\x20Curso\x20','Probabilidad\x20y\x20Estadistica','libre','CDIV','Geometría\x20y\x20Álgebra\x20Lineal\x202','Programación\x204','Taller\x20de\x20Programación','getItem','Cálculo\x20DIVV','getElementById','Matemática\x20Discreta\x201','Sistemas\x20Operativos','parse','forEach','previas','286630ISMCjx','Algoritmos\x20Evolutivos'];_0x9f0d=function(){return _0x1207a6;};return _0x9f0d();}function actualizar(){const _0x521b9f=_0x2682c5;creditos=0x0,materias=0x0,Materias['forEach'](_0x16bd03=>{const _0x2314f4=_0x433e;if(opcionales==!![])switch(semestreAct){case _0x2314f4(0x229):_0x16bd03[_0x2314f4(0x20a)]==_0x2314f4(0x229)||_0x16bd03['semestre']=='ambos'?document['getElementById'](_0x16bd03[_0x2314f4(0x1f6)])[_0x2314f4(0x1d7)][_0x2314f4(0x1da)]='block':document[_0x2314f4(0x21a)](_0x16bd03['nombre'])['style'][_0x2314f4(0x1da)]=_0x2314f4(0x1c8);break;case _0x2314f4(0x204):_0x16bd03[_0x2314f4(0x20a)]==_0x2314f4(0x204)||_0x16bd03[_0x2314f4(0x20a)]==_0x2314f4(0x1f7)?document[_0x2314f4(0x21a)](_0x16bd03['nombre'])[_0x2314f4(0x1d7)][_0x2314f4(0x1da)]=_0x2314f4(0x227):document['getElementById'](_0x16bd03[_0x2314f4(0x1f6)])[_0x2314f4(0x1d7)]['display']=_0x2314f4(0x1c8);break;case _0x2314f4(0x213):_0x16bd03[_0x2314f4(0x213)]=='si'?document['getElementById'](_0x16bd03['nombre'])[_0x2314f4(0x1d7)]['display']=_0x2314f4(0x227):document[_0x2314f4(0x21a)](_0x16bd03[_0x2314f4(0x1f6)])[_0x2314f4(0x1d7)][_0x2314f4(0x1da)]=_0x2314f4(0x1c8);break;default:document[_0x2314f4(0x21a)](_0x16bd03[_0x2314f4(0x1f6)])[_0x2314f4(0x1d7)]['display']=_0x2314f4(0x227);break;}else{if(_0x16bd03[_0x2314f4(0x1e3)]=='no')switch(semestreAct){case _0x2314f4(0x229):_0x16bd03[_0x2314f4(0x20a)]==_0x2314f4(0x229)||_0x16bd03['semestre']==_0x2314f4(0x1f7)?document[_0x2314f4(0x21a)](_0x16bd03[_0x2314f4(0x1f6)])[_0x2314f4(0x1d7)][_0x2314f4(0x1da)]=_0x2314f4(0x227):document[_0x2314f4(0x21a)](_0x16bd03[_0x2314f4(0x1f6)])[_0x2314f4(0x1d7)]['display']='none';break;case _0x2314f4(0x204):_0x16bd03[_0x2314f4(0x20a)]=='segundo'||_0x16bd03[_0x2314f4(0x20a)]==_0x2314f4(0x1f7)?document[_0x2314f4(0x21a)](_0x16bd03[_0x2314f4(0x1f6)])[_0x2314f4(0x1d7)][_0x2314f4(0x1da)]=_0x2314f4(0x227):document[_0x2314f4(0x21a)](_0x16bd03[_0x2314f4(0x1f6)])['style'][_0x2314f4(0x1da)]='none';break;case _0x2314f4(0x213):_0x16bd03[_0x2314f4(0x213)]=='si'?document[_0x2314f4(0x21a)](_0x16bd03['nombre'])['style'][_0x2314f4(0x1da)]=_0x2314f4(0x227):document['getElementById'](_0x16bd03['nombre'])['style'][_0x2314f4(0x1da)]=_0x2314f4(0x1c8);break;default:document[_0x2314f4(0x21a)](_0x16bd03[_0x2314f4(0x1f6)])[_0x2314f4(0x1d7)][_0x2314f4(0x1da)]=_0x2314f4(0x227);break;}else document[_0x2314f4(0x21a)](_0x16bd03[_0x2314f4(0x1f6)])['style'][_0x2314f4(0x1da)]=_0x2314f4(0x1c8);}let _0x3178fb=!![];_0x16bd03[_0x2314f4(0x21f)][_0x2314f4(0x21e)](_0x764174=>{const _0x390c49=_0x2314f4;_0x3178fb=(MateriasPersona['includes'](_0x764174[_0x390c49(0x1f6)])||MateriasPersona['includes'](_0x764174))&&_0x3178fb;}),_0x3178fb?((!MateriasPersona[_0x2314f4(0x1ff)](_0x10cd12=>_0x10cd12==_0x16bd03[_0x2314f4(0x1f6)])||!MateriasPersona['find'](_0x119236=>_0x119236==_0x16bd03['curso']))&&(document['getElementById'](_0x16bd03[_0x2314f4(0x1f6)])[_0x2314f4(0x1d3)]=![],document[_0x2314f4(0x21a)](_0x16bd03[_0x2314f4(0x1f6)])['style'][_0x2314f4(0x1d0)]='lightcoral',_0x16bd03['estado']=0x1),MateriasPersona['find'](_0x339e4e=>_0x339e4e==_0x16bd03[_0x2314f4(0x1ee)])&&(document['getElementById'](_0x16bd03['nombre'])['style'][_0x2314f4(0x1d0)]=_0x2314f4(0x200),_0x16bd03['estado']=0x2),MateriasPersona[_0x2314f4(0x1ff)](_0xb764d2=>_0xb764d2==_0x16bd03[_0x2314f4(0x1f6)])&&(document[_0x2314f4(0x21a)](_0x16bd03[_0x2314f4(0x1f6)])[_0x2314f4(0x1d7)]['background']=_0x2314f4(0x1f3),creditos+=_0x16bd03['creditos'],materias+=0x1,_0x16bd03[_0x2314f4(0x1f9)]=0x3)):(MateriasPersona[_0x2314f4(0x1d1)](_0x16bd03[_0x2314f4(0x1f6)])&&MateriasPersona[_0x2314f4(0x1cc)](MateriasPersona[_0x2314f4(0x223)](_0x16bd03['nombre']),0x1),MateriasPersona[_0x2314f4(0x1d1)](_0x16bd03[_0x2314f4(0x1ee)])&&MateriasPersona['splice'](MateriasPersona[_0x2314f4(0x223)](_0x16bd03['curso']),0x1),_0x16bd03[_0x2314f4(0x1f9)]=0x0,document['getElementById'](_0x16bd03[_0x2314f4(0x1f6)])[_0x2314f4(0x1d7)]['background']=_0x2314f4(0x1f1));}),document[_0x521b9f(0x21a)]('titulo')[_0x521b9f(0x226)]=_0x521b9f(0x207)+creditos,localStorage[_0x521b9f(0x1d8)]('semestre',semestreAct),localStorage[_0x521b9f(0x1d8)](_0x521b9f(0x1fa),JSON[_0x521b9f(0x20f)](MateriasPersona)),localStorage[_0x521b9f(0x1d8)]('MI',document[_0x521b9f(0x21a)]('MI')['disabled']);}function firstLoad(){const _0x5f0062=_0x2682c5;localStorage[_0x5f0062(0x218)](_0x5f0062(0x20a))&&(semestreAct=localStorage[_0x5f0062(0x218)](_0x5f0062(0x20a)));localStorage[_0x5f0062(0x218)](_0x5f0062(0x1fa))&&(MateriasPersona=JSON[_0x5f0062(0x21d)](localStorage['getItem']('materias')));document['getElementById']('MI')[_0x5f0062(0x1d3)]=!![];localStorage['getItem']('MI')==_0x5f0062(0x1e2)&&toggleMI();switch(semestreAct){case'primero':primero();break;case _0x5f0062(0x204):segundo();break;case _0x5f0062(0x213):libre();break;default:ambos();break;}}function toggleMI(){const _0x50d70b=_0x2682c5;document[_0x50d70b(0x21a)]('MI')['disabled']==!![]?(document['getElementById']('MI')[_0x50d70b(0x1d3)]=![],MI[_0x50d70b(0x21f)]=[],CDIV[_0x50d70b(0x21f)]=[MI],actualizar()):(document[_0x50d70b(0x21a)]('MI')['disabled']=!![],MI[_0x50d70b(0x21f)]=[Aux],CDIV['previas']=[],actualizar());}function primero(){const _0x2a1ce2=_0x2682c5;document[_0x2a1ce2(0x21a)](_0x2a1ce2(0x229))[_0x2a1ce2(0x1d7)][_0x2a1ce2(0x206)]=_0x2a1ce2(0x1fb),document[_0x2a1ce2(0x21a)](_0x2a1ce2(0x204))[_0x2a1ce2(0x1d7)][_0x2a1ce2(0x206)]=_0x2a1ce2(0x1ce),document[_0x2a1ce2(0x21a)]('ambos')[_0x2a1ce2(0x1d7)][_0x2a1ce2(0x206)]='white',document[_0x2a1ce2(0x21a)]('libre')['style'][_0x2a1ce2(0x206)]='white',document[_0x2a1ce2(0x21a)]('activarMI')[_0x2a1ce2(0x1d7)][_0x2a1ce2(0x1da)]=_0x2a1ce2(0x227),semestreAct=_0x2a1ce2(0x229),localStorage[_0x2a1ce2(0x1d8)]('semestre',semestreAct),actualizar();}function _0x433e(_0x40b98e,_0x357c7d){const _0x9f0ddb=_0x9f0d();return _0x433e=function(_0x433e5a,_0x3c6e8e){_0x433e5a=_0x433e5a-0x1c8;let _0x2be24f=_0x9f0ddb[_0x433e5a];return _0x2be24f;},_0x433e(_0x40b98e,_0x357c7d);}function segundo(){const _0x8500e6=_0x2682c5;document[_0x8500e6(0x21a)](_0x8500e6(0x229))['style'][_0x8500e6(0x206)]=_0x8500e6(0x1ce),document['getElementById'](_0x8500e6(0x204))[_0x8500e6(0x1d7)][_0x8500e6(0x206)]=_0x8500e6(0x1fb),document['getElementById']('ambos')['style'][_0x8500e6(0x206)]=_0x8500e6(0x1ce),document[_0x8500e6(0x21a)](_0x8500e6(0x213))[_0x8500e6(0x1d7)][_0x8500e6(0x206)]=_0x8500e6(0x1ce),document['getElementById']('activarMI')[_0x8500e6(0x1d7)][_0x8500e6(0x1da)]=_0x8500e6(0x227),semestreAct=_0x8500e6(0x204),localStorage['setItem'](_0x8500e6(0x20a),semestreAct),actualizar();}function ambos(){const _0x50e9ad=_0x2682c5;document[_0x50e9ad(0x21a)](_0x50e9ad(0x229))[_0x50e9ad(0x1d7)][_0x50e9ad(0x206)]=_0x50e9ad(0x1ce),document[_0x50e9ad(0x21a)](_0x50e9ad(0x204))[_0x50e9ad(0x1d7)][_0x50e9ad(0x206)]=_0x50e9ad(0x1ce),document['getElementById'](_0x50e9ad(0x1f7))[_0x50e9ad(0x1d7)][_0x50e9ad(0x206)]='lightskyblue',document[_0x50e9ad(0x21a)]('libre')[_0x50e9ad(0x1d7)][_0x50e9ad(0x206)]=_0x50e9ad(0x1ce),document[_0x50e9ad(0x21a)](_0x50e9ad(0x1e8))[_0x50e9ad(0x1d7)][_0x50e9ad(0x1da)]=_0x50e9ad(0x227),semestreAct='ambos',localStorage[_0x50e9ad(0x1d8)](_0x50e9ad(0x20a),semestreAct),actualizar();}function libre(){const _0x2bc74d=_0x2682c5;document[_0x2bc74d(0x21a)]('primero')[_0x2bc74d(0x1d7)][_0x2bc74d(0x206)]=_0x2bc74d(0x1ce),document[_0x2bc74d(0x21a)](_0x2bc74d(0x204))['style'][_0x2bc74d(0x206)]=_0x2bc74d(0x1ce),document[_0x2bc74d(0x21a)](_0x2bc74d(0x1f7))[_0x2bc74d(0x1d7)][_0x2bc74d(0x206)]='white',document['getElementById']('libre')[_0x2bc74d(0x1d7)][_0x2bc74d(0x206)]=_0x2bc74d(0x1fb),document[_0x2bc74d(0x21a)](_0x2bc74d(0x1e8))['style'][_0x2bc74d(0x1da)]=_0x2bc74d(0x1c8),semestreAct=_0x2bc74d(0x213),localStorage[_0x2bc74d(0x1d8)](_0x2bc74d(0x20a),semestreAct),actualizar();}firstLoad();
+//comentar y revisar codigo
 
+class Materia {
 
+    constructor(nombre, creditos, previas, nombreCompleto, semestre, opcional, libre){
+        this.creditos = creditos;
+        this.nombre = nombre;
+        this.previas = previas;
+        this.curso = `${nombre}Curso`;
+        this.estado = 0;
+        this.nombreCompleto = nombreCompleto;
+        this.prioridad = 0;
+        this.semestre = semestre;
+        this.opcional = opcional;
+        this.libre = libre;
+    }
 
+}
 
+const CDIV = new Materia("CDIV", 13, [] , 'Cálculo DIV', 'ambos', 'no', 'si');
+const CDIVV = new Materia("CDIVV", 13, [CDIV.curso],'Cálculo DIVV', 'ambos', 'no', 'si');
+const MD1 = new Materia("MD1", 9, [], 'Matemática Discreta 1', 'ambos', 'no', 'si');
+const P1 = new Materia("P1", 10, [], 'Programación 1', 'ambos', 'no', 'no');
+const GAL1 = new Materia("GAL1", 9, [], 'Geometría y Álgebra Lineal 1', 'ambos', 'no', 'si')
+const P2 = new Materia("P2", 12, [P1.curso], 'Programación 2', 'primero', 'no', 'no');
+const Ec = new Materia("Ec", 7, [], 'Economía', 'segundo', 'si', 'no')
+const F1 = new Materia("F1", 10, [], 'Física 1', 'ambos', 'si', 'si')
+const GAL2 = new Materia("GAL2", 9, [GAL1.curso], 'Geometría y Álgebra Lineal 2', 'ambos', 'no', 'si')
+const PYE = new Materia("PYE", 10, [CDIVV.curso, GAL1, CDIV], 'Probabilidad y Estadistica', 'ambos', 'no', 'si')
+const MD2 = new Materia("MD2", 9, [MD1.curso, GAL1.curso], 'Matemática Discreta 2', 'ambos', 'no', 'si') 
+const LG = new Materia("LG", 12, [MD1.curso], 'Lógica', 'primero', 'no', 'no') 
+const MN = new Materia("MN", 8, [CDIVV, P1, GAL2, GAL1, CDIV], 'Métodos Numéricos', 'segundo', 'no', 'no') 
+const P4 = new Materia("P4", 15, [GAL1, CDIV, MD1, P2], 'Programación 4', 'primero', 'no', 'no') 
+const IIO = new Materia("IIO", 10, [GAL2, PYE, CDIVV, CDIV, GAL1], 'Int. a la Investigación de Operaciones', 'primero', 'no', 'no') 
+const P3 = new Materia("P3", 15, [P2.curso, PYE.curso, P1, MD1], 'Programación 3', 'segundo', 'no', 'no') 
+const AC = new Materia("AC", 12, [CDIV, LG.curso, P2.curso, P1, MD1], 'Arquitectura de Computadoras', 'segundo', 'no', 'no') 
+const CV = new Materia("CV", 10, [CDIVV.curso, GAL1, CDIV], 'Cálculo Vectorial', 'ambos', 'si', 'si') 
+const ED = new Materia("ED", 10, [GAL2,CDIVV.curso, GAL1, CDIV], 'Int. a las Ec. Diferenciales', 'segundo', 'si', 'si') 
+const TL = new Materia("TL", 12, [P3.curso, CDIV, GAL1, LG, MD1], 'Teoría de Lenguajes', 'primero', 'no', 'no') 
+const FVC = new Materia("FVC", 5, [CV.curso, CDIVV], 'Funciones de Variable Compleja', 'primero', 'si', 'si') 
+const SO = new Materia("SO", 12, [AC.curso, GAL1, CDIV, P2, MD1], 'Sistemas Operativos', 'primero', 'no', 'no')
+const FO = new Materia("FO", 6, [IIO], 'Fundamentos de Optimización', 'primero', 'si', 'no')
+const OCA = new Materia("OCA", 10, [IIO], 'Optimización Continua y Aplicaciones', 'segundo', 'si', 'no') 
+const FBD = new Materia("FBD", 15, [LG, P3, MD2], 'Fundamentos de Bases de Datos', 'segundo', 'no', 'no') 
+const RC = new Materia("RC", 12, [P3, SO.curso, CDIV, AC.curso] , 'Redes de Computadoras', 'segundo', 'no', 'no')
+const TP = new Materia("TP", 15, [P4], 'Taller de Programación', 'segundo', 'no', 'no') //Hay otra forma de poder cursar TP, P4.curso + P3 | Tengo que revisar como mostrarlo
+const IIS = new Materia("IIS", 10, [TP.curso, FBD.curso, P4.curso], 'Int. a la Ingeniería de Software', 'primero', 'no', 'no') 
+const IPF = new Materia("IPF", 7, [TL, P2, LG, MD1], 'Int. a la Programación Funcional', 'primero', 'no', 'no') // No aparecio en inscripcion del primer semestre
+const PL = new Materia("PL", 10, [TL, P3, MD2, LG], 'Programación Lógica', 'primero', 'no', 'no') 
+const PIS = new Materia("PIS", 15, [IIS.curso, P4], 'Proyecto de Ingeniería de Software', 'segundo', 'no', 'no') 
+const AA = new Materia("AA", 12, [LG, PYE, P3.curso, FBD.curso, P4, MD2], 'Aprendizaje Automático', 'primero', 'si', 'no') // No aparecio en inscripcion del primer semestre
+const AE = new Materia("AE", 10, [P4, PYE, IIO], 'Algoritmos Evolutivos', 'segundo', 'si', 'no') 
+const ICG = new Materia("ICG", 10, [P3, P4, GAL2.curso, GAL1], 'Int. a la Computación Gráfica', 'primero', 'si', 'no') 
+const CGA = new Materia("CGA", 12, [ICG.curso], 'Computación Gráfica Avanzada', 'segundo', 'si', 'no') 
+const CG = new Materia("CG", 10, [MD2, P3, MD1], 'Criptografía', 'primero', 'si', 'no') // No aparecio en inscripcion del primer semestre
+const FSI = new Materia("FSI", 12, [SO, FBD, P3, LG, RC], 'Fundamentos de la Seguridad Informática', 'primero', 'si', 'no') 
+const Aux = new Materia("Aux", 4, []);
+const MI = new Materia("MI", 4, [Aux], 'Matemática Inicial', 'ambos', 'no', 'no');
+const CTS = new Materia("CTS", 8, [], 'Ciencia, Tecnología y Sociedad', 'primero', 'si', 'no');
+const TRE = new Materia("TRE", 6, [P1], 'Taller de Robótica Educativa', 'primero', 'si', 'no');
+const F2 = new Materia("F2", 10, [F1.curso, CDIV.curso], 'Física 2', 'ambos', 'si', 'no');
+
+//Revisar todos otra vez
+
+let Materias = [MI, CDIV, CDIVV, P1, GAL1, MD1, P2, Ec, F1, GAL2, PYE, MD2, LG, MN, P4, IIO, P3, AC, CV, ED, TL, FVC, SO, FO, OCA, FBD, RC, TP, IIS, IPF, PL, PIS, AA, AE, ICG, CGA, CG, FSI, CTS, TRE, F2];
+
+let MateriasPersona = [];
+let creditos = 0;
+let materias = 0;
+let opcionales = true;
+let semestreAct = "ambos";
+
+function reset(){
+    MateriasPersona = [];
+    resetParrafos();
+    actualizar();
+}
+
+function resetParrafos(){
+    for (let index = 1; index < 8; index++) {
+        document.getElementById(`S${index}`).innerText = '';
+        document.getElementById(`S${index}`).style.display = 'none';  
+    }   
+}
+
+function toggleOpcionales(){
+    if (opcionales){
+        opcionales = false;
+        actualizar();
+    }else{
+        opcionales = true;
+        actualizar();
+    }
+}
+
+function toggleMateria(nombre, seccion){
+
+    let materiaActual = Materias.find( nombreAux => nombreAux.nombre == nombre );
+    switch (materiaActual.estado) {
+        case 0:
+            indicarPrevias(nombre, seccion);
+            break;
+        case 1:
+            MateriasPersona.push(materiaActual.curso);
+            break;
+        case 2:
+            MateriasPersona.push(materiaActual.nombre);
+            break;
+        case 3:
+            MateriasPersona.splice(MateriasPersona.indexOf(materiaActual.curso), 1);
+            MateriasPersona.splice(MateriasPersona.indexOf(materiaActual.nombre), 1);
+            break;
+        default:
+            break;
+    }
+    actualizar();
+
+}
+
+function indicarPrevias(nombre, seccion){
+
+    let materiaAct = Materias.find( materia => materia.nombre == nombre )
+
+    let MateriasQueFaltan = []
+    
+    materiaAct.previas.filter( (materia)=>{ 
+
+        if (typeof(materia)=="string"){
+            if (!MateriasPersona.find( elemento => elemento == materia)){
+                let materiaAux = Materias.find( elemento => elemento.curso == materia )
+                MateriasQueFaltan.push(` Curso ${materiaAux.nombreCompleto} `)
+            }
+        }else{
+            if (!MateriasPersona.find( elemento => elemento == materia.nombre)){
+                MateriasQueFaltan.push(` ${materia.nombreCompleto} `)
+            }
+            if (!MateriasPersona.find(elemento => elemento == materia.curso)){
+                MateriasQueFaltan.push(` Curso ${materia.nombreCompleto} `)
+            }
+        }
+
+        
+    } )
+
+    document.getElementById(seccion).style.display = "block"
+    document.getElementById(seccion).innerText = `[Clic para cerrar] Para poder cursar ${materiaAct.nombreCompleto} hacen falta {${MateriasQueFaltan}}`;
+
+}
+
+function actualizar(){
+
+    creditos = 0;
+    materias = 0;
+
+    Materias.forEach( (materia) => {
+
+        if (opcionales == true){
+
+                switch (semestreAct) {
+                    case "primero":
+                        if (materia.semestre == "primero" || materia.semestre == "ambos"){ document.getElementById(materia.nombre).style.display = "block"; }else{ document.getElementById(materia.nombre).style.display = "none"; }
+                        break;
+        
+                    case "segundo":
+                        if (materia.semestre == "segundo" || materia.semestre == "ambos"){ document.getElementById(materia.nombre).style.display = "block"; }else{ document.getElementById(materia.nombre).style.display = "none"; }
+                        break;
+                    case "libre":
+                        if (materia.libre == "si"){ document.getElementById(materia.nombre).style.display = "block"; }else{ document.getElementById(materia.nombre).style.display = "none"; }
+                        break;
+
+                    default:
+                        document.getElementById(materia.nombre).style.display = "block";
+                        break;
+                }
+
+        }else{
+            if (materia.opcional == "no"){
+                switch (semestreAct) {
+                    case "primero":
+                        if (materia.semestre == "primero" || materia.semestre == "ambos"){ document.getElementById(materia.nombre).style.display = "block"; }else{ document.getElementById(materia.nombre).style.display = "none"; }
+                        break;
+        
+                    case "segundo":
+                        if (materia.semestre == "segundo" || materia.semestre == "ambos"){ document.getElementById(materia.nombre).style.display = "block"; }else{ document.getElementById(materia.nombre).style.display = "none"; }
+                        break;
+                    case "libre":
+                        if (materia.libre == "si"){ document.getElementById(materia.nombre).style.display = "block"; }else{ document.getElementById(materia.nombre).style.display = "none"; }
+                        break;
+
+                    default:
+                        document.getElementById(materia.nombre).style.display = "block";
+                        break;
+                }
+            }else{
+                document.getElementById(materia.nombre).style.display = "none";
+            }
+        }
+
+        let estanTodas = true;
+
+        materia.previas.forEach( (previa) => {
+            estanTodas = (MateriasPersona.includes(previa.nombre)||MateriasPersona.includes(previa)) && estanTodas;
+        });
+
+        if (estanTodas){
+
+            if (!MateriasPersona.find(elemento => elemento == materia.nombre) || !MateriasPersona.find( elemento => elemento == materia.curso )){
+                document.getElementById(materia.nombre).disabled = false;
+                document.getElementById(materia.nombre).style.background = "lightcoral";
+                materia.estado = 1;
+            }
+            if (MateriasPersona.find( elemento => elemento == materia.curso )){
+                document.getElementById(materia.nombre).style.background = "lightblue";
+                materia.estado = 2;
+            }
+            if (MateriasPersona.find(elemento => elemento == materia.nombre)){
+                document.getElementById(materia.nombre).style.background = "lightgreen";
+                creditos += materia.creditos;
+                materias += 1;
+                materia.estado = 3;
+            }      
+
+        }else{
+
+            if (MateriasPersona.includes(materia.nombre)){
+                MateriasPersona.splice(MateriasPersona.indexOf(materia.nombre), 1);
+            }
+            if (MateriasPersona.includes(materia.curso)){
+                MateriasPersona.splice(MateriasPersona.indexOf(materia.curso), 1);
+            }
+            materia.estado = 0;
+            document.getElementById(materia.nombre).style.background = "gray";
+
+        }
+
+    });
+
+    document.getElementById('titulo').textContent = `Materias | Créditos: ${creditos}`
+
+    localStorage.setItem('semestre', semestreAct);
+    localStorage.setItem('materias', JSON.stringify(MateriasPersona))
+    localStorage.setItem('MI', document.getElementById('MI').disabled)
+
+}
+
+function firstLoad(){
+    if(localStorage.getItem('semestre')){
+        semestreAct = localStorage.getItem('semestre');
+    }
+    if(localStorage.getItem('materias')){
+        MateriasPersona = JSON.parse(localStorage.getItem('materias'))
+    }
+    document.getElementById('MI').disabled = true;
+    if (localStorage.getItem('MI') == "false"){
+        toggleMI();
+    }
+    switch (semestreAct) {
+        case "primero":
+            primero();
+            break;
+    
+        case "segundo":
+            segundo();
+            break;
+        case "libre":
+            libre();
+            break;
+
+        default:
+            ambos();
+            break;
+    }
+}
+
+function toggleMI(){
+    if (document.getElementById('MI').disabled == true){
+        document.getElementById('MI').disabled = false;
+        MI.previas = [];
+        CDIV.previas = [MI];
+        actualizar();
+    }else{
+        document.getElementById('MI').disabled = true;
+        MI.previas = [Aux];
+        CDIV.previas = [];
+        actualizar();
+    }
+}
+
+function primero(){
+    document.getElementById('primero').style.backgroundColor = "lightskyblue";
+    document.getElementById('segundo').style.backgroundColor = "white";
+    document.getElementById('ambos').style.backgroundColor = "white";
+    document.getElementById('libre').style.backgroundColor = "white";
+    document.getElementById('activarMI').style.display = "block";
+
+    semestreAct = "primero";
+    localStorage.setItem('semestre', semestreAct);
+    actualizar();
+
+}
+
+function segundo(){
+    document.getElementById('primero').style.backgroundColor = "white";
+    document.getElementById('segundo').style.backgroundColor = "lightskyblue";
+    document.getElementById('ambos').style.backgroundColor = "white";
+    document.getElementById('libre').style.backgroundColor = "white";
+    document.getElementById('activarMI').style.display = "block";
+
+    semestreAct = "segundo";
+    localStorage.setItem('semestre', semestreAct);
+    actualizar();
+
+}
+
+function ambos(){
+    document.getElementById('primero').style.backgroundColor = "white";
+    document.getElementById('segundo').style.backgroundColor = "white";
+    document.getElementById('ambos').style.backgroundColor = "lightskyblue";
+    document.getElementById('libre').style.backgroundColor = "white";
+    document.getElementById('activarMI').style.display = "block";
+
+    semestreAct = "ambos";
+    localStorage.setItem('semestre', semestreAct);
+    actualizar();
+
+}
+
+function libre(){
+    document.getElementById('primero').style.backgroundColor = "white";
+    document.getElementById('segundo').style.backgroundColor = "white";
+    document.getElementById('ambos').style.backgroundColor = "white";
+    document.getElementById('libre').style.backgroundColor = "lightskyblue";
+    document.getElementById('activarMI').style.display = "none";
+
+    semestreAct = "libre";
+    localStorage.setItem('semestre', semestreAct);
+    actualizar();
+
+}
+
+// function calculadoraSemestre(){
+
+//     let creditosSemestre = 0;
+//     let semestrePosiblePrimero = [];
+//     let semestrePosibleSegundo= [];
+
+//     Materias.forEach( (materia)=>{
+//         materia.prioridad = 0;
+//     } )
+
+//     maximaPrioridad = 0;
+
+//     Materias.forEach( (materia)=>{
+//         if (materia.estado == 1 || materia.estado == 2){
+//             materia.prioridad += 1;
+//         }
+//         if (materia.opcional == "no"){
+//             materia.prioridad += 1;
+//         }
+//         if (materia.prioridad>maximaPrioridad){
+//             maximaPrioridad = materia.prioridad;
+//         }
+//     } );
+
+//     Materias.forEach( (materia)=>{
+//         if (materia.prioridad == maximaPrioridad){
+            
+//             if (materia.semestre == "ambos"){
+//                 semestrePosiblePrimero.push(materia);
+//                 semestrePosibleSegundo.push(materia);
+//             }
+//             if (materia.semestre == "primero"){
+//                 semestrePosiblePrimero.push(materia);
+//             }
+//             if (materia.semestre == "primero"){
+//                 semestrePosibleSegundo.push(materia);
+//             }
+
+//         }
+//     } )
+
+//     console.log(semestrePosiblePrimero);
+//     console.log(semestrePosibleSegundo);
+
+// }
+
+firstLoad();
