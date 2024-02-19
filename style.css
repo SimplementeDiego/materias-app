@@ -66,7 +66,8 @@ main{
     display: flex;
     flex-direction: column;
     align-items: center;
-    margin-top: 20px;
+    /* margin-top: 20px; */
+    border-top: 5px solid gray;
     background-color: beige;
     text-align: center;
     padding: 10px;
@@ -80,8 +81,8 @@ main{
     flex-wrap: wrap;
 }
 
-.no-mt{
-    margin-top: 0;
+.no-bt{
+    border-top: none;
 }
 
 .section button{
@@ -116,6 +117,11 @@ transform: scale(1.05);
 
 .tituloSeccion{
     text-decoration: underline;
+}
+
+.section-calculadora{
+    position: sticky;
+    bottom: 0;
 }
 
 @media (max-width: 675px) {
