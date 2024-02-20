@@ -267,20 +267,7 @@ function checkWidth(){
     }
 }
 
-function firstLoad(){
-    if(localStorage.getItem('semestre')){
-        semestreAct = localStorage.getItem('semestre');
-        toggleBotones(semestreAct);
-    }
-    if(localStorage.getItem('materias')){
-        MateriasPersona = JSON.parse(localStorage.getItem('materias'))
-    }
-    document.getElementById('MI').disabled = true;
-    if (localStorage.getItem('MI') == "false"){
-        toggleMI();
-    }
-    checkWidth();
-}
+
 
 function toggleMI(){
     if (document.getElementById('MI').disabled == true){
@@ -351,6 +338,22 @@ function toggleMenu(){
         seleccion = !seleccion;
     }
 
+}
+
+function firstLoad(){
+    
+    if(localStorage.getItem('materias')){
+        MateriasPersona = JSON.parse(localStorage.getItem('materias'))
+    }
+    document.getElementById('MI').disabled = true;
+    if (localStorage.getItem('MI') == "false"){
+        toggleMI();
+    }
+    if(localStorage.getItem('semestre')){
+        semestreAct = localStorage.getItem('semestre');
+        toggleBotones(semestreAct);
+    }
+    checkWidth();
 }
 
 firstLoad();
