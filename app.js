@@ -278,6 +278,19 @@ function firstLoad(){
             ambos();
             break;
     }
+    if (window.matchMedia("(min-width: 675px)").matches) {
+        this.document.getElementById('checkbox-container').style.display = "none";
+        document.getElementById('navbar').style.display = "flex"
+    } else {
+        this.document.getElementById('checkbox-container').style.display = "flex";
+        if (seleccion){
+            this.document.getElementById('checkbox').checked = true;
+            document.getElementById('navbar').style.display = "flex"
+        }else{
+            this.document.getElementById('checkbox').checked = false;
+            document.getElementById('navbar').style.display = "none"
+        }
+    }
 }
 
 function toggleMI(){
