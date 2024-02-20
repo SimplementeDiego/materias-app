@@ -114,28 +114,59 @@ function indicarPrevias(nombre){
 
     let materiaAct = Materias.find( materia => materia.nombre == nombre )
 
-    let MateriasQueFaltan = []
+    let Exonerar = [];
+    let Salvar = [];
+    let SalvarFinal = [];
     
     materiaAct.previas.filter( (materia)=>{ 
 
         if (typeof(materia)=="string"){
             if (!MateriasPersona.find( elemento => elemento == materia)){
-                let materiaAux = Materias.find( elemento => elemento.curso == materia )
-                MateriasQueFaltan.push(` Curso ${materiaAux.nombreCompleto} `)
+                let materiaAux = Materias.find( elemento => elemento.curso == materia );
+                Salvar.push(materiaAux);
             }
         }else{
             if (!MateriasPersona.find( elemento => elemento == materia.nombre)){
-                MateriasQueFaltan.push(` ${materia.nombreCompleto} `)
+                Exonerar.push(materia);
             }
             if (!MateriasPersona.find(elemento => elemento == materia.curso)){
-                MateriasQueFaltan.push(` Curso ${materia.nombreCompleto} `)
+                Salvar.push(materia);
             }
         }
 
         
     } )
 
-    document.getElementById('popup-text').innerHTML = `Para poder cursar ${materiaAct.nombreCompleto} hacen falta {${MateriasQueFaltan}}`;
+    let texto = `Para poder cursar ${materiaAct.nombreCompleto} se necesita:<br/><br/>`;
+
+    if (Exonerar.length>0){
+        texto += `<u>Exonerar</u>:<br/><br/>`
+    }
+    Exonerar.forEach( (materia)=>{
+        texto += `-${materia.nombreCompleto}<br/>`
+    } )
+
+    
+
+   
+    Salvar.forEach( (materia)=>{
+        if (!Exonerar.find(elemento => elemento == materia)){
+            SalvarFinal.push(materia);
+        }
+    } )
+    if (SalvarFinal.length>0){
+        if (Exonerar.length>0){
+            texto += `<br/>`
+        }
+        texto += `<u>Salvar curso de</u>:<br/><br/>`
+    }
+    SalvarFinal.forEach( (materia)=>{
+        if (!Exonerar.find(elemento => elemento == materia)){
+            texto += `-${materia.nombreCompleto}<br/>`
+        }
+    } )
+
+    document.getElementById('popup-text').innerHTML = texto;
     openPopup();
 
 }
