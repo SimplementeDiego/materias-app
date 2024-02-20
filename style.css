@@ -173,6 +173,46 @@ transform: scale(1.05);
     justify-content: center;
 }
 
+
+#boxPopup {
+    display: none; 
+    position: fixed; 
+    z-index: 1; 
+    left: 0;
+    top: 0;
+    width: 100%; 
+    height: 100%; 
+    overflow: auto; 
+    background-color: rgb(0,0,0); 
+    background-color: rgba(0,0,0,0.4); 
+    justify-content: center;
+    align-items: center;
+}    
+
+#boxPopup-content{
+    z-index: 2;
+    height: fit-content;
+    width: fit-content;
+    background-color: white;
+    border-radius: 10px;
+    padding: 20px;
+    text-align: center;
+    margin: 20px;
+}
+
+#popup-text{
+    padding: 5px;
+}
+
+#cerrar-popup{
+    padding: 10px;
+    border: none;
+    margin-top: 10px;
+    background-color: lightpink;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
 @media (max-width: 675px) {
     .section{
         flex-direction: column;

@@ -73,15 +73,7 @@ let semestreAct = "ambos";
 
 function reset(){
     MateriasPersona = [];
-    resetParrafos();
     actualizar();
-}
-
-function resetParrafos(){
-    for (let index = 1; index < 8; index++) {
-        document.getElementById(`S${index}`).innerText = '';
-        document.getElementById(`S${index}`).style.display = 'none';  
-    }   
 }
 
 function toggleOpcionales(){
@@ -94,12 +86,12 @@ function toggleOpcionales(){
     }
 }
 
-function toggleMateria(nombre, seccion){
+function toggleMateria(nombre){
 
     let materiaActual = Materias.find( nombreAux => nombreAux.nombre == nombre );
     switch (materiaActual.estado) {
         case 0:
-            indicarPrevias(nombre, seccion);
+            indicarPrevias(nombre);
             break;
         case 1:
             MateriasPersona.push(materiaActual.curso);
@@ -118,7 +110,7 @@ function toggleMateria(nombre, seccion){
 
 }
 
-function indicarPrevias(nombre, seccion){
+function indicarPrevias(nombre){
 
     let materiaAct = Materias.find( materia => materia.nombre == nombre )
 
@@ -143,8 +135,8 @@ function indicarPrevias(nombre, seccion){
         
     } )
 
-    document.getElementById(seccion).style.display = "block"
-    document.getElementById(seccion).innerText = `[Clic para cerrar] Para poder cursar ${materiaAct.nombreCompleto} hacen falta {${MateriasQueFaltan}}`;
+    document.getElementById('popup-text').innerHTML = `Para poder cursar ${materiaAct.nombreCompleto} hacen falta {${MateriasQueFaltan}}`;
+    openPopup();
 
 }
 
@@ -264,7 +256,13 @@ function checkWidth(){
     }
 }
 
+function openPopup() {
+    document.getElementById("boxPopup").style.display = "flex";
+}
 
+function closePopup() {
+    document.getElementById("boxPopup").style.display = "none";
+}
 
 function toggleMI(){
     if (document.getElementById('MI').disabled == true){
@@ -352,4 +350,13 @@ firstLoad();
 
 window.addEventListener("resize", function() {
     checkWidth();
-  })
+})
+
+window.onclick = function (event) {
+    var modal = document.getElementById('boxPopup');
+    if (event.target == modal) {
+        closePopup();
+    }
+}
+
+
