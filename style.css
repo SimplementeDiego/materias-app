@@ -62,16 +62,6 @@
     align-items: center;
 }
 
-.botones-bot{
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    height: 140px;
-    justify-content: space-between;
-    padding-bottom: 20px;
-}
-
 .botones-item{
     width: 80%;
     height: 40px;
@@ -215,19 +205,8 @@ transform: scale(1.05);
         height: fit-content;
         overflow: hidden;
     }
-    .botones-bot{
-        padding: 0;
-        margin: 10px 0 10px 0;
-        height: 120px;
-        justify-content: space-between;
-        position: absolute;
-        top: calc( 100vh - 200px );
-    }
     .main-content{
         background-color: beige;
-    }
-    .seccion-final{
-        margin-bottom: 120px;
     }
     .botones-top button{
         margin: 0;
