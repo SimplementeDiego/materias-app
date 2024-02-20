@@ -244,10 +244,7 @@ function actualizar(){
         document.getElementById('op').innerHTML = "Opcionales: No"
     }
     
-
-    localStorage.setItem('semestre', semestreAct);
     localStorage.setItem('materias', JSON.stringify(MateriasPersona))
-    localStorage.setItem('MI', document.getElementById('MI').disabled)
 
 }
 
@@ -274,13 +271,13 @@ function toggleMI(){
         document.getElementById('MI').disabled = false;
         MI.previas = [];
         CDIV.previas = [MI];
-        actualizar();
     }else{
         document.getElementById('MI').disabled = true;
         MI.previas = [Aux];
         CDIV.previas = [];
-        actualizar();
     }
+    actualizar();
+    localStorage.setItem('MI', document.getElementById('MI').disabled)
 }
 
 function toggleBotones(valor){
@@ -322,14 +319,11 @@ function toggleBotones(valor){
         default:
             break;
     }
-
-    localStorage.setItem('semestre', semestreAct);
     actualizar();
-
+    localStorage.setItem('semestre', semestreAct);
 }
 
 function toggleMenu(){
-
     if (document.getElementById('checkbox').checked){
         document.getElementById('navbar').style.display = "flex"
         seleccion = !seleccion;
@@ -337,11 +331,9 @@ function toggleMenu(){
         document.getElementById('navbar').style.display = "none"
         seleccion = !seleccion;
     }
-
 }
 
 function firstLoad(){
-    
     if(localStorage.getItem('materias')){
         MateriasPersona = JSON.parse(localStorage.getItem('materias'))
     }
