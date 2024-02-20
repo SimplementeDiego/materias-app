@@ -251,33 +251,7 @@ function actualizar(){
 
 }
 
-function firstLoad(){
-    if(localStorage.getItem('semestre')){
-        semestreAct = localStorage.getItem('semestre');
-    }
-    if(localStorage.getItem('materias')){
-        MateriasPersona = JSON.parse(localStorage.getItem('materias'))
-    }
-    document.getElementById('MI').disabled = true;
-    if (localStorage.getItem('MI') == "false"){
-        toggleMI();
-    }
-    switch (semestreAct) {
-        case "primero":
-            primero();
-            break;
-    
-        case "segundo":
-            segundo();
-            break;
-        case "libre":
-            libre();
-            break;
-
-        default:
-            ambos();
-            break;
-    }
+function checkWidth(){
     if (window.matchMedia("(min-width: 675px)").matches) {
         this.document.getElementById('checkbox-container').style.display = "none";
         document.getElementById('navbar').style.display = "flex"
@@ -291,6 +265,21 @@ function firstLoad(){
             document.getElementById('navbar').style.display = "none"
         }
     }
+}
+
+function firstLoad(){
+    if(localStorage.getItem('semestre')){
+        semestreAct = localStorage.getItem('semestre');
+        toggleBotones(semestreAct);
+    }
+    if(localStorage.getItem('materias')){
+        MateriasPersona = JSON.parse(localStorage.getItem('materias'))
+    }
+    document.getElementById('MI').disabled = true;
+    if (localStorage.getItem('MI') == "false"){
+        toggleMI();
+    }
+    checkWidth();
 }
 
 function toggleMI(){
@@ -307,53 +296,46 @@ function toggleMI(){
     }
 }
 
-function primero(){
-    document.getElementById('primero').style.backgroundColor = "lightskyblue";
-    document.getElementById('segundo').style.backgroundColor = "lightgrey";
-    document.getElementById('ambos').style.backgroundColor = "lightgrey";
-    document.getElementById('libre').style.backgroundColor = "lightgrey";
-    document.getElementById('activarMI').style.display = "block";
+function toggleBotones(valor){
 
-    semestreAct = "primero";
-    localStorage.setItem('semestre', semestreAct);
-    actualizar();
+    semestreAct = valor;
+    let colorSec = 'lightgrey'
+    let colorPrin = 'lightskyblue'
 
-}
+    switch (valor) {
+        case 'primero':
+            document.getElementById('primero').style.backgroundColor = colorPrin;
+            document.getElementById('segundo').style.backgroundColor = colorSec;
+            document.getElementById('ambos').style.backgroundColor = colorSec;
+            document.getElementById('libre').style.backgroundColor = colorSec;
+            document.getElementById('activarMI').style.display = "block";
+            break;
+        case 'segundo':
+            document.getElementById('primero').style.backgroundColor = colorSec;
+            document.getElementById('segundo').style.backgroundColor = colorPrin;
+            document.getElementById('ambos').style.backgroundColor = colorSec;
+            document.getElementById('libre').style.backgroundColor = colorSec;
+            document.getElementById('activarMI').style.display = "block";
+            break;
+        case 'ambos':
+            document.getElementById('primero').style.backgroundColor = colorSec;
+            document.getElementById('segundo').style.backgroundColor = colorSec;
+            document.getElementById('ambos').style.backgroundColor = colorPrin;
+            document.getElementById('libre').style.backgroundColor = colorSec;
+            document.getElementById('activarMI').style.display = "block";
+            break;
+        case 'libre':
+            document.getElementById('primero').style.backgroundColor = colorSec;
+            document.getElementById('segundo').style.backgroundColor = colorSec;
+            document.getElementById('ambos').style.backgroundColor = colorSec;
+            document.getElementById('libre').style.backgroundColor = colorPrin;
+            document.getElementById('activarMI').style.display = "none";
+            break;
+    
+        default:
+            break;
+    }
 
-function segundo(){
-    document.getElementById('primero').style.backgroundColor = "lightgrey";
-    document.getElementById('segundo').style.backgroundColor = "lightskyblue";
-    document.getElementById('ambos').style.backgroundColor = "lightgrey";
-    document.getElementById('libre').style.backgroundColor = "lightgrey";
-    document.getElementById('activarMI').style.display = "block";
-
-    semestreAct = "segundo";
-    localStorage.setItem('semestre', semestreAct);
-    actualizar();
-
-}
-
-function ambos(){
-    document.getElementById('primero').style.backgroundColor = "lightgrey";
-    document.getElementById('segundo').style.backgroundColor = "lightgrey";
-    document.getElementById('ambos').style.backgroundColor = "lightskyblue";
-    document.getElementById('libre').style.backgroundColor = "lightgrey";
-    document.getElementById('activarMI').style.display = "block";
-
-    semestreAct = "ambos";
-    localStorage.setItem('semestre', semestreAct);
-    actualizar();
-
-}
-
-function libre(){
-    document.getElementById('primero').style.backgroundColor = "lightgrey";
-    document.getElementById('segundo').style.backgroundColor = "lightgrey";
-    document.getElementById('ambos').style.backgroundColor = "lightgrey";
-    document.getElementById('libre').style.backgroundColor = "lightskyblue";
-    document.getElementById('activarMI').style.display = "none";
-
-    semestreAct = "libre";
     localStorage.setItem('semestre', semestreAct);
     actualizar();
 
@@ -371,66 +353,8 @@ function toggleMenu(){
 
 }
 
-// function calculadoraSemestre(){
-
-//     let creditosSemestre = 0;
-//     let semestrePosiblePrimero = [];
-//     let semestrePosibleSegundo= [];
-
-//     Materias.forEach( (materia)=>{
-//         materia.prioridad = 0;
-//     } )
-
-//     maximaPrioridad = 0;
-
-//     Materias.forEach( (materia)=>{
-//         if (materia.estado == 1 || materia.estado == 2){
-//             materia.prioridad += 1;
-//         }
-//         if (materia.opcional == "no"){
-//             materia.prioridad += 1;
-//         }
-//         if (materia.prioridad>maximaPrioridad){
-//             maximaPrioridad = materia.prioridad;
-//         }
-//     } );
-
-//     Materias.forEach( (materia)=>{
-//         if (materia.prioridad == maximaPrioridad){
-            
-//             if (materia.semestre == "ambos"){
-//                 semestrePosiblePrimero.push(materia);
-//                 semestrePosibleSegundo.push(materia);
-//             }
-//             if (materia.semestre == "primero"){
-//                 semestrePosiblePrimero.push(materia);
-//             }
-//             if (materia.semestre == "primero"){
-//                 semestrePosibleSegundo.push(materia);
-//             }
-
-//         }
-//     } )
-
-//     console.log(semestrePosiblePrimero);
-//     console.log(semestrePosibleSegundo);
-
-// }
-
 firstLoad();
 
 window.addEventListener("resize", function() {
-    if (window.matchMedia("(min-width: 675px)").matches) {
-        this.document.getElementById('checkbox-container').style.display = "none";
-        document.getElementById('navbar').style.display = "flex"
-    } else {
-        this.document.getElementById('checkbox-container').style.display = "flex";
-        if (seleccion){
-            this.document.getElementById('checkbox').checked = true;
-            document.getElementById('navbar').style.display = "flex"
-        }else{
-            this.document.getElementById('checkbox').checked = false;
-            document.getElementById('navbar').style.display = "none"
-        }
-    }
+    checkWidth();
   })
