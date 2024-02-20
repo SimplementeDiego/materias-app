@@ -4,8 +4,8 @@
     margin: 0;
 }
 
-header{
-    height: 100px;
+.header-content{
+    height: 60px;
     width: 100%;
     background-color: lightpink;
     display: flex;
@@ -13,6 +13,28 @@ header{
     position: sticky;
     top: 0;
     z-index: 999;
+}
+
+.main-content{
+    min-height: calc( 100vh - 60px );
+    width: 100%;
+    display: flex;
+}
+
+.secciones{
+    display: block;
+    flex-direction: column;
+    width: calc( 100% - 200px );
+    overflow-y: scroll;
+    height: calc( 100vh - 60px );
+}
+
+.navbar{
+    width: 200px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    background-color: rgb(241, 221, 250);
 }
 
 .titulo-container{
@@ -32,19 +54,45 @@ header{
     padding: 5px;
 }
 
-.semestres{
+.botones-top{
     width: 100%;
     display: flex;
-}
-.semestres button{
-    width: calc( 100% / 4 );
-    height: 40px;   
+    flex-direction: column;
+    width: 100%;
+    align-items: center;
 }
 
-.semestre{
+.botones-bot{
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: 140px;
+    justify-content: space-between;
+    padding-bottom: 20px;
+}
+
+.botones-item{
+    width: 80%;
+    height: 40px;
     border: none;
-    border-bottom: 1px solid black;
-    border-right: 1px solid black;
+    background-color: lightgrey;
+    border-radius: 10px;
+    margin-top: 20px;
+    box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.5);
+    cursor: pointer; 
+}
+
+.botones-item:active{
+    transform: scale(0.95);
+}
+
+.reset{
+    background-color: lightcoral;
+}
+
+.opcionales{
+    background-color: lightsalmon;
 }
 
 .no-br{
@@ -55,24 +103,16 @@ header{
     background-color: lightskyblue;
 }
 
-main{
-    min-height: calc( 100vh - 100px );
-    height: 100%;
-    width: 100%;
-    background-color: lightblue;
-}
-
 .container-section{
     display: flex;
     flex-direction: column;
     align-items: center;
-    /* margin-top: 20px; */
     border-top: 5px solid gray;
     background-color: beige;
     text-align: center;
     padding: 10px;
-    min-height: calc( ( 100vh - 100px ) / 8 );
-    height: 100%;
+    min-height: calc( ( 100vh - 60px ) / 8 );
+    height: fit-content;
     justify-content: space-around;
 }
 
@@ -127,6 +167,22 @@ transform: scale(1.05);
     bottom: 0;
 }
 
+.checkbox{
+    height: 30px;
+    width: 30px;
+    margin-right: 20px;
+}
+
+.label{
+    margin-right: 10px;
+}
+
+.checkbox-container{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
 @media (max-width: 675px) {
     .section{
         flex-direction: column;
@@ -139,12 +195,47 @@ transform: scale(1.05);
         margin: 10px 0 10px 0;
         width: 95%;
     }
-    header h1{
+    .header-content h1{
         font-size: 17px;
     }
-    .semestres button{
+    .botones-top-item{
         font-size: 12px;
     }
+    .main-content{
+        flex-direction: column;
+    }
+    .navbar{
+        width: 100%;
+        position: sticky;
+        top: 60px;
+        z-index: 999;
+    }
+    .secciones{
+        width: 100%;
+        height: fit-content;
+        overflow: hidden;
+    }
+    .botones-bot{
+        padding: 0;
+        margin: 10px 0 10px 0;
+        height: 120px;
+        justify-content: space-between;
+        position: absolute;
+        top: calc( 100vh - 200px );
+    }
+    .main-content{
+        background-color: beige;
+    }
+    .seccion-final{
+        margin-bottom: 120px;
+    }
+    .botones-top button{
+        margin: 0;
+        box-shadow: none;
+        border-radius: 0;
+        width: 100%;
+    }
+    .botones-top button:active{
+        transform: none;
+    }
   }
-
-  

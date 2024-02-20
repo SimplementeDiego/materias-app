@@ -68,6 +68,7 @@ let MateriasPersona = [];
 let creditos = 0;
 let materias = 0;
 let opcionales = true;
+let seleccion = false;
 let semestreAct = "ambos";
 
 function reset(){
@@ -237,6 +238,13 @@ function actualizar(){
 
     document.getElementById('titulo').textContent = `Materias | Créditos: ${creditos}`
 
+    if (opcionales){
+        document.getElementById('op').innerHTML = "Opcionales: Si"
+    }else{
+        document.getElementById('op').innerHTML = "Opcionales: No"
+    }
+    
+
     localStorage.setItem('semestre', semestreAct);
     localStorage.setItem('materias', JSON.stringify(MateriasPersona))
     localStorage.setItem('MI', document.getElementById('MI').disabled)
@@ -288,9 +296,9 @@ function toggleMI(){
 
 function primero(){
     document.getElementById('primero').style.backgroundColor = "lightskyblue";
-    document.getElementById('segundo').style.backgroundColor = "white";
-    document.getElementById('ambos').style.backgroundColor = "white";
-    document.getElementById('libre').style.backgroundColor = "white";
+    document.getElementById('segundo').style.backgroundColor = "lightgrey";
+    document.getElementById('ambos').style.backgroundColor = "lightgrey";
+    document.getElementById('libre').style.backgroundColor = "lightgrey";
     document.getElementById('activarMI').style.display = "block";
 
     semestreAct = "primero";
@@ -300,10 +308,10 @@ function primero(){
 }
 
 function segundo(){
-    document.getElementById('primero').style.backgroundColor = "white";
+    document.getElementById('primero').style.backgroundColor = "lightgrey";
     document.getElementById('segundo').style.backgroundColor = "lightskyblue";
-    document.getElementById('ambos').style.backgroundColor = "white";
-    document.getElementById('libre').style.backgroundColor = "white";
+    document.getElementById('ambos').style.backgroundColor = "lightgrey";
+    document.getElementById('libre').style.backgroundColor = "lightgrey";
     document.getElementById('activarMI').style.display = "block";
 
     semestreAct = "segundo";
@@ -313,10 +321,10 @@ function segundo(){
 }
 
 function ambos(){
-    document.getElementById('primero').style.backgroundColor = "white";
-    document.getElementById('segundo').style.backgroundColor = "white";
+    document.getElementById('primero').style.backgroundColor = "lightgrey";
+    document.getElementById('segundo').style.backgroundColor = "lightgrey";
     document.getElementById('ambos').style.backgroundColor = "lightskyblue";
-    document.getElementById('libre').style.backgroundColor = "white";
+    document.getElementById('libre').style.backgroundColor = "lightgrey";
     document.getElementById('activarMI').style.display = "block";
 
     semestreAct = "ambos";
@@ -326,15 +334,27 @@ function ambos(){
 }
 
 function libre(){
-    document.getElementById('primero').style.backgroundColor = "white";
-    document.getElementById('segundo').style.backgroundColor = "white";
-    document.getElementById('ambos').style.backgroundColor = "white";
+    document.getElementById('primero').style.backgroundColor = "lightgrey";
+    document.getElementById('segundo').style.backgroundColor = "lightgrey";
+    document.getElementById('ambos').style.backgroundColor = "lightgrey";
     document.getElementById('libre').style.backgroundColor = "lightskyblue";
     document.getElementById('activarMI').style.display = "none";
 
     semestreAct = "libre";
     localStorage.setItem('semestre', semestreAct);
     actualizar();
+
+}
+
+function toggleMenu(){
+
+    if (document.getElementById('checkbox').checked){
+        document.getElementById('navbar').style.display = "flex"
+        seleccion = !seleccion;
+    }else{
+        document.getElementById('navbar').style.display = "none"
+        seleccion = !seleccion;
+    }
 
 }
 
@@ -385,3 +405,19 @@ function libre(){
 // }
 
 firstLoad();
+
+window.addEventListener("resize", function() {
+    if (window.matchMedia("(min-width: 675px)").matches) {
+        this.document.getElementById('checkbox-container').style.display = "none";
+        document.getElementById('navbar').style.display = "flex"
+    } else {
+        this.document.getElementById('checkbox-container').style.display = "flex";
+        if (seleccion){
+            this.document.getElementById('checkbox').checked = true;
+            document.getElementById('navbar').style.display = "flex"
+        }else{
+            this.document.getElementById('checkbox').checked = false;
+            document.getElementById('navbar').style.display = "none"
+        }
+    }
+  })
