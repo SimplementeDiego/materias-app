@@ -362,21 +362,21 @@ function toggleMenu(){
     }
 }
 
-function aviso(){
+// function aviso(){
 
-    let texto = `<h2><u>Aviso</u></h2><br/>`
-    texto += `Esta página fue inspirada de Malla Curricular.<br/><br/>`
-    texto += `El objetivo de crearla fue:<br/><br/>`
-    texto += `- Agregar materias opcionales<br/>`
-    texto += `- Ver materias que se dictan por semestre<br/>`
-    texto += `- Pestaña con calidad de libre<br/>`
-    texto += `- Mantenerla actualizada<br/>`
-    texto += `- Hacer un proyecto divertido y útil<br/><br/>`
-    texto += `Todo el código es único.`
-    document.getElementById('popup-text').innerHTML = texto;
-    openPopup();
+//     let texto = `<h2><u>Aviso</u></h2><br/>`
+//     texto += `Esta página fue inspirada de Malla Curricular.<br/><br/>`
+//     texto += `El objetivo de crearla fue:<br/><br/>`
+//     texto += `- Agregar materias opcionales<br/>`
+//     texto += `- Ver materias que se dictan por semestre<br/>`
+//     texto += `- Pestaña con calidad de libre<br/>`
+//     texto += `- Mantenerla actualizada<br/>`
+//     texto += `- Hacer un proyecto divertido y útil<br/><br/>`
+//     texto += `Todo el código es único.`
+//     document.getElementById('popup-text').innerHTML = texto;
+//     openPopup();
     
-}
+// }
 
 function firstLoad(){
     if(localStorage.getItem('materias')){
@@ -391,7 +391,6 @@ function firstLoad(){
         toggleBotones(semestreAct);
     }
     checkWidth();
-    aviso();
 }
 
 firstLoad();
