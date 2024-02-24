@@ -310,7 +310,7 @@ const IPF = new Materia(
   7,
   [TL, P2, LG, MD1],
   "Int. a la Programación Funcional",
-  "primero",
+  "segundo",
   "no",
   "no",
   "creditosEnProg"
