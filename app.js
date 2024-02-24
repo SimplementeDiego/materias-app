@@ -484,7 +484,7 @@ const PG = new Materia(
   "ambos",
   "no",
   "no",
-  "Total"
+  "creditosEnTall_Pasa_Proy"
 );
 
 //Revisar todos otra vez
@@ -1040,7 +1040,7 @@ function verAreas(){
     texto += `Cálculo Numérico: ${creditosBloque.creditosEnMN} (8)<br/>`
     texto += `Investigación Operativa: ${creditosBloque.creditosEnIO} (10)<br/>`
     texto += `Ingeniería de Software: ${creditosBloque.creditosEnIS} (10)<br/>`
-    texto += `A. Integ., Tall., Pas. y Proy.: ${creditosBloque.creditosEnIS} (45)<br/>`
+    texto += `A. Integ., Tall., Pas. y Proy.: ${creditosBloque.creditosEnTall_Pasa_Proy} (45)<br/>`
     texto += `Gestión en Organizaciones: ${creditosBloque.creditosEnGO} (10)<br/>`
     texto += `Ciencias H. y S.: ${creditosBloque.creditosEnCHS} (10)<br/>`
 
