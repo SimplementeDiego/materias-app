@@ -85,6 +85,10 @@
     background-color: lightsalmon;
 }
 
+.area{
+    background-color: lightyellow;
+}
+
 .no-br{
     border-right: none;
 }
@@ -177,7 +181,7 @@ transform: scale(1.05);
 #boxPopup {
     display: none; 
     position: fixed; 
-    z-index: 1; 
+    z-index: 11; 
     left: 0;
     top: 0;
     width: 100%; 
@@ -190,14 +194,16 @@ transform: scale(1.05);
 }    
 
 #boxPopup-content{
-    z-index: 2;
+    z-index: 11;
     height: fit-content;
     width: fit-content;
+    max-width: 80%;
     background-color: white;
     border-radius: 10px;
     padding: 20px;
     text-align: center;
     margin: 20px;
+    text-wrap: wrap;
 }
 
 #popup-text{
@@ -238,7 +244,7 @@ transform: scale(1.05);
         width: 100%;
         position: sticky;
         top: 60px;
-        z-index: 999;
+        z-index: 10;
     }
     .secciones{
         width: 100%;
