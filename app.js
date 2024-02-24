@@ -466,6 +466,16 @@ const PCIC = new Materia(
   "no",
   "creditosEnCHS"
 );
+const Pasan = new Materia(
+  "Pasan",
+  10,
+  [Aux],
+  "Pasantía",
+  "primero",
+  "si",
+  "no",
+  "creditosEnTall_Pasa_Proy"
+);
 const PG = new Materia(
   "PG",
   30,
@@ -524,6 +534,7 @@ let Materias = [
   PCIC,
   AGI,
   PAI,
+  Pasan,
   PG,
 ];
 
@@ -698,6 +709,11 @@ function indicarPrevias(nombre) {
     texto += `-140 créditos`;
   }
 
+  if (materiaAct == Pasan) {
+    texto = `Para poder validar ${materiaAct.nombreCompleto} se necesitan:<br/><br/>`;
+    texto += `-200 créditos`;
+  }
+
   if (materiaAct == TP) {
     texto = `Para poder cursar ${materiaAct.nombreCompleto} se necesita alguna de las siguientes:<br/><br/>`;
     texto += `<u>Opción 1</u>:<br/>`;
@@ -807,6 +823,10 @@ function actualizar() {
     });
 
     if (materia == AGI && creditosBloque.Total >= 140) {
+      estanTodas = true;
+    }
+
+    if (materia == Pasan && creditosBloque.Total >= 200) {
       estanTodas = true;
     }
 
