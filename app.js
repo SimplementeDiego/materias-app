@@ -314,7 +314,7 @@ const IPF = new Materia(
   "no",
   "no",
   "creditosEnProg"
-); // No aparecio en inscripcion del primer semestre
+);
 const PL = new Materia(
   "PL",
   10,
@@ -340,11 +340,11 @@ const AA = new Materia(
   12,
   [LG, PYE, P3.curso, FBD.curso, P4, MD2],
   "Aprendizaje Automático",
-  "primero",
+  "segundo",
   "si",
   "no",
-  "Total"
-); // No aparecio en inscripcion del primer semestre
+  "creditosEnIAYR"
+);
 const AE = new Materia(
   "AE",
   10,
@@ -375,16 +375,6 @@ const CGA = new Materia(
   "no",
   "creditosEnProg"
 );
-const CG = new Materia(
-  "CG",
-  10,
-  [MD2, P3, MD1],
-  "Criptografía",
-  "primero",
-  "si",
-  "no",
-  "Total"
-); // No aparecio en inscripcion del primer semestre
 const FSI = new Materia(
   "FSI",
   12,
@@ -536,7 +526,6 @@ let Materias = [
   AE,
   ICG,
   CGA,
-  CG,
   FSI,
   CTS,
   TRE,
@@ -568,6 +557,7 @@ let creditosBloque = {
   creditosEnIS: 0, // 10             | IIS = 10
   creditosEnTall_Pasa_Proy: 0, // 45 | PG + PIS + TP = 60
   creditosEnGO: 0, // 10             | AGI + PAI = 10
+  creditosEnIAYR: 0, // 0            |
   creditosEnCHS: 0, // 10            | EC + PCIC = 10
   Total: 0,
 };
@@ -618,6 +608,10 @@ function sumarCreditos(materia) {
       break;
     case "creditosEnCHS":
       creditosBloque.creditosEnCHS += materia.creditos;
+      creditosBloque.Total += materia.creditos;
+      break;
+    case "creditosEnIAYR":
+      creditosBloque.creditosEnIAYR += materia.creditos;
       creditosBloque.Total += materia.creditos;
       break;
     case "Total":
@@ -754,6 +748,7 @@ function actualizar() {
     creditosEnIS: 0, // 10             | IIS = 10
     creditosEnTall_Pasa_Proy: 0, // 45 | PG + PIS + TP = 60
     creditosEnGO: 0, // 10             | AGI + PAI = 10
+    creditosEnIAYR: 0,
     creditosEnCHS: 0, // 10            | EC + PCIC = 10
     Total: 0,
   };
@@ -1047,7 +1042,7 @@ function verAreas(){
     texto += `<b><u>Materias Básicas</u>: ${creditosBloque.creditosEnM + creditosBloque.creditosEnCE} (80)</b><br/>`
     texto += `-Matemática: ${creditosBloque.creditosEnM} (70)<br/>`
     texto += `-Ciencias Experimentales: ${creditosBloque.creditosEnCE} (10)<br/><br/>`
-    texto += `<b><u>Básico-Tec,Técnicas e Int.</u>: ${creditosBloque.creditosEnProg + creditosBloque.creditosEnAC_SO_RC + creditosBloque.creditosEnBD_SI + creditosBloque.creditosEnMN + creditosBloque.creditosEnIO + creditosBloque.creditosEnIS + creditosBloque.creditosEnTall_Pasa_Proy + creditosBloque.creditosEnGO} (220)</b><br/>`
+    texto += `<b><u>Básico-Tec,Técnicas e Int.</u>: ${creditosBloque.creditosEnProg + creditosBloque.creditosEnAC_SO_RC + creditosBloque.creditosEnBD_SI + creditosBloque.creditosEnMN + creditosBloque.creditosEnIO + creditosBloque.creditosEnIS + creditosBloque.creditosEnTall_Pasa_Proy + creditosBloque.creditosEnGO + creditosBloque.creditosEnIAYR} (220)</b><br/>`
     texto += `-Programación: ${creditosBloque.creditosEnProg} (60)<br/>`
     texto += `-Arq., S. OP., Redes de C.: ${creditosBloque.creditosEnAC_SO_RC} (30)<br/>`
     texto += `-B. Datos y Sist. de I.: ${creditosBloque.creditosEnBD_SI} (10)<br/>`
@@ -1055,7 +1050,8 @@ function verAreas(){
     texto += `-Investigación Operativa: ${creditosBloque.creditosEnIO} (10)<br/>`
     texto += `-Ingeniería de Software: ${creditosBloque.creditosEnIS} (10)<br/>`
     texto += `-A. Integ., Tall., Pas. y Proy.: ${creditosBloque.creditosEnTall_Pasa_Proy} (45)<br/>`
-    texto += `-Gestión en Organizaciones: ${creditosBloque.creditosEnGO} (10)<br/><br/>`
+    texto += `-Gestión en Organizaciones: ${creditosBloque.creditosEnGO} (10)<br/>`
+    texto += `-Int. Artificial y Robótica: ${creditosBloque.creditosEnIAYR} (0)<br/><br/>`
     texto += `<b><u>Materias Complementarias</u>: ${creditosBloque.creditosEnCHS} (10)</b><br/>`
     texto += `-Ciencias H. y S.: ${creditosBloque.creditosEnCHS} (10)<br/>`
 
