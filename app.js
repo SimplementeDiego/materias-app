@@ -1044,17 +1044,20 @@ function toggleMenu() {
 function verAreas(){
 
     let texto = `<u>Cantidad de créditos por Área</u><br/><br/>`
-    texto += `Matemática: ${creditosBloque.creditosEnM} (70)<br/>`
-    texto += `Programación: ${creditosBloque.creditosEnProg} (60)<br/>`
-    texto += `Ciencias Experimentales: ${creditosBloque.creditosEnCE} (10)<br/>`
-    texto += `Arq., S. OP., Redes de C.: ${creditosBloque.creditosEnAC_SO_RC} (30)<br/>`
-    texto += `B. Datos y Sist. de I.: ${creditosBloque.creditosEnBD_SI} (10)<br/>`
-    texto += `Cálculo Numérico: ${creditosBloque.creditosEnMN} (8)<br/>`
-    texto += `Investigación Operativa: ${creditosBloque.creditosEnIO} (10)<br/>`
-    texto += `Ingeniería de Software: ${creditosBloque.creditosEnIS} (10)<br/>`
-    texto += `A. Integ., Tall., Pas. y Proy.: ${creditosBloque.creditosEnTall_Pasa_Proy} (45)<br/>`
-    texto += `Gestión en Organizaciones: ${creditosBloque.creditosEnGO} (10)<br/>`
-    texto += `Ciencias H. y S.: ${creditosBloque.creditosEnCHS} (10)<br/>`
+    texto += `<b><u>Materias Básicas</u>: ${creditosBloque.creditosEnM + creditosBloque.creditosEnCE} (80)</b><br/>`
+    texto += `-Matemática: ${creditosBloque.creditosEnM} (70)<br/>`
+    texto += `-Ciencias Experimentales: ${creditosBloque.creditosEnCE} (10)<br/><br/>`
+    texto += `<b><u>Básico-Tec,Técnicas e Int.</u>: ${creditosBloque.creditosEnProg + creditosBloque.creditosEnAC_SO_RC + creditosBloque.creditosEnBD_SI + creditosBloque.creditosEnMN + creditosBloque.creditosEnIO + creditosBloque.creditosEnIS + creditosBloque.creditosEnTall_Pasa_Proy + creditosBloque.creditosEnGO} (220)</b><br/>`
+    texto += `-Programación: ${creditosBloque.creditosEnProg} (60)<br/>`
+    texto += `-Arq., S. OP., Redes de C.: ${creditosBloque.creditosEnAC_SO_RC} (30)<br/>`
+    texto += `-B. Datos y Sist. de I.: ${creditosBloque.creditosEnBD_SI} (10)<br/>`
+    texto += `-Cálculo Numérico: ${creditosBloque.creditosEnMN} (8)<br/>`
+    texto += `-Investigación Operativa: ${creditosBloque.creditosEnIO} (10)<br/>`
+    texto += `-Ingeniería de Software: ${creditosBloque.creditosEnIS} (10)<br/>`
+    texto += `-A. Integ., Tall., Pas. y Proy.: ${creditosBloque.creditosEnTall_Pasa_Proy} (45)<br/>`
+    texto += `-Gestión en Organizaciones: ${creditosBloque.creditosEnGO} (10)<br/><br/>`
+    texto += `<b><u>Materias Complementarias</u>: ${creditosBloque.creditosEnCHS} (10)</b><br/>`
+    texto += `-Ciencias H. y S.: ${creditosBloque.creditosEnCHS} (10)<br/>`
 
 
     document.getElementById("popup-text").innerHTML = texto;

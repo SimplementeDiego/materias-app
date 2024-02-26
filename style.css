@@ -271,4 +271,7 @@ transform: scale(1.05);
     .area{
         background-color: rgb(241, 221, 250);
     }
+    #boxPopup-content{
+        max-width: 90%;
+    }
   }
