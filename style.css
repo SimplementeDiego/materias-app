@@ -217,6 +217,7 @@ transform: scale(1.05);
     background-color: lightpink;
     border-radius: 5px;
     cursor: pointer;
+    border: 2px solid white;
 }
 
 #cerrar-popup:focus {
