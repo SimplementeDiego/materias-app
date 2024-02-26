@@ -466,6 +466,16 @@ const PCIC = new Materia(
   "no",
   "creditosEnCHS"
 );
+const ASS = new Materia(
+  "ASS",
+  10,
+  [AGI, PAI, RC.curso, SO.curso, FBD.curso, IIS.curso, AC.curso],
+  "Administración y Seguridad de Sistemas",
+  "primero",
+  "si",
+  "no",
+  "creditosEnBD_SI"
+);
 const Pasan = new Materia(
   "Pasan",
   10,
@@ -535,6 +545,7 @@ let Materias = [
   AGI,
   PAI,
   Pasan,
+  ASS,
   PG,
 ];
 
