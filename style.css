@@ -263,4 +263,7 @@ transform: scale(1.05);
     .botones-top button:active{
         transform: none;
     }
+    .area{
+        background-color: rgb(241, 221, 250);
+    }
   }
