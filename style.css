@@ -219,6 +219,10 @@ transform: scale(1.05);
     cursor: pointer;
 }
 
+#cerrar-popup:focus {
+    border: 2px solid black;
+}
+
 @media (max-width: 675px) {
     .section{
         flex-direction: column;

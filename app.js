@@ -968,6 +968,7 @@ function checkWidth() {
 
 function openPopup() {
   document.getElementById("boxPopup").style.display = "flex";
+  document.getElementById('cerrar-popup').focus()
 }
 
 function closePopup() {
