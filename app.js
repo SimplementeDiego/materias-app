@@ -1089,6 +1089,9 @@ function firstLoad() {
     semestreAct = localStorage.getItem("semestre");
     toggleBotones(semestreAct);
   }
+  if (!localStorage.getItem("semestre") && !localStorage.getItem("MI")){
+    actualizar();
+  }
   checkWidth();
 }
 
