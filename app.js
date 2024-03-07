@@ -123,7 +123,7 @@ const AAL = new Materia(
   "segundo",
   "si",
   "no",
-  "creditosEnM"
+  "creditosEnMN"
 );
 const PYE = new Materia(
   "PYE",
