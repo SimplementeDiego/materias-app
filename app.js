@@ -115,6 +115,16 @@ const GAL2 = new Materia(
   "si",
   "creditosEnM"
 );
+const AAL = new Materia(
+  "AAL",
+  9,
+  [GAL2.curso, CDIV],
+  "Aplicaciones del Álgebra Lineal",
+  "segundo",
+  "si",
+  "no",
+  "creditosEnM"
+);
 const PYE = new Materia(
   "PYE",
   10,
@@ -123,6 +133,16 @@ const PYE = new Materia(
   "ambos",
   "no",
   "si",
+  "creditosEnM"
+);
+const ITI = new Materia(
+  "ITI",
+  8,
+  [PYE],
+  "Introducción a la Teoría de la Información",
+  "primero",
+  "si",
+  "no",
   "creditosEnM"
 );
 const MD2 = new Materia(
@@ -500,7 +520,9 @@ let Materias = [
   Ec,
   F1,
   GAL2,
+  AAL,
   PYE,
+  ITI,
   MD2,
   LG,
   MN,
