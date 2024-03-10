@@ -229,6 +229,8 @@ transform: scale(1.05);
     align-items: center;
     justify-content: center;
     text-align: center;
+    width: 200px;
+    margin: 10px;
 }
 
 .bloque-gris{
@@ -307,9 +309,10 @@ transform: scale(1.05);
         max-width: 90%;
     }
     .info{
-        width: 100%;
+        border: 1px solid gray;
+        margin: 10px;
+        border-radius: 10px;
         justify-content: start;
-        margin-left: 50%;
     }
     .bloque-gris{
         margin: 10px;
