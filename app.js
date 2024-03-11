@@ -215,6 +215,16 @@ const AC = new Materia(
   "no",
   "creditosEnAC_SO_RC"
 );
+const CDPGEUPG = new Materia(
+  "CDPGEUPG",
+  10,
+  [P4.curso, AC, P3],
+  "Comput.De Pr.Gral.En Unid.De Proc.Graf.",
+  "primero",
+  "si",
+  "no",
+  "creditosEnAC_SO_RC"
+);
 const CV = new Materia(
   "CV",
   10,
@@ -302,6 +312,16 @@ const RC = new Materia(
   "Redes de Computadoras",
   "segundo",
   "no",
+  "no",
+  "creditosEnAC_SO_RC"
+);
+const CAP = new Materia(
+  "CAP",
+  10,
+  [P4.curso, RC.curso, SO.curso, AC.curso],
+  "Computación de alta performance",
+  "primero",
+  "si",
   "no",
   "creditosEnAC_SO_RC"
 );
@@ -529,6 +549,7 @@ let Materias = [
   P4,
   IIO,
   P3,
+  CDPGEUPG,
   AC,
   CV,
   ED,
@@ -539,6 +560,7 @@ let Materias = [
   OCA,
   FBD,
   RC,
+  CAP,
   TP,
   IIS,
   IPF,
