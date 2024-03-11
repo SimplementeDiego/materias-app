@@ -219,7 +219,7 @@ const CDPGEUPG = new Materia(
   "CDPGEUPG",
   10,
   [P4.curso, AC, P3],
-  "Comput.De Pr.Gral.En Unid.De Proc.Graf.",
+  "Computación de propósito general en unidades de procesamiento gráfico",
   "primero",
   "si",
   "no",
