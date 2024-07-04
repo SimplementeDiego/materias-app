@@ -1084,24 +1084,104 @@ function verAreas(){
 
     let texto = `<u>Cantidad de créditos por Área</u><br/><br/>`
     texto += `<b><u>Materias Básicas</u>: ${creditosBloque.creditosEnM + creditosBloque.creditosEnCE} (80)</b><br/>`
-    texto += `-Matemática: ${creditosBloque.creditosEnM} (70)<br/>`
-    texto += `-Ciencias Experimentales: ${creditosBloque.creditosEnCE} (10)<br/><br/>`
+    texto += `-<span onclick="mostrarMaterias('m')">Matemática</span>: ${creditosBloque.creditosEnM} (70)<br/>`
+    texto += `-<span onclick="mostrarMaterias('ce')">Ciencias Experimentales</span>: ${creditosBloque.creditosEnCE} (10)<br/><br/>`
     texto += `<b><u>Básico-Tec,Técnicas e Int.</u>: ${creditosBloque.creditosEnProg + creditosBloque.creditosEnAC_SO_RC + creditosBloque.creditosEnBD_SI + creditosBloque.creditosEnMN + creditosBloque.creditosEnIO + creditosBloque.creditosEnIS + creditosBloque.creditosEnTall_Pasa_Proy + creditosBloque.creditosEnGO + creditosBloque.creditosEnIAYR} (220)</b><br/>`
-    texto += `-Programación: ${creditosBloque.creditosEnProg} (60)<br/>`
-    texto += `-Arq., S. OP., Redes de C.: ${creditosBloque.creditosEnAC_SO_RC} (30)<br/>`
-    texto += `-B. Datos y Sist. de I.: ${creditosBloque.creditosEnBD_SI} (10)<br/>`
-    texto += `-Cálculo Numérico: ${creditosBloque.creditosEnMN} (8)<br/>`
-    texto += `-Investigación Operativa: ${creditosBloque.creditosEnIO} (10)<br/>`
-    texto += `-Ingeniería de Software: ${creditosBloque.creditosEnIS} (10)<br/>`
-    texto += `-A. Integ., Tall., Pas. y Proy.: ${creditosBloque.creditosEnTall_Pasa_Proy} (45)<br/>`
-    texto += `-Gestión en Organizaciones: ${creditosBloque.creditosEnGO} (10)<br/>`
-    texto += `-Int. Artificial y Robótica: ${creditosBloque.creditosEnIAYR} (0)<br/><br/>`
+    texto += `-<span onclick="mostrarMaterias('p')">Programación</span>: ${creditosBloque.creditosEnProg} (60)<br/>`
+    texto += `-<span onclick="mostrarMaterias('a')">Arq., S. OP., Redes de C.</span>: ${creditosBloque.creditosEnAC_SO_RC} (30)<br/>`
+    texto += `-<span onclick="mostrarMaterias('b')">B. Datos y Sist. de I.</span>: ${creditosBloque.creditosEnBD_SI} (10)<br/>`
+    texto += `-<span onclick="mostrarMaterias('cn')">Cálculo Numérico</span>: ${creditosBloque.creditosEnMN} (8)<br/>`
+    texto += `-<span onclick="mostrarMaterias('i')">Investigación Operativa</span>: ${creditosBloque.creditosEnIO} (10)<br/>`
+    texto += `-<span onclick="mostrarMaterias('is')">Ingeniería de Software</span>: ${creditosBloque.creditosEnIS} (10)<br/>`
+    texto += `-<span onclick="mostrarMaterias('ai')">A. Integ., Tall., Pas. y Proy.</span>: ${creditosBloque.creditosEnTall_Pasa_Proy} (45)<br/>`
+    texto += `-<span onclick="mostrarMaterias('go')">Gestión en Organizaciones</span>: ${creditosBloque.creditosEnGO} (10)<br/>`
+    texto += `-<span onclick="mostrarMaterias('ia')">Int. Artificial y Robótica</span>: ${creditosBloque.creditosEnIAYR} (0)<br/><br/>`
     texto += `<b><u>Materias Complementarias</u>: ${creditosBloque.creditosEnCHS} (10)</b><br/>`
-    texto += `-Ciencias H. y S.: ${creditosBloque.creditosEnCHS} (10)<br/>`
+    texto += `-<span onclick="mostrarMaterias('ch')">Ciencias H. y S.</span>: ${creditosBloque.creditosEnCHS} (10)<br/>`
 
 
     document.getElementById("popup-text").innerHTML = texto;
+
     openPopup();
+
+}
+
+function mostrarMaterias(nombre){
+
+  let area, nombreArea;
+
+  switch (nombre) {
+    case "m":
+      area = "creditosEnM"
+      nombreArea = "Matemática"
+      break;
+    case "ce":
+      area = "creditosEnCE"
+      nombreArea = "Ciencias Experimentales"
+      break;
+    case "p":
+      area = "creditosEnProg"
+      nombreArea = "Programación"
+      break;
+    case "a":
+      area = "creditosEnAC_SO_RC"
+      nombreArea = "Arq., S. OP., Redes de C."
+      break;
+    case "b":
+      area = "creditosEnBD_SI"
+      nombreArea = "B. Datos y Sist. de I."
+      break;
+    case "cn":
+      area = "creditosEnMN"
+      nombreArea = "Cálculo Numérico"
+      break;
+    case "i":
+      area = "creditosEnIO"
+      nombreArea = "Investigación Operativa"
+      break;
+    case "is":
+      area = "creditosEnIS"
+      nombreArea = "Ingeniería de Software"
+      break;
+    case "ai":
+      area = "creditosEnTall_Pasa_Proy"
+      nombreArea = "A. Integ., Tall., Pas. y Proy."
+      break;
+    case "go":
+      area = "creditosEnGO"
+      nombreArea = "Gestión en Organizaciones"
+      break;
+    case "ia":
+      area = "creditosEnIAYR"
+      nombreArea = "Int. Artificial y Robótica"
+      break;
+    case "ch":
+      area = "creditosEnCHS"
+      nombreArea = "Ciencias H. y S."
+      break;
+  
+    default:
+      break;
+  }
+
+  texto = `<u>Materias para ${nombreArea}</u>:<br/><br/>`;
+  textoOcupadas = "<br/><u>Materias ya hechas</u>:<br/>"
+  textoDisponible = "<u>Materias disponibles</u>:<br/>"
+
+  Materias.forEach( (materia)=>{
+
+    if ( materia.area == area ){
+      if ( MateriasPersona.find((elemento) => elemento == materia.nombre) ){
+        textoOcupadas += `-${materia.nombreCompleto}<br/>`;
+      }else{
+        textoDisponible += `-${materia.nombreCompleto}<br/>`;
+      }
+
+    }
+
+  } )
+
+  document.getElementById("popup-text").innerHTML = texto + textoDisponible + textoOcupadas;
 
 }
 
