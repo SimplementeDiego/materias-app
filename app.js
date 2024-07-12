@@ -491,7 +491,7 @@ const PCIC = new Materia(
   3,
   [],
   "Políticas Científicas en Inf. y Comp.",
-  "primero",
+  "segundo",
   "si",
   "no",
   "creditosEnCHS"
