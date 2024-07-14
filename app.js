@@ -80,7 +80,7 @@ const P2 = new Materia(
   12,
   [P1.curso],
   "Programación 2",
-  "primero",
+  "ambos",
   "no",
   "no",
   "creditosEnProg"
