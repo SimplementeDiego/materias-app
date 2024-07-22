@@ -205,6 +205,16 @@ const P3 = new Materia(
   "no",
   "creditosEnProg"
 );
+const ALN = new Materia(
+  "ALN",
+  9,
+  [P3, MN],
+  "Álgebra Lineal Numérica",
+  "segundo",
+  "si",
+  "no",
+  "creditosEnMN"
+);
 const AC = new Materia(
   "AC",
   12,
@@ -315,6 +325,26 @@ const RC = new Materia(
   "no",
   "creditosEnAC_SO_RC"
 );
+const TSI = new Materia(
+  "TSI",
+  10,
+  [RC.curso, FBD, P3],
+  "Taller de Seguridad Informática",
+  "segundo",
+  "si",
+  "no",
+  "creditosEnTall_Pasa_Proy"
+);
+const ADAR = new Materia(
+  "ADAR",
+  8,
+  [P3, RC],
+  "Análisis y Diseño de Al. Dis. en Redes",
+  "segundo",
+  "si",
+  "no",
+  "creditosEnAC_SO_RC"
+);
 const CAP = new Materia(
   "CAP",
   10,
@@ -345,12 +375,12 @@ const IIS = new Materia(
   "no",
   "creditosEnIS"
 );
-const IPF = new Materia(
-  "IPF",
-  7,
+const PF = new Materia(
+  "PF",
+  10,
   [TL, P2, LG, MD1],
-  "Int. a la Programación Funcional",
-  "primero",
+  "Programación Funcional",
+  "segundo",
   "no",
   "no",
   "creditosEnProg"
@@ -549,6 +579,7 @@ let Materias = [
   P4,
   IIO,
   P3,
+  ALN,
   CDPGEUPG,
   AC,
   CV,
@@ -560,10 +591,12 @@ let Materias = [
   OCA,
   FBD,
   RC,
+  TSI,
+  ADAR,
   CAP,
   TP,
   IIS,
-  IPF,
+  PF,
   PL,
   PIS,
   AA,
@@ -1183,6 +1216,21 @@ function mostrarMaterias(nombre){
 
   document.getElementById("popup-text").innerHTML = texto + textoDisponible + textoOcupadas;
 
+}
+
+function verMaterias(){
+  texto = ``;
+  cantidad = 0;
+  Materias.forEach( (materia)=>{
+
+    if ( MateriasPersona.find((elemento) => elemento == materia.nombre) ){
+      texto += `-${materia.nombreCompleto}<br/>`;
+      cantidad+=1;
+    }
+
+  } )
+  document.getElementById("popup-text").innerHTML = `<u>Materias hechas</u>: ${cantidad}<br/><br/>` + texto;
+  openPopup();
 }
 
 function firstLoad() {
