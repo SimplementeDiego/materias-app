@@ -4,6 +4,10 @@
     margin: 0;
 }
 
+button {
+    -webkit-tap-highlight-color: transparent;
+}
+
 .header-content{
     height: 60px;
     width: 100%;
