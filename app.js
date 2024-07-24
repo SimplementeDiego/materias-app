@@ -22,6 +22,7 @@ class Materia {
     this.opcional = opcional;
     this.libre = libre;
     this.area = area;
+    this.peso = 0;
   }
 }
 
@@ -36,7 +37,7 @@ const F1 = new Materia("F1", 10, [], "Física 1", "ambos", "si", "si", "creditos
 const GAL2 = new Materia("GAL2", 9, [GAL1.curso], "Geometría y Álgebra Lineal 2", "ambos", "no", "si", "creditosEnM");
 const AAL = new Materia( "AAL",  9,  [GAL2.curso, CDIV], "Aplicaciones del Álgebra Lineal", "segundo", "si",  "no", "creditosEnMN");
 const PYE = new Materia("PYE",  10, [CDIVV.curso, GAL1, CDIV], "Probabilidad y Estadistica",  "ambos",  "no", "si",  "creditosEnM");
-const ITI = new Materia("ITI", 8, [PYE], "Introducción a la Teoría de la Información", "primero", "si", "no", "creditosEnM");
+const ITI = new Materia("ITI", 8, [PYE], "Int. a la Teoría de la Información", "primero", "si", "no", "creditosEnM");
 const MD2 = new Materia("MD2", 9, [MD1.curso, GAL1.curso], "Matemática Discreta 2", "ambos", "no", "si", "creditosEnM");
 const LG = new Materia("LG", 12, [MD1.curso], "Lógica", "primero", "no", "no", "creditosEnM");
 const MN = new Materia("MN", 8, [CDIVV, P1, GAL2, GAL1, CDIV], "Métodos Numéricos", "segundo", "no", "no", "creditosEnMN");
@@ -45,7 +46,7 @@ const IIO = new Materia("IIO", 10, [GAL2, PYE, CDIVV, CDIV, GAL1], "Int. a la In
 const P3 = new Materia("P3", 15, [P2.curso, PYE.curso, P1, MD1], "Programación 3", "segundo", "no", "no", "creditosEnProg");
 const ALN = new Materia("ALN", 9, [P3, MN], "Álgebra Lineal Numérica", "segundo", "si", "no", "creditosEnMN");
 const AC = new Materia("AC", 12, [CDIV, LG.curso, P2.curso, P1, MD1], "Arquitectura de Computadoras", "segundo", "no", "no", "creditosEnAC_SO_RC");
-const CDPGEUPG = new Materia("CDPGEUPG", 10, [P4.curso, AC, P3], "Computación de propósito general en unidades de procesamiento gráfico", "primero", "si", "no", "creditosEnAC_SO_RC");
+const CDPGEUPG = new Materia("CDPGEUPG", 10, [P4.curso, AC, P3], "Comput. Pr.Gral. U. Proc.Graf.", "primero", "si", "no", "creditosEnAC_SO_RC");
 const CV = new Materia("CV", 10, [CDIVV.curso, GAL1, CDIV], "Cálculo Vectorial", "ambos", "si", "si", "creditosEnM");
 const ED = new Materia("ED", 10, [GAL2, CDIVV.curso, GAL1, CDIV], "Int. a las Ec. Diferenciales", "segundo", "si", "si", "creditosEnM");
 const TL = new Materia("TL", 12, [P3.curso, CDIV, GAL1, LG, MD1], "Teoría de Lenguajes", "primero", "no", "no", "creditosEnProg");
@@ -84,56 +85,56 @@ const PG = new Materia("PG", 30, [Aux], "Proyecto de Grado", "ambos", "no", "no"
 
 let Materias = [
   MI,
+  MD1,
   CDIV,
-  CDIVV,
   P1,
   GAL1,
-  MD1,
-  P2,
   Ec,
   F1,
+  CTS,
+  PCIC,
+  CDIVV,
+  P2,
   GAL2,
-  AAL,
-  PYE,
-  ITI,
   MD2,
   LG,
+  TRE,
+  F2,
+  AC,
+  PYE,
   MN,
   P4,
-  IIO,
-  P3,
-  ALN,
-  CDPGEUPG,
-  AC,
+  AAL,
   CV,
   ED,
-  TL,
-  FVC,
+  AGI,
+  TP,
+  IIO,
+  P3,
   SO,
-  FO,
-  OCA,
+  Pasan,
+  ITI,
+  FVC,
+  PAI,
+  TL,
   FBD,
   RC,
-  TSI,
-  ADAR,
-  CAP,
-  TP,
+  FO,
+  OCA,
+  AE,
+  ICG,
+  CDPGEUPG,
+  ALN,
   IIS,
   PF,
   PL,
-  PIS,
   AA,
-  AE,
-  ICG,
   CGA,
   FSI,
-  CTS,
-  TRE,
-  F2,
-  PCIC,
-  AGI,
-  PAI,
-  Pasan,
+  CAP,
+  ADAR,
+  TSI,
+  PIS,
   ASS,
   PG,
 ];
@@ -728,6 +729,87 @@ function firstLoad() {
   checkWidth();
 }
 
+function crearMaterias(){
+  Materias.forEach( (materia) => {
+
+    if (materia.nombre != "MI"){
+      var button = document.createElement('button');
+        button.textContent = `${materia.nombreCompleto} (${materia.creditos})` ;
+        if (materia.opcional == "si"){
+          button.textContent += "*";
+        }
+        button.id = materia.nombre;
+        button.onclick = function() {
+            toggleMateria(materia.nombre);
+        };
+        document.getElementById(`section-materias-${materia.peso}`).appendChild(button);
+    }
+
+  } );
+
+}
+
+function asignarPesoMateria(materia){
+  let maxPesoPrevia = 0;
+  if (materia.previas.length == 0){
+    materia.peso = 1;
+  }
+  materia.previas.forEach( (previa) => {
+
+    let materiaA;
+    if (typeof previa == "string") {
+      materiaA = Materias.find((elemento) => elemento.curso == previa);
+    }else{
+      materiaA = previa;
+    }
+
+    if (materiaA.peso == 0){
+      asignarPesoMateria(materiaA);
+    }
+
+    if (materiaA.peso >= maxPesoPrevia && materiaA!=Aux){
+      maxPesoPrevia = materiaA.peso;
+    }
+
+    if (maxPesoPrevia>=materia.peso){
+      materia.peso = maxPesoPrevia + 1;
+    }
+
+  } )
+}
+
+function asignarPesos(){
+  let maxTotal = 0;
+  AGI.peso = 3;
+  PAI.peso = 4;
+  Pasan.peso = 4;
+  TP.peso = 4;
+  Materias.forEach( (materia) => {
+    if (materia.peso == 0){
+      asignarPesoMateria(materia);
+    }
+    if (maxTotal < materia.peso){
+      maxTotal = materia.peso;
+    }
+  } );
+
+  PG.peso = maxTotal + 1;
+
+  for(let i = 1; i<=PG.peso; i++){
+
+    var containerDiv = document.createElement('div');
+    containerDiv.className = 'container-section';
+    var sectionDiv = document.createElement('div');
+    sectionDiv.className = 'section';
+    sectionDiv.id = `section-materias-${i}`;
+    containerDiv.appendChild(sectionDiv);
+    document.getElementById("secciones").appendChild(containerDiv);
+
+  }
+}
+
+asignarPesos()
+crearMaterias()
 firstLoad();
 
 window.addEventListener("resize", function () {
