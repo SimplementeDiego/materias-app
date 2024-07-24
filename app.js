@@ -25,537 +25,60 @@ class Materia {
   }
 }
 
-const CDIV = new Materia(
-  "CDIV",
-  13,
-  [],
-  "Cálculo DIV",
-  "ambos",
-  "no",
-  "si",
-  "creditosEnM"
-);
-const CDIVV = new Materia(
-  "CDIVV",
-  13,
-  [CDIV.curso],
-  "Cálculo DIVV",
-  "ambos",
-  "no",
-  "si",
-  "creditosEnM"
-);
-const MD1 = new Materia(
-  "MD1",
-  9,
-  [],
-  "Matemática Discreta 1",
-  "ambos",
-  "no",
-  "si",
-  "creditosEnM"
-);
-const P1 = new Materia(
-  "P1",
-  10,
-  [],
-  "Programación 1",
-  "ambos",
-  "no",
-  "no",
-  "creditosEnProg"
-);
-const GAL1 = new Materia(
-  "GAL1",
-  9,
-  [],
-  "Geometría y Álgebra Lineal 1",
-  "ambos",
-  "no",
-  "si",
-  "creditosEnM"
-);
-const P2 = new Materia(
-  "P2",
-  12,
-  [P1.curso],
-  "Programación 2",
-  "ambos",
-  "no",
-  "no",
-  "creditosEnProg"
-);
-const Ec = new Materia(
-  "Ec",
-  7,
-  [],
-  "Economía",
-  "segundo",
-  "si",
-  "no",
-  "creditosEnCHS"
-);
-const F1 = new Materia(
-  "F1",
-  10,
-  [],
-  "Física 1",
-  "ambos",
-  "si",
-  "si",
-  "creditosEnCE"
-);
-const GAL2 = new Materia(
-  "GAL2",
-  9,
-  [GAL1.curso],
-  "Geometría y Álgebra Lineal 2",
-  "ambos",
-  "no",
-  "si",
-  "creditosEnM"
-);
-const AAL = new Materia(
-  "AAL",
-  9,
-  [GAL2.curso, CDIV],
-  "Aplicaciones del Álgebra Lineal",
-  "segundo",
-  "si",
-  "no",
-  "creditosEnMN"
-);
-const PYE = new Materia(
-  "PYE",
-  10,
-  [CDIVV.curso, GAL1, CDIV],
-  "Probabilidad y Estadistica",
-  "ambos",
-  "no",
-  "si",
-  "creditosEnM"
-);
-const ITI = new Materia(
-  "ITI",
-  8,
-  [PYE],
-  "Introducción a la Teoría de la Información",
-  "primero",
-  "si",
-  "no",
-  "creditosEnM"
-);
-const MD2 = new Materia(
-  "MD2",
-  9,
-  [MD1.curso, GAL1.curso],
-  "Matemática Discreta 2",
-  "ambos",
-  "no",
-  "si",
-  "creditosEnM"
-);
-const LG = new Materia(
-  "LG",
-  12,
-  [MD1.curso],
-  "Lógica",
-  "primero",
-  "no",
-  "no",
-  "creditosEnM"
-);
-const MN = new Materia(
-  "MN",
-  8,
-  [CDIVV, P1, GAL2, GAL1, CDIV],
-  "Métodos Numéricos",
-  "segundo",
-  "no",
-  "no",
-  "creditosEnMN"
-);
-const P4 = new Materia(
-  "P4",
-  15,
-  [GAL1, CDIV, MD1, P2],
-  "Programación 4",
-  "primero",
-  "no",
-  "no",
-  "creditosEnProg"
-);
-const IIO = new Materia(
-  "IIO",
-  10,
-  [GAL2, PYE, CDIVV, CDIV, GAL1],
-  "Int. a la Investigación de Operaciones",
-  "primero",
-  "no",
-  "no",
-  "creditosEnIO"
-);
-const P3 = new Materia(
-  "P3",
-  15,
-  [P2.curso, PYE.curso, P1, MD1],
-  "Programación 3",
-  "segundo",
-  "no",
-  "no",
-  "creditosEnProg"
-);
-const ALN = new Materia(
-  "ALN",
-  9,
-  [P3, MN],
-  "Álgebra Lineal Numérica",
-  "segundo",
-  "si",
-  "no",
-  "creditosEnMN"
-);
-const AC = new Materia(
-  "AC",
-  12,
-  [CDIV, LG.curso, P2.curso, P1, MD1],
-  "Arquitectura de Computadoras",
-  "segundo",
-  "no",
-  "no",
-  "creditosEnAC_SO_RC"
-);
-const CDPGEUPG = new Materia(
-  "CDPGEUPG",
-  10,
-  [P4.curso, AC, P3],
-  "Computación de propósito general en unidades de procesamiento gráfico",
-  "primero",
-  "si",
-  "no",
-  "creditosEnAC_SO_RC"
-);
-const CV = new Materia(
-  "CV",
-  10,
-  [CDIVV.curso, GAL1, CDIV],
-  "Cálculo Vectorial",
-  "ambos",
-  "si",
-  "si",
-  "creditosEnM"
-);
-const ED = new Materia(
-  "ED",
-  10,
-  [GAL2, CDIVV.curso, GAL1, CDIV],
-  "Int. a las Ec. Diferenciales",
-  "segundo",
-  "si",
-  "si",
-  "creditosEnM"
-);
-const TL = new Materia(
-  "TL",
-  12,
-  [P3.curso, CDIV, GAL1, LG, MD1],
-  "Teoría de Lenguajes",
-  "primero",
-  "no",
-  "no",
-  "creditosEnProg"
-);
-const FVC = new Materia(
-  "FVC",
-  5,
-  [CV.curso, CDIVV],
-  "Funciones de Variable Compleja",
-  "primero",
-  "si",
-  "si",
-  "creditosEnM"
-);
-const SO = new Materia(
-  "SO",
-  12,
-  [AC.curso, GAL1, CDIV, P2, MD1],
-  "Sistemas Operativos",
-  "primero",
-  "no",
-  "no",
-  "creditosEnAC_SO_RC"
-);
-const FO = new Materia(
-  "FO",
-  6,
-  [IIO],
-  "Fundamentos de Optimización",
-  "primero",
-  "si",
-  "no",
-  "creditosEnIO"
-);
-const OCA = new Materia(
-  "OCA",
-  10,
-  [IIO],
-  "Optimización Continua y Aplicaciones",
-  "segundo",
-  "si",
-  "no",
-  "creditosEnIO"
-);
-const FBD = new Materia(
-  "FBD",
-  15,
-  [LG, P3, MD2],
-  "Fundamentos de Bases de Datos",
-  "segundo",
-  "no",
-  "no",
-  "creditosEnBD_SI"
-);
-const RC = new Materia(
-  "RC",
-  12,
-  [P3, SO.curso, CDIV, AC.curso],
-  "Redes de Computadoras",
-  "segundo",
-  "no",
-  "no",
-  "creditosEnAC_SO_RC"
-);
-const TSI = new Materia(
-  "TSI",
-  10,
-  [RC.curso, FBD, P3],
-  "Taller de Seguridad Informática",
-  "segundo",
-  "si",
-  "no",
-  "creditosEnTall_Pasa_Proy"
-);
-const ADAR = new Materia(
-  "ADAR",
-  8,
-  [P3, RC],
-  "Análisis y Diseño de Al. Dis. en Redes",
-  "segundo",
-  "si",
-  "no",
-  "creditosEnAC_SO_RC"
-);
-const CAP = new Materia(
-  "CAP",
-  10,
-  [P4.curso, RC.curso, SO.curso, AC.curso],
-  "Computación de alta performance",
-  "primero",
-  "si",
-  "no",
-  "creditosEnAC_SO_RC"
-);
-const TP = new Materia(
-  "TP",
-  15,
-  [P3, P4.curso],
-  "Taller de Programación",
-  "segundo",
-  "no",
-  "no",
-  "creditosEnTall_Pasa_Proy"
-);
-const IIS = new Materia(
-  "IIS",
-  10,
-  [TP.curso, FBD.curso, P4.curso],
-  "Int. a la Ingeniería de Software",
-  "primero",
-  "no",
-  "no",
-  "creditosEnIS"
-);
-const PF = new Materia(
-  "PF",
-  10,
-  [TL, P2, LG, MD1],
-  "Programación Funcional",
-  "segundo",
-  "no",
-  "no",
-  "creditosEnProg"
-);
-const PL = new Materia(
-  "PL",
-  10,
-  [TL, P3, MD2, LG],
-  "Programación Lógica",
-  "primero",
-  "no",
-  "no",
-  "creditosEnProg"
-);
-const PIS = new Materia(
-  "PIS",
-  15,
-  [IIS.curso, P4],
-  "Proyecto de Ingeniería de Software",
-  "segundo",
-  "no",
-  "no",
-  "creditosEnTall_Pasa_Proy"
-);
-const AA = new Materia(
-  "AA",
-  12,
-  [LG, PYE, P3.curso, FBD.curso, P4, MD2],
-  "Aprendizaje Automático",
-  "segundo",
-  "si",
-  "no",
-  "creditosEnIAYR"
-);
-const AE = new Materia(
-  "AE",
-  10,
-  [P4, PYE, IIO],
-  "Algoritmos Evolutivos",
-  "segundo",
-  "si",
-  "no",
-  "creditosEnIO"
-);
-const ICG = new Materia(
-  "ICG",
-  10,
-  [P3, P4, GAL2.curso, GAL1],
-  "Int. a la Computación Gráfica",
-  "primero",
-  "si",
-  "no",
-  "creditosEnProg"
-);
-const CGA = new Materia(
-  "CGA",
-  12,
-  [ICG.curso],
-  "Computación Gráfica Avanzada",
-  "segundo",
-  "si",
-  "no",
-  "creditosEnProg"
-);
-const FSI = new Materia(
-  "FSI",
-  12,
-  [SO, FBD, P3, LG, RC],
-  "Fundamentos de la Seguridad Informática",
-  "primero",
-  "si",
-  "no",
-  "creditosEnAC_SO_RC"
-);
+const CDIV = new Materia("CDIV", 13, [], "Cálculo DIV", "ambos", "no", "si", "creditosEnM");
+const CDIVV = new Materia("CDIVV", 13, [CDIV.curso], "Cálculo DIVV", "ambos", "no", "si", "creditosEnM");
+const MD1 = new Materia("MD1", 9, [], "Matemática Discreta 1", "ambos", "no", "si", "creditosEnM");
+const P1 = new Materia("P1", 10, [], "Programación 1", "ambos", "no", "no", "creditosEnProg");
+const GAL1 = new Materia("GAL1", 9, [], "Geometría y Álgebra Lineal 1", "ambos", "no", "si", "creditosEnM");
+const P2 = new Materia("P2", 12, [P1.curso], "Programación 2", "ambos", "no", "no", "creditosEnProg");
+const Ec = new Materia("Ec", 7, [], "Economía", "segundo", "si", "no", "creditosEnCHS");
+const F1 = new Materia("F1", 10, [], "Física 1", "ambos", "si", "si", "creditosEnCE");
+const GAL2 = new Materia("GAL2", 9, [GAL1.curso], "Geometría y Álgebra Lineal 2", "ambos", "no", "si", "creditosEnM");
+const AAL = new Materia( "AAL",  9,  [GAL2.curso, CDIV], "Aplicaciones del Álgebra Lineal", "segundo", "si",  "no", "creditosEnMN");
+const PYE = new Materia("PYE",  10, [CDIVV.curso, GAL1, CDIV], "Probabilidad y Estadistica",  "ambos",  "no", "si",  "creditosEnM");
+const ITI = new Materia("ITI", 8, [PYE], "Introducción a la Teoría de la Información", "primero", "si", "no", "creditosEnM");
+const MD2 = new Materia("MD2", 9, [MD1.curso, GAL1.curso], "Matemática Discreta 2", "ambos", "no", "si", "creditosEnM");
+const LG = new Materia("LG", 12, [MD1.curso], "Lógica", "primero", "no", "no", "creditosEnM");
+const MN = new Materia("MN", 8, [CDIVV, P1, GAL2, GAL1, CDIV], "Métodos Numéricos", "segundo", "no", "no", "creditosEnMN");
+const P4 = new Materia("P4",  15, [GAL1, CDIV, MD1, P2], "Programación 4", "primero", "no", "no", "creditosEnProg");
+const IIO = new Materia("IIO", 10, [GAL2, PYE, CDIVV, CDIV, GAL1], "Int. a la Investigación de Operaciones", "primero", "no", "no", "creditosEnIO");
+const P3 = new Materia("P3", 15, [P2.curso, PYE.curso, P1, MD1], "Programación 3", "segundo", "no", "no", "creditosEnProg");
+const ALN = new Materia("ALN", 9, [P3, MN], "Álgebra Lineal Numérica", "segundo", "si", "no", "creditosEnMN");
+const AC = new Materia("AC", 12, [CDIV, LG.curso, P2.curso, P1, MD1], "Arquitectura de Computadoras", "segundo", "no", "no", "creditosEnAC_SO_RC");
+const CDPGEUPG = new Materia("CDPGEUPG", 10, [P4.curso, AC, P3], "Computación de propósito general en unidades de procesamiento gráfico", "primero", "si", "no", "creditosEnAC_SO_RC");
+const CV = new Materia("CV", 10, [CDIVV.curso, GAL1, CDIV], "Cálculo Vectorial", "ambos", "si", "si", "creditosEnM");
+const ED = new Materia("ED", 10, [GAL2, CDIVV.curso, GAL1, CDIV], "Int. a las Ec. Diferenciales", "segundo", "si", "si", "creditosEnM");
+const TL = new Materia("TL", 12, [P3.curso, CDIV, GAL1, LG, MD1], "Teoría de Lenguajes", "primero", "no", "no", "creditosEnProg");
+const FVC = new Materia("FVC", 5, [CV.curso, CDIVV], "Funciones de Variable Compleja", "primero", "si", "si", "creditosEnM");
+const SO = new Materia("SO", 12, [AC.curso, GAL1, CDIV, P2, MD1], "Sistemas Operativos", "primero", "no", "no", "creditosEnAC_SO_RC");
+const FO = new Materia("FO", 6, [IIO], "Fundamentos de Optimización", "primero", "si", "no", "creditosEnIO");
+const OCA = new Materia("OCA", 10, [IIO], "Optimización Continua y Aplicaciones", "segundo", "si", "no", "creditosEnIO");
+const FBD = new Materia("FBD", 15, [LG, P3, MD2], "Fundamentos de Bases de Datos", "segundo", "no", "no", "creditosEnBD_SI");
+const RC = new Materia("RC", 12, [P3, SO.curso, CDIV, AC.curso], "Redes de Computadoras", "segundo", "no", "no", "creditosEnAC_SO_RC");
+const TSI = new Materia("TSI", 10, [RC.curso, FBD, P3], "Taller de Seguridad Informática", "segundo", "si", "no", "creditosEnTall_Pasa_Proy");
+const ADAR = new Materia("ADAR", 8, [P3, RC], "Análisis y Diseño de Al. Dis. en Redes", "segundo", "si", "no", "creditosEnAC_SO_RC");
+const CAP = new Materia("CAP", 10, [P4.curso, RC.curso, SO.curso, AC.curso], "Computación de alta performance", "primero", "si", "no", "creditosEnAC_SO_RC");
+const TP = new Materia("TP", 15, [P3, P4.curso], "Taller de Programación", "segundo", "no", "no", "creditosEnTall_Pasa_Proy");
+const IIS = new Materia("IIS", 10, [TP.curso, FBD.curso, P4.curso], "Int. a la Ingeniería de Software", "primero", "no", "no", "creditosEnIS");
+const PF = new Materia("PF", 10, [TL, P2, LG, MD1], "Programación Funcional", "segundo", "no", "no", "creditosEnProg");
+const PL = new Materia("PL", 10, [TL, P3, MD2, LG], "Programación Lógica", "primero", "no", "no", "creditosEnProg");
+const PIS = new Materia("PIS", 15, [IIS.curso, P4], "Proyecto de Ingeniería de Software", "segundo", "no", "no", "creditosEnTall_Pasa_Proy");
+const AA = new Materia("AA", 12, [LG, PYE, P3.curso, FBD.curso, P4, MD2], "Aprendizaje Automático", "segundo", "si", "no", "creditosEnIAYR");
+const AE = new Materia("AE", 10, [P4, PYE, IIO], "Algoritmos Evolutivos", "segundo", "si", "no", "creditosEnIO");
+const ICG = new Materia("ICG", 10, [P3, P4, GAL2.curso, GAL1], "Int. a la Computación Gráfica", "primero", "si", "no", "creditosEnProg");
+const CGA = new Materia("CGA", 12, [ICG.curso], "Computación Gráfica Avanzada", "segundo", "si", "no", "creditosEnProg");
+const FSI = new Materia("FSI", 12, [SO, FBD, P3, LG, RC], "Fundamentos de la Seguridad Informática", "primero", "si", "no", "creditosEnAC_SO_RC");
 const Aux = new Materia("Aux", 0, [], "", "", "", "", "");
-const MI = new Materia(
-  "MI",
-  4,
-  [Aux],
-  "Matemática Inicial",
-  "ambos",
-  "no",
-  "no",
-  "creditosEnM"
-);
-const CTS = new Materia(
-  "CTS",
-  8,
-  [],
-  "Ciencia, Tecnología y Sociedad",
-  "primero",
-  "si",
-  "no",
-  "creditosEnCHS"
-);
-const TRE = new Materia(
-  "TRE",
-  6,
-  [P1],
-  "Taller de Robótica Educativa",
-  "primero",
-  "si",
-  "no",
-  "creditosEnTall_Pasa_Proy"
-);
-const F2 = new Materia(
-  "F2",
-  10,
-  [F1.curso, CDIV.curso],
-  "Física 2",
-  "ambos",
-  "si",
-  "no",
-  "creditosEnCE"
-);
-const AGI = new Materia(
-  "AGI",
-  5,
-  [Aux],
-  "Administración General para Ingenieros",
-  "primero",
-  "si",
-  "no",
-  "creditosEnGO"
-);
-const PAI = new Materia(
-  "PAI",
-  5,
-  [AGI.curso],
-  "Práctica de Administración para Ingenieros",
-  "segundo",
-  "si",
-  "no",
-  "creditosEnGO"
-);
-const PCIC = new Materia(
-  "PCIC",
-  3,
-  [],
-  "Políticas Científicas en Inf. y Comp.",
-  "segundo",
-  "si",
-  "no",
-  "creditosEnCHS"
-);
-const ASS = new Materia(
-  "ASS",
-  10,
-  [AGI, PAI, RC.curso, SO.curso, FBD.curso, IIS.curso, AC.curso],
-  "Administración y Seguridad de Sistemas",
-  "primero",
-  "si",
-  "no",
-  "creditosEnBD_SI"
-);
-const Pasan = new Materia(
-  "Pasan",
-  10,
-  [Aux],
-  "Pasantía",
-  "primero",
-  "si",
-  "no",
-  "creditosEnTall_Pasa_Proy"
-);
-const PG = new Materia(
-  "PG",
-  30,
-  [Aux],
-  "Proyecto de Grado",
-  "ambos",
-  "no",
-  "no",
-  "creditosEnTall_Pasa_Proy"
-);
+const MI = new Materia("MI", 4, [Aux], "Matemática Inicial", "ambos", "no", "no", "creditosEnM");
+const CTS = new Materia("CTS", 8, [], "Ciencia, Tecnología y Sociedad", "primero", "si", "no", "creditosEnCHS");
+const TRE = new Materia("TRE", 6, [P1], "Taller de Robótica Educativa", "primero", "si", "no", "creditosEnTall_Pasa_Proy");
+const F2 = new Materia("F2", 10, [F1.curso, CDIV.curso], "Física 2", "ambos", "si", "no", "creditosEnCE");
+const AGI = new Materia("AGI", 5, [Aux], "Administración General para Ingenieros", "primero", "si", "no", "creditosEnGO");
+const PAI = new Materia("PAI", 5, [AGI.curso], "Práctica de Administración para Ingenieros", "segundo", "si", "no", "creditosEnGO");
+const PCIC = new Materia("PCIC", 3, [], "Políticas Científicas en Inf. y Comp.", "segundo", "si", "no", "creditosEnCHS");
+const ASS = new Materia("ASS", 10, [AGI, PAI, RC.curso, SO.curso, FBD.curso, IIS.curso, AC.curso], "Administración y Seguridad de Sistemas", "primero", "si", "no", "creditosEnBD_SI");
+const Pasan = new Materia("Pasan", 10, [Aux], "Pasantía", "primero", "si", "no", "creditosEnTall_Pasa_Proy");
+const PG = new Materia("PG", 30, [Aux], "Proyecto de Grado", "ambos", "no", "no", "creditosEnTall_Pasa_Proy");
 
 //Revisar todos otra vez
 
@@ -642,59 +165,44 @@ let creditosBloque = {
 // Total = 331 - faltan 139
 
 function sumarCreditos(materia) {
+  creditosBloque.Total += materia.creditos;
   switch (materia.area) {
     case "creditosEnM":
       creditosBloque.creditosEnM += materia.creditos;
-      creditosBloque.Total += materia.creditos;
       break;
     case "creditosEnCE":
       creditosBloque.creditosEnCE += materia.creditos;
-      creditosBloque.Total += materia.creditos;
       break;
     case "creditosEnProg":
       creditosBloque.creditosEnProg += materia.creditos;
-      creditosBloque.Total += materia.creditos;
       break;
     case "creditosEnAC_SO_RC":
       creditosBloque.creditosEnAC_SO_RC += materia.creditos;
-      creditosBloque.Total += materia.creditos;
       break;
     case "creditosEnBD_SI":
       creditosBloque.creditosEnBD_SI += materia.creditos;
-      creditosBloque.Total += materia.creditos;
       break;
     case "creditosEnMN":
       creditosBloque.creditosEnMN += materia.creditos;
-      creditosBloque.Total += materia.creditos;
       break;
     case "creditosEnIO":
       creditosBloque.creditosEnIO += materia.creditos;
-      creditosBloque.Total += materia.creditos;
       break;
     case "creditosEnIS":
       creditosBloque.creditosEnIS += materia.creditos;
-      creditosBloque.Total += materia.creditos;
       break;
     case "creditosEnTall_Pasa_Proy":
       creditosBloque.creditosEnTall_Pasa_Proy += materia.creditos;
-      creditosBloque.Total += materia.creditos;
       break;
     case "creditosEnGO":
       creditosBloque.creditosEnGO += materia.creditos;
-      creditosBloque.Total += materia.creditos;
       break;
     case "creditosEnCHS":
       creditosBloque.creditosEnCHS += materia.creditos;
-      creditosBloque.Total += materia.creditos;
       break;
     case "creditosEnIAYR":
       creditosBloque.creditosEnIAYR += materia.creditos;
-      creditosBloque.Total += materia.creditos;
       break;
-    case "Total":
-      creditosBloque.Total += materia.creditos;
-      break;
-
     default:
       break;
   }
@@ -746,15 +254,15 @@ function indicarPrevias(nombre) {
 
   materiaAct.previas.filter((materia) => {
     if (typeof materia == "string") {
-      if (!MateriasPersona.find((elemento) => elemento == materia)) {
+      if (!MateriasPersona.includes(materia)) {
         let materiaAux = Materias.find((elemento) => elemento.curso == materia);
         Salvar.push(materiaAux);
       }
     } else {
-      if (!MateriasPersona.find((elemento) => elemento == materia.nombre)) {
+      if (!MateriasPersona.includes(materia.nombre)) {
         Exonerar.push(materia);
       }
-      if (!MateriasPersona.find((elemento) => elemento == materia.curso)) {
+      if (!MateriasPersona.includes(materia.curso)) {
         Salvar.push(materia);
       }
     }
@@ -770,7 +278,7 @@ function indicarPrevias(nombre) {
   });
 
   Salvar.forEach((materia) => {
-    if (!Exonerar.find((elemento) => elemento == materia)) {
+    if (!Exonerar.includes(materia)) {
       SalvarFinal.push(materia);
     }
   });
@@ -781,7 +289,7 @@ function indicarPrevias(nombre) {
     texto += `<u>Salvar curso de</u>:<br/><br/>`;
   }
   SalvarFinal.forEach((materia) => {
-    if (!Exonerar.find((elemento) => elemento == materia)) {
+    if (!Exonerar.includes(materia)) {
       texto += `-${materia.nombreCompleto}<br/>`;
     }
   });
@@ -808,9 +316,19 @@ function indicarPrevias(nombre) {
     texto = `Para poder cursar ${materiaAct.nombreCompleto} hay 3 opciones complejas.<br/><br/>`;
     texto += `Estas están contempladas, para mas información sobre cada una recomendamos averiguar con Bedelías.`;
   }
+  openPopup(texto);
 
-  document.getElementById("popup-text").innerHTML = texto;
-  openPopup();
+}
+
+
+function displayBlock(elemento){
+  document.getElementById(elemento).style.display = "block";
+}
+function displayNone(elemento){
+  document.getElementById(elemento).style.display = "none";
+}
+function displayFlex(elemento){
+  document.getElementById(elemento).style.display = "flex";
 }
 
 function actualizar() {
@@ -836,29 +354,29 @@ function actualizar() {
       switch (semestreAct) {
         case "primero":
           if (materia.semestre == "primero" || materia.semestre == "ambos") {
-            document.getElementById(materia.nombre).style.display = "block";
+            displayBlock(materia.nombre);
           } else {
-            document.getElementById(materia.nombre).style.display = "none";
+            displayNone(materia.nombre)
           }
           break;
 
         case "segundo":
           if (materia.semestre == "segundo" || materia.semestre == "ambos") {
-            document.getElementById(materia.nombre).style.display = "block";
+            displayBlock(materia.nombre);
           } else {
-            document.getElementById(materia.nombre).style.display = "none";
+            displayNone(materia.nombre);
           }
           break;
         case "libre":
           if (materia.libre == "si") {
-            document.getElementById(materia.nombre).style.display = "block";
+            displayBlock(materia.nombre);
           } else {
-            document.getElementById(materia.nombre).style.display = "none";
+            displayNone(materia.nombre);
           }
           break;
 
         default:
-          document.getElementById(materia.nombre).style.display = "block";
+          displayBlock(materia.nombre);
           break;
       }
     } else {
@@ -866,33 +384,33 @@ function actualizar() {
         switch (semestreAct) {
           case "primero":
             if (materia.semestre == "primero" || materia.semestre == "ambos") {
-              document.getElementById(materia.nombre).style.display = "block";
+              displayBlock(materia.nombre);
             } else {
-              document.getElementById(materia.nombre).style.display = "none";
+              displayNone(materia.nombre);
             }
             break;
 
           case "segundo":
             if (materia.semestre == "segundo" || materia.semestre == "ambos") {
-              document.getElementById(materia.nombre).style.display = "block";
+              displayBlock(materia.nombre);
             } else {
-              document.getElementById(materia.nombre).style.display = "none";
+              displayNone(materia.nombre);
             }
             break;
           case "libre":
             if (materia.libre == "si") {
-              document.getElementById(materia.nombre).style.display = "block";
+              displayBlock(materia.nombre);
             } else {
-              document.getElementById(materia.nombre).style.display = "none";
+              displayNone(materia.nombre);
             }
             break;
 
           default:
-            document.getElementById(materia.nombre).style.display = "block";
+            displayBlock(materia.nombre);
             break;
         }
       } else {
-        document.getElementById(materia.nombre).style.display = "none";
+        displayNone(materia.nombre);
       }
     }
 
@@ -925,39 +443,8 @@ function actualizar() {
       }
 
       if (!estanTodas && creditosBloque.Total >= 365) {
-        let estan = 0;
-        MateriasPersona.forEach((elemento) => {
-          if (elemento == "P3Curso") {
-            estan += 1;
-          }
-          if (elemento == "SOCurso") {
-            estan += 1;
-          }
-          if (elemento == "IISCurso") {
-            estan += 1;
-          }
-          if (elemento == "FBDCurso") {
-            estan += 1;
-          }
-          if (elemento == "P4Curso") {
-            estan += 1;
-          }
-          if (elemento == "TPCurso") {
-            estan += 1;
-          }
-          if (elemento == "TLCurso") {
-            estan += 1;
-          }
-          if (elemento == "PISCurso") {
-            estan += 1;
-          }
-          if (elemento == "MNCurso") {
-            estan += 1;
-          }
-        });
-        if (estan == 9) {
-          estanTodas = true;
-        }
+        const verificarSiEstan = ["P3Curso", "SOCurso", "IISCurso", "FBDCurso", "P4Curso", "TPCurso", "TLCurso", "PISCurso", "MNCurso"]
+        estanTodas = verificarSiEstan.every(element => MateriasPersona.includes(element));
       }
 
       if (!estanTodas && creditosBloque.Total >= 330) {
@@ -1024,27 +511,28 @@ function actualizar() {
 
 function checkWidth() {
   if (window.matchMedia("(min-width: 675px)").matches) {
-    this.document.getElementById("checkbox-container").style.display = "none";
-    document.getElementById("navbar").style.display = "flex";
+    displayNone("checkbox-container");
+    displayFlex("navbar");
   } else {
-    this.document.getElementById("checkbox-container").style.display = "flex";
+    displayFlex("checkbox-container");
     if (seleccion) {
       this.document.getElementById("checkbox").checked = true;
-      document.getElementById("navbar").style.display = "flex";
+      displayFlex("navbar");
     } else {
       this.document.getElementById("checkbox").checked = false;
-      document.getElementById("navbar").style.display = "none";
+      displayNone("navbar");
     }
   }
 }
 
-function openPopup() {
-  document.getElementById("boxPopup").style.display = "flex";
-  document.getElementById('cerrar-popup').focus()
+function openPopup(texto) {
+  document.getElementById("popup-text").innerHTML = texto;
+  displayFlex("boxPopup");
+  document.getElementById('cerrar-popup').focus();
 }
 
 function closePopup() {
-  document.getElementById("boxPopup").style.display = "none";
+  displayNone("boxPopup");
 }
 
 function toggleMI() {
@@ -1061,6 +549,13 @@ function toggleMI() {
   localStorage.setItem("MI", document.getElementById("MI").disabled);
 }
 
+function cambiarColores(color1, color2, color3, color4){
+  document.getElementById("primero").style.backgroundColor = color1;
+  document.getElementById("segundo").style.backgroundColor = color2;
+  document.getElementById("ambos").style.backgroundColor = color3;
+  document.getElementById("libre").style.backgroundColor = color4;
+}
+
 function toggleBotones(valor) {
   semestreAct = valor;
   let colorSec = "lightgrey";
@@ -1068,34 +563,21 @@ function toggleBotones(valor) {
 
   switch (valor) {
     case "primero":
-      document.getElementById("primero").style.backgroundColor = colorPrin;
-      document.getElementById("segundo").style.backgroundColor = colorSec;
-      document.getElementById("ambos").style.backgroundColor = colorSec;
-      document.getElementById("libre").style.backgroundColor = colorSec;
-      document.getElementById("activarMI").style.display = "block";
+      cambiarColores(colorPrin, colorSec, colorSec, colorSec);
+      displayBlock("activarMI");
       break;
     case "segundo":
-      document.getElementById("primero").style.backgroundColor = colorSec;
-      document.getElementById("segundo").style.backgroundColor = colorPrin;
-      document.getElementById("ambos").style.backgroundColor = colorSec;
-      document.getElementById("libre").style.backgroundColor = colorSec;
-      document.getElementById("activarMI").style.display = "block";
+      cambiarColores(colorSec, colorPrin, colorSec, colorSec);
+      displayBlock("activarMI");
       break;
     case "ambos":
-      document.getElementById("primero").style.backgroundColor = colorSec;
-      document.getElementById("segundo").style.backgroundColor = colorSec;
-      document.getElementById("ambos").style.backgroundColor = colorPrin;
-      document.getElementById("libre").style.backgroundColor = colorSec;
-      document.getElementById("activarMI").style.display = "block";
+      cambiarColores(colorSec, colorSec, colorPrin, colorSec);
+      displayBlock("activarMI");
       break;
     case "libre":
-      document.getElementById("primero").style.backgroundColor = colorSec;
-      document.getElementById("segundo").style.backgroundColor = colorSec;
-      document.getElementById("ambos").style.backgroundColor = colorSec;
-      document.getElementById("libre").style.backgroundColor = colorPrin;
-      document.getElementById("activarMI").style.display = "none";
+      cambiarColores(colorSec, colorSec, colorSec, colorPrin);
+      displayNone("activarMI");
       break;
-
     default:
       break;
   }
@@ -1105,10 +587,10 @@ function toggleBotones(valor) {
 
 function toggleMenu() {
   if (document.getElementById("checkbox").checked) {
-    document.getElementById("navbar").style.display = "flex";
+    displayFlex("navbar");
     seleccion = !seleccion;
   } else {
-    document.getElementById("navbar").style.display = "none";
+    displayNone("navbar")
     seleccion = !seleccion;
   }
 }
@@ -1131,11 +613,7 @@ function verAreas(){
     texto += `-<span onclick="mostrarMaterias('ia')">Int. Artificial y Robótica</span>: ${creditosBloque.creditosEnIAYR} (0)<br/><br/>`
     texto += `<b><u>Materias Complementarias</u>: ${creditosBloque.creditosEnCHS} (10)</b><br/>`
     texto += `-<span onclick="mostrarMaterias('ch')">Ciencias H. y S.</span>: ${creditosBloque.creditosEnCHS} (10)<br/>`
-
-
-    document.getElementById("popup-text").innerHTML = texto;
-
-    openPopup();
+    openPopup(texto);
 
 }
 
@@ -1229,8 +707,7 @@ function verMaterias(){
     }
 
   } )
-  document.getElementById("popup-text").innerHTML = `<u>Materias hechas</u>: ${cantidad}<br/><br/>` + texto;
-  openPopup();
+  openPopup(`<u>Materias hechas</u>: ${cantidad}<br/><br/>` + texto);
 }
 
 function firstLoad() {
