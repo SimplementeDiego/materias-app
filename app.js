@@ -165,54 +165,63 @@ let creditosBloque = {
 
 // Total = 331 - faltan 139
 
-function sumarCreditos(materia) {
-  creditosBloque.Total += materia.creditos;
-  switch (materia.area) {
-    case "creditosEnM":
-      creditosBloque.creditosEnM += materia.creditos;
-      break;
-    case "creditosEnCE":
-      creditosBloque.creditosEnCE += materia.creditos;
-      break;
-    case "creditosEnProg":
-      creditosBloque.creditosEnProg += materia.creditos;
-      break;
-    case "creditosEnAC_SO_RC":
-      creditosBloque.creditosEnAC_SO_RC += materia.creditos;
-      break;
-    case "creditosEnBD_SI":
-      creditosBloque.creditosEnBD_SI += materia.creditos;
-      break;
-    case "creditosEnMN":
-      creditosBloque.creditosEnMN += materia.creditos;
-      break;
-    case "creditosEnIO":
-      creditosBloque.creditosEnIO += materia.creditos;
-      break;
-    case "creditosEnIS":
-      creditosBloque.creditosEnIS += materia.creditos;
-      break;
-    case "creditosEnTall_Pasa_Proy":
-      creditosBloque.creditosEnTall_Pasa_Proy += materia.creditos;
-      break;
-    case "creditosEnGO":
-      creditosBloque.creditosEnGO += materia.creditos;
-      break;
-    case "creditosEnCHS":
-      creditosBloque.creditosEnCHS += materia.creditos;
-      break;
-    case "creditosEnIAYR":
-      creditosBloque.creditosEnIAYR += materia.creditos;
-      break;
-    default:
-      break;
-  }
+// Funciones auxiliares
+
+function displayBlock(elemento){
+  document.getElementById(elemento).style.display = "block";
 }
 
-function reset() {
-  MateriasPersona = [];
-  actualizar();
+function displayNone(elemento){
+  document.getElementById(elemento).style.display = "none";
 }
+
+function displayFlex(elemento){
+  document.getElementById(elemento).style.display = "flex";
+}
+
+function cambiarColores(color1, color2, color3, color4){
+  document.getElementById("primero").style.backgroundColor = color1;
+  document.getElementById("segundo").style.backgroundColor = color2;
+  document.getElementById("ambos").style.backgroundColor = color3;
+  document.getElementById("libre").style.backgroundColor = color4;
+}
+
+// Funciones de Popup
+
+function openPopup(texto) {
+  document.getElementById("popup-text").innerHTML = texto;
+  displayFlex("boxPopup");
+  document.getElementById('cerrar-popup').focus();
+}
+
+function closePopup() {
+  displayNone("boxPopup");
+}
+
+window.onclick = function (event) {
+  var modal = document.getElementById("boxPopup");
+  if (event.target == modal) {
+    closePopup();
+  }
+};
+
+// Funcion de MI
+
+function toggleMI() {
+  if (document.getElementById("MI").disabled == true) {
+    document.getElementById("MI").disabled = false;
+    MI.previas = [];
+    CDIV.previas = [MI];
+  } else {
+    document.getElementById("MI").disabled = true;
+    MI.previas = [Aux];
+    CDIV.previas = [];
+  }
+  actualizar();
+  localStorage.setItem("MI", document.getElementById("MI").disabled);
+}
+
+// Funciones de toggle
 
 function toggleOpcionales() {
   if (opcionales) {
@@ -246,91 +255,46 @@ function toggleMateria(nombre) {
   actualizar();
 }
 
-function indicarPrevias(nombre) {
-  let materiaAct = Materias.find((materia) => materia.nombre == nombre);
+function toggleBotones(valor) {
+  semestreAct = valor;
+  let colorSec = "lightgrey";
+  let colorPrin = "lightskyblue";
 
-  let Exonerar = [];
-  let Salvar = [];
-  let SalvarFinal = [];
-
-  materiaAct.previas.filter((materia) => {
-    if (typeof materia == "string") {
-      if (!MateriasPersona.includes(materia)) {
-        let materiaAux = Materias.find((elemento) => elemento.curso == materia);
-        Salvar.push(materiaAux);
-      }
-    } else {
-      if (!MateriasPersona.includes(materia.nombre)) {
-        Exonerar.push(materia);
-      }
-      if (!MateriasPersona.includes(materia.curso)) {
-        Salvar.push(materia);
-      }
-    }
-  });
-
-  let texto = `Para poder cursar ${materiaAct.nombreCompleto} te hace falta:<br/><br/>`;
-
-  if (Exonerar.length > 0) {
-    texto += `<u>Exonerar</u>:<br/><br/>`;
+  switch (valor) {
+    case "primero":
+      cambiarColores(colorPrin, colorSec, colorSec, colorSec);
+      displayBlock("activarMI");
+      break;
+    case "segundo":
+      cambiarColores(colorSec, colorPrin, colorSec, colorSec);
+      displayBlock("activarMI");
+      break;
+    case "ambos":
+      cambiarColores(colorSec, colorSec, colorPrin, colorSec);
+      displayBlock("activarMI");
+      break;
+    case "libre":
+      cambiarColores(colorSec, colorSec, colorSec, colorPrin);
+      displayNone("activarMI");
+      break;
+    default:
+      break;
   }
-  Exonerar.forEach((materia) => {
-    texto += `-${materia.nombreCompleto}<br/>`;
-  });
-
-  Salvar.forEach((materia) => {
-    if (!Exonerar.includes(materia)) {
-      SalvarFinal.push(materia);
-    }
-  });
-  if (SalvarFinal.length > 0) {
-    if (Exonerar.length > 0) {
-      texto += `<br/>`;
-    }
-    texto += `<u>Salvar curso de</u>:<br/><br/>`;
-  }
-  SalvarFinal.forEach((materia) => {
-    if (!Exonerar.includes(materia)) {
-      texto += `-${materia.nombreCompleto}<br/>`;
-    }
-  });
-
-  if (materiaAct == AGI) {
-    texto = `Para poder cursar ${materiaAct.nombreCompleto} se necesitan:<br/><br/>`;
-    texto += `-140 créditos`;
-  }
-
-  if (materiaAct == Pasan) {
-    texto = `Para poder validar ${materiaAct.nombreCompleto} se necesitan:<br/><br/>`;
-    texto += `-200 créditos`;
-  }
-
-  if (materiaAct == TP) {
-    texto = `Para poder cursar ${materiaAct.nombreCompleto} se necesita alguna de las siguientes:<br/><br/>`;
-    texto += `<u>Opción 1</u>:<br/>`;
-    texto += `-Exonerar Programación 3 y Salvar Curso Programación 4<br/><br/>`;
-    texto += `<u>Opción 2</u>:<br/>`;
-    texto += `-Exonerar Programación 4<br/>`;
-  }
-
-  if (materiaAct == PG) {
-    texto = `Para poder cursar ${materiaAct.nombreCompleto} hay 3 opciones complejas.<br/><br/>`;
-    texto += `Estas están contempladas, para mas información sobre cada una recomendamos averiguar con Bedelías.`;
-  }
-  openPopup(texto);
-
+  actualizar();
+  localStorage.setItem("semestre", semestreAct);
 }
 
+function toggleMenu() {
+  if (document.getElementById("checkbox").checked) {
+    displayFlex("navbar");
+    seleccion = !seleccion;
+  } else {
+    displayNone("navbar")
+    seleccion = !seleccion;
+  }
+}
 
-function displayBlock(elemento){
-  document.getElementById(elemento).style.display = "block";
-}
-function displayNone(elemento){
-  document.getElementById(elemento).style.display = "none";
-}
-function displayFlex(elemento){
-  document.getElementById(elemento).style.display = "flex";
-}
+// Actualiza el estado de la pagina
 
 function actualizar() {
   creditosBloque = {
@@ -352,64 +316,10 @@ function actualizar() {
 
   Materias.forEach((materia) => {
     if (opcionales == true) {
-      switch (semestreAct) {
-        case "primero":
-          if (materia.semestre == "primero" || materia.semestre == "ambos") {
-            displayBlock(materia.nombre);
-          } else {
-            displayNone(materia.nombre)
-          }
-          break;
-
-        case "segundo":
-          if (materia.semestre == "segundo" || materia.semestre == "ambos") {
-            displayBlock(materia.nombre);
-          } else {
-            displayNone(materia.nombre);
-          }
-          break;
-        case "libre":
-          if (materia.libre == "si") {
-            displayBlock(materia.nombre);
-          } else {
-            displayNone(materia.nombre);
-          }
-          break;
-
-        default:
-          displayBlock(materia.nombre);
-          break;
-      }
+      mostrarBotonMateria(materia);
     } else {
       if (materia.opcional == "no") {
-        switch (semestreAct) {
-          case "primero":
-            if (materia.semestre == "primero" || materia.semestre == "ambos") {
-              displayBlock(materia.nombre);
-            } else {
-              displayNone(materia.nombre);
-            }
-            break;
-
-          case "segundo":
-            if (materia.semestre == "segundo" || materia.semestre == "ambos") {
-              displayBlock(materia.nombre);
-            } else {
-              displayNone(materia.nombre);
-            }
-            break;
-          case "libre":
-            if (materia.libre == "si") {
-              displayBlock(materia.nombre);
-            } else {
-              displayNone(materia.nombre);
-            }
-            break;
-
-          default:
-            displayBlock(materia.nombre);
-            break;
-        }
+        mostrarBotonMateria(materia);
       } else {
         displayNone(materia.nombre);
       }
@@ -510,90 +420,163 @@ function actualizar() {
   localStorage.setItem("materias", JSON.stringify(MateriasPersona));
 }
 
-function checkWidth() {
-  if (window.matchMedia("(min-width: 675px)").matches) {
-    displayNone("checkbox-container");
-    displayFlex("navbar");
-  } else {
-    displayFlex("checkbox-container");
-    if (seleccion) {
-      this.document.getElementById("checkbox").checked = true;
-      displayFlex("navbar");
-    } else {
-      this.document.getElementById("checkbox").checked = false;
-      displayNone("navbar");
-    }
-  }
-}
+// Funciones generales
 
-function openPopup(texto) {
-  document.getElementById("popup-text").innerHTML = texto;
-  displayFlex("boxPopup");
-  document.getElementById('cerrar-popup').focus();
-}
-
-function closePopup() {
-  displayNone("boxPopup");
-}
-
-function toggleMI() {
-  if (document.getElementById("MI").disabled == true) {
-    document.getElementById("MI").disabled = false;
-    MI.previas = [];
-    CDIV.previas = [MI];
-  } else {
-    document.getElementById("MI").disabled = true;
-    MI.previas = [Aux];
-    CDIV.previas = [];
-  }
+function reset() {
+  MateriasPersona = [];
   actualizar();
-  localStorage.setItem("MI", document.getElementById("MI").disabled);
 }
 
-function cambiarColores(color1, color2, color3, color4){
-  document.getElementById("primero").style.backgroundColor = color1;
-  document.getElementById("segundo").style.backgroundColor = color2;
-  document.getElementById("ambos").style.backgroundColor = color3;
-  document.getElementById("libre").style.backgroundColor = color4;
-}
-
-function toggleBotones(valor) {
-  semestreAct = valor;
-  let colorSec = "lightgrey";
-  let colorPrin = "lightskyblue";
-
-  switch (valor) {
-    case "primero":
-      cambiarColores(colorPrin, colorSec, colorSec, colorSec);
-      displayBlock("activarMI");
+function sumarCreditos(materia) {
+  creditosBloque.Total += materia.creditos;
+  switch (materia.area) {
+    case "creditosEnM":
+      creditosBloque.creditosEnM += materia.creditos;
       break;
-    case "segundo":
-      cambiarColores(colorSec, colorPrin, colorSec, colorSec);
-      displayBlock("activarMI");
+    case "creditosEnCE":
+      creditosBloque.creditosEnCE += materia.creditos;
       break;
-    case "ambos":
-      cambiarColores(colorSec, colorSec, colorPrin, colorSec);
-      displayBlock("activarMI");
+    case "creditosEnProg":
+      creditosBloque.creditosEnProg += materia.creditos;
       break;
-    case "libre":
-      cambiarColores(colorSec, colorSec, colorSec, colorPrin);
-      displayNone("activarMI");
+    case "creditosEnAC_SO_RC":
+      creditosBloque.creditosEnAC_SO_RC += materia.creditos;
+      break;
+    case "creditosEnBD_SI":
+      creditosBloque.creditosEnBD_SI += materia.creditos;
+      break;
+    case "creditosEnMN":
+      creditosBloque.creditosEnMN += materia.creditos;
+      break;
+    case "creditosEnIO":
+      creditosBloque.creditosEnIO += materia.creditos;
+      break;
+    case "creditosEnIS":
+      creditosBloque.creditosEnIS += materia.creditos;
+      break;
+    case "creditosEnTall_Pasa_Proy":
+      creditosBloque.creditosEnTall_Pasa_Proy += materia.creditos;
+      break;
+    case "creditosEnGO":
+      creditosBloque.creditosEnGO += materia.creditos;
+      break;
+    case "creditosEnCHS":
+      creditosBloque.creditosEnCHS += materia.creditos;
+      break;
+    case "creditosEnIAYR":
+      creditosBloque.creditosEnIAYR += materia.creditos;
       break;
     default:
       break;
   }
-  actualizar();
-  localStorage.setItem("semestre", semestreAct);
 }
 
-function toggleMenu() {
-  if (document.getElementById("checkbox").checked) {
-    displayFlex("navbar");
-    seleccion = !seleccion;
-  } else {
-    displayNone("navbar")
-    seleccion = !seleccion;
+function indicarPrevias(nombre) {
+  let materiaAct = Materias.find((materia) => materia.nombre == nombre);
+
+  let Exonerar = [];
+  let Salvar = [];
+  let SalvarFinal = [];
+
+  materiaAct.previas.filter((materia) => {
+    if (typeof materia == "string") {
+      if (!MateriasPersona.includes(materia)) {
+        let materiaAux = Materias.find((elemento) => elemento.curso == materia);
+        Salvar.push(materiaAux);
+      }
+    } else {
+      if (!MateriasPersona.includes(materia.nombre)) {
+        Exonerar.push(materia);
+      }
+      if (!MateriasPersona.includes(materia.curso)) {
+        Salvar.push(materia);
+      }
+    }
+  });
+
+  let texto = `Para poder cursar ${materiaAct.nombreCompleto} te hace falta:<br/><br/>`;
+
+  if (Exonerar.length > 0) {
+    texto += `<u>Exonerar</u>:<br/><br/>`;
   }
+  Exonerar.forEach((materia) => {
+    texto += `-${materia.nombreCompleto}<br/>`;
+  });
+
+  Salvar.forEach((materia) => {
+    if (!Exonerar.includes(materia)) {
+      SalvarFinal.push(materia);
+    }
+  });
+  if (SalvarFinal.length > 0) {
+    if (Exonerar.length > 0) {
+      texto += `<br/>`;
+    }
+    texto += `<u>Salvar curso de</u>:<br/><br/>`;
+  }
+  SalvarFinal.forEach((materia) => {
+    if (!Exonerar.includes(materia)) {
+      texto += `-${materia.nombreCompleto}<br/>`;
+    }
+  });
+
+  if (materiaAct == AGI) {
+    texto = `Para poder cursar ${materiaAct.nombreCompleto} se necesitan:<br/><br/>`;
+    texto += `-140 créditos`;
+  }
+
+  if (materiaAct == Pasan) {
+    texto = `Para poder validar ${materiaAct.nombreCompleto} se necesitan:<br/><br/>`;
+    texto += `-200 créditos`;
+  }
+
+  if (materiaAct == TP) {
+    texto = `Para poder cursar ${materiaAct.nombreCompleto} se necesita alguna de las siguientes:<br/><br/>`;
+    texto += `<u>Opción 1</u>:<br/>`;
+    texto += `-Exonerar Programación 3 y Salvar Curso Programación 4<br/><br/>`;
+    texto += `<u>Opción 2</u>:<br/>`;
+    texto += `-Exonerar Programación 4<br/>`;
+  }
+
+  if (materiaAct == PG) {
+    texto = `Para poder cursar ${materiaAct.nombreCompleto} hay 3 opciones complejas.<br/><br/>`;
+    texto += `Estas están contempladas, para mas información sobre cada una recomendamos averiguar con Bedelías.`;
+  }
+  openPopup(texto);
+
+}
+
+function mostrarBotonMateria(materia){
+
+  switch (semestreAct) {
+    case "primero":
+      if (materia.semestre == "primero" || materia.semestre == "ambos") {
+        displayBlock(materia.nombre);
+      } else {
+        displayNone(materia.nombre)
+      }
+      break;
+
+    case "segundo":
+      if (materia.semestre == "segundo" || materia.semestre == "ambos") {
+        displayBlock(materia.nombre);
+      } else {
+        displayNone(materia.nombre);
+      }
+      break;
+    case "libre":
+      if (materia.libre == "si") {
+        displayBlock(materia.nombre);
+      } else {
+        displayNone(materia.nombre);
+      }
+      break;
+
+    default:
+      displayBlock(materia.nombre);
+      break;
+  }
+
 }
 
 function verAreas(){
@@ -711,43 +694,7 @@ function verMaterias(){
   openPopup(`<u>Materias hechas</u>: ${cantidad}<br/><br/>` + texto);
 }
 
-function firstLoad() {
-  if (localStorage.getItem("materias")) {
-    MateriasPersona = JSON.parse(localStorage.getItem("materias"));
-  }
-  document.getElementById("MI").disabled = true;
-  if (localStorage.getItem("MI") == "false") {
-    toggleMI();
-  }
-  if (localStorage.getItem("semestre")) {
-    semestreAct = localStorage.getItem("semestre");
-    toggleBotones(semestreAct);
-  }
-  if (!localStorage.getItem("semestre") && localStorage.getItem("MI") != "false"){
-    actualizar();
-  }
-  checkWidth();
-}
-
-function crearMaterias(){
-  Materias.forEach( (materia) => {
-
-    if (materia.nombre != "MI"){
-      var button = document.createElement('button');
-        button.textContent = `${materia.nombreCompleto} (${materia.creditos})` ;
-        if (materia.opcional == "si"){
-          button.textContent += "*";
-        }
-        button.id = materia.nombre;
-        button.onclick = function() {
-            toggleMateria(materia.nombre);
-        };
-        document.getElementById(`section-materias-${materia.peso}`).appendChild(button);
-    }
-
-  } );
-
-}
+// Funciones de asignacion de peso y creacion del HTML
 
 function asignarPesoMateria(materia){
   let maxPesoPrevia = 0;
@@ -808,17 +755,68 @@ function asignarPesos(){
   }
 }
 
-asignarPesos()
-crearMaterias()
-firstLoad();
+function crearBotonesMaterias(){
+  Materias.forEach( (materia) => {
+
+    if (materia.nombre != "MI"){
+      var button = document.createElement('button');
+        button.textContent = `${materia.nombreCompleto} (${materia.creditos})` ;
+        if (materia.opcional == "si"){
+          button.textContent += "*";
+        }
+        button.id = materia.nombre;
+        button.onclick = function() {
+            toggleMateria(materia.nombre);
+        };
+        document.getElementById(`section-materias-${materia.peso}`).appendChild(button);
+    }
+
+  } );
+
+}
+
+// Funciones y eventos de manejo de tamaño de ventana
+
+function checkWidth() {
+  if (window.matchMedia("(min-width: 675px)").matches) {
+    displayNone("checkbox-container");
+    displayFlex("navbar");
+  } else {
+    displayFlex("checkbox-container");
+    if (seleccion) {
+      this.document.getElementById("checkbox").checked = true;
+      displayFlex("navbar");
+    } else {
+      this.document.getElementById("checkbox").checked = false;
+      displayNone("navbar");
+    }
+  }
+}
 
 window.addEventListener("resize", function () {
   checkWidth();
 });
 
-window.onclick = function (event) {
-  var modal = document.getElementById("boxPopup");
-  if (event.target == modal) {
-    closePopup();
+// Inicio de pagina
+
+function firstLoad() {
+  if (localStorage.getItem("materias")) {
+    MateriasPersona = JSON.parse(localStorage.getItem("materias"));
   }
-};
+  document.getElementById("MI").disabled = true;
+  if (localStorage.getItem("MI") == "false") {
+    toggleMI();
+  }
+  if (localStorage.getItem("semestre")) {
+    semestreAct = localStorage.getItem("semestre");
+    toggleBotones(semestreAct);
+  }
+  if (!localStorage.getItem("semestre") && localStorage.getItem("MI") != "false"){
+    actualizar();
+  }
+  checkWidth();
+}
+
+asignarPesos()
+crearBotonesMaterias()
+firstLoad();
