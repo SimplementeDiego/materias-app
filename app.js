@@ -201,9 +201,6 @@ function openPopup(texto) {
   displayFlex("boxPopup");
   document.getElementById('cerrar-popup').focus();
   document.body.style.overflow = 'hidden';
-  if (!window.matchMedia("(min-width: 675px)").matches) {
-    document.getElementById("checkbox").click();
-  }
 }
 
 function closePopup() {
@@ -610,6 +607,9 @@ function verAreas(){
     texto += `-<span onclick="mostrarMaterias('ia')">Int. Artificial y Robótica</span>: ${creditosBloque.creditosEnIAYR} (0)<br/><br/>`
     texto += `<b><u>Materias Complementarias</u>: ${creditosBloque.creditosEnCHS} (10)</b><br/>`
     texto += `-<span onclick="mostrarMaterias('ch')">Ciencias H. y S.</span>: ${creditosBloque.creditosEnCHS} (10)<br/>`
+    if (!window.matchMedia("(min-width: 675px)").matches) {
+      document.getElementById("checkbox").click();
+    }
     openPopup(texto);
 
 }
