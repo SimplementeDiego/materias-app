@@ -303,6 +303,7 @@ label img{
     .section button{
         margin: 10px 0 10px 0;
         width: 95%;
+        font-size: 12px;
     }
     .header-content h1{
         font-size: 17px;
