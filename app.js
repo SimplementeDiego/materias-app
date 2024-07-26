@@ -124,7 +124,7 @@ let Materias = [
   FBD,
   RC,
   FO,
-  OCA,
+  //OCA,
   AE,
   ICG,
   CDPGEUPG,
