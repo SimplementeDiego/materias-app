@@ -278,6 +278,9 @@ label img{
 }
 
 @media (max-width: 675px) {
+    #box-Popup{
+        z-index: 10;
+    }
     #boxPopup-content{
         z-index: 11;
         height: fit-content;
