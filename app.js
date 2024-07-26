@@ -43,6 +43,8 @@ const LG = new Materia("LG", 12, [MD1.curso], "Lógica", "primero", "no", "no", 
 const MN = new Materia("MN", 8, [CDIVV, P1, GAL2, GAL1, CDIV], "Métodos Numéricos", "segundo", "no", "no", "creditosEnMN");
 const P4 = new Materia("P4",  15, [GAL1, CDIV, MD1, P2], "Programación 4", "primero", "no", "no", "creditosEnProg");
 const IIO = new Materia("IIO", 10, [GAL2, PYE, CDIVV, CDIV, GAL1], "Int. a la Investigación de Operaciones", "primero", "no", "no", "creditosEnIO");
+const MO = new Materia("MO", 6, [IIO], "Modelado y Optimización", "segundo", "si", "no", "creditosEnIO");
+const IOGR = new Materia("IOGR", 6, [IIO], "Investigación de Oper. y Gest. de Riesgos", "segundo", "si", "no", "creditosEnIO");
 const P3 = new Materia("P3", 15, [P2.curso, PYE.curso, P1, MD1], "Programación 3", "segundo", "no", "no", "creditosEnProg");
 const ALN = new Materia("ALN", 9, [P3, MN], "Álgebra Lineal Numérica", "segundo", "si", "no", "creditosEnMN");
 const AC = new Materia("AC", 12, [CDIV, LG.curso, P2.curso, P1, MD1], "Arquitectura de Computadoras", "segundo", "no", "no", "creditosEnAC_SO_RC");
@@ -60,11 +62,13 @@ const TSI = new Materia("TSI", 10, [RC.curso, FBD, P3], "Taller de Seguridad Inf
 const ADAR = new Materia("ADAR", 8, [P3, RC], "Análisis y Diseño de Al. Dis. en Redes", "segundo", "si", "no", "creditosEnAC_SO_RC");
 const CAP = new Materia("CAP", 10, [P4.curso, RC.curso, SO.curso, AC.curso], "Computación de alta performance", "primero", "si", "no", "creditosEnAC_SO_RC");
 const TP = new Materia("TP", 15, [P3, P4.curso], "Taller de Programación", "segundo", "no", "no", "creditosEnTall_Pasa_Proy");
+const IPLN = new Materia("IPLN", 12, [P4, TP.curso, LG, P3, TL, PYE], "Int. al Procesamiento de Leng. Natural", "segundo", "si", "no", "creditosEnIAYR");
 const IIS = new Materia("IIS", 10, [TP.curso, FBD.curso, P4.curso], "Int. a la Ingeniería de Software", "primero", "no", "no", "creditosEnIS");
 const PF = new Materia("PF", 10, [TL, P2, LG, MD1], "Programación Funcional", "segundo", "no", "no", "creditosEnProg");
 const PL = new Materia("PL", 10, [TL, P3, MD2, LG], "Programación Lógica", "primero", "no", "no", "creditosEnProg");
 const PIS = new Materia("PIS", 15, [IIS.curso, P4], "Proyecto de Ingeniería de Software", "segundo", "no", "no", "creditosEnTall_Pasa_Proy");
 const AA = new Materia("AA", 12, [LG, PYE, P3.curso, FBD.curso, P4, MD2], "Aprendizaje Automático", "segundo", "si", "no", "creditosEnIAYR");
+const RNLN = new Materia("RNLN", 10, [P3, AA.curso, PYE], "Redes Neuronales para Leng. Natural", "segundo", "si", "no", "creditosEnIAYR");
 const AE = new Materia("AE", 10, [P4, PYE, IIO], "Algoritmos Evolutivos", "segundo", "si", "no", "creditosEnIO");
 const ICG = new Materia("ICG", 10, [P3, P4, GAL2.curso, GAL1], "Int. a la Computación Gráfica", "primero", "si", "no", "creditosEnProg");
 const CGA = new Materia("CGA", 12, [ICG.curso], "Computación Gráfica Avanzada", "segundo", "si", "no", "creditosEnProg");
@@ -137,6 +141,10 @@ let Materias = [
   PIS,
   ASS,
   PG,
+  IPLN,
+  IOGR,
+  MO,
+  RNLN,
 ];
 
 let MateriasPersona = [];
