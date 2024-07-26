@@ -141,6 +141,7 @@ button {
     transition: 0.3s;
     cursor: pointer;
     margin: 10px;
+    color: black;
 }
 
 .section button:hover{
