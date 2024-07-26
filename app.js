@@ -200,10 +200,15 @@ function openPopup(texto) {
   document.getElementById("popup-text").innerHTML = texto;
   displayFlex("boxPopup");
   document.getElementById('cerrar-popup').focus();
+  document.body.style.overflow = 'hidden';
+  if (!window.matchMedia("(min-width: 675px)").matches) {
+    document.getElementById("checkbox").click();
+  }
 }
 
 function closePopup() {
   displayNone("boxPopup");
+  document.body.style.overflow = 'auto';
 }
 
 window.onclick = function (event) {
