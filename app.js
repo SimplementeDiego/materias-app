@@ -756,15 +756,12 @@ function asignarPesos(){
 
 function crearBotonesMaterias(){
   Materias.sort((materia1, materia2) => {
-    // Comparar por peso
     if (materia1.peso !== materia2.peso) {
         return materia1.peso - materia2.peso;
     }
-    // Comparar por opcional
     if (materia1.opcional !== materia2.opcional) {
         return (materia1.opcional === "no" ? -1 : 1) - (materia2.opcional === "no" ? -1 : 1);
     }
-    // Comparar alfabéticamente por nombreCompleto
     return materia1.nombreCompleto.localeCompare(materia2.nombreCompleto);
   });
   Materias.forEach( (materia) => {
