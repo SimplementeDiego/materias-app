@@ -756,11 +756,16 @@ function asignarPesos(){
 
 function crearBotonesMaterias(){
   Materias.sort((materia1, materia2) => {
+    // Comparar por peso
     if (materia1.peso !== materia2.peso) {
         return materia1.peso - materia2.peso;
-    } else {
-        return materia2.nombreCompleto.localeCompare(materia1.nombreCompleto);
     }
+    // Comparar por opcional
+    if (materia1.opcional !== materia2.opcional) {
+        return (materia1.opcional === "no" ? -1 : 1) - (materia2.opcional === "no" ? -1 : 1);
+    }
+    // Comparar alfabéticamente por nombreCompleto
+    return materia1.nombreCompleto.localeCompare(materia2.nombreCompleto);
   });
   Materias.forEach( (materia) => {
 
@@ -775,12 +780,7 @@ function crearBotonesMaterias(){
             toggleMateria(materia.nombre);
         };
         let parent = document.getElementById(`section-materias-${materia.peso}`);
-        if (materia.opcional == "si"){
-          parent.appendChild(button);
-        }else{
-          parent.insertBefore(button, parent.firstChild);
-
-        }
+        parent.appendChild(button);
     }
 
   } );
