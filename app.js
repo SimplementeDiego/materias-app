@@ -47,7 +47,7 @@ const MO = new Materia("MO", 6, [IIO], "Modelado y Optimización", "segundo", "s
 const IOGR = new Materia("IOGR", 6, [IIO], "Investigación de Oper. y Gest. de Riesgos", "segundo", "si", "no", "creditosEnIO");
 const P3 = new Materia("P3", 15, [P2.curso, PYE.curso, P1, MD1], "Programación 3", "segundo", "no", "no", "creditosEnProg");
 const ALN = new Materia("ALN", 9, [P3, MN], "Álgebra Lineal Numérica", "segundo", "si", "no", "creditosEnMN");
-const AC = new Materia("AC", 12, [CDIV, LG.curso, P2.curso, P1, MD1], "Arquitectura de Computadoras", "segundo", "no", "no", "creditosEnAC_SO_RC");
+const AC = new Materia("AC", 10, [LG.curso, P2.curso, P1, MD1.curso], "Arquitectura de Computadoras", "segundo", "no", "si", "creditosEnAC_SO_RC");
 const CDPGEUPG = new Materia("CDPGEUPG", 10, [P4.curso, AC, P3], "Comput. Pr.Gral. U. Proc.Graf.", "primero", "si", "no", "creditosEnAC_SO_RC");
 const CV = new Materia("CV", 10, [CDIVV.curso, GAL1, CDIV], "Cálculo Vectorial", "ambos", "si", "si", "creditosEnM");
 const ED = new Materia("ED", 10, [GAL2, CDIVV.curso, GAL1, CDIV], "Int. a las Ec. Diferenciales", "segundo", "si", "si", "creditosEnM");
@@ -693,20 +693,6 @@ function mostrarMaterias(nombre){
 
 }
 
-function verMaterias(){
-  texto = ``;
-  cantidad = 0;
-  Materias.forEach( (materia)=>{
-
-    if ( MateriasPersona.find((elemento) => elemento == materia.nombre) ){
-      texto += `-${materia.nombreCompleto}<br/>`;
-      cantidad+=1;
-    }
-
-  } )
-  openPopup(`<u>Materias hechas</u>: ${cantidad}<br/><br/>` + texto);
-}
-
 // Funciones de asignacion de peso y creacion del HTML
 
 function asignarPesoMateria(materia){
@@ -769,6 +755,13 @@ function asignarPesos(){
 }
 
 function crearBotonesMaterias(){
+  Materias.sort((materia1, materia2) => {
+    if (materia1.peso !== materia2.peso) {
+        return materia1.peso - materia2.peso;
+    } else {
+        return materia2.nombreCompleto.localeCompare(materia1.nombreCompleto);
+    }
+  });
   Materias.forEach( (materia) => {
 
     if (materia.nombre != "MI"){
@@ -781,7 +774,13 @@ function crearBotonesMaterias(){
         button.onclick = function() {
             toggleMateria(materia.nombre);
         };
-        document.getElementById(`section-materias-${materia.peso}`).appendChild(button);
+        let parent = document.getElementById(`section-materias-${materia.peso}`);
+        if (materia.opcional == "si"){
+          parent.appendChild(button);
+        }else{
+          parent.insertBefore(button, parent.firstChild);
+
+        }
     }
 
   } );
