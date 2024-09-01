@@ -746,6 +746,7 @@ function asignarPesos(){
   PAI.peso = 4;
   Pasan.peso = 4;
   TP.peso = 4;
+  PMPPG.peso = 4;
   Materias.forEach( (materia) => {
     if (materia.peso == 0){
       asignarPesoMateria(materia);
