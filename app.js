@@ -48,12 +48,12 @@ const IOGR = new Materia("IOGR", 6, [IIO], "Investigación de Oper. y Gest. de R
 const P3 = new Materia("P3", 15, [P2.curso, P1, MD1], "Programación 3", "segundo", "no", "si", "creditosEnProg");
 const ALN = new Materia("ALN", 9, [P3, MN], "Álgebra Lineal Numérica", "segundo", "si", "no", "creditosEnMN");
 const AC = new Materia("AC", 10, [LG.curso, P2.curso, P1, MD1.curso], "Arquitectura de Computadoras", "segundo", "no", "si", "creditosEnAC_SO_RC");
-const CDPGEUPG = new Materia("CDPGEUPG", 10, [P4.curso, AC, P3], "Comput. Pr.Gral. U. Proc.Graf.", "primero", "si", "no", "creditosEnAC_SO_RC");
 const CV = new Materia("CV", 10, [CDIVV.curso, GAL1, CDIV], "Cálculo Vectorial", "ambos", "si", "si", "creditosEnM");
 const ED = new Materia("ED", 10, [GAL2, CDIVV.curso, GAL1, CDIV], "Int. a las Ec. Diferenciales", "segundo", "si", "si", "creditosEnM");
 const TL = new Materia("TL", 12, [P3.curso, CDIV, GAL1, LG, MD1], "Teoría de Lenguajes", "primero", "no", "no", "creditosEnProg");
 const FVC = new Materia("FVC", 5, [CV.curso, CDIVV], "Funciones de Variable Compleja", "primero", "si", "si", "creditosEnM");
 const SO = new Materia("SO", 12, [AC.curso, GAL1, CDIV, P2, MD1], "Sistemas Operativos", "primero", "no", "no", "creditosEnAC_SO_RC");
+const PMPPG = new Materia("PMPPG", 10, [P2, SO.curso, AC.curso], "Prog. masivamente paralela en p. gráficos", "primero", "si", "no", "creditosEnAC_SO_RC");
 const FO = new Materia("FO", 6, [IIO], "Fundamentos de Optimización", "primero", "si", "no", "creditosEnIO");
 const OCA = new Materia("OCA", 10, [IIO], "Optimización Continua y Aplicaciones", "segundo", "si", "no", "creditosEnIO");
 const FBD = new Materia("FBD", 15, [LG, P3, MD2], "Fundamentos de Bases de Datos", "segundo", "no", "no", "creditosEnBD_SI");
@@ -127,7 +127,7 @@ let Materias = [
   //OCA,
   AE,
   ICG,
-  CDPGEUPG,
+  PMPPG,
   ALN,
   IIS,
   PF,
@@ -358,6 +358,12 @@ function actualizar() {
       }
     }
 
+    if (materia == PMPPG && !estanTodas){
+      if ( (MateriasPersona.find((elemento) => elemento == "AC")) || (MateriasPersona.find((elemento) => elemento == "SO"))) {
+        estanTodas = true;
+      }
+    }
+
     if (materia == PG) {
       if (!estanTodas && creditosBloque.Total >= 380) {
         estanTodas = true;
@@ -547,6 +553,16 @@ function indicarPrevias(nombre) {
     texto += `<u>Opción 2</u>:<br/>`;
     texto += `-Exonerar Programación 4<br/>`;
   }
+  
+  if (materiaAct == PMPPG) {
+    texto = `Para poder cursar ${materiaAct.nombreCompleto} se necesita alguna de las siguientes:<br/><br/>`;
+    texto += `<u>Opción 1</u>:<br/>`;
+    texto += `-Salvar Curso Arquitectura de Computadoras y Salvar Curso Sistemas Operativos<br/><br/>`;
+    texto += `<u>Opción 2</u>:<br/>`;
+    texto += `-Exonerar Arquitectura de Computadoras 4<br/><br/>`;
+    texto += `<u>Opción 3</u>:<br/>`;
+    texto += `-Exonerar Sistemas Operativos<br/>`;
+  }
 
   if (materiaAct == PG) {
     texto = `Para poder cursar ${materiaAct.nombreCompleto} hay 3 opciones complejas.<br/><br/>`;
@@ -730,6 +746,7 @@ function asignarPesos(){
   PAI.peso = 4;
   Pasan.peso = 4;
   TP.peso = 4;
+  PMPPG.peso = 4;
   Materias.forEach( (materia) => {
     if (materia.peso == 0){
       asignarPesoMateria(materia);
