@@ -359,7 +359,7 @@ function actualizar() {
     }
 
     if (materia == PMPPG && !estanTodas){
-      if ( (MateriasPersona.find((elemento) => elemento == "AC")) || (MateriasPersona.find((elemento) => elemento == "SO"))) {
+      if ( ((MateriasPersona.find((elemento) => elemento == "AC")) || (MateriasPersona.find((elemento) => elemento == "SO")))&&(MateriasPersona.find((elemento) => elemento == "P2")) ) {
         estanTodas = true;
       }
     }
@@ -557,11 +557,11 @@ function indicarPrevias(nombre) {
   if (materiaAct == PMPPG) {
     texto = `Para poder cursar ${materiaAct.nombreCompleto} se necesita alguna de las siguientes:<br/><br/>`;
     texto += `<u>Opción 1</u>:<br/>`;
-    texto += `-Salvar Curso Arquitectura de Computadoras y Salvar Curso Sistemas Operativos<br/><br/>`;
+    texto += `-Salvar Curso Arquitectura de Computadoras, Salvar Curso Sistemas Operativos y Exonerar Programación 2<br/><br/>`;
     texto += `<u>Opción 2</u>:<br/>`;
-    texto += `-Exonerar Arquitectura de Computadoras 4<br/><br/>`;
+    texto += `-Exonerar Arquitectura de Computadoras 4 y Programación 2<br/><br/>`;
     texto += `<u>Opción 3</u>:<br/>`;
-    texto += `-Exonerar Sistemas Operativos<br/>`;
+    texto += `-Exonerar Sistemas Operativos y Programación 2<br/>`;
   }
 
   if (materiaAct == PG) {
