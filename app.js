@@ -559,7 +559,7 @@ function indicarPrevias(nombre) {
     texto += `<u>Opción 1</u>:<br/>`;
     texto += `-Salvar Curso Arquitectura de Computadoras, Salvar Curso Sistemas Operativos y Exonerar Programación 2<br/><br/>`;
     texto += `<u>Opción 2</u>:<br/>`;
-    texto += `-Exonerar Arquitectura de Computadoras 4 y Programación 2<br/><br/>`;
+    texto += `-Exonerar Arquitectura de Computadoras y Programación 2<br/><br/>`;
     texto += `<u>Opción 3</u>:<br/>`;
     texto += `-Exonerar Sistemas Operativos y Programación 2<br/>`;
   }
