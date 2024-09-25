@@ -147,7 +147,7 @@ let Materias = [
   RNLN,
 ];
 
-let MateriasPersona = [];
+let MateriasPersona = new Set();
 let materias = 0;
 let opcionales = true;
 let seleccion = false;
@@ -250,14 +250,14 @@ function toggleMateria(nombre) {
       indicarPrevias(nombre);
       break;
     case 1:
-      MateriasPersona.push(materiaActual.curso);
+      MateriasPersona.add(materiaActual.curso);
       break;
     case 2:
-      MateriasPersona.push(materiaActual.nombre);
+      MateriasPersona.add(materiaActual.nombre);
       break;
     case 3:
-      MateriasPersona.splice(MateriasPersona.indexOf(materiaActual.curso), 1);
-      MateriasPersona.splice(MateriasPersona.indexOf(materiaActual.nombre), 1);
+      MateriasPersona.delete(materiaActual.curso);
+      MateriasPersona.delete(materiaActual.nombre);
       break;
     default:
       break;
@@ -339,8 +339,8 @@ function actualizar() {
 
     materia.previas.forEach((previa) => {
       estanTodas =
-        (MateriasPersona.includes(previa.nombre) ||
-          MateriasPersona.includes(previa)) &&
+        (MateriasPersona.has(previa.nombre) ||
+          MateriasPersona.has(previa)) &&
         estanTodas;
     });
 
@@ -353,13 +353,13 @@ function actualizar() {
     }
 
     if (materia == TP && !estanTodas) {
-      if (MateriasPersona.find((elemento) => elemento == "P4")) {
+      if (MateriasPersona.has("P4")) {
         estanTodas = true;
       }
     }
 
     if (materia == PMPPG && !estanTodas){
-      if ( ((MateriasPersona.find((elemento) => elemento == "AC")) || (MateriasPersona.find((elemento) => elemento == "SO")))&&(MateriasPersona.find((elemento) => elemento == "P2")) ) {
+      if ( ((MateriasPersona.has("AC")) || (MateriasPersona.has("SO")))&&(MateriasPersona.has("P2")) ) {
         estanTodas = true;
       }
     }
@@ -371,7 +371,7 @@ function actualizar() {
 
       if (!estanTodas && creditosBloque.Total >= 365) {
         const verificarSiEstan = ["P3Curso", "SOCurso", "IISCurso", "FBDCurso", "P4Curso", "TPCurso", "TLCurso", "PISCurso", "MNCurso"]
-        estanTodas = verificarSiEstan.every(element => MateriasPersona.includes(element));
+        estanTodas = verificarSiEstan.every(element => MateriasPersona.has(element));
       }
 
       if (!estanTodas && creditosBloque.Total >= 330) {
@@ -393,30 +393,27 @@ function actualizar() {
     }
 
     if (estanTodas) {
-      if (
-        !MateriasPersona.find((elemento) => elemento == materia.nombre) ||
-        !MateriasPersona.find((elemento) => elemento == materia.curso)
-      ) {
+      if ( !MateriasPersona.has(materia.nombre) || !MateriasPersona.has(materia.curso)) {
         document.getElementById(materia.nombre).disabled = false;
         document.getElementById(materia.nombre).style.background = "lightcoral";
         materia.estado = 1;
       }
-      if (MateriasPersona.find((elemento) => elemento == materia.curso)) {
+      if (MateriasPersona.has(materia.curso)) {
         document.getElementById(materia.nombre).style.background = "lightblue";
         materia.estado = 2;
       }
-      if (MateriasPersona.find((elemento) => elemento == materia.nombre)) {
+      if (MateriasPersona.has(materia.nombre)) {
         document.getElementById(materia.nombre).style.background = "lightgreen";
         sumarCreditos(materia);
         materias += 1;
         materia.estado = 3;
       }
     } else {
-      if (MateriasPersona.includes(materia.nombre)) {
-        MateriasPersona.splice(MateriasPersona.indexOf(materia.nombre), 1);
+      if (MateriasPersona.has(materia.nombre)) {
+        MateriasPersona.delete(materia.nombre);
       }
-      if (MateriasPersona.includes(materia.curso)) {
-        MateriasPersona.splice(MateriasPersona.indexOf(materia.curso), 1);
+      if (MateriasPersona.has(materia.curso)) {
+        MateriasPersona.delete(materia.curso);
       }
       materia.estado = 0;
       document.getElementById(materia.nombre).style.background = "gray";
@@ -432,14 +429,13 @@ function actualizar() {
   } else {
     document.getElementById("op").innerHTML = "Opcionales: No";
   }
-
-  localStorage.setItem("materias", JSON.stringify(MateriasPersona));
+  localStorage.setItem("materias", JSON.stringify(Array.from(MateriasPersona.values())));
 }
 
 // Funciones generales
 
 function reset() {
-  MateriasPersona = [];
+  MateriasPersona.clear();
   actualizar();
 }
 
@@ -496,15 +492,15 @@ function indicarPrevias(nombre) {
 
   materiaAct.previas.filter((materia) => {
     if (typeof materia == "string") {
-      if (!MateriasPersona.includes(materia)) {
+      if (!MateriasPersona.has(materia)) {
         let materiaAux = Materias.find((elemento) => elemento.curso == materia);
         Salvar.push(materiaAux);
       }
     } else {
-      if (!MateriasPersona.includes(materia.nombre)) {
+      if (!MateriasPersona.has(materia.nombre)) {
         Exonerar.push(materia);
       }
-      if (!MateriasPersona.includes(materia.curso)) {
+      if (!MateriasPersona.has(materia.curso)) {
         Salvar.push(materia);
       }
     }
@@ -695,7 +691,7 @@ function mostrarMaterias(nombre){
   Materias.forEach( (materia)=>{
 
     if ( materia.area == area ){
-      if ( MateriasPersona.find((elemento) => elemento == materia.nombre) ){
+      if ( MateriasPersona.has(materia.nombre) ){
         textoOcupadas += `-${materia.nombreCompleto}<br/>`;
       }else{
         textoDisponible += `-${materia.nombreCompleto}<br/>`;
@@ -827,7 +823,7 @@ window.addEventListener("resize", function () {
 
 function firstLoad() {
   if (localStorage.getItem("materias")) {
-    MateriasPersona = JSON.parse(localStorage.getItem("materias"));
+    MateriasPersona = new Set(JSON.parse(localStorage.getItem("materias")));
   }
   document.getElementById("MI").disabled = true;
   if (localStorage.getItem("MI") == "false") {
