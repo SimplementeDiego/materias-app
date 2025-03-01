@@ -37,6 +37,7 @@ const F1 = new Materia("F1", 10, [], "Física 1", "ambos", "si", "si", "creditos
 const GAL2 = new Materia("GAL2", 9, [GAL1.curso], "Geometría y Álgebra Lineal 2", "ambos", "no", "si", "creditosEnM");
 const AAL = new Materia( "AAL",  9,  [GAL2.curso, CDIV], "Aplicaciones del Álgebra Lineal", "segundo", "si",  "no", "creditosEnMN");
 const PYE = new Materia("PYE",  10, [CDIVV.curso, GAL1, CDIV], "Probabilidad y Estadistica",  "ambos",  "no", "si",  "creditosEnM");
+const PCI = new Materia("PCI",  10, [PYE, CDIVV, GAL2], "Procesamiento cuántico de la información",  "primero",  "si", "no",  "creditosEnM");
 const ITI = new Materia("ITI", 8, [PYE], "Int. a la Teoría de la Información", "primero", "si", "no", "creditosEnM");
 const MD2 = new Materia("MD2", 9, [MD1.curso, GAL1.curso], "Matemática Discreta 2", "ambos", "no", "si", "creditosEnM");
 const LG = new Materia("LG", 12, [MD1.curso], "Lógica", "primero", "no", "no", "creditosEnM");
@@ -59,6 +60,7 @@ const FO = new Materia("FO", 6, [IIO], "Fundamentos de Optimización", "primero"
 const OCA = new Materia("OCA", 10, [IIO], "Optimización Continua y Aplicaciones", "segundo", "si", "no", "creditosEnIO");
 const FBD = new Materia("FBD", 15, [LG, P3, MD2], "Fundamentos de Bases de Datos", "segundo", "no", "no", "creditosEnBD_SI");
 const BDNR = new Materia("BDNR", 10, [FBD], "Bases de Datos No Relacionales", "primero", "si", "no", "creditosEnBD_SI");
+const CDI = new Materia("CDI", 8, [FBD], "Calidad de Datos e Información", "primero", "si", "no", "creditosEnBD_SI");
 const RC = new Materia("RC", 12, [P3, SO.curso, CDIV, AC.curso], "Redes de Computadoras", "segundo", "no", "no", "creditosEnAC_SO_RC");
 const TSI = new Materia("TSI", 10, [RC.curso, FBD, P3], "Taller de Seguridad Informática", "segundo", "si", "no", "creditosEnTall_Pasa_Proy");
 const ADAR = new Materia("ADAR", 8, [P3, RC], "Análisis y Diseño de Al. Dis. en Redes", "segundo", "si", "no", "creditosEnAC_SO_RC");
@@ -66,6 +68,7 @@ const CAP = new Materia("CAP", 10, [P4.curso, RC.curso, SO.curso, AC.curso], "Co
 const TP = new Materia("TP", 15, [P3, P4.curso], "Taller de Programación", "segundo", "no", "no", "creditosEnTall_Pasa_Proy");
 const IPLN = new Materia("IPLN", 12, [P4, TP.curso, LG, P3, TL, PYE], "Int. al Procesamiento de Leng. Natural", "segundo", "si", "no", "creditosEnIAYR");
 const IIS = new Materia("IIS", 10, [TP.curso, FBD.curso, P4.curso], "Int. a la Ingeniería de Software", "primero", "no", "no", "creditosEnIS");
+const FWS = new Materia("FWS", 8, [IIS,FBD], "Fundamentos de la web semántica", "primero", "si", "no", "creditosEnBD_SI");
 const PF = new Materia("PF", 10, [TL, P2, LG, MD1], "Programación Funcional", "segundo", "no", "no", "creditosEnProg");
 const PL = new Materia("PL", 10, [TL, P3, MD2, LG], "Programación Lógica", "primero", "no", "no", "creditosEnProg");
 const PIS = new Materia("PIS", 15, [IIS.curso, P4], "Proyecto de Ingeniería de Software", "segundo", "no", "no", "creditosEnTall_Pasa_Proy");
@@ -108,6 +111,7 @@ let Materias = [
   F2,
   AC,
   PYE,
+  PCI,
   MN,
   P4,
   AAL,
@@ -126,6 +130,7 @@ let Materias = [
   TL,
   FBD,
   BDNR,
+  CDI,
   RC,
   FO,
   //OCA,
@@ -134,6 +139,7 @@ let Materias = [
   PMPPG,
   ALN,
   IIS,
+  FWS,
   PF,
   PL,
   AA,
