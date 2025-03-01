@@ -53,12 +53,10 @@ const ED = new Materia("ED", 10, [GAL2, CDIVV.curso, GAL1, CDIV], "Int. a las Ec
 const TL = new Materia("TL", 12, [P3.curso, CDIV, GAL1, LG, MD1], "Teoría de Lenguajes", "primero", "no", "no", "creditosEnProg");
 const FVC = new Materia("FVC", 5, [CV.curso, CDIVV], "Funciones de Variable Compleja", "primero", "si", "si", "creditosEnM");
 const SO = new Materia("SO", 12, [AC.curso, GAL1, CDIV, P2, MD1], "Sistemas Operativos", "primero", "no", "no", "creditosEnAC_SO_RC");
-const CCE = new Materia("CCE", 8, [PYE.curso, GAL1, CDIVV, MD1, CDIV], "Códigos para Corrección de Errores", "primero", "si", "no", "creditosEnM");
 const PMPPG = new Materia("PMPPG", 10, [P2, SO.curso, AC.curso], "Prog. masivamente paralela en p. gráficos", "primero", "si", "no", "creditosEnAC_SO_RC");
 const FO = new Materia("FO", 6, [IIO], "Fundamentos de Optimización", "primero", "si", "no", "creditosEnIO");
 const OCA = new Materia("OCA", 10, [IIO], "Optimización Continua y Aplicaciones", "segundo", "si", "no", "creditosEnIO");
 const FBD = new Materia("FBD", 15, [LG, P3, MD2], "Fundamentos de Bases de Datos", "segundo", "no", "no", "creditosEnBD_SI");
-const BDNR = new Materia("BDNR", 10, [FBD], "Bases de Datos No Relacionales", "primero", "si", "no", "creditosEnBD_SI");
 const RC = new Materia("RC", 12, [P3, SO.curso, CDIV, AC.curso], "Redes de Computadoras", "segundo", "no", "no", "creditosEnAC_SO_RC");
 const TSI = new Materia("TSI", 10, [RC.curso, FBD, P3], "Taller de Seguridad Informática", "segundo", "si", "no", "creditosEnTall_Pasa_Proy");
 const ADAR = new Materia("ADAR", 8, [P3, RC], "Análisis y Diseño de Al. Dis. en Redes", "segundo", "si", "no", "creditosEnAC_SO_RC");
@@ -104,7 +102,7 @@ let Materias = [
   GAL2,
   MD2,
   LG,
-  //TRE,
+  TRE,
   F2,
   AC,
   PYE,
@@ -121,11 +119,9 @@ let Materias = [
   Pasan,
   ITI,
   FVC,
-  CCE,
   PAI,
   TL,
   FBD,
-  BDNR,
   RC,
   FO,
   //OCA,
