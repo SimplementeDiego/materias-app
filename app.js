@@ -792,6 +792,31 @@ function asignarPesos(){
   }
 }
 
+function mostrarDeQueEsPrevia(materiaACalcular){
+  texto = `La aprobación de ${materiaACalcular.nombreCompleto} es previa de :<br/><br/>`;
+  cont = 0;
+  Materias.forEach( (materiaActual) => {
+    if (materiaActual.previas.includes(materiaACalcular.curso)){
+      texto += `-${materiaActual.nombreCompleto}<br/>`
+      cont++;
+    }
+  } )
+  texto += `<br/>La exoneración de ${materiaACalcular.nombreCompleto} es previa de :<br/><br/>`;
+  Materias.forEach( (materiaActual) => {
+    if (materiaActual.previas.includes(materiaACalcular)){
+      texto += `-${materiaActual.nombreCompleto}<br/>`
+      cont++;
+    }
+  } )
+  if (cont==0){
+    texto = `${materiaACalcular.nombreCompleto} no es previa de ninguna materia <u>en esta página</u>.`
+  }
+  openPopup(texto)
+}
+
+var mouseIsDown = false;
+var idTimeout;
+
 function crearBotonesMaterias(){
   Materias.sort((materia1, materia2) => {
     if (materia1.peso !== materia2.peso) {
@@ -814,6 +839,22 @@ function crearBotonesMaterias(){
         button.onclick = function() {
             toggleMateria(materia.nombre);
         };
+
+        button.addEventListener('mousedown', function() {
+          mouseIsDown = true;
+          idTimeout = setTimeout(function() {
+            if(mouseIsDown) {
+              mostrarDeQueEsPrevia(materia);
+            }
+          }, 800);
+        });
+
+        button.addEventListener('mouseup', function() {
+          clearTimeout(idTimeout);
+          mouseIsDown = false;
+          toggleMateria(materia.nombre);
+        });
+
         let parent = document.getElementById(`section-materias-${materia.peso}`);
         parent.appendChild(button);
     }
@@ -821,6 +862,7 @@ function crearBotonesMaterias(){
   } );
 
 }
+
 
 // Funciones y eventos de manejo de tamaño de ventana
 
