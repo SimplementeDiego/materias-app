@@ -843,9 +843,6 @@ function crearBotonesMaterias(){
           button.textContent += "*";
         }
         button.id = materia.nombre;
-        button.onclick = function() {
-            toggleMateria(materia.nombre);
-        };
 
         button.addEventListener('mousedown', function() {
           mouseIsDown = true;
@@ -857,6 +854,21 @@ function crearBotonesMaterias(){
         });
 
         button.addEventListener('mouseup', function() {
+          clearTimeout(idTimeout);
+          mouseIsDown = false;
+          toggleMateria(materia.nombre);
+        });
+
+        button.addEventListener('touchstart', function() {
+          mouseIsDown = true;
+          idTimeout = setTimeout(function() {
+            if(mouseIsDown) {
+              mostrarDeQueEsPrevia(materia);
+            }
+          }, 800);
+        });
+
+        button.addEventListener('touchend', function() {
           clearTimeout(idTimeout);
           mouseIsDown = false;
           toggleMateria(materia.nombre);
