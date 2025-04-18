@@ -44,6 +44,7 @@ const LG = new Materia("LG", 12, [MD1.curso], "Lógica", "primero", "no", "no", 
 const MN = new Materia("MN", 8, [CDIVV, P1, GAL2, GAL1, CDIV], "Métodos Numéricos", "segundo", "no", "no", "creditosEnMN");
 const P4 = new Materia("P4",  15, [GAL1, CDIV, MD1, P2], "Programación 4", "primero", "no", "no", "creditosEnProg");
 const IIO = new Materia("IIO", 10, [GAL2, PYE, CDIVV, CDIV, GAL1], "Int. a la Investigación de Operaciones", "primero", "no", "no", "creditosEnIO");
+const FDPE = new Materia("FDPE", 8, [IIO], "Fundamentos de Programación Entera", "primero", "si", "no", "creditosEnIO");
 const MO = new Materia("MO", 6, [IIO], "Modelado y Optimización", "segundo", "si", "no", "creditosEnIO");
 const IOGR = new Materia("IOGR", 6, [IIO], "Investigación de Oper. y Gest. de Riesgos", "segundo", "si", "no", "creditosEnIO");
 const P3 = new Materia("P3", 15, [P2.curso, P1, MD1], "Programación 3", "segundo", "no", "si", "creditosEnProg");
@@ -84,6 +85,7 @@ const CTS = new Materia("CTS", 8, [], "Ciencia, Tecnología y Sociedad", "primer
 const TRE = new Materia("TRE", 6, [P1], "Taller de Robótica Educativa", "primero", "si", "no", "creditosEnTall_Pasa_Proy");
 const F2 = new Materia("F2", 10, [F1.curso, CDIV.curso], "Física 2", "ambos", "si", "no", "creditosEnCE");
 const AGI = new Materia("AGI", 5, [Aux], "Administración General para Ingenieros", "primero", "si", "si", "creditosEnGO");
+const CC = new Materia("CC", 8, [PYE.curso], "Control de Calidad", "primero", "si", "si", "creditosEnGO");
 const PAI = new Materia("PAI", 5, [AGI.curso], "Práctica de Administración para Ingenieros", "segundo", "si", "si", "creditosEnGO");
 const PCIC = new Materia("PCIC", 3, [], "Políticas Científicas en Inf. y Comp.", "segundo", "si", "no", "creditosEnCHS");
 const ASS = new Materia("ASS", 10, [AGI, PAI, RC.curso, SO.curso, FBD.curso, IIS.curso, AC.curso], "Administración y Seguridad de Sistemas", "primero", "si", "no", "creditosEnBD_SI");
@@ -111,6 +113,7 @@ let Materias = [
   F2,
   AC,
   PYE,
+  CC,
   PCI,
   MN,
   P4,
@@ -120,6 +123,7 @@ let Materias = [
   AGI,
   TP,
   IIO,
+  FDPE,
   P3,
   SO,
   Pasan,
@@ -358,6 +362,10 @@ function actualizar() {
       estanTodas = true;
     }
 
+    if (materia == CC) {
+      estanTodas = creditosBloque.Total >= 80 && MateriasPersona.has("PYECurso")? true: false;
+    }
+
     if (materia == Pasan && creditosBloque.Total >= 200) {
       estanTodas = true;
     }
@@ -541,6 +549,13 @@ function indicarPrevias(nombre) {
       texto += `-${materia.nombreCompleto}<br/>`;
     }
   });
+
+  if (materiaAct == CC) {
+    texto = `Para poder cursar ${materiaAct.nombreCompleto} se necesitan:<br/><br/>`;
+    texto += `-80 créditos<br/><br/>`;
+    texto += `<u>Salvar curso de</u>:<br/><br/>`;
+    texto += `-${PYE.nombreCompleto}<br/>`;
+  }
 
   if (materiaAct == AGI) {
     texto = `Para poder cursar ${materiaAct.nombreCompleto} se necesitan:<br/><br/>`;
