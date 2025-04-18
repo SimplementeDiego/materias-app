@@ -793,22 +793,29 @@ function asignarPesos(){
 }
 
 function mostrarDeQueEsPrevia(materiaACalcular){
-  texto = `La aprobación de ${materiaACalcular.nombreCompleto} es previa de :<br/><br/>`;
-  cont = 0;
+  cont1 = 0;
+  cont2 = 0;
+  texto = "";
   Materias.forEach( (materiaActual) => {
     if (materiaActual.previas.includes(materiaACalcular.curso)){
+      if (cont1==0){
+        texto += `La aprobación de ${materiaACalcular.nombreCompleto} es previa de :<br/><br/>`;
+        cont1++
+      }
       texto += `-${materiaActual.nombreCompleto}<br/>`
-      cont++;
     }
   } )
-  texto += `<br/>La exoneración de ${materiaACalcular.nombreCompleto} es previa de :<br/><br/>`;
+  
   Materias.forEach( (materiaActual) => {
     if (materiaActual.previas.includes(materiaACalcular)){
+      if (cont2==0){
+        texto += `<br/>La exoneración de ${materiaACalcular.nombreCompleto} es previa de :<br/><br/>`;
+        cont2++
+      }
       texto += `-${materiaActual.nombreCompleto}<br/>`
-      cont++;
     }
   } )
-  if (cont==0){
+  if (cont1+cont2==0){
     texto = `${materiaACalcular.nombreCompleto} no es previa de ninguna materia <u>en esta página</u>.`
   }
   openPopup(texto)
