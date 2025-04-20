@@ -844,6 +844,12 @@ function crearBotonesMaterias(){
         }
         button.id = materia.nombre;
 
+        button.onclick = function() {
+          mouseIsDown = false;
+          clearTimeout(idTimeout);
+          toggleMateria(materia.nombre);
+      };
+
         button.addEventListener('mousedown', function() {
           mouseIsDown = true;
           idTimeout = setTimeout(function() {
@@ -853,26 +859,14 @@ function crearBotonesMaterias(){
           }, 800);
         });
 
-        button.addEventListener('mouseup', function() {
-          clearTimeout(idTimeout);
-          mouseIsDown = false;
-          toggleMateria(materia.nombre);
+        button.addEventListener('touchstart', function() {
+          mouseIsDown = true;
+          idTimeout = setTimeout(function() {
+            if(mouseIsDown) {
+              mostrarDeQueEsPrevia(materia);
+            }
+          }, 1500);
         });
-
-        // button.addEventListener('touchstart', function() {
-        //   mouseIsDown = true;
-        //   idTimeout = setTimeout(function() {
-        //     if(mouseIsDown) {
-        //       mostrarDeQueEsPrevia(materia);
-        //     }
-        //   }, 800);
-        // });
-
-        // button.addEventListener('touchend', function() {
-        //   clearTimeout(idTimeout);
-        //   mouseIsDown = false;
-        //   toggleMateria(materia.nombre);
-        // });
 
         let parent = document.getElementById(`section-materias-${materia.peso}`);
         parent.appendChild(button);
