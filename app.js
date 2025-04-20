@@ -876,6 +876,9 @@ function crearBotonesMaterias(){
 
 }
 
+document.addEventListener("scroll", (event) => {
+  mouseIsDown = false;
+});
 
 // Funciones y eventos de manejo de tamaño de ventana
 
