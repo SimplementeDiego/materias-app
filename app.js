@@ -877,6 +877,7 @@ function crearBotonesMaterias(){
 }
 
 document.addEventListener("scroll", (event) => {
+  clearTimeout(idTimeout);
   mouseIsDown = false;
 });
 
