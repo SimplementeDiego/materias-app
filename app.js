@@ -865,7 +865,7 @@ function crearBotonesMaterias(){
             if(mouseIsDown) {
               mostrarDeQueEsPrevia(materia);
             }
-          }, 1000);
+          }, 1200);
         });
 
         let parent = document.getElementById(`section-materias-${materia.peso}`);
