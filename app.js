@@ -823,8 +823,7 @@ function mostrarDeQueEsPrevia(materiaACalcular){
   openPopup(texto)
 }
 
-var mouseIsDown = false;
-var idTimeout;
+seScrolleo = false;
 
 function crearBotonesMaterias(){
   Materias.sort((materia1, materia2) => {
@@ -847,27 +846,40 @@ function crearBotonesMaterias(){
         button.id = materia.nombre;
 
         button.onclick = function() {
-          mouseIsDown = false;
-          clearTimeout(idTimeout);
+          seScrolleo = false;
+          this.mouseIsDown = false;
+          clearTimeout(this.idTimeout);
           toggleMateria(materia.nombre);
       };
 
         button.addEventListener('mousedown', function() {
-          mouseIsDown = true;
-          idTimeout = setTimeout(function() {
-            if(mouseIsDown) {
+          this.mouseIsDown = true;
+          seScrolleo = false;
+          this.idTimeout = setTimeout( () => {
+            if(this.mouseIsDown && !seScrolleo) {
               mostrarDeQueEsPrevia(materia);
             }
           }, 800);
         });
 
+        button.addEventListener('mouseleave', function() {
+          clearTimeout(this.idTimeout);
+          this.mouseIsDown = false;
+        });
+
         button.addEventListener('touchstart', function() {
-          mouseIsDown = true;
-          idTimeout = setTimeout(function() {
-            if(mouseIsDown) {
+          this.mouseIsDown = true;
+          seScrolleo = false;
+          this.idTimeout = setTimeout( () => {
+            if(this.mouseIsDown && !seScrolleo) {
               mostrarDeQueEsPrevia(materia);
             }
-          }, 1200);
+          }, 800);
+        });
+
+        button.addEventListener('touchmove', function() {
+          clearTimeout(this.idTimeout);
+          this.mouseIsDown = false;
         });
 
         let parent = document.getElementById(`section-materias-${materia.peso}`);
@@ -878,9 +890,9 @@ function crearBotonesMaterias(){
 
 }
 
-document.addEventListener("scroll", (event) => {
-  clearTimeout(idTimeout);
-  mouseIsDown = false;
+// Util solo para mobile, para poder hacer scroll apretando un boton de una materia sin que aparezca de que es previa
+document.addEventListener("scroll", function() {
+  seScrolleo = true;
 });
 
 // Funciones y eventos de manejo de tamaño de ventana
