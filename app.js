@@ -89,7 +89,7 @@ const AGI = new Materia("AGI", 5, [Aux], "Administración General para Ingeniero
 const CC = new Materia("CC", 8, [PYE.curso], "Control de Calidad", "primero", "si", "si", "creditosEnGO");
 const PAI = new Materia("PAI", 5, [AGI.curso], "Práctica de Administración para Ingenieros", "segundo", "si", "si", "creditosEnGO");
 const PCIC = new Materia("PCIC", 3, [], "Políticas Científicas en Inf. y Comp.", "segundo", "si", "no", "creditosEnCHS");
-const ASS = new Materia("ASS", 10, [AGI, PAI, RC.curso, SO.curso, FBD.curso, IIS.curso, AC.curso], "Administración y Seguridad de Sistemas", "primero", "si", "no", "creditosEnBD_SI");
+const ASS = new Materia("ASS", 10, [RC.curso, SO.curso, FBD.curso, IIS.curso, AC.curso], "Administración y Seguridad de Sistemas", "primero", "si", "no", "creditosEnBD_SI");
 const Pasan = new Materia("Pasan", 10, [Aux], "Pasantía", "primero", "si", "no", "creditosEnTall_Pasa_Proy");
 const PG = new Materia("PG", 30, [Aux], "Proyecto de Grado", "ambos", "no", "no", "creditosEnTall_Pasa_Proy");
 
@@ -372,6 +372,12 @@ function actualizar() {
       estanTodas = true;
     }
 
+    if (materia == ASS && estanTodas) {
+      if (!((MateriasPersona.has("AGI")&&MateriasPersona.has("CC"))||(MateriasPersona.has("AGI")&&MateriasPersona.has("PAI")))) {
+        estanTodas = false;
+      }
+    }
+
     if (materia == TP && !estanTodas) {
       if (MateriasPersona.has("P4")) {
         estanTodas = true;
@@ -555,8 +561,28 @@ function indicarPrevias(nombre) {
   if (materiaAct == CC) {
     texto = `Para poder cursar ${materiaAct.nombreCompleto} se necesitan:<br/><br/>`;
     texto += `-80 créditos<br/><br/>`;
-    texto += `<u>Salvar curso de</u>:<br/><br/>`;
-    texto += `-${PYE.nombreCompleto}<br/>`;
+    if (!MateriasPersona.has(PYE.curso)){
+      texto += `<u>Salvar curso de</u>:<br/><br/>`;
+      texto += `-${PYE.nombreCompleto}<br/>`;
+    }
+  }
+
+  if (materiaAct == ASS) {
+    texto = `Para poder cursar ${materiaAct.nombreCompleto} se necesitan:<br/><br/>`;
+    texto += `-10 créditos en el área de Gestión en Organizaciones<br/><br/>`;
+    alguna = false;
+    mat = [AC,SO,RC,FBD,IIS]
+    mat.forEach( (materia)=>{
+      if (!MateriasPersona.has(materia.curso)&&!alguna){
+        alguna=true;
+        texto += `<u>Salvar curso de</u>:<br/><br/>`;
+      }
+    } )
+    mat.forEach( (materia)=>{
+      if (!MateriasPersona.has(materia.curso)){
+        texto += `-${materia.nombreCompleto}<br/>`;
+      }
+    } )
   }
 
   if (materiaAct == AGI) {
