@@ -518,74 +518,73 @@ function indicarPrevias(nombre) {
   let materiaAct = Materias.find((materia) => materia.nombre == nombre);
 
   let Exonerar = [];
+  let Exoneradas = [];
   let Salvar = [];
-  let SalvarFinal = [];
+  let Salvadas = [];
 
   materiaAct.previas.filter((materia) => {
     if (typeof materia == "string") {
+      let materiaAux = Materias.find((elemento) => elemento.curso == materia);
       if (!MateriasPersona.has(materia)) {
-        let materiaAux = Materias.find((elemento) => elemento.curso == materia);
         Salvar.push(materiaAux);
+      }else{
+        Salvadas.push(materiaAux);
       }
     } else {
       if (!MateriasPersona.has(materia.nombre)) {
         Exonerar.push(materia);
-      }
-      if (!MateriasPersona.has(materia.curso)) {
-        Salvar.push(materia);
+      }else{
+        Exoneradas.push(materia);
       }
     }
   });
 
   let texto = `Para poder cursar ${materiaAct.nombreCompleto} te hace falta:<br/><br/>`;
 
-  if (Exonerar.length > 0) {
+  if (Exonerar.length + Exoneradas.length > 0) {
     texto += `<u>Exonerar</u>:<br/><br/>`;
   }
   Exonerar.forEach((materia) => {
     texto += `-${materia.nombreCompleto}<br/>`;
   });
-
-  Salvar.forEach((materia) => {
-    if (!Exonerar.includes(materia)) {
-      SalvarFinal.push(materia);
-    }
+  Exoneradas.forEach((materia) => {
+    texto += `-<s>${materia.nombreCompleto}</s><br/>`;
   });
-  if (SalvarFinal.length > 0) {
-    if (Exonerar.length > 0) {
+
+  if (Salvar.length + Salvadas.length > 0) {
+    if (Exonerar.length + Exoneradas.length > 0) {
       texto += `<br/>`;
     }
     texto += `<u>Salvar curso de</u>:<br/><br/>`;
   }
-  SalvarFinal.forEach((materia) => {
-    if (!Exonerar.includes(materia)) {
-      texto += `-${materia.nombreCompleto}<br/>`;
-    }
+  Salvar.forEach((materia) => {
+    texto += `-${materia.nombreCompleto}<br/>`;
+  });
+  Salvadas.forEach((materia) => {
+    texto += `-<s>${materia.nombreCompleto}</s><br/>`;
   });
 
   if (materiaAct == CC) {
     texto = `Para poder cursar ${materiaAct.nombreCompleto} se necesitan:<br/><br/>`;
     texto += `-80 créditos<br/><br/>`;
+    texto += `<u>Salvar curso de</u>:<br/><br/>`;
     if (!MateriasPersona.has(PYE.curso)){
-      texto += `<u>Salvar curso de</u>:<br/><br/>`;
       texto += `-${PYE.nombreCompleto}<br/>`;
+    }else{
+      texto += `-<s>${PYE.nombreCompleto}</s><br/>`;
     }
   }
 
   if (materiaAct == ASS) {
     texto = `Para poder cursar ${materiaAct.nombreCompleto} se necesitan:<br/><br/>`;
     texto += `-10 créditos en el área de Gestión en Organizaciones<br/><br/>`;
-    alguna = false;
     mat = [AC,SO,RC,FBD,IIS]
-    mat.forEach( (materia)=>{
-      if (!MateriasPersona.has(materia.curso)&&!alguna){
-        alguna=true;
-        texto += `<u>Salvar curso de</u>:<br/><br/>`;
-      }
-    } )
+    texto += `<u>Salvar curso de</u>:<br/><br/>`;
     mat.forEach( (materia)=>{
       if (!MateriasPersona.has(materia.curso)){
         texto += `-${materia.nombreCompleto}<br/>`;
+      }else{
+        texto += `-<s>${materia.nombreCompleto}</s><br/>`;
       }
     } )
   }
