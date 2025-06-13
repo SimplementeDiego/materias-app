@@ -213,6 +213,11 @@ function cambiarColores(color1, color2, color3, color4){
 // Funciones de Popup
 
 function openPopup(texto) {
+  if (!window.matchMedia("(min-width: 675px)").matches) {
+    if (document.getElementById("checkbox").checked) {
+      document.getElementById("checkbox").click();
+    }
+  }
   document.getElementById("popup-text").innerHTML = texto;
   displayFlex("boxPopup");
   document.getElementById('cerrar-popup').focus();
@@ -621,6 +626,15 @@ function indicarPrevias(nombre) {
 
 }
 
+function info(){
+  let texto = "<u>Funcionalidades</u><br/><br/>";
+  texto+="-En celulares se puede abrir y cerrar el menú con el botón de arriba a la derecha.<br/><br/>"
+  texto+="-Presionar el botón de una materia no habilitada muestra los requisitos necesarios para poder cursarla.<br/><br/>"
+  texto+="-Mantener apretado el botón de cualquier materia muestra de qué materias es previa.<br/><br/>"
+  texto+="-Dar clic en el nombre de un área muestra las materias que suman créditos a esa área."
+  openPopup(texto);
+}
+
 function mostrarBotonMateria(materia){
 
   switch (semestreAct) {
@@ -672,9 +686,6 @@ function verAreas(){
     texto += `-<span onclick="mostrarMaterias('ia')">Int. Artificial y Robótica</span>: ${creditosBloque.creditosEnIAYR} (0)<br/><br/>`
     texto += `<b><u>Materias Complementarias</u>: ${creditosBloque.creditosEnCHS} (10)</b><br/>`
     texto += `-<span onclick="mostrarMaterias('ch')">Ciencias H. y S.</span>: ${creditosBloque.creditosEnCHS} (10)<br/>`
-    if (!window.matchMedia("(min-width: 675px)").matches) {
-      document.getElementById("checkbox").click();
-    }
     openPopup(texto);
 
 }

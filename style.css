@@ -97,6 +97,10 @@ button {
     background-color: lightcyan;
 }
 
+.informacion{
+    background-color: rgb(216, 243, 211);
+}
+
 .no-br{
     border-right: none;
 }
@@ -222,7 +226,7 @@ transform: scale(1.05);
 #cerrar-popup{
     padding: 10px;
     border: none;
-    margin-top: 25px;
+    margin-top: 15px;
     background-color: lightpink;
     border-radius: 5px;
     cursor: pointer;
@@ -279,8 +283,11 @@ label img{
 }
 
 @media (max-width: 675px) {
-    #box-Popup{
+    #boxPopup{
         z-index: 10;
+        left: 0;
+        top: 60px;
+        height: calc(100% - 60px);
     }
     #boxPopup-content{
         z-index: 11;
@@ -289,7 +296,7 @@ label img{
         max-width: 80%;
         background-color: white;
         border-radius: 10px;
-        padding: 20px;
+        padding: 10px;
         text-align: center;
         margin: 20px;
         text-wrap: wrap;
