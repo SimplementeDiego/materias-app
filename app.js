@@ -44,6 +44,7 @@ const LG = new Materia("LG", 12, [MD1.curso], "Lógica", "primero", "no", "no", 
 const MN = new Materia("MN", 8, [CDIVV, P1, GAL2, GAL1, CDIV], "Métodos Numéricos", "segundo", "no", "no", "creditosEnMN");
 const P4 = new Materia("P4",  15, [GAL1, CDIV, MD1, P2], "Programación 4", "primero", "no", "no", "creditosEnProg");
 const IIO = new Materia("IIO", 10, [GAL2, PYE, CDIVV, CDIV, GAL1], "Int. a la Investigación de Operaciones", "primero", "no", "no", "creditosEnIO");
+const ADA = new Materia("ADA", 10, [IIO], "Algoritmos de Aproximación", "segundo", "si", "no", "creditosEnIO");
 const MMC = new Materia("MMC", 8, [PYE, IIO], "Métodos de Monte Carlo", "primero", "si", "no", "creditosEnMN");
 const FDPE = new Materia("FDPE", 8, [IIO], "Fundamentos de Programación Entera", "primero", "si", "no", "creditosEnIO");
 const MO = new Materia("MO", 6, [IIO], "Modelado y Optimización", "segundo", "si", "no", "creditosEnIO");
@@ -57,6 +58,7 @@ const TL = new Materia("TL", 12, [P3.curso, CDIV, GAL1, LG, MD1], "Teoría de Le
 const FVC = new Materia("FVC", 5, [CV.curso, CDIVV], "Funciones de Variable Compleja", "primero", "si", "si", "creditosEnM");
 const SO = new Materia("SO", 12, [AC.curso, GAL1, CDIV, P2, MD1], "Sistemas Operativos", "primero", "no", "no", "creditosEnAC_SO_RC");
 const CCE = new Materia("CCE", 8, [PYE.curso, GAL1, CDIVV, MD1, CDIV], "Códigos para Corrección de Errores", "primero", "si", "no", "creditosEnM");
+const TACCE = new Materia("TACCE", 7, [CCE.curso], "Temas avanzados en cód. para corr. de err.", "segundo", "si", "no", "creditosEnM");
 const PMPPG = new Materia("PMPPG", 10, [P2, SO.curso, AC.curso], "Prog. masivamente paralela en p. gráficos", "primero", "si", "no", "creditosEnAC_SO_RC");
 const FO = new Materia("FO", 6, [CDIVV, P1.curso, GAL2], "Fundamentos de Optimización", "primero", "si", "no", "creditosEnIO");
 const OCA = new Materia("OCA", 10, [IIO], "Optimización Continua y Aplicaciones", "segundo", "si", "no", "creditosEnIO");
@@ -69,9 +71,10 @@ const ADAR = new Materia("ADAR", 8, [P3, RC], "Análisis y Diseño de Al. Dis. e
 const CAP = new Materia("CAP", 10, [P4.curso, RC.curso, SO.curso, AC.curso], "Computación de alta performance", "primero", "si", "no", "creditosEnAC_SO_RC");
 const TP = new Materia("TP", 15, [P3, P4.curso], "Taller de Programación", "segundo", "no", "no", "creditosEnTall_Pasa_Proy");
 const IPLN = new Materia("IPLN", 12, [P4, TP.curso, LG, P3, TL, PYE], "Int. al Procesamiento de Leng. Natural", "segundo", "si", "no", "creditosEnIAYR");
-const IIS = new Materia("IIS", 10, [TP.curso, FBD.curso, P4.curso], "Int. a la Ingeniería de Software", "primero", "no", "no", "creditosEnIS");
+const IIS = new Materia("IIS", 10, [TP.curso, FBD.curso, P4.curso], "Taller Introductorio de Ing. de Software", "primero", "no", "no", "creditosEnIS");
 const FWS = new Materia("FWS", 8, [IIS,FBD], "Fundamentos de la web semántica", "primero", "si", "no", "creditosEnBD_SI");
 const PF = new Materia("PF", 10, [TL, P2, LG, MD1], "Programación Funcional", "segundo", "no", "no", "creditosEnProg");
+const PFA = new Materia("PFA", 12, [PF.curso], "Programación Funcional Avanzada", "segundo", "si", "no", "creditosEnProg");
 const PL = new Materia("PL", 10, [TL, P3, MD2, LG], "Programación Lógica", "primero", "no", "no", "creditosEnProg");
 const PIS = new Materia("PIS", 15, [IIS.curso, P4], "Proyecto de Ingeniería de Software", "segundo", "no", "no", "creditosEnTall_Pasa_Proy");
 const AA = new Materia("AA", 12, [LG, PYE, P3.curso, FBD.curso, P4, MD2], "Aprendizaje Automático", "segundo", "si", "no", "creditosEnIAYR");
@@ -90,7 +93,7 @@ const CC = new Materia("CC", 8, [PYE.curso], "Control de Calidad", "primero", "s
 const PAI = new Materia("PAI", 5, [AGI.curso], "Práctica de Administración para Ingenieros", "segundo", "si", "si", "creditosEnGO");
 const PCIC = new Materia("PCIC", 3, [], "Políticas Científicas en Inf. y Comp.", "segundo", "si", "no", "creditosEnCHS");
 const ASS = new Materia("ASS", 10, [RC.curso, SO.curso, FBD.curso, IIS.curso, AC.curso], "Administración y Seguridad de Sistemas", "primero", "si", "no", "creditosEnBD_SI");
-const Pasan = new Materia("Pasan", 10, [Aux], "Pasantía", "primero", "si", "no", "creditosEnTall_Pasa_Proy");
+const Pasan = new Materia("Pasan", 10, [Aux], "Pasantía", "ambos", "si", "no", "creditosEnTall_Pasa_Proy");
 const PG = new Materia("PG", 30, [Aux], "Proyecto de Grado", "ambos", "no", "no", "creditosEnTall_Pasa_Proy");
 
 //Revisar todos otra vez
@@ -124,6 +127,7 @@ let Materias = [
   AGI,
   TP,
   IIO,
+  ADA,
   MMC,
   FDPE,
   P3,
@@ -132,6 +136,7 @@ let Materias = [
   ITI,
   FVC,
   CCE,
+  TACCE,
   PAI,
   TL,
   FBD,
@@ -139,7 +144,7 @@ let Materias = [
   CDI,
   RC,
   FO,
-  //OCA,
+  OCA,
   AE,
   ICG,
   PMPPG,
@@ -147,6 +152,7 @@ let Materias = [
   IIS,
   FWS,
   PF,
+  PFA,
   PL,
   AA,
   CGA,
