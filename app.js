@@ -66,6 +66,7 @@ const FBD = new Materia("FBD", 15, [LG, P3, MD2], "Fundamentos de Bases de Datos
 const BDNR = new Materia("BDNR", 10, [FBD], "Bases de Datos No Relacionales", "primero", "si", "no", "creditosEnBD_SI");
 const CDI = new Materia("CDI", 8, [FBD], "Calidad de Datos e Información", "primero", "si", "no", "creditosEnBD_SI");
 const RC = new Materia("RC", 12, [P3, SO.curso, CDIV, AC.curso], "Redes de Computadoras", "segundo", "no", "no", "creditosEnAC_SO_RC");
+const RO = new Materia("RO", 10, [RC], "Redes Ópticas", "segundo", "si", "no", "creditosEnAC_SO_RC");
 const TSI = new Materia("TSI", 10, [RC.curso, FBD, P3], "Taller de Seguridad Informática", "segundo", "si", "no", "creditosEnTall_Pasa_Proy");
 const ADAR = new Materia("ADAR", 8, [P3, RC], "Análisis y Diseño de Al. Dis. en Redes", "segundo", "si", "no", "creditosEnAC_SO_RC");
 const CAP = new Materia("CAP", 10, [P4.curso, RC.curso, SO.curso, AC.curso], "Computación de alta performance", "primero", "si", "no", "creditosEnAC_SO_RC");
@@ -143,6 +144,7 @@ let Materias = [
   BDNR,
   CDI,
   RC,
+  RO,
   FO,
   OCA,
   AE,
