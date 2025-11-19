@@ -125,7 +125,6 @@ let Materias = [
   AAL,
   CV,
   ED,
-  AGI,
   TP,
   IIO,
   ADA,
@@ -138,7 +137,6 @@ let Materias = [
   FVC,
   CCE,
   TACCE,
-  PAI,
   TL,
   FBD,
   BDNR,
@@ -169,6 +167,8 @@ let Materias = [
   IOGR,
   MO,
   RNLN,
+  AGI,
+  PAI
 ];
 
 let MateriasPersona = new Set();
@@ -354,6 +354,77 @@ function actualizar() {
   materias = 0;
 
   Materias.forEach((materia) => {
+    if (opcionales == true) {
+      mostrarBotonMateria(materia);
+    } else {
+      if (materia.opcional == "no") {
+        mostrarBotonMateria(materia);
+      } else {
+        displayNone(materia.nombre);
+      }
+    }
+
+    let estanTodas = true;
+
+    materia.previas.forEach((previa) => {
+      estanTodas =
+        (MateriasPersona.has(previa.nombre) ||
+          MateriasPersona.has(previa)) &&
+        estanTodas;
+    });
+
+    if (!(materia == AGI || materia == CC || materia == Pasan || materia == PAI || materia == PG)) {
+      if (materia == ASS && estanTodas) {
+        if (!((MateriasPersona.has("AGI")&&MateriasPersona.has("CC"))||(MateriasPersona.has("AGI")&&MateriasPersona.has("PAI")))) {
+          estanTodas = false;
+        }
+      }
+
+      if (materia == TP && !estanTodas) {
+        if (MateriasPersona.has("P4")) {
+          estanTodas = true;
+        }
+      }
+
+      if (materia == PMPPG && !estanTodas){
+        if ( ((MateriasPersona.has("AC")) || (MateriasPersona.has("SO")))&&(MateriasPersona.has("P2")) ) {
+          estanTodas = true;
+        }
+      }
+
+      if (estanTodas) {
+        if ( !MateriasPersona.has(materia.nombre) || !MateriasPersona.has(materia.curso)) {
+          document.getElementById(materia.nombre).disabled = false;
+          document.getElementById(materia.nombre).style.background = "lightcoral";
+          materia.estado = 1;
+        }
+        if (MateriasPersona.has(materia.curso)) {
+          document.getElementById(materia.nombre).style.background = "lightblue";
+          materia.estado = 2;
+        }
+        if (MateriasPersona.has(materia.nombre)) {
+          document.getElementById(materia.nombre).style.background = "lightgreen";
+          sumarCreditos(materia);
+          materias += 1;
+          materia.estado = 3;
+        }
+      } else {
+        if (MateriasPersona.has(materia.nombre)) {
+          MateriasPersona.delete(materia.nombre);
+        }
+        if (MateriasPersona.has(materia.curso)) {
+          MateriasPersona.delete(materia.curso);
+        }
+        materia.estado = 0;
+        document.getElementById(materia.nombre).style.background = "gray";
+      }
+    }
+    
+  });
+
+  let materiasConCreditos = [CC, AGI, PAI, Pasan, PG]
+
+  materiasConCreditos.forEach((materia) => {
     if (opcionales == true) {
       mostrarBotonMateria(materia);
     } else {
