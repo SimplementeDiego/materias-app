@@ -827,8 +827,6 @@ function indicarInformacion(nombreMateria) {
   materiaAct.informacion.forEach( ({ nombre, valor }) => {
     const a = document.createElement("a");
     a.href = valor;
-    a.target = "_blank";
-    a.rel = "noopener noreferrer";
     a.textContent = nombre;
     const line = document.createElement("div");
     line.append(a);
