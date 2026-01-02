@@ -147,7 +147,7 @@ const creditosMinimos = (bloque, cantidad) => ({
   tipo: "predicado",
   id: `creditos:${bloque}>=${cantidad}`,
   verificar: () => creditosBloque[bloque] >= cantidad,
-  mensajeFalta: `Tener al menos ${cantidad} créditos en ${bloque}.`,
+  mensajeFalta: `Tener al menos ${cantidad} créditos en ${TraduccionBloqueCreditos[bloque]}.`,
 });
 
 function evaluarRegla(regla) {
