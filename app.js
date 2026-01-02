@@ -1,106 +1,425 @@
 //comentar y revisar codigo
 
+const LocalStorageNombres = Object.freeze({
+  materiasAprobadas: "materiasAprobadas",
+  materiasExoneradas: "materiasExoneradas",
+  semestre : "semestre"
+});
+
+const Semestre = Object.freeze({
+  PRIMERO: "primero",
+  SEGUNDO: "segundo",
+  AMBOS: "ambos",
+  LIBRE: "libre"
+});
+
+const BarraPopup = Object.freeze({
+  Previas: "previas",
+  PreviaDe: "previaDe",
+  Informacion: "informacion"
+});
+
+const Estado = Object.freeze({
+  DESHABILITADA: 0,
+  HABILITADA: 1,
+  APROBADA: 2,
+  EXONERADA: 3
+});
+
+const TraduccionBloqueCreditos = Object.freeze({
+  creditosEnM: "Matemática",
+  creditosEnCE: "Ciencias Experimentales",
+  creditosEnProg: "Programación",
+  creditosEnAC_SO_RC: "Arq., S. OP., Redes de C.",
+  creditosEnBD_SI: "B. Datos y Sist. de I.",
+  creditosEnMN: "Cálculo Numérico",
+  creditosEnIO: "Investigación Operativa",
+  creditosEnIS: "Ingeniería de Software",
+  creditosEnTall_Pasa_Proy: "A. Integ., Tall., Pas. y Proy.",
+  creditosEnGO: "Gestión en Organizaciones",
+  creditosEnIAYR: "Int. Artificial y Robótica",
+  creditosEnCHS: "Ciencias H. y S.",
+  Total: "Total"
+});
+
+const BloqueCreditos = Object.freeze({
+  creditosEnM: "creditosEnM",
+  creditosEnCE: "creditosEnCE",
+  creditosEnProg: "creditosEnProg",
+  creditosEnAC_SO_RC: "creditosEnAC_SO_RC",
+  creditosEnBD_SI: "creditosEnBD_SI",
+  creditosEnMN: "creditosEnMN",
+  creditosEnIO: "creditosEnIO",
+  creditosEnIS: "creditosEnIS",
+  creditosEnTall_Pasa_Proy: "creditosEnTall_Pasa_Proy",
+  creditosEnGO: "creditosEnGO",
+  creditosEnIAYR: "creditosEnIAYR",
+  creditosEnCHS: "creditosEnCHS",
+  Total: "Total",
+});
+
+const claseResaltarBotonEnNav = "activo";
+const colorAprobada = "lightblue";
+const colorExonerada = "lightgreen";
+const colorHabilitada = "lightcoral";
+const colorDeshabilitada = "gray";
+
+const idToggleMI = "activarMI";
+const idSecciones = "secciones";
+const idPopUp = "boxPopup";
+const idTextInPopup = "popup-text";
+const idCheckbox = "checkbox";
+const idNavbar = "navbar";
+const idButtonCloseInPopup = "cerrar-popup";
+const idButtonOpcionales = "op";
+const idTitulo = "titulo";
+
+let historialAprobadas = new Set();
+let historialExoneradas = new Set();
+let seleccionOpcionales = true;
+let seleccionMenu = false;
+let seleccionSemestre = Semestre.AMBOS;
+let valorBarra = BarraPopup.Previas;
+
+let creditosBloque = {
+  creditosEnM: 0, // 70              | MI + MD1 + CDIV + GAL1 + CDIVV + GAL2 + MD2 + PYE + LOG = 88
+  creditosEnCE: 0, // 10             | F1 = 10
+  creditosEnProg: 0, // 60           | P1 + P2 + P3 + P4 + TL = 64
+  creditosEnAC_SO_RC: 0, // 30       | AC + SO + RC = 36
+  creditosEnBD_SI: 0, // 10          | FBD = 15
+  creditosEnMN: 0, // 8              | MN = 8
+  creditosEnIO: 0, // 10             | IIO = 10
+  creditosEnIS: 0, // 10             | IIS = 10
+  creditosEnTall_Pasa_Proy: 0, // 45 | PG + PIS + TP = 60
+  creditosEnGO: 0, // 10             | AGI + PAI = 10
+  creditosEnIAYR: 0, // 0            |
+  creditosEnCHS: 0, // 10            | EC + PCIC = 10
+  Total: 0,
+};
+
 class Materia {
   constructor(
     nombre,
     creditos,
-    previas,
+    reglaHabilitacion,
     nombreCompleto,
     semestre,
-    opcional,
-    libre,
-    area
+    esOpcional,
+    esLibre,
+    area,
+    informacion
   ) {
-    this.creditos = creditos;
     this.nombre = nombre;
-    this.previas = previas;
-    this.curso = `${nombre}Curso`;
-    this.estado = 0;
+    this.creditos = creditos;
+    this.reglaHabilitacion = reglaHabilitacion;
+    this.nombreCurso = `${nombre}Curso`;
+    this.estado = Estado.DESHABILITADA;
     this.nombreCompleto = nombreCompleto;
     this.prioridad = 0;
     this.semestre = semestre;
-    this.opcional = opcional;
-    this.libre = libre;
+    this.esOpcional = esOpcional;
+    this.esLibre = esLibre;
     this.area = area;
     this.peso = 0;
+    this.informacion = informacion;
   }
 }
 
-const CDIV = new Materia("CDIV", 13, [], "Cálculo DIV", "ambos", "no", "si", "creditosEnM");
-const CDIVV = new Materia("CDIVV", 13, [CDIV.curso], "Cálculo DIVV", "ambos", "no", "si", "creditosEnM");
-const MD1 = new Materia("MD1", 9, [], "Matemática Discreta 1", "ambos", "no", "si", "creditosEnM");
-const P1 = new Materia("P1", 10, [], "Programación 1", "ambos", "no", "no", "creditosEnProg");
-const GAL1 = new Materia("GAL1", 9, [], "Geometría y Álgebra Lineal 1", "ambos", "no", "si", "creditosEnM");
-const P2 = new Materia("P2", 12, [P1.curso], "Programación 2", "ambos", "no", "no", "creditosEnProg");
-const Ec = new Materia("Ec", 7, [], "Economía", "segundo", "si", "no", "creditosEnCHS");
-const F1 = new Materia("F1", 10, [], "Física 1", "ambos", "si", "si", "creditosEnCE");
-const GAL2 = new Materia("GAL2", 9, [GAL1.curso], "Geometría y Álgebra Lineal 2", "ambos", "no", "si", "creditosEnM");
-const AAL = new Materia( "AAL",  9,  [GAL2.curso, CDIV], "Aplicaciones del Álgebra Lineal", "segundo", "si",  "no", "creditosEnMN");
-const PYE = new Materia("PYE",  10, [CDIVV.curso, GAL1, CDIV], "Probabilidad y Estadistica",  "ambos",  "no", "si",  "creditosEnM");
-const PCI = new Materia("PCI",  10, [PYE, CDIVV, GAL2], "Procesamiento cuántico de la información",  "primero",  "si", "no",  "creditosEnM");
-const ITI = new Materia("ITI", 8, [PYE], "Int. a la Teoría de la Información", "primero", "si", "no", "creditosEnM");
-const MD2 = new Materia("MD2", 9, [MD1.curso, GAL1.curso], "Matemática Discreta 2", "ambos", "no", "si", "creditosEnM");
-const LG = new Materia("LG", 12, [MD1.curso], "Lógica", "primero", "no", "no", "creditosEnM");
-const MN = new Materia("MN", 10, [CDIVV, P1, GAL2, GAL1, CDIV], "Métodos Numéricos", "segundo", "no", "no", "creditosEnMN");
-const P4 = new Materia("P4",  15, [GAL1, CDIV, MD1, P2], "Programación 4", "primero", "no", "no", "creditosEnProg");
-const IIO = new Materia("IIO", 10, [GAL2, PYE, CDIVV, CDIV, GAL1], "Int. a la Investigación de Operaciones", "primero", "no", "no", "creditosEnIO");
-const ADA = new Materia("ADA", 10, [IIO], "Algoritmos de Aproximación", "segundo", "si", "no", "creditosEnIO");
-const MMC = new Materia("MMC", 8, [PYE, IIO], "Métodos de Monte Carlo", "primero", "si", "no", "creditosEnMN");
-const FDPE = new Materia("FDPE", 8, [IIO], "Fundamentos de Programación Entera", "primero", "si", "no", "creditosEnIO");
-const MO = new Materia("MO", 6, [IIO], "Modelado y Optimización", "segundo", "si", "no", "creditosEnIO");
-const IOGR = new Materia("IOGR", 6, [IIO], "Investigación de Oper. y Gest. de Riesgos", "segundo", "si", "no", "creditosEnIO");
-const P3 = new Materia("P3", 15, [P2.curso, P1, MD1], "Programación 3", "segundo", "no", "si", "creditosEnProg");
-const ALN = new Materia("ALN", 9, [P3, MN], "Álgebra Lineal Numérica", "segundo", "si", "no", "creditosEnMN");
-const AC = new Materia("AC", 10, [LG.curso, P2.curso, P1, MD1.curso], "Arquitectura de Computadoras", "segundo", "no", "si", "creditosEnAC_SO_RC");
-const CV = new Materia("CV", 10, [CDIVV.curso, GAL1, CDIV], "Cálculo Vectorial", "ambos", "si", "si", "creditosEnM");
-const ED = new Materia("ED", 10, [GAL2, CDIVV.curso, GAL1, CDIV], "Int. a las Ec. Diferenciales", "segundo", "si", "si", "creditosEnM");
-const TL = new Materia("TL", 12, [P3.curso, CDIV, GAL1, LG, MD1], "Teoría de Lenguajes", "primero", "no", "no", "creditosEnProg");
-const FVC = new Materia("FVC", 5, [CV.curso, CDIVV], "Funciones de Variable Compleja", "primero", "si", "si", "creditosEnM");
-const SO = new Materia("SO", 12, [AC.curso, GAL1, CDIV, P2, MD1], "Sistemas Operativos", "primero", "no", "no", "creditosEnAC_SO_RC");
-const CCE = new Materia("CCE", 8, [PYE.curso, GAL1, CDIVV, MD1, CDIV], "Códigos para Corrección de Errores", "primero", "si", "no", "creditosEnM");
-const TACCE = new Materia("TACCE", 7, [CCE.curso], "Temas avanzados en cód. para corr. de err.", "segundo", "si", "no", "creditosEnM");
-const PMPPG = new Materia("PMPPG", 10, [P2, SO.curso, AC.curso], "Prog. masivamente paralela en p. gráficos", "primero", "si", "no", "creditosEnAC_SO_RC");
-const FO = new Materia("FO", 6, [CDIVV, P1.curso, GAL2], "Fundamentos de Optimización", "primero", "si", "no", "creditosEnIO");
-const OCA = new Materia("OCA", 10, [IIO], "Optimización Continua y Aplicaciones", "segundo", "si", "no", "creditosEnIO");
-const FBD = new Materia("FBD", 15, [LG, P3, MD2], "Fundamentos de Bases de Datos", "segundo", "no", "no", "creditosEnBD_SI");
-const BDNR = new Materia("BDNR", 10, [FBD], "Bases de Datos No Relacionales", "primero", "si", "no", "creditosEnBD_SI");
-const CDI = new Materia("CDI", 8, [FBD], "Calidad de Datos e Información", "primero", "si", "no", "creditosEnBD_SI");
-const RC = new Materia("RC", 12, [P3, SO.curso, CDIV, AC.curso], "Redes de Computadoras", "segundo", "no", "no", "creditosEnAC_SO_RC");
-const RO = new Materia("RO", 10, [RC], "Redes Ópticas", "segundo", "si", "no", "creditosEnAC_SO_RC");
-const TSI = new Materia("TSI", 10, [RC.curso, FBD, P3], "Taller de Seguridad Informática", "segundo", "si", "no", "creditosEnTall_Pasa_Proy");
-const ADAR = new Materia("ADAR", 8, [P3, RC], "Análisis y Diseño de Al. Dis. en Redes", "segundo", "si", "no", "creditosEnAC_SO_RC");
-const CAP = new Materia("CAP", 10, [P4.curso, RC.curso, SO.curso, AC.curso], "Computación de alta performance", "primero", "si", "no", "creditosEnAC_SO_RC");
-const TP = new Materia("TP", 15, [P3, P4.curso], "Taller de Programación", "segundo", "no", "no", "creditosEnTall_Pasa_Proy");
-const IPLN = new Materia("IPLN", 12, [P4, TP.curso, LG, P3, TL, PYE], "Int. al Procesamiento de Leng. Natural", "segundo", "si", "no", "creditosEnIAYR");
-const IIS = new Materia("IIS", 10, [TP.curso, FBD.curso, P4.curso], "Taller Introductorio de Ing. de Software", "primero", "no", "no", "creditosEnIS");
-const FWS = new Materia("FWS", 8, [IIS,FBD], "Fundamentos de la web semántica", "primero", "si", "no", "creditosEnBD_SI");
-const PF = new Materia("PF", 10, [TL, P2, LG, MD1], "Programación Funcional", "segundo", "no", "no", "creditosEnProg");
-const PFA = new Materia("PFA", 12, [PF.curso], "Programación Funcional Avanzada", "segundo", "si", "no", "creditosEnProg");
-const PL = new Materia("PL", 10, [TL, P3, MD2, LG], "Programación Lógica", "primero", "no", "no", "creditosEnProg");
-const PIS = new Materia("PIS", 15, [IIS.curso, P4], "Proyecto de Ingeniería de Software", "segundo", "no", "no", "creditosEnTall_Pasa_Proy");
-const AA = new Materia("AA", 12, [LG, PYE, P3.curso, FBD.curso, P4, MD2], "Aprendizaje Automático", "segundo", "si", "no", "creditosEnIAYR");
-const RNLN = new Materia("RNLN", 10, [P3, AA.curso, PYE], "Redes Neuronales para Leng. Natural", "segundo", "si", "no", "creditosEnIAYR");
-const AE = new Materia("AE", 10, [P4, PYE, IIO], "Algoritmos Evolutivos", "segundo", "si", "no", "creditosEnIO");
-const ICG = new Materia("ICG", 10, [P3, P4, GAL2.curso, GAL1], "Int. a la Computación Gráfica", "primero", "si", "no", "creditosEnProg");
-const CGA = new Materia("CGA", 12, [ICG.curso], "Computación Gráfica Avanzada", "segundo", "si", "no", "creditosEnProg");
-const FSI = new Materia("FSI", 12, [SO, FBD, P3, LG, RC], "Fundamentos de la Seguridad Informática", "primero", "si", "no", "creditosEnAC_SO_RC");
-const Aux = new Materia("Aux", 0, [], "", "", "", "", "");
-const MI = new Materia("MI", 4, [Aux], "Matemática Inicial", "ambos", "no", "no", "creditosEnM");
-const CTS = new Materia("CTS", 8, [], "Ciencia, Tecnología y Sociedad", "primero", "si", "no", "creditosEnCHS");
-const TRE = new Materia("TRE", 6, [P1], "Taller de Robótica Educativa", "primero", "si", "no", "creditosEnTall_Pasa_Proy");
-const F2 = new Materia("F2", 10, [F1.curso, CDIV.curso], "Física 2", "ambos", "si", "si", "creditosEnCE");
-const AGI = new Materia("AGI", 5, [Aux], "Administración General para Ingenieros", "primero", "si", "si", "creditosEnGO");
-const CC = new Materia("CC", 8, [PYE.curso], "Control de Calidad", "primero", "si", "si", "creditosEnGO");
-const PAI = new Materia("PAI", 5, [AGI.curso], "Práctica de Administración para Ingenieros", "segundo", "si", "si", "creditosEnGO");
-const PCIC = new Materia("PCIC", 3, [], "Políticas Científicas en Inf. y Comp.", "segundo", "si", "no", "creditosEnCHS");
-const ASS = new Materia("ASS", 10, [RC.curso, SO.curso, FBD.curso, IIS.curso, AC.curso], "Administración y Seguridad de Sistemas", "primero", "si", "no", "creditosEnBD_SI");
-const Pasan = new Materia("Pasan", 10, [Aux], "Pasantía", "ambos", "si", "no", "creditosEnTall_Pasa_Proy");
-const PG = new Materia("PG", 30, [Aux], "Proyecto de Grado", "ambos", "no", "no", "creditosEnTall_Pasa_Proy");
+const todas = (...reglas) => ({ tipo: "todas", reglas });
+const alguna = (...reglas) => ({ tipo: "alguna", reglas });
+const negarRegla = (regla) => ({ tipo: "negar", regla });
 
-//Revisar todos otra vez
+const materiaAprobada = (materia) => ({
+  tipo: "predicado",
+  id: `aprobada:${materia.nombre}`,
+  verificar: () => historialAprobadas.has(materia.nombre),
+  mensajeFalta: `Curso de ${materia.nombreCompleto}`,
+});
 
-let Materias = [
+const materiaExonerada = (materia) => ({
+  tipo: "predicado",
+  id: `exonerada:${materia.nombre}`,
+  verificar: () => historialExoneradas.has(materia.nombre),
+  mensajeFalta: `Exonerar ${materia.nombreCompleto}`,
+});
+
+const creditosMinimos = (bloque, cantidad) => ({
+  tipo: "predicado",
+  id: `creditos:${bloque}>=${cantidad}`,
+  verificar: () => creditosBloque[bloque] >= cantidad,
+  mensajeFalta: `Tener al menos ${cantidad} créditos en ${bloque}.`,
+});
+
+function evaluarRegla(regla) {
+  if (!regla) return { cumple: true, faltantes: [] };
+  if (regla.tipo === "predicado") {
+    const cumple = regla.verificar();
+    return { cumple, faltantes: cumple ? [] : [regla.mensajeFalta] };
+  }
+  if (regla.tipo === "todas") {
+    const resultados = regla.reglas.map((r) => evaluarRegla(r));
+    return {
+      cumple: resultados.every((r) => r.cumple),
+      faltantes: resultados.flatMap((r) => r.faltantes),
+    };
+  }
+  if (regla.tipo === "alguna") {
+    const resultados = regla.reglas.map((r) => evaluarRegla(r));
+    const cumple = resultados.some((r) => r.cumple);
+    if (cumple) return { cumple: true, faltantes: [] };
+    const mejorOpcion = resultados.reduce((a, b) =>
+      a.faltantes.length <= b.faltantes.length ? a : b
+    );
+    return { cumple: false, faltantes: mejorOpcion.faltantes };
+  }
+  if (regla.tipo === "negar") {
+    const resultadoInterno = evaluarRegla(regla.regla);
+    return {
+      cumple: !resultadoInterno.cumple,
+      faltantes: !resultadoInterno.cumple ? [] : ["No se cumple la condición negada"],
+    };
+  }
+}
+
+const Bloqueante = new Materia("Bloqueante", 0, null, "Bloqueante", "", true, false, "");
+const CDIV = new Materia("CDIV", 13, null, "Cálculo DIV", Semestre.AMBOS, false, true, BloqueCreditos.creditosEnM, []);
+CDIV.informacion = [{nombre: "Eva primer semestre", valor: "https://eva.fing.edu.uy/course/view.php?id=1024"}, 
+                    {nombre: "Eva segundo semestre", valor: "https://eva.fing.edu.uy/course/view.php?id=1504"}, 
+                    {nombre: "Programa", valor: "https://eva.fing.edu.uy/pluginfile.php/483549/mod_resource/content/4/Ficha%20del%20curso.pdf"}]
+const CDIVV = new Materia("CDIVV", 13, materiaAprobada(CDIV), "Cálculo DIVV", Semestre.AMBOS, false, true, BloqueCreditos.creditosEnM, []);
+CDIVV.informacion = [{nombre: "Eva primer semestre", valor: "https://eva.fing.edu.uy/course/view.php?id=1594"}, 
+                    {nombre: "Eva segundo semestre", valor: "https://eva.fing.edu.uy/course/view.php?id=1131"}, 
+                    {nombre: "Programa", valor: "https://eva.fing.edu.uy/pluginfile.php/351830/mod_resource/content/1/Programa_Unidad_Curricular_calculo_varias_variables.pdf"}]
+const MD1 = new Materia("MD1", 9, null, "Matemática Discreta 1", Semestre.AMBOS, false, true, BloqueCreditos.creditosEnM, []);
+MD1.informacion = [{nombre: "Eva primer semestre", valor: "https://eva.fing.edu.uy/course/view.php?id=323"}, 
+                    {nombre: "Eva segundo semestre", valor: "https://eva.fing.edu.uy/course/view.php?id=1541"}, 
+                    {nombre: "Programa", valor: "https://www.fing.edu.uy/sites/default/files/2024-08/Matem%C3%A1tica%20Discreta%201.pdf"}]
+const P1 = new Materia("P1", 10, null, "Programación 1", Semestre.AMBOS, false, false, BloqueCreditos.creditosEnProg, []);
+P1.informacion = [{nombre: "Eva primer semestre", valor: "https://eva.fing.edu.uy/course/view.php?id=58"}, 
+                    {nombre: "Eva segundo semestre", valor: "https://eva.fing.edu.uy/course/view.php?id=1958"}, 
+                    {nombre: "Programa", valor: "https://eva.fing.edu.uy/pluginfile.php/554301/mod_resource/content/2/ProgramaP12024.pdf"}]
+const GAL1 = new Materia("GAL1", 9, null, "Geometría y Álgebra Lineal 1", Semestre.AMBOS, false, true, BloqueCreditos.creditosEnM, []);
+GAL1.informacion = [{nombre: "Eva primer semestre", valor: "https://eva.fing.edu.uy/course/view.php?id=1597"}, 
+                    {nombre: "Eva segundo semestre", valor: "https://eva.fing.edu.uy/course/view.php?id=1442"}, 
+                    {nombre: "Programa", valor: "https://www.fing.edu.uy/sites/default/files/2024-08/GAL1_Programa.pdf"}]
+const P2 = new Materia("P2", 12, materiaAprobada(P1), "Programación 2", Semestre.AMBOS, false, false, BloqueCreditos.creditosEnProg, []);
+P2.informacion = [{nombre: "Eva", valor: "https://eva.fing.edu.uy/course/view.php?id=132"}, 
+                    {nombre: "Programa", valor: "https://eva.fing.edu.uy/mod/resource/view.php?id=25948"}]
+const DAED = new Materia("DAED", 7, todas(materiaExonerada(P1), materiaExonerada(P2)), "Didáctica de Algorit. y Estruct. de Datos", Semestre.PRIMERO, true, false, BloqueCreditos.creditosEnProg, []);
+DAED.informacion = [{nombre: "Eva", valor: "https://eva.fing.edu.uy/course/view.php?id=874"}, 
+                    {nombre: "Programa", valor: "https://eva.fing.edu.uy/pluginfile.php/217214/mod_resource/content/2/Programa-de-Unidad-Curricular-DAED.pdf"}]
+const Ec = new Materia("Ec", 7, null, "Economía", Semestre.SEGUNDO, true, false, BloqueCreditos.creditosEnCHS, []);
+Ec.informacion = [{nombre: "Eva", valor: "https://eva.fing.edu.uy/course/view.php?id=1093"}, 
+                    {nombre: "Programa", valor: "https://www.fing.edu.uy/static/programas/Grado/2019/Econom%C3%ADa/economia.pdf"}]
+const F1 = new Materia("F1", 10, null, "Física 1", Semestre.AMBOS, true, true, BloqueCreditos.creditosEnCE, []);
+F1.informacion = [{nombre: "Eva primer semestre", valor: "https://eva.fing.edu.uy/course/view.php?id=87"}, 
+                    {nombre: "Eva segundo semestre", valor: "https://eva.fing.edu.uy/course/view.php?id=1545"}, 
+                    {nombre: "Programa", valor: "https://eva.fing.edu.uy/pluginfile.php/534297/mod_resource/content/2/f1_1151.pdf"}]
+const GAL2 = new Materia("GAL2", 9, materiaAprobada(GAL1), "Geometría y Álgebra Lineal 2", Semestre.AMBOS, false, true, BloqueCreditos.creditosEnM, []);
+GAL2.informacion = [{nombre: "Eva primer semestre", valor: "https://eva.fing.edu.uy/course/view.php?id=270"}, 
+                    {nombre: "Eva segundo semestre", valor: "https://eva.fing.edu.uy/course/view.php?id=203"}, 
+                    {nombre: "Programa", valor: "https://eva.fing.edu.uy/pluginfile.php/553828/mod_resource/content/1/GAL%202%20-%20programa.pdf"}]
+const AAL = new Materia("AAL", 9, todas(materiaExonerada(GAL2),materiaExonerada(CDIV)), "Aplicaciones del Álgebra Lineal", Semestre.SEGUNDO, true, false, BloqueCreditos.creditosEnMN, []);
+AAL.informacion = [{nombre: "Eva", valor: "https://eva.fing.edu.uy/course/view.php?id=1543"}, 
+                    {nombre: "Programa", valor: "https://eva.fing.edu.uy/pluginfile.php/483795/mod_resource/content/7/Aplicaciones%20del%20%C3%81lgebra%20Lineal.pdf"}]
+const PYE = new Materia("PYE", 10, todas(materiaAprobada(CDIVV),materiaExonerada(GAL1),materiaExonerada(CDIV)), "Probabilidad y Estadistica", Semestre.AMBOS, false, true, BloqueCreditos.creditosEnM, []);
+PYE.informacion = [{nombre: "Eva primer semestre", valor: "https://eva.fing.edu.uy/course/view.php?id=54"}, 
+                    {nombre: "Eva segundo semestre", valor: "https://eva.fing.edu.uy/course/view.php?id=1537"}, 
+                    {nombre: "Programa", valor: "https://eva.fing.edu.uy/pluginfile.php/557128/mod_resource/content/1/programa_PyE.pdf"}]
+const PCI = new Materia("PCI", 10, todas(materiaExonerada(PYE),materiaExonerada(CDIVV),materiaExonerada(GAL2)), "Procesamiento cuántico de la información", Semestre.PRIMERO, true, false, BloqueCreditos.creditosEnM, []);
+PCI.informacion = [{nombre: "Eva", valor: "https://eva.fing.edu.uy/course/view.php?id=1903"}, 
+                    {nombre: "Programa", valor: "https://eva.fing.edu.uy/pluginfile.php/529581/mod_resource/content/1/programa_proc_cuant_inf.pdf"}]
+const ITI = new Materia("ITI", 8, materiaExonerada(PYE), "Int. a la Teoría de la Información", Semestre.PRIMERO, true, false, BloqueCreditos.creditosEnM, []);
+ITI.informacion = [{nombre: "Eva", valor: "https://eva.fing.edu.uy/course/view.php?id=412"}, 
+                    {nombre: "Programa", valor: "https://eva.fing.edu.uy/pluginfile.php/54492/course/section/6880/ProgramaITI-2013-Grado.pdf"}]
+const MD2 = new Materia("MD2", 9, todas(materiaAprobada(MD1),materiaAprobada(GAL1)), "Matemática Discreta 2", Semestre.AMBOS, false, true, BloqueCreditos.creditosEnM, []);
+MD2.informacion = [{nombre: "Eva primer semestre", valor: "https://eva.fing.edu.uy/course/view.php?id=267"}, 
+                    {nombre: "Eva segundo semestre", valor: "https://eva.fing.edu.uy/course/view.php?id=1542"}, 
+                    {nombre: "Programa", valor: "https://www.fing.edu.uy/sites/default/files/2024-09/Matem%C3%A1tica%20Discreta%202.pdf"}]
+const LG = new Materia("LG", 12, materiaAprobada(MD1), "Lógica", Semestre.PRIMERO, false, false, BloqueCreditos.creditosEnM, []);
+LG.informacion = [{nombre: "Eva", valor: "https://eva.fing.edu.uy/course/view.php?id=394"}, 
+                    {nombre: "Programa", valor: "https://eva.fing.edu.uy/pluginfile.php/55389/mod_resource/content/2/Programa%20de%20Unidad%20Curricular%20Logica.pdf"}]
+const MN = new Materia("MN", 10, todas(materiaExonerada(CDIVV),materiaExonerada(P1),materiaExonerada(GAL2),materiaExonerada(GAL1),materiaExonerada(CDIV)), "Métodos Numéricos", Semestre.SEGUNDO, false, false, BloqueCreditos.creditosEnMN, []);
+MN.informacion = [{nombre: "Eva", valor: "https://eva.fing.edu.uy/course/view.php?id=62"}, 
+                    {nombre: "Programa (viejo)", valor: "https://www.fing.edu.uy/sites/default/files/2025-06/metodos_numericos_2024.pdf"}]
+const P4 = new Materia("P4", 15, todas(materiaExonerada(GAL1),materiaExonerada(CDIV),materiaExonerada(MD1),materiaExonerada(P2)), "Programación 4", Semestre.PRIMERO, false, false, BloqueCreditos.creditosEnProg, []);
+P4.informacion = [{nombre: "Eva", valor: "https://eva.fing.edu.uy/course/view.php?id=413"}, 
+                    {nombre: "Programa", valor: "https://eva.fing.edu.uy/pluginfile.php/191533/mod_resource/content/2/programa_curso.pdf"}]
+const IIO = new Materia("IIO", 10, todas(materiaExonerada(GAL2),materiaExonerada(PYE),materiaExonerada(CDIVV),materiaExonerada(CDIV),materiaExonerada(GAL1)), "Int. a la Investigación de Operaciones", Semestre.PRIMERO, false, false, BloqueCreditos.creditosEnIO, []);
+IIO.informacion = [{nombre: "Eva", valor: "https://eva.fing.edu.uy/course/view.php?id=994"}, 
+                    {nombre: "Programa", valor: "https://eva.fing.edu.uy/pluginfile.php/148555/mod_resource/content/2/Programa%20IIO%202018.pdf"}]
+const ADA = new Materia("ADA", 10, materiaExonerada(IIO), "Algoritmos de Aproximación", Semestre.SEGUNDO, true, false, BloqueCreditos.creditosEnIO, []);
+ADA.informacion = [{nombre: "Eva", valor: "https://eva.fing.edu.uy/course/view.php?id=914"}, 
+                    {nombre: "Programa", valor: "https://eva.fing.edu.uy/pluginfile.php/482614/mod_resource/content/2/AA-2025%20%281%29%20%281%29.pdf"}]
+const MMC = new Materia("MMC", 8, todas(materiaExonerada(PYE),materiaExonerada(IIO)), "Métodos de Monte Carlo", Semestre.PRIMERO, true, false, BloqueCreditos.creditosEnMN, []);
+MMC.informacion = [{nombre: "Eva", valor: "https://eva.fing.edu.uy/course/view.php?id=24"}, 
+                    {nombre: "Programa", valor: "https://www.fing.edu.uy/sites/default/files/2022-06/M%C3%A9todos%20de%20Monte%20Carlo.pdf"}]
+const FDPE = new Materia("FDPE", 8, materiaExonerada(IIO), "Fundamentos de Programación Entera", Semestre.PRIMERO, true, false, BloqueCreditos.creditosEnIO, []);
+FDPE.informacion = [{nombre: "Eva", valor: "https://eva.fing.edu.uy/course/view.php?id=269"}, 
+                    {nombre: "Programa", valor: "https://eva.fing.edu.uy/pluginfile.php/37456/mod_resource/content/2/PUC_Fundamentos-de-Programacion-Entera_2018.pdf"}]
+const MO = new Materia("MO", 6, materiaExonerada(IIO), "Modelado y Optimización", Semestre.SEGUNDO, true, false, BloqueCreditos.creditosEnIO, []);
+MO.informacion = [{nombre: "Eva", valor: "https://eva.fing.edu.uy/course/view.php?id=1070"}, 
+                    {nombre: "Programa", valor: "https://eva.fing.edu.uy/pluginfile.php/360410/mod_resource/content/2/ModOpt_Programa_Bedelia_2018.pdf"}]
+const OBI = new Materia("OBI", 8, materiaExonerada(IIO), "Optimización bajo Incertidumbre", Semestre.PRIMERO, true, false, BloqueCreditos.creditosEnIO, []);
+OBI.informacion = [{nombre: "Eva", valor: "https://eva.fing.edu.uy/course/view.php?id=397"}, 
+                    {nombre: "Programa", valor: "https://eva.fing.edu.uy/pluginfile.php/53747/mod_resource/content/7/PUC_Optimizacion-bajo-Incertidumbre_2018.pdf"}]
+const IOGR = new Materia("IOGR", 6, materiaExonerada(IIO), "Investigación de Oper. y Gest. de Riesgos", Semestre.SEGUNDO, true, false, BloqueCreditos.creditosEnIO, []);
+IOGR.informacion = [{nombre: "Eva", valor: "https://eva.fing.edu.uy/course/view.php?id=38"}, 
+                    {nombre: "Programa", valor: "https://eva.fing.edu.uy/pluginfile.php/256495/mod_resource/content/1/Programa%20de%20Investigacion%20Operativa%20y%20Gestion%20de%20Riesgos.pdf"}]
+const P3 = new Materia("P3", 15, todas(materiaAprobada(P2),materiaExonerada(P1),materiaExonerada(MD1)), "Programación 3", Semestre.SEGUNDO, false, true, BloqueCreditos.creditosEnProg, []);
+P3.informacion = [{nombre: "Eva", valor: "https://eva.fing.edu.uy/course/view.php?id=39"}, 
+                    {nombre: "Programa", valor: "https://eva.fing.edu.uy/pluginfile.php/517721/mod_resource/content/4/ProgramaUCProgramacion3%20-%202024.pdf"}]
+const FRA = new Materia("FRA", 7, todas(creditosMinimos(BloqueCreditos.creditosEnCE,10),creditosMinimos(BloqueCreditos.creditosEnAC_SO_RC,12), materiaAprobada(P3), materiaExonerada(P2), materiaExonerada(LG)), "Fundamentos de la Robótica Autónoma", Semestre.PRIMERO, true, false, BloqueCreditos.creditosEnIAYR, []);
+FRA.informacion = [{nombre: "Eva", valor: "https://eva.fing.edu.uy/course/view.php?id=869"}, 
+                    {nombre: "Programa", valor: "https://eva.fing.edu.uy/pluginfile.php/99494/mod_resource/content/6/fra-programa-rev-03-oct-2018-mmm.pdf"}]
+const ALN = new Materia("ALN", 9, todas(materiaExonerada(P3),materiaExonerada(MN)), "Álgebra Lineal Numérica", Semestre.SEGUNDO, true, false, BloqueCreditos.creditosEnMN, []);
+ALN.informacion = [{nombre: "Eva", valor: "https://eva.fing.edu.uy/course/view.php?id=1143"}, 
+                    {nombre: "Programa", valor: "https://eva.fing.edu.uy/pluginfile.php/191829/mod_resource/content/1/ProgramaALN.pdf"}]
+const AC = new Materia("AC", 10, todas(materiaAprobada(LG),materiaAprobada(P2),materiaExonerada(P1),materiaAprobada(MD1)), "Arquitectura de Computadoras", Semestre.SEGUNDO, false, true, BloqueCreditos.creditosEnAC_SO_RC, []);
+AC.informacion = [{nombre: "Eva", valor: "https://eva.fing.edu.uy/course/view.php?id=195"}, 
+                    {nombre: "Programa", valor: "https://eva.fing.edu.uy/pluginfile.php/517614/mod_resource/content/1/programa-arqcomp-2024.pdf"}]
+const CV = new Materia("CV", 10, todas(materiaAprobada(CDIVV),materiaExonerada(GAL1),materiaExonerada(CDIV)), "Cálculo Vectorial", Semestre.AMBOS, true, true, BloqueCreditos.creditosEnM, []);
+CV.informacion = [{nombre: "Eva primer semestre", valor: "https://eva.fing.edu.uy/course/view.php?id=1498"}, 
+                    {nombre: "Eva segundo semestre", valor: "https://eva.fing.edu.uy/course/view.php?id=1183"}, 
+                    {nombre: "Programa", valor: "https://eva.fing.edu.uy/pluginfile.php/536052/mod_resource/content/1/Ficha%20-%20Ca%CC%81lculo%20Vectorial.pdf"}]
+const ED = new Materia("ED", 10, todas(materiaExonerada(GAL2),materiaAprobada(CDIVV),materiaExonerada(GAL1),materiaExonerada(CDIV)), "Int. a las Ec. Diferenciales", Semestre.SEGUNDO, true, true, BloqueCreditos.creditosEnM, []);
+ED.informacion = [{nombre: "Eva", valor: "https://eva.fing.edu.uy/course/view.php?id=342"}, 
+                    {nombre: "Programa", valor: "https://www.fing.edu.uy/sites/default/files/2024-08/Programa_Introducci%C3%B3n%20a%20las%20ecuaciones%20diferenciales.pdf"}]
+const TL = new Materia("TL", 12, todas(materiaAprobada(P3),materiaExonerada(CDIV),materiaExonerada(GAL1),materiaExonerada(LG),materiaExonerada(MD1)), "Teoría de Lenguajes", Semestre.PRIMERO, false, false, BloqueCreditos.creditosEnProg, []);
+TL.informacion = [{nombre: "Eva", valor: "https://eva.fing.edu.uy/course/view.php?id=687"}, 
+                    {nombre: "Programa", valor: "https://www.fing.edu.uy/sites/default/files/Programa%20de%20Unidad%20Curricular%20TeoLeng.pdf"}]
+const FVC = new Materia("FVC", 5, todas(materiaAprobada(CV),materiaExonerada(CDIVV)), "Funciones de Variable Compleja", Semestre.PRIMERO, true, true, BloqueCreditos.creditosEnM, []);
+FVC.informacion = [{nombre: "Eva", valor: "https://eva.fing.edu.uy/course/view.php?id=55"}, 
+                    {nombre: "Programa", valor: "https://eva.fing.edu.uy/pluginfile.php/216430/mod_resource/content/2/%20Programa%202019/fvc%20corregido%20%281%29.pdf"}]
+const SO = new Materia("SO", 12, todas(materiaAprobada(AC),materiaExonerada(GAL1),materiaExonerada(CDIV),materiaExonerada(P2),materiaExonerada(MD1)), "Sistemas Operativos", Semestre.PRIMERO, false, false, BloqueCreditos.creditosEnAC_SO_RC, []);
+SO.informacion = [{nombre: "Eva", valor: "https://eva.fing.edu.uy/course/view.php?id=679"}, 
+                    {nombre: "Programa", valor: "https://eva.fing.edu.uy/pluginfile.php/548974/mod_resource/content/1/Programa-SO.pdf"}]
+const CCE = new Materia("CCE", 8, todas(materiaAprobada(PYE),materiaExonerada(GAL1),materiaExonerada(CDIVV),materiaExonerada(MD1),materiaExonerada(CDIV), materiaAprobada(P3)), "Códigos para Corrección de Errores", Semestre.PRIMERO, true, false, BloqueCreditos.creditosEnM, []);
+CCE.informacion = [{nombre: "Eva", valor: "https://eva.fing.edu.uy/course/view.php?id=134"}, 
+                    {nombre: "Programa", valor: "https://eva.fing.edu.uy/pluginfile.php/305518/mod_resource/content/1/Programa%20de%20Unidad%20Curricular%20Co%CC%81digos%20para%20Correccio%CC%81n%20de%20Errores%202020%20%28pendiente%20de%20aprobacio%CC%81n%29.pdf"}]
+const TACCE = new Materia("TACCE", 7, materiaAprobada(CCE), "Temas avanzados en cód. para corr. de err.", Semestre.SEGUNDO, true, false, BloqueCreditos.creditosEnM, []);
+TACCE.informacion = [{nombre: "Eva", valor: "https://eva.fing.edu.uy/course/view.php?id=456"}, 
+                    {nombre: "Programa", valor: "https://eva.fing.edu.uy/pluginfile.php/60822/course/section/7408/Programa%20de%20Unidad%20Curricular%20Temas%20avanzados%20en%20c%C3%B3digos%20para%20correcci%C3%B3n%20de%20errores%202023.pdf"}]
+const PMPPG = new Materia("PMPPG", 10, todas(materiaExonerada(P2),alguna(materiaExonerada(AC),materiaExonerada(SO),todas(materiaAprobada(AC),materiaAprobada(SO)))), "Prog. masivamente paralela en p. gráficos", Semestre.PRIMERO, true, false, BloqueCreditos.creditosEnAC_SO_RC, []);
+PMPPG.informacion = [{nombre: "Eva", valor: "https://eva.fing.edu.uy/course/view.php?id=1076"}, 
+                    {nombre: "Programa", valor: "https://eva.fing.edu.uy/pluginfile.php/276986/mod_resource/content/2/Programa_PMPenGPU_Grado2024.pdf"}]
+const FO = new Materia("FO", 6, todas(materiaExonerada(CDIVV),materiaAprobada(P1),materiaExonerada(GAL2)), "Fundamentos de Optimización", Semestre.PRIMERO, true, false, BloqueCreditos.creditosEnIO, []);
+FO.informacion = [{nombre: "Eva", valor: "https://eva.fing.edu.uy/course/view.php?id=1513"}, 
+                    {nombre: "Programa", valor: "https://eva.fing.edu.uy/pluginfile.php/337331/mod_resource/content/1/Programa_Unidad_Curricular_Optimizacion.pdf"}]
+const OCA = new Materia("OCA", 10, materiaExonerada(IIO), "Optimización Continua y Aplicaciones", Semestre.SEGUNDO, true, false, BloqueCreditos.creditosEnIO, []);
+OCA.informacion = [{nombre: "Eva", valor: "https://eva.fing.edu.uy/course/view.php?id=1538"}, 
+                    {nombre: "Programa", valor: "https://www.fing.edu.uy/sites/default/files/2023-10/optimizacion%20continua%20y%20aplicaciones_1640.pdf"}]
+const FBD = new Materia("FBD", 15, todas(materiaExonerada(LG),materiaExonerada(P3),materiaExonerada(MD2)), "Fundamentos de Bases de Datos", Semestre.SEGUNDO, false, false, BloqueCreditos.creditosEnBD_SI, []);
+FBD.informacion = [{nombre: "Eva", valor: "https://eva.fing.edu.uy/course/view.php?id=330"}, 
+                    {nombre: "Programa", valor: "https://eva.fing.edu.uy/pluginfile.php/45571/course/section/5775/Programa-FBD.pdf?time=1627317936142"}]
+const BDNR = new Materia("BDNR", 10, materiaExonerada(FBD), "Bases de Datos No Relacionales", Semestre.PRIMERO, true, false, BloqueCreditos.creditosEnBD_SI, []);
+BDNR.informacion = [{nombre: "Eva", valor: "https://eva.fing.edu.uy/course/view.php?id=947"}, 
+                    {nombre: "Programa", valor: "https://www.fing.edu.uy/sites/default/files/propuesta-bdnr.pdf"}]
+const CDI = new Materia("CDI", 8, materiaExonerada(FBD), "Calidad de Datos e Información", Semestre.PRIMERO, true, false, BloqueCreditos.creditosEnBD_SI, []);
+CDI.informacion = [{nombre: "Eva", valor: "https://eva.fing.edu.uy/course/view.php?id=1073"}, 
+                    {nombre: "Programa", valor: "https://eva.fing.edu.uy/pluginfile.php/484275/mod_resource/content/1/Programa-CalidadDatosInf.pdf"}]
+const RC = new Materia("RC", 12, todas(materiaExonerada(P3),materiaAprobada(SO),materiaExonerada(CDIV),materiaAprobada(AC)), "Redes de Computadoras", Semestre.SEGUNDO, false, false, BloqueCreditos.creditosEnAC_SO_RC, []);
+RC.informacion = [{nombre: "Eva", valor: "https://eva.fing.edu.uy/course/view.php?id=335"}, 
+                    {nombre: "Programa", valor: "https://eva.fing.edu.uy/pluginfile.php/82991/mod_resource/content/2/Programa%20de%20Unidad%20Curricular%20Redes%20de%20Computadoras%20-%2020191022.pdf"}]
+const RO = new Materia("RO", 10, materiaExonerada(RC), "Redes Ópticas", Semestre.SEGUNDO, true, false, BloqueCreditos.creditosEnAC_SO_RC, []);
+RO.informacion = [{nombre: "Eva", valor: "https://eva.fing.edu.uy/course/view.php?id=1862"}, 
+                    {nombre: "Programa", valor: "https://www.fing.edu.uy/sites/default/files/2024-08/Redes_Opticas.pdf"}]
+const TSI = new Materia("TSI", 10, todas(materiaAprobada(RC),materiaExonerada(FBD),materiaExonerada(P3)), "Taller de Seguridad Informática", Semestre.SEGUNDO, true, false, BloqueCreditos.creditosEnTall_Pasa_Proy, []);
+TSI.informacion = [{nombre: "Eva", valor: "https://eva.fing.edu.uy/course/view.php?id=324"}, 
+                    {nombre: "Programa", valor: "https://eva.fing.edu.uy/pluginfile.php/45152/course/overviewfiles/Programa%20de%20Unidad%20Curricular.pdf"}]
+const ADAR = new Materia("ADAR", 8, todas(materiaExonerada(P3),materiaExonerada(RC)), "Análisis y Diseño de Al. Dis. en Redes", Semestre.SEGUNDO, true, false, BloqueCreditos.creditosEnAC_SO_RC, []);
+ADAR.informacion = [{nombre: "Eva", valor: "https://eva.fing.edu.uy/course/view.php?id=145"}, 
+                    {nombre: "Programa", valor: "https://eva.fing.edu.uy/pluginfile.php/14124/mod_resource/content/0/Programa_ADADR.pdf"}]
+const CAP = new Materia("CAP", 10, todas(materiaAprobada(P4),materiaAprobada(RC),materiaAprobada(SO),materiaAprobada(AC)), "Computación de alta performance", Semestre.PRIMERO, true, false, BloqueCreditos.creditosEnAC_SO_RC, []);
+CAP.informacion = [{nombre: "Eva", valor: "https://eva.fing.edu.uy/course/view.php?id=1064"}, 
+                    {nombre: "Programa", valor: "https://www.fing.edu.uy/sites/default/files/2023-04/Computaci%C3%B3n%20de%20alta%20performance.pdf"}]
+const TP = new Materia("TP", 15, alguna(todas(materiaExonerada(P3),materiaAprobada(P4)),materiaExonerada(P4)), "Taller de Programación", Semestre.SEGUNDO, false, false, BloqueCreditos.creditosEnTall_Pasa_Proy, []);
+TP.informacion = [{nombre: "Eva", valor: "https://eva.fing.edu.uy/course/view.php?id=315"}, 
+                    {nombre: "Programa", valor: "https://eva.fing.edu.uy/pluginfile.php/64508/mod_resource/content/5/programaTProg2017_APROBADO.pdf"}]
+const IPLN = new Materia("IPLN", 12, todas(materiaExonerada(P4),materiaAprobada(TP),materiaExonerada(LG),materiaExonerada(P3),materiaExonerada(TL),materiaExonerada(PYE)), "Int. al Procesamiento de Leng. Natural", Semestre.SEGUNDO, true, false, BloqueCreditos.creditosEnIAYR, []);
+IPLN.informacion = [{nombre: "Eva", valor: "https://eva.fing.edu.uy/course/view.php?id=211"}, 
+                    {nombre: "Programa", valor: "https://eva.fing.edu.uy/pluginfile.php/466566/mod_resource/content/0/Programa%20de%20Unidad%20Curricular%20IntroPLN%20Grado.pdf"}]
+const IIS = new Materia("IIS", 10, todas(materiaAprobada(TP),materiaAprobada(FBD),materiaAprobada(P4)), "Taller Introductorio de Ing. de Software", Semestre.PRIMERO, false, false, BloqueCreditos.creditosEnIS, []);
+IIS.informacion = [{nombre: "Eva", valor: "https://eva.fing.edu.uy/course/view.php?id=613"}, 
+                    {nombre: "Programa", valor: "https://eva.fing.edu.uy/pluginfile.php/72271/mod_page/content/7/Programa%20TIIS%20-%202025.pdf"}]
+const FWS = new Materia("FWS", 8, todas(materiaExonerada(IIS),materiaExonerada(FBD)), "Fundamentos de la web semántica", Semestre.PRIMERO, true, false, BloqueCreditos.creditosEnBD_SI, []);
+FWS.informacion = [{nombre: "Eva", valor: "https://eva.fing.edu.uy/course/view.php?id=536"}, 
+                    {nombre: "Programa", valor: "https://eva.fing.edu.uy/pluginfile.php/384659/mod_resource/content/1/Programa%20de%20Unidad%20Curricular-FWS.pdf"}]
+const PF = new Materia("PF", 10, todas(materiaExonerada(TL),materiaExonerada(P2),materiaExonerada(LG),materiaExonerada(MD1)), "Programación Funcional", Semestre.AMBOS, false, false, BloqueCreditos.creditosEnProg, []);
+PF.informacion = [{nombre: "Eva", valor: "https://eva.fing.edu.uy/course/view.php?id=138"}, 
+                    {nombre: "Programa", valor: "https://www.fing.edu.uy/sites/default/files/cursos/2020/anexos/39014/Programaci%C3%B3n%20Funcional.pdf"}]
+const PFA = new Materia("PFA", 12, materiaAprobada(PF), "Programación Funcional Avanzada", Semestre.SEGUNDO, true, false, BloqueCreditos.creditosEnProg, []);
+PFA.informacion = [{nombre: "Eva", valor: "https://eva.fing.edu.uy/course/view.php?id=965"}, 
+                    {nombre: "Programa", valor: "https://www.fing.edu.uy/sites/default/files/2025-10/programacion-funcional-avanzada_1350.pdf"}]
+const PL = new Materia("PL", 10, todas(materiaExonerada(TL),materiaExonerada(P3),materiaExonerada(MD2),materiaExonerada(LG)), "Programación Lógica", Semestre.PRIMERO, false, false, BloqueCreditos.creditosEnProg, []);
+PL.informacion = [{nombre: "Eva", valor: "https://eva.fing.edu.uy/course/view.php?id=293"}, 
+                    {nombre: "Programa", valor: "https://eva.fing.edu.uy/pluginfile.php/101293/mod_resource/content/2/PL_programaOficial2018.pdf"}]
+const PIS = new Materia("PIS", 15, todas(materiaAprobada(IIS),materiaExonerada(P4)), "Proyecto de Ingeniería de Software", Semestre.SEGUNDO, false, false, BloqueCreditos.creditosEnTall_Pasa_Proy, []);
+PIS.informacion = [{nombre: "Eva", valor: "https://eva.fing.edu.uy/course/view.php?id=573"}, 
+                    {nombre: "Programa", valor: "https://www.fing.edu.uy/sites/default/files/cursos/2020/anexos/39036/Proyecto%20de%20Ingenier%C3%ADa%20de%20Software.pdf"}]
+const AA = new Materia("AA", 12, todas(materiaExonerada(LG),materiaExonerada(PYE),materiaExonerada(P3),materiaExonerada(FBD),materiaExonerada(P4),materiaExonerada(MD2)), "Aprendizaje Automático", Semestre.SEGUNDO, true, false, BloqueCreditos.creditosEnIAYR, []);
+AA.informacion = [{nombre: "Eva", valor: "https://eva.fing.edu.uy/course/view.php?id=43"}, 
+                    {nombre: "Programa", valor: "https://eva.fing.edu.uy/pluginfile.php/1583/course/section/29051/AA%20-%20Programa%20de%20Unidad%20Curricular.pdf"}]
+const RNLN = new Materia("RNLN", 10, todas(materiaExonerada(P3),materiaAprobada(AA),materiaExonerada(PYE)), "Redes Neuronales para Leng. Natural", Semestre.SEGUNDO, true, false, BloqueCreditos.creditosEnIAYR, []);
+RNLN.informacion = [{nombre: "Eva", valor: "https://eva.fing.edu.uy/course/view.php?id=1758"}, 
+                    {nombre: "Programa", valor: "https://www.fing.edu.uy/sites/default/files/2023-05/REDES%20NEURONALES%20PARA%20LENGUAJE%20NATURAL.pdf"}]
+const AE = new Materia("AE", 10, todas(materiaExonerada(P4),materiaExonerada(PYE),materiaExonerada(IIO)), "Algoritmos Evolutivos", Semestre.SEGUNDO, true, false, BloqueCreditos.creditosEnIO, []);
+AE.informacion = [{nombre: "Eva", valor: "https://eva.fing.edu.uy/course/view.php?id=1049"}, 
+                    {nombre: "Programa", valor: "https://eva.fing.edu.uy/pluginfile.php/299871/mod_resource/content/2/Programa%20de%20Unidad%20Curricular%20Algoritmos%20Evolutivos.pdf"}]
+const ICG = new Materia("ICG", 10, todas(materiaExonerada(P3),materiaExonerada(P4),materiaAprobada(GAL2),materiaExonerada(GAL1)), "Int. a la Computación Gráfica", Semestre.PRIMERO, true, false, BloqueCreditos.creditosEnProg, []);
+ICG.informacion = [{nombre: "Eva", valor: "https://eva.fing.edu.uy/course/view.php?id=205"}, 
+                    {nombre: "Programa", valor: "https://www.fing.edu.uy/inco/cursos/compgraf/Programa/Programa.Int.a.la.Comp.Grafica-1316.pdf"}]
+const CGA = new Materia("CGA", 12, materiaAprobada(ICG), "Computación Gráfica Avanzada", Semestre.SEGUNDO, true, false, BloqueCreditos.creditosEnProg, []);
+CGA.informacion = [{nombre: "Eva", valor: "https://eva.fing.edu.uy/course/view.php?id=1067"}, 
+                    {nombre: "Programa", valor: "https://eva.fing.edu.uy/pluginfile.php/175013/mod_resource/content/3/Programa%20de%20Computaci%C3%B3n%20Gr%C3%A1fica%20Avanzada.pdf"}]
+const FSI = new Materia("FSI", 12, todas(materiaExonerada(SO),materiaExonerada(FBD),materiaExonerada(P3),materiaExonerada(LG),materiaExonerada(RC)), "Fundamentos de la Seguridad Informática", Semestre.PRIMERO, true, false, BloqueCreditos.creditosEnAC_SO_RC, []);
+FSI.informacion = [{nombre: "Eva", valor: "https://eva.fing.edu.uy/course/view.php?id=399"}, 
+                    {nombre: "Programa", valor: "https://eva.fing.edu.uy/pluginfile.php/191862/mod_resource/content/1/Programa%20de%20Unidad%20Curricular%20-%20FSI.pdf"}]
+const MI = new Materia("MI", 4, materiaExonerada("AUX"), "Matemática Inicial", Semestre.AMBOS, false, false, BloqueCreditos.creditosEnM, []);
+MI.informacion = [{nombre: "Eva primer semestre", valor: "https://eva.fing.edu.uy/course/view.php?id=1822"}, 
+                    {nombre: "Eva segundo semestre", valor: "https://eva.fing.edu.uy/course/view.php?id=1535"}, 
+                    {nombre: "Programa", valor: "https://eva.fing.edu.uy/pluginfile.php/499136/mod_resource/content/1/Programa_UC_Matematica_Inicial_modificado.pdf"}]
+const CTS = new Materia("CTS", 8, null, "Ciencia, Tecnología y Sociedad", Semestre.PRIMERO, true, false, BloqueCreditos.creditosEnCHS, []);
+CTS.informacion = [{nombre: "Eva", valor: "https://eva.fing.edu.uy/course/view.php?id=1243"}, 
+                    {nombre: "Programa", valor: "https://eva.fing.edu.uy/pluginfile.php/549276/mod_resource/content/2/Programa%20Unidad%20Curricular%20Ciencia%20Tecnolog%C3%ADa%20y%20Sociedad%20%28Cod.%201223%29.pdf"}]
+const TRE = new Materia("TRE", 6, creditosMinimos(BloqueCreditos.creditosEnProg,10), "Taller de Robótica Educativa", Semestre.PRIMERO, true, false, BloqueCreditos.creditosEnTall_Pasa_Proy, []);
+TRE.informacion = [{nombre: "Eva", valor: "https://eva.fing.edu.uy/course/view.php?id=1187"}, 
+                    {nombre: "Programa", valor: "https://eva.fing.edu.uy/pluginfile.php/205353/mod_resource/content/4/Programataller-robedu-butia_v20180817.pdf"}]
+const F2 = new Materia("F2", 10, todas(materiaAprobada(F1),materiaAprobada(CDIV)), "Física 2", Semestre.AMBOS, true, true, BloqueCreditos.creditosEnCE, []);
+F2.informacion = [{nombre: "Eva primer semestre", valor: "https://eva.fing.edu.uy/course/view.php?id=32"}, 
+                    {nombre: "Eva segundo semestre", valor: "https://eva.fing.edu.uy/course/view.php?id=1546"}, 
+                    {nombre: "Programa", valor: "https://www.fing.edu.uy/sites/default/files/cursos/2011/anexos/2553/357_0.pdf"}]
+const AGI = new Materia("AGI", 5, creditosMinimos(BloqueCreditos.Total,140), "Administración General para Ingenieros", Semestre.PRIMERO, true, true, BloqueCreditos.creditosEnGO, []);
+AGI.informacion = [{nombre: "Eva", valor: "https://eva.fing.edu.uy/course/view.php?id=778"}, 
+                    {nombre: "Programa", valor: "https://eva.fing.edu.uy/pluginfile.php/87876/mod_folder/content/0/Programa%202024.pdf"}]
+const CC = new Materia("CC", 8, todas(materiaAprobada(PYE),creditosMinimos(BloqueCreditos.Total,80)), "Control de Calidad", Semestre.PRIMERO, true, true, BloqueCreditos.creditosEnGO, []);
+CC.informacion = [{nombre: "Eva", valor: "https://eva.fing.edu.uy/course/view.php?id=49"}, 
+                    {nombre: "Programa", valor: "https://eva.fing.edu.uy/pluginfile.php/299876/mod_resource/content/2/Programa%20Control%20de%20Calidad%20-%20nuevo%20formato.pdf"}]
+const PAI = new Materia("PAI", 5, materiaAprobada(AGI), "Práctica de Administración para Ingenieros", Semestre.SEGUNDO, true, true, BloqueCreditos.creditosEnGO, []);
+PAI.informacion = [{nombre: "Eva", valor: "https://eva.fing.edu.uy/course/view.php?id=779"}, 
+                    {nombre: "Programa", valor: "https://eva.fing.edu.uy/pluginfile.php/206010/mod_resource/content/4/Programa_Practica_de_Administracion_para_Ingenieros_2019_v2.pdf"}]
+const PCIC = new Materia("PCIC", 3, null, "Políticas Científicas en Inf. y Comp.", Semestre.SEGUNDO, true, false, BloqueCreditos.creditosEnCHS, []);
+PCIC.informacion = [{nombre: "Eva", valor: "https://eva.fing.edu.uy/course/view.php?id=1311"}, 
+                    {nombre: "Programa", valor: "https://www.fing.edu.uy/sites/default/files/cursos/2011/anexos/3559/Pol%C3%ADticas%20Cient%C3%ADficas%20en%20Inform%C3%A1tica%20y%20Computaci%C3%B3n.pdf"}]
+const ASS = new Materia("ASS", 10, todas(creditosMinimos(BloqueCreditos.creditosEnGO,10),materiaAprobada(RC),materiaAprobada(SO),materiaAprobada(FBD),materiaAprobada(IIS),materiaExonerada(AC)), "Administración y Seguridad de Sistemas", Semestre.PRIMERO, true, false, BloqueCreditos.creditosEnBD_SI, []);
+ASS.informacion = [{nombre: "Eva", valor: "https://eva.fing.edu.uy/course/view.php?id=785"}, 
+                    {nombre: "Programa", valor: "https://www.fing.edu.uy/sites/default/files/Programa%20de%20Unidad%20Curricular%20ASS.pdf"}]
+const Pasan = new Materia("Pasan", 10, creditosMinimos(BloqueCreditos.Total,200), "Pasantía", Semestre.AMBOS, true, false, BloqueCreditos.creditosEnTall_Pasa_Proy, []);
+Pasan.informacion = [{nombre: "Eva", valor: "https://eva.fing.edu.uy/course/view.php?id=702"}, 
+                    {nombre: "Programa", valor: "https://eva.fing.edu.uy/pluginfile.php/80376/mod_resource/content/2/Pasantia_programa.pdf"}]
+const PG = new Materia("PG", 30, alguna(
+                                        creditosMinimos(BloqueCreditos.Total,380),
+                                        todas(creditosMinimos(BloqueCreditos.Total,365),materiaAprobada(TP),materiaAprobada(PIS),materiaAprobada(TL),materiaAprobada(MN),materiaAprobada(P4),materiaAprobada(IIS),materiaAprobada(P3),materiaAprobada(FBD),materiaAprobada(SO),materiaAprobada(IIO),materiaAprobada(AC)),
+                                        todas(creditosMinimos(BloqueCreditos.Total,330),creditosMinimos(BloqueCreditos.creditosEnMN,8),creditosMinimos(BloqueCreditos.creditosEnTall_Pasa_Proy,15),creditosMinimos(BloqueCreditos.creditosEnProg,60),creditosMinimos(BloqueCreditos.creditosEnBD_SI,10),creditosMinimos(BloqueCreditos.creditosEnIO,10),creditosMinimos(BloqueCreditos.creditosEnIS,10),creditosMinimos(BloqueCreditos.creditosEnM,70),creditosMinimos(BloqueCreditos.creditosEnGO,10),creditosMinimos(BloqueCreditos.creditosEnAC_SO_RC,30),creditosMinimos(BloqueCreditos.creditosEnCHS,10)))
+                      , "Proyecto de Grado", Semestre.AMBOS, false, false, BloqueCreditos.creditosEnTall_Pasa_Proy, []);
+PG.informacion = [{nombre: "Eva", valor: "https://eva.fing.edu.uy/course/view.php?id=627"}, 
+                    {nombre: "Programa", valor: "https://eva.fing.edu.uy/pluginfile.php/310888/mod_resource/content/1/Programa%20de%20Unidad%20Curricular%20Proyecto%20de%20Grado.pdf"}]
+
+
+
+const Materias = [
   MI,
+  CC,
   MD1,
   CDIV,
   P1,
@@ -111,14 +430,14 @@ let Materias = [
   PCIC,
   CDIVV,
   P2,
+  DAED,
   GAL2,
   MD2,
   LG,
-  //TRE,
+  TRE,
   F2,
   AC,
   PYE,
-  CC,
   PCI,
   MN,
   P4,
@@ -131,6 +450,7 @@ let Materias = [
   MMC,
   FDPE,
   P3,
+  FRA,
   SO,
   Pasan,
   ITI,
@@ -143,6 +463,7 @@ let Materias = [
   CDI,
   RC,
   RO,
+  OBI,
   FO,
   OCA,
   AE,
@@ -171,33 +492,9 @@ let Materias = [
   PAI
 ];
 
-let MateriasPersona = new Set();
-let materias = 0;
-let opcionales = true;
-let seleccion = false;
-let semestreAct = "ambos";
+const botonMI = document.getElementById(MI.nombre);
 
-//Cumplir areas
-
-let creditosBloque = {
-  creditosEnM: 0, // 70              | MI + MD1 + CDIV + GAL1 + CDIVV + GAL2 + MD2 + PYE + LOG = 88
-  creditosEnCE: 0, // 10             | F1 = 10
-  creditosEnProg: 0, // 60           | P1 + P2 + P3 + P4 + TL = 64
-  creditosEnAC_SO_RC: 0, // 30       | AC + SO + RC = 36
-  creditosEnBD_SI: 0, // 10          | FBD = 15
-  creditosEnMN: 0, // 8              | MN = 8
-  creditosEnIO: 0, // 10             | IIO = 10
-  creditosEnIS: 0, // 10             | IIS = 10
-  creditosEnTall_Pasa_Proy: 0, // 45 | PG + PIS + TP = 60
-  creditosEnGO: 0, // 10             | AGI + PAI = 10
-  creditosEnIAYR: 0, // 0            |
-  creditosEnCHS: 0, // 10            | EC + PCIC = 10
-  Total: 0,
-};
-
-// Total = 331 - faltan 139
-
-// Funciones auxiliares
+// FUNCIONES QUE HACEN UNA COSA
 
 function displayBlock(elemento){
   document.getElementById(elemento).style.display = "block";
@@ -211,731 +508,567 @@ function displayFlex(elemento){
   document.getElementById(elemento).style.display = "flex";
 }
 
-function cambiarColores(color1, color2, color3, color4){
-  document.getElementById("primero").style.backgroundColor = color1;
-  document.getElementById("segundo").style.backgroundColor = color2;
-  document.getElementById("ambos").style.backgroundColor = color3;
-  document.getElementById("libre").style.backgroundColor = color4;
+function cargarEnPopup(elemento) {
+  document.getElementById(idTextInPopup).innerHTML = "";
+  document.getElementById(idTextInPopup).append(elemento);
 }
 
-// Funciones de Popup
+function openPopup() {
+  desactivarBarraPopup()
+  closeNavIfMobile();
+  displayFlex(idPopUp);
+  document.getElementById(idButtonCloseInPopup).focus();
+}
 
-function openPopup(texto) {
-  if (!window.matchMedia("(min-width: 675px)").matches) {
-    if (document.getElementById("checkbox").checked) {
-      document.getElementById("checkbox").click();
-    }
-  }
-  document.getElementById("popup-text").innerHTML = texto;
-  displayFlex("boxPopup");
-  document.getElementById('cerrar-popup').focus();
-  document.body.style.overflow = 'hidden';
+function openPopupConBarra() {
+  closeNavIfMobile();
+  displayFlex(idPopUp);
+  document.getElementById(idButtonCloseInPopup).focus();
 }
 
 function closePopup() {
-  displayNone("boxPopup");
-  document.body.style.overflow = 'auto';
+  desactivarBarraPopup();
+  displayNone(idPopUp);
+}
+
+function activarBarraPopup(nombreMateria, valor) {
+  displayFlex("popup-barra-superior");
+  document.getElementById(valorBarra).classList.remove("activo");
+  valorBarra = valor;
+  document.getElementById(valor).classList.add("activo");
+  document.getElementById(BarraPopup.Previas).onclick = () => { popUpGeneral(nombreMateria,"previas") };
+  document.getElementById(BarraPopup.PreviaDe).onclick = () => { popUpGeneral(nombreMateria,"previaDe") };
+  document.getElementById(BarraPopup.Informacion).onclick =() => { popUpGeneral(nombreMateria,"informacion") };
+}
+
+function desactivarBarraPopup(){
+  displayNone("popup-barra-superior");
+}
+
+function popUpGeneral(nombreMateria, valor) {
+  const containerPrincipal = document.createElement("div");
+  activarBarraPopup(nombreMateria, valor);
+  const contenidoInferior = document.createElement("div");
+  switch (valor) {
+    case BarraPopup.Previas:
+      contenidoInferior.append(indicarPrevias(nombreMateria));
+      break;
+    case BarraPopup.PreviaDe:
+      contenidoInferior.append(mostrarDeQueEsPrevia(nombreMateria));
+      break;
+    case BarraPopup.Informacion:
+      contenidoInferior.append(indicarInformacion(nombreMateria));
+      break;
+  }
+  containerPrincipal.append(contenidoInferior);
+  cargarEnPopup(containerPrincipal);
+  openPopupConBarra();
+}
+
+function isMobileDevice(){
+  return !window.matchMedia("(min-width: 675px)").matches;
+}
+
+function isNavbarOpen() {
+  return document.getElementById(idCheckbox).checked;
+}
+
+function closeNavIfMobile(){
+  if (isMobileDevice()&&isNavbarOpen()) {
+    document.getElementById(idCheckbox).click();
+  }
 }
 
 window.onclick = function (event) {
-  var modal = document.getElementById("boxPopup");
+  var modal = document.getElementById(idPopUp);
   if (event.target == modal) {
     closePopup();
   }
 };
 
-// Funcion de MI
-
-function toggleMI() {
-  if (document.getElementById("MI").disabled == true) {
-    document.getElementById("MI").disabled = false;
-    MI.previas = [];
-    CDIV.previas = [MI];
-  } else {
-    document.getElementById("MI").disabled = true;
-    MI.previas = [Aux];
-    CDIV.previas = [];
-  }
-  actualizar();
-  localStorage.setItem("MI", document.getElementById("MI").disabled);
+function habilitarMI() {
+  botonMI.disabled = false;
+  MI.reglaHabilitacion = null;
+  CDIV.reglaHabilitacion = materiaExonerada(MI);
 }
 
-// Funciones de toggle
+function deshabilitarMI() {
+  botonMI.disabled = true;
+  MI.reglaHabilitacion = materiaExonerada(Bloqueante);
+  CDIV.reglaHabilitacion = null;
+}
+
+function cambiarValoresMI() {
+  botonMI.disabled ? habilitarMI() : deshabilitarMI();
+  localStorage.setItem(MI.nombre, botonMI.disabled);
+}
+
+function toggleMI() {
+  cambiarValoresMI();
+  reconstruirEstadoPagina();
+}
 
 function toggleOpcionales() {
-  if (opcionales) {
-    opcionales = false;
-    actualizar();
-  } else {
-    opcionales = true;
-    actualizar();
-  }
+  seleccionOpcionales = !seleccionOpcionales;
+  document.getElementById(idButtonOpcionales).innerHTML = seleccionOpcionales ? "Opcionales: Si" : "Opcionales: No";
+  mostrarBotonesDeMateriasQueCorresponda();
+}
+
+function encontrarMateriaPorNombre(nombre) {
+  return Materias.find((materia) => materia.nombre == nombre);
 }
 
 function toggleMateria(nombre) {
-  let materiaActual = Materias.find((nombreAux) => nombreAux.nombre == nombre);
+  let materiaActual = encontrarMateriaPorNombre(nombre);
   switch (materiaActual.estado) {
-    case 0:
-      indicarPrevias(nombre);
+    case Estado.DESHABILITADA:
+      popUpGeneral(nombre, "previas");
       break;
-    case 1:
-      MateriasPersona.add(materiaActual.curso);
+    case Estado.HABILITADA:
+      historialAprobadas.add(materiaActual.nombre);
       break;
-    case 2:
-      MateriasPersona.add(materiaActual.nombre);
+    case Estado.APROBADA:
+      historialExoneradas.add(materiaActual.nombre);
       break;
-    case 3:
-      MateriasPersona.delete(materiaActual.curso);
-      MateriasPersona.delete(materiaActual.nombre);
+    case Estado.EXONERADA:
+      historialAprobadas.delete(materiaActual.nombre);
+      historialExoneradas.delete(materiaActual.nombre);
       break;
     default:
       break;
   }
-  actualizar();
+  reconstruirEstadoPagina();
 }
 
-function toggleBotones(valor) {
-  semestreAct = valor;
-  let colorSec = "lightgrey";
-  let colorPrin = "lightskyblue";
+function cambiarClaseActivaEnNav(idBoton) {
+  document.getElementById(seleccionSemestre).classList.remove(claseResaltarBotonEnNav);
+  seleccionSemestre = idBoton;
+  document.getElementById(seleccionSemestre).classList.add(claseResaltarBotonEnNav);
+}
 
-  switch (valor) {
-    case "primero":
-      cambiarColores(colorPrin, colorSec, colorSec, colorSec);
-      displayBlock("activarMI");
-      break;
-    case "segundo":
-      cambiarColores(colorSec, colorPrin, colorSec, colorSec);
-      displayBlock("activarMI");
-      break;
-    case "ambos":
-      cambiarColores(colorSec, colorSec, colorPrin, colorSec);
-      displayBlock("activarMI");
-      break;
-    case "libre":
-      cambiarColores(colorSec, colorSec, colorSec, colorPrin);
-      displayNone("activarMI");
-      break;
-    default:
-      break;
-  }
-  actualizar();
-  localStorage.setItem("semestre", semestreAct);
+function evaluarSiMostrarBotonToggleDeMI(){
+  seleccionSemestre==Semestre.LIBRE ? displayNone(idToggleMI) : displayBlock(idToggleMI);
+}
+
+function toggleBotones(idBoton) {
+  cambiarClaseActivaEnNav(idBoton);
+  evaluarSiMostrarBotonToggleDeMI();
+  mostrarBotonesDeMateriasQueCorresponda();
+  localStorage.setItem(LocalStorageNombres.semestre, seleccionSemestre);
+}
+
+function isMateriaValid(materia) {
+  let semestreLibre = (seleccionSemestre==Semestre.LIBRE && materia.esLibre);
+  let semestreAmbos = (seleccionSemestre==Semestre.AMBOS);
+  let semestrePrimero = (seleccionSemestre==Semestre.PRIMERO && (materia.semestre==Semestre.PRIMERO || materia.semestre==Semestre.AMBOS))
+  let semestreSegundo = (seleccionSemestre==Semestre.SEGUNDO && (materia.semestre==Semestre.SEGUNDO || materia.semestre==Semestre.AMBOS))
+  let opcionales = (seleccionOpcionales || !materia.esOpcional);
+  return (semestreLibre || semestreAmbos || semestrePrimero || semestreSegundo) && opcionales;
+}
+
+function evaluarMostrarMateria(materia) {
+  isMateriaValid(materia) ? displayBlock(materia.nombre) : displayNone(materia.nombre);
+}
+
+function mostrarBotonesDeMateriasQueCorresponda() {
+  Materias.forEach( (materia) => { evaluarMostrarMateria(materia) });
 }
 
 function toggleMenu() {
-  if (document.getElementById("checkbox").checked) {
-    displayFlex("navbar");
-    seleccion = !seleccion;
-  } else {
-    displayNone("navbar")
-    seleccion = !seleccion;
-  }
+  isNavbarOpen() ? displayFlex(idNavbar) : displayNone(idNavbar);
+  document.getElementById("menu-icon").classList.toggle("abierto");
+  
+  seleccionMenu = !seleccionMenu;
 }
 
-// Actualiza el estado de la pagina
+function resetCreditos() {
+  creditosBloque.creditosEnM = 0;
+  creditosBloque.creditosEnCE = 0;
+  creditosBloque.creditosEnProg = 0;
+  creditosBloque.creditosEnAC_SO_RC = 0;
+  creditosBloque.creditosEnBD_SI = 0;
+  creditosBloque.creditosEnMN = 0;
+  creditosBloque.creditosEnIO = 0;
+  creditosBloque.creditosEnIS = 0;
+  creditosBloque.creditosEnTall_Pasa_Proy = 0;
+  creditosBloque.creditosEnGO = 0;
+  creditosBloque.creditosEnIAYR = 0;
+  creditosBloque.creditosEnCHS = 0;
+  creditosBloque.Total = 0;
+}
 
-function actualizar() {
-  creditosBloque = {
-    creditosEnM: 0, // 70              | MI + MD1 + CDIV + GAL1 + CDIVV + GAL2 + MD2 + PYE + LOG = 88
-    creditosEnCE: 0, // 10             | F1 = 10
-    creditosEnProg: 0, // 60           | P1 + P2 + P3 + P4 + TL = 64
-    creditosEnAC_SO_RC: 0, // 30       | AC + SO + RC = 36
-    creditosEnBD_SI: 0, // 10          | FBD = 15
-    creditosEnMN: 0, // 8              | MN = 8
-    creditosEnIO: 0, // 10             | IIO = 10
-    creditosEnIS: 0, // 10             | IIS = 10
-    creditosEnTall_Pasa_Proy: 0, // 45 | PG + PIS + TP = 60
-    creditosEnGO: 0, // 10             | AGI + PAI = 10
-    creditosEnIAYR: 0,
-    creditosEnCHS: 0, // 10            | EC + PCIC = 10
-    Total: 0,
-  };
-  materias = 0;
+function establecerEstadoBotonMateria(materia){
+  const boton = document.getElementById(materia.nombre);
+  const { cumple } = evaluarRegla(materia.reglaHabilitacion);
+  if (!cumple) {
+    materia.estado = Estado.DESHABILITADA;
+    boton.style.background = colorDeshabilitada;
+    return;
+  }
+  if (historialExoneradas.has(materia.nombre)) {
+    materia.estado = Estado.EXONERADA;
+    boton.style.background = colorExonerada;
+    return;
+  }
+  if (historialAprobadas.has(materia.nombre)) {
+    materia.estado = Estado.APROBADA;
+    boton.style.background = colorAprobada;
+    return;
+  }
+  materia.estado = Estado.HABILITADA;
+  boton.style.background = colorHabilitada;
+}
 
-  Materias.forEach((materia) => {
-    if (opcionales == true) {
-      mostrarBotonMateria(materia);
-    } else {
-      if (materia.opcional == "no") {
-        mostrarBotonMateria(materia);
-      } else {
-        displayNone(materia.nombre);
-      }
+function actualizarCreditosTitulo() {
+  document.getElementById(idTitulo).textContent = `Materias | Créditos: ${creditosBloque.Total}`;
+}
+
+function hastaQueNoHayaCambio(){
+  let materiasAprobadas = {};
+  let materiasExoneradas = {};
+  let huboCambioEnHistoriales = true;
+  while (huboCambioEnHistoriales) {
+    resetCreditos();
+    huboCambioEnHistoriales = false;
+    for (const materia of Materias) {
+      materiasAprobadas[materia.nombre] = false;
+      materiasExoneradas[materia.nombre] = false;
     }
-
-    let estanTodas = true;
-
-    materia.previas.forEach((previa) => {
-      estanTodas =
-        (MateriasPersona.has(previa.nombre) ||
-          MateriasPersona.has(previa)) &&
-        estanTodas;
-    });
-
-    if (!(materia == AGI || materia == CC || materia == Pasan || materia == PAI || materia == PG)) {
-      if (materia == ASS && estanTodas) {
-        if (!((MateriasPersona.has("AGI")&&MateriasPersona.has("CC"))||(MateriasPersona.has("AGI")&&MateriasPersona.has("PAI")))) {
-          estanTodas = false;
+    let seMarcoNuevaMateria = true;
+    while (seMarcoNuevaMateria) {
+      seMarcoNuevaMateria = false;
+      Materias.forEach((materia) => {
+        const { cumple } = evaluarRegla(materia.reglaHabilitacion);
+        if ( !materiasAprobadas[materia.nombre] && cumple && historialAprobadas.has(materia.nombre) ) {
+          materiasAprobadas[materia.nombre] = true;
+          seMarcoNuevaMateria = true;
         }
-      }
-
-      if (materia == TP && !estanTodas) {
-        if (MateriasPersona.has("P4")) {
-          estanTodas = true;
-        }
-      }
-
-      if (materia == PMPPG && !estanTodas){
-        if ( ((MateriasPersona.has("AC")) || (MateriasPersona.has("SO")))&&(MateriasPersona.has("P2")) ) {
-          estanTodas = true;
-        }
-      }
-
-      if (estanTodas) {
-        if ( !MateriasPersona.has(materia.nombre) || !MateriasPersona.has(materia.curso)) {
-          document.getElementById(materia.nombre).disabled = false;
-          document.getElementById(materia.nombre).style.background = "lightcoral";
-          materia.estado = 1;
-        }
-        if (MateriasPersona.has(materia.curso)) {
-          document.getElementById(materia.nombre).style.background = "lightblue";
-          materia.estado = 2;
-        }
-        if (MateriasPersona.has(materia.nombre)) {
-          document.getElementById(materia.nombre).style.background = "lightgreen";
+        if ( !materiasExoneradas[materia.nombre] && cumple && historialExoneradas.has(materia.nombre) ) {
           sumarCreditos(materia);
-          materias += 1;
-          materia.estado = 3;
+          materiasExoneradas[materia.nombre] = true;
+          seMarcoNuevaMateria = true;
         }
-      } else {
-        if (MateriasPersona.has(materia.nombre)) {
-          MateriasPersona.delete(materia.nombre);
-        }
-        if (MateriasPersona.has(materia.curso)) {
-          MateriasPersona.delete(materia.curso);
-        }
-        materia.estado = 0;
-        document.getElementById(materia.nombre).style.background = "gray";
-      }
+      });
     }
-    
-  });
-
-  let materiasConCreditos = [CC, AGI, PAI, Pasan, PG]
-
-  materiasConCreditos.forEach((materia) => {
-    if (opcionales == true) {
-      mostrarBotonMateria(materia);
-    } else {
-      if (materia.opcional == "no") {
-        mostrarBotonMateria(materia);
-      } else {
-        displayNone(materia.nombre);
-      }
-    }
-
-    let estanTodas = true;
-
-    materia.previas.forEach((previa) => {
-      estanTodas =
-        (MateriasPersona.has(previa.nombre) ||
-          MateriasPersona.has(previa)) &&
-        estanTodas;
-    });
-
-    if (materia == AGI && creditosBloque.Total >= 140) {
-      estanTodas = true;
-    }
-
-    if (materia == CC) {
-      estanTodas = creditosBloque.Total >= 80 && MateriasPersona.has("PYECurso")? true: false;
-    }
-
-    if (materia == Pasan && creditosBloque.Total >= 200) {
-      estanTodas = true;
-    }
-
-    if (materia == ASS && estanTodas) {
-      if (!((MateriasPersona.has("AGI")&&MateriasPersona.has("CC"))||(MateriasPersona.has("AGI")&&MateriasPersona.has("PAI")))) {
-        estanTodas = false;
-      }
-    }
-
-    if (materia == TP && !estanTodas) {
-      if (MateriasPersona.has("P4")) {
-        estanTodas = true;
-      }
-    }
-
-    if (materia == PMPPG && !estanTodas){
-      if ( ((MateriasPersona.has("AC")) || (MateriasPersona.has("SO")))&&(MateriasPersona.has("P2")) ) {
-        estanTodas = true;
-      }
-    }
-
-    if (materia == PG) {
-      if (!estanTodas && creditosBloque.Total >= 380) {
-        estanTodas = true;
-      }
-
-      if (!estanTodas && creditosBloque.Total >= 365) {
-        const verificarSiEstan = ["P3Curso", "SOCurso", "IISCurso", "FBDCurso", "P4Curso", "TPCurso", "TLCurso", "PISCurso", "MNCurso"]
-        estanTodas = verificarSiEstan.every(element => MateriasPersona.has(element));
-      }
-
-      if (!estanTodas && creditosBloque.Total >= 330) {
-        if (
-          creditosBloque.creditosEnMN >= 8 &&
-          creditosBloque.creditosEnProg >= 60 &&
-          creditosBloque.creditosEnTall_Pasa_Proy >= 15 &&
-          creditosBloque.creditosEnM >= 70 &&
-          creditosBloque.creditosEnIS >= 10 &&
-          creditosBloque.creditosEnIO >= 10 &&
-          creditosBloque.creditosEnBD_SI >= 10 &&
-          creditosBloque.creditosEnGO >= 10 &&
-          creditosBloque.creditosEnAC_SO_RC >= 30 &&
-          creditosBloque.creditosEnCHS >= 10
-        ) {
-          estanTodas = true;
+    for (const materia of Materias) {
+      if (!materiasAprobadas[materia.nombre]){
+        if (historialAprobadas.delete(materia.nombre) || historialExoneradas.delete(materia.nombre)) huboCambioEnHistoriales=true;
+      }else{
+        if (!materiasExoneradas[materia.nombre]){
+          if (historialExoneradas.delete(materia.nombre)) huboCambioEnHistoriales=true;
         }
       }
     }
-
-    if (estanTodas) {
-      if ( !MateriasPersona.has(materia.nombre) || !MateriasPersona.has(materia.curso)) {
-        document.getElementById(materia.nombre).disabled = false;
-        document.getElementById(materia.nombre).style.background = "lightcoral";
-        materia.estado = 1;
-      }
-      if (MateriasPersona.has(materia.curso)) {
-        document.getElementById(materia.nombre).style.background = "lightblue";
-        materia.estado = 2;
-      }
-      if (MateriasPersona.has(materia.nombre)) {
-        document.getElementById(materia.nombre).style.background = "lightgreen";
-        sumarCreditos(materia);
-        materias += 1;
-        materia.estado = 3;
-      }
-    } else {
-      if (MateriasPersona.has(materia.nombre)) {
-        MateriasPersona.delete(materia.nombre);
-      }
-      if (MateriasPersona.has(materia.curso)) {
-        MateriasPersona.delete(materia.curso);
-      }
-      materia.estado = 0;
-      document.getElementById(materia.nombre).style.background = "gray";
-    }
-  });
-
-  document.getElementById(
-    "titulo"
-  ).textContent = `Materias | Créditos: ${creditosBloque.Total}`;
-
-  if (opcionales) {
-    document.getElementById("op").innerHTML = "Opcionales: Si";
-  } else {
-    document.getElementById("op").innerHTML = "Opcionales: No";
   }
-  localStorage.setItem("materias", JSON.stringify(Array.from(MateriasPersona.values())));
 }
 
-// Funciones generales
+function reconstruirEstadoPagina() {
+  hastaQueNoHayaCambio()
+  Materias.forEach((materia) => { establecerEstadoBotonMateria(materia); });
+  actualizarCreditosTitulo();
+  localStorage.setItem(LocalStorageNombres.materiasExoneradas, JSON.stringify(Array.from(historialExoneradas.values())));
+  localStorage.setItem(LocalStorageNombres.materiasAprobadas, JSON.stringify(Array.from(historialAprobadas.values())));
+}
 
 function reset() {
-  MateriasPersona.clear();
-  actualizar();
+  historialAprobadas.clear();
+  historialExoneradas.clear();
+  reconstruirEstadoPagina();
 }
 
 function sumarCreditos(materia) {
-  creditosBloque.Total += materia.creditos;
-  switch (materia.area) {
-    case "creditosEnM":
-      creditosBloque.creditosEnM += materia.creditos;
-      break;
-    case "creditosEnCE":
-      creditosBloque.creditosEnCE += materia.creditos;
-      break;
-    case "creditosEnProg":
-      creditosBloque.creditosEnProg += materia.creditos;
-      break;
-    case "creditosEnAC_SO_RC":
-      creditosBloque.creditosEnAC_SO_RC += materia.creditos;
-      break;
-    case "creditosEnBD_SI":
-      creditosBloque.creditosEnBD_SI += materia.creditos;
-      break;
-    case "creditosEnMN":
-      creditosBloque.creditosEnMN += materia.creditos;
-      break;
-    case "creditosEnIO":
-      creditosBloque.creditosEnIO += materia.creditos;
-      break;
-    case "creditosEnIS":
-      creditosBloque.creditosEnIS += materia.creditos;
-      break;
-    case "creditosEnTall_Pasa_Proy":
-      creditosBloque.creditosEnTall_Pasa_Proy += materia.creditos;
-      break;
-    case "creditosEnGO":
-      creditosBloque.creditosEnGO += materia.creditos;
-      break;
-    case "creditosEnCHS":
-      creditosBloque.creditosEnCHS += materia.creditos;
-      break;
-    case "creditosEnIAYR":
-      creditosBloque.creditosEnIAYR += materia.creditos;
-      break;
-    default:
-      break;
+  if (historialExoneradas.has(materia.nombre)) {
+    creditosBloque.Total += materia.creditos;
+    creditosBloque[BloqueCreditos[materia.area]] += materia.creditos;
   }
+}
+
+function calcularHTMLIndicarPrevias(regla) {
+  if (!regla) return;
+  let elementoSalida = document.createElement("div");
+  elementoSalida.classList.add("rectangulo");
+  if (regla.tipo === "predicado") {
+    if (evaluarRegla(regla).cumple){
+      elementoSalida.classList.add("tachado");
+    }
+    elementoSalida.textContent = regla.mensajeFalta;
+  }
+  if (regla.tipo === "todas") {
+    let tituloSalida = document.createElement("div");
+    tituloSalida.innerText = "Debe cumplir todo lo siguiente";
+    tituloSalida.classList.add("tituloPopup");
+    elementoSalida.append(tituloSalida);
+    regla.reglas.forEach( (reglaActual) => { 
+      elementoSalida.append(calcularHTMLIndicarPrevias(reglaActual)); 
+    } );
+  }
+  if (regla.tipo === "alguna") {
+    let tituloSalida = document.createElement("div");
+    tituloSalida.innerText = "Debe cumplir alguna de las siguientes opciones";
+    tituloSalida.classList.add("tituloPopup");
+    elementoSalida.append(tituloSalida)
+    let opcionNumero = 1;
+    regla.reglas.forEach( (reglaActual) => { 
+      let tituloOpcion = document.createElement("div");
+      tituloOpcion.innerText = `Opción ${opcionNumero}`;
+      opcionNumero++;
+      tituloOpcion.classList.add("subrayado");
+      elementoSalida.append(tituloOpcion);
+      elementoSalida.append(calcularHTMLIndicarPrevias(reglaActual)); 
+    } );
+  }
+  return elementoSalida;
+}
+
+function indicarInformacion(nombreMateria) {
+  let htmlFinal = document.createElement("div");
+  const materiaAct = encontrarMateriaPorNombre(nombreMateria);
+  htmlFinal.append(crearLineaAreaSubrayadaConMargenAbajo(`Información de ${materiaAct.nombreCompleto}`));
+  materiaAct.informacion.forEach( ({ nombre, valor }) => {
+    const a = document.createElement("a");
+    a.href = valor;
+    a.target = "_blank";
+    a.rel = "noopener noreferrer";
+    a.textContent = nombre;
+    const line = document.createElement("div");
+    line.append(a);
+    htmlFinal.append(line);
+  } )
+  return htmlFinal;
 }
 
 function indicarPrevias(nombre) {
-  let materiaAct = Materias.find((materia) => materia.nombre == nombre);
-
-  let Exonerar = [];
-  let Exoneradas = [];
-  let Salvar = [];
-  let Salvadas = [];
-
-  materiaAct.previas.filter((materia) => {
-    if (typeof materia == "string") {
-      let materiaAux = Materias.find((elemento) => elemento.curso == materia);
-      if (!MateriasPersona.has(materia)) {
-        Salvar.push(materiaAux);
-      }else{
-        Salvadas.push(materiaAux);
-      }
-    } else {
-      if (!MateriasPersona.has(materia.nombre)) {
-        Exonerar.push(materia);
-      }else{
-        Exoneradas.push(materia);
-      }
-    }
-  });
-
-  let texto = `Para poder cursar ${materiaAct.nombreCompleto} te hace falta:<br/><br/>`;
-
-  if (Exonerar.length + Exoneradas.length > 0) {
-    texto += `<u>Exonerar</u>:<br/><br/>`;
-  }
-  Exonerar.forEach((materia) => {
-    texto += `-${materia.nombreCompleto}<br/>`;
-  });
-  Exoneradas.forEach((materia) => {
-    texto += `-<s>${materia.nombreCompleto}</s><br/>`;
-  });
-
-  if (Salvar.length + Salvadas.length > 0) {
-    if (Exonerar.length + Exoneradas.length > 0) {
-      texto += `<br/>`;
-    }
-    texto += `<u>Salvar curso de</u>:<br/><br/>`;
-  }
-  Salvar.forEach((materia) => {
-    texto += `-${materia.nombreCompleto}<br/>`;
-  });
-  Salvadas.forEach((materia) => {
-    texto += `-<s>${materia.nombreCompleto}</s><br/>`;
-  });
-
-  if (materiaAct == CC) {
-    texto = `Para poder cursar ${materiaAct.nombreCompleto} se necesitan:<br/><br/>`;
-    texto += `-80 créditos<br/><br/>`;
-    texto += `<u>Salvar curso de</u>:<br/><br/>`;
-    if (!MateriasPersona.has(PYE.curso)){
-      texto += `-${PYE.nombreCompleto}<br/>`;
-    }else{
-      texto += `-<s>${PYE.nombreCompleto}</s><br/>`;
-    }
-  }
-
-  if (materiaAct == ASS) {
-    texto = `Para poder cursar ${materiaAct.nombreCompleto} se necesitan:<br/><br/>`;
-    texto += `-10 créditos en el área de Gestión en Organizaciones<br/><br/>`;
-    mat = [AC,SO,RC,FBD,IIS]
-    texto += `<u>Salvar curso de</u>:<br/><br/>`;
-    mat.forEach( (materia)=>{
-      if (!MateriasPersona.has(materia.curso)){
-        texto += `-${materia.nombreCompleto}<br/>`;
-      }else{
-        texto += `-<s>${materia.nombreCompleto}</s><br/>`;
-      }
-    } )
-  }
-
-  if (materiaAct == AGI) {
-    texto = `Para poder cursar ${materiaAct.nombreCompleto} se necesitan:<br/><br/>`;
-    texto += `-140 créditos`;
-  }
-
-  if (materiaAct == Pasan) {
-    texto = `Para poder validar ${materiaAct.nombreCompleto} se necesitan:<br/><br/>`;
-    texto += `-200 créditos`;
-  }
-
-  if (materiaAct == TP) {
-    texto = `Para poder cursar ${materiaAct.nombreCompleto} se necesita alguna de las siguientes:<br/><br/>`;
-    texto += `<u>Opción 1</u>:<br/>`;
-    texto += `-Exonerar Programación 3 y Salvar Curso Programación 4<br/><br/>`;
-    texto += `<u>Opción 2</u>:<br/>`;
-    texto += `-Exonerar Programación 4<br/>`;
+  let htmlPrevias = document.createElement("div");
+  const materiaAct = encontrarMateriaPorNombre(nombre);
+  htmlPrevias.innerText = `Previas de ${materiaAct.nombreCompleto}:`;
+  const previas = calcularHTMLIndicarPrevias(materiaAct.reglaHabilitacion);
+  if (previas) {
+    htmlPrevias.append(previas);
+  } else {
+    htmlPrevias.innerText = `${materiaAct.nombreCompleto} no tiene previas.`;
   }
   
-  if (materiaAct == PMPPG) {
-    texto = `Para poder cursar ${materiaAct.nombreCompleto} se necesita alguna de las siguientes:<br/><br/>`;
-    texto += `<u>Opción 1</u>:<br/>`;
-    texto += `-Salvar Curso Arquitectura de Computadoras, Salvar Curso Sistemas Operativos y Exonerar Programación 2<br/><br/>`;
-    texto += `<u>Opción 2</u>:<br/>`;
-    texto += `-Exonerar Arquitectura de Computadoras y Programación 2<br/><br/>`;
-    texto += `<u>Opción 3</u>:<br/>`;
-    texto += `-Exonerar Sistemas Operativos y Programación 2<br/>`;
-  }
-
-  if (materiaAct == PG) {
-    texto = `Para poder cursar ${materiaAct.nombreCompleto} hay 3 opciones complejas.<br/><br/>`;
-    texto += `Estas están contempladas, para mas información sobre cada una recomendamos averiguar con Bedelías.`;
-  }
-  openPopup(texto);
-
+  return htmlPrevias;
 }
 
-function info(){
-  let texto = "<u>Funcionalidades</u><br/><br/>";
-  texto+="-En celulares se puede abrir y cerrar el menú con el botón de arriba a la derecha.<br/><br/>"
-  texto+="-Presionar el botón de una materia no habilitada muestra los requisitos necesarios para poder cursarla.<br/><br/>"
-  texto+="-Mantener apretado el botón de cualquier materia muestra de qué materias es previa.<br/><br/>"
-  texto+="-Dar clic en el nombre de un área muestra las materias que suman créditos a esa área."
-  openPopup(texto);
+function crearLineaArea(area, creditosEsperados) {
+  const linea = document.createElement("div");
+  linea.innerText = `-${TraduccionBloqueCreditos[area]}: ${creditosBloque[area]} (${creditosEsperados})`;
+  linea.onclick = () => { mostrarMateriasEnPopup(BloqueCreditos[area]) }
+  linea.classList.add("paraClick");
+  return linea;
 }
 
-function mostrarBotonMateria(materia){
-
-  switch (semestreAct) {
-    case "primero":
-      if (materia.semestre == "primero" || materia.semestre == "ambos") {
-        displayBlock(materia.nombre);
-      } else {
-        displayNone(materia.nombre)
-      }
-      break;
-
-    case "segundo":
-      if (materia.semestre == "segundo" || materia.semestre == "ambos") {
-        displayBlock(materia.nombre);
-      } else {
-        displayNone(materia.nombre);
-      }
-      break;
-    case "libre":
-      if (materia.libre == "si") {
-        displayBlock(materia.nombre);
-      } else {
-        displayNone(materia.nombre);
-      }
-      break;
-
-    default:
-      displayBlock(materia.nombre);
-      break;
-  }
-
+function crearLineaAreaSubrayada(texto) {
+  const linea = document.createElement("div");
+  linea.innerText = texto;
+  linea.classList.add("subrayado");
+  return linea;
 }
 
-function verAreas(){
-
-    let texto = `<u>Cantidad de créditos por Área</u><br/><br/>`
-    texto += `<b><u>Materias Básicas</u>: ${creditosBloque.creditosEnM + creditosBloque.creditosEnCE} (80)</b><br/>`
-    texto += `-<span onclick="mostrarMaterias('m')">Matemática</span>: ${creditosBloque.creditosEnM} (70)<br/>`
-    texto += `-<span onclick="mostrarMaterias('ce')">Ciencias Experimentales</span>: ${creditosBloque.creditosEnCE} (10)<br/><br/>`
-    texto += `<b><u>Básico-Tec,Técnicas e Int.</u>: ${creditosBloque.creditosEnProg + creditosBloque.creditosEnAC_SO_RC + creditosBloque.creditosEnBD_SI + creditosBloque.creditosEnMN + creditosBloque.creditosEnIO + creditosBloque.creditosEnIS + creditosBloque.creditosEnTall_Pasa_Proy + creditosBloque.creditosEnGO + creditosBloque.creditosEnIAYR} (220)</b><br/>`
-    texto += `-<span onclick="mostrarMaterias('p')">Programación</span>: ${creditosBloque.creditosEnProg} (60)<br/>`
-    texto += `-<span onclick="mostrarMaterias('a')">Arq., S. OP., Redes de C.</span>: ${creditosBloque.creditosEnAC_SO_RC} (30)<br/>`
-    texto += `-<span onclick="mostrarMaterias('b')">B. Datos y Sist. de I.</span>: ${creditosBloque.creditosEnBD_SI} (10)<br/>`
-    texto += `-<span onclick="mostrarMaterias('cn')">Cálculo Numérico</span>: ${creditosBloque.creditosEnMN} (8)<br/>`
-    texto += `-<span onclick="mostrarMaterias('i')">Investigación Operativa</span>: ${creditosBloque.creditosEnIO} (10)<br/>`
-    texto += `-<span onclick="mostrarMaterias('is')">Ingeniería de Software</span>: ${creditosBloque.creditosEnIS} (10)<br/>`
-    texto += `-<span onclick="mostrarMaterias('ai')">A. Integ., Tall., Pas. y Proy.</span>: ${creditosBloque.creditosEnTall_Pasa_Proy} (45)<br/>`
-    texto += `-<span onclick="mostrarMaterias('go')">Gestión en Organizaciones</span>: ${creditosBloque.creditosEnGO} (10)<br/>`
-    texto += `-<span onclick="mostrarMaterias('ia')">Int. Artificial y Robótica</span>: ${creditosBloque.creditosEnIAYR} (0)<br/><br/>`
-    texto += `<b><u>Materias Complementarias</u>: ${creditosBloque.creditosEnCHS} (10)</b><br/>`
-    texto += `-<span onclick="mostrarMaterias('ch')">Ciencias H. y S.</span>: ${creditosBloque.creditosEnCHS} (10)<br/>`
-    openPopup(texto);
-
+function crearLineaAreaSubrayadaConMargenAbajo(texto) {
+  const linea = document.createElement("div");
+  linea.innerText = texto;
+  linea.classList.add("margen-inferior");
+  linea.classList.add("subrayado");
+  return linea;
 }
 
-function mostrarMaterias(nombre){
+function crearLineaAreaConMargenAbajo(area, creditosEsperados) {
+  const linea = document.createElement("div");
+  linea.innerText = `-${TraduccionBloqueCreditos[area]}: ${creditosBloque[area]} (${creditosEsperados})`;
+  linea.onclick = () => { mostrarMateriasEnPopup(BloqueCreditos[area]) }
+  linea.classList.add("paraClick");
+  linea.classList.add("margen-inferior");
+  return linea;
+}
 
-  let area, nombreArea;
+function crearLineaNegrita(nombre, textoDespues) {
+  const container = document.createElement("div");
+  const texto = document.createElement("span");
+  texto.innerText = nombre;
+  texto.classList.add("subrayado");
+  texto.classList.add("negrita");
+  const creditos = document.createElement("span");
+  creditos.innerText = textoDespues;
+  creditos.classList.add("negrita");
+  container.append(texto);
+  container.append(creditos);
+  return container;
+}
 
-  switch (nombre) {
-    case "m":
-      area = "creditosEnM"
-      nombreArea = "Matemática"
-      break;
-    case "ce":
-      area = "creditosEnCE"
-      nombreArea = "Ciencias Experimentales"
-      break;
-    case "p":
-      area = "creditosEnProg"
-      nombreArea = "Programación"
-      break;
-    case "a":
-      area = "creditosEnAC_SO_RC"
-      nombreArea = "Arq., S. OP., Redes de C."
-      break;
-    case "b":
-      area = "creditosEnBD_SI"
-      nombreArea = "B. Datos y Sist. de I."
-      break;
-    case "cn":
-      area = "creditosEnMN"
-      nombreArea = "Cálculo Numérico"
-      break;
-    case "i":
-      area = "creditosEnIO"
-      nombreArea = "Investigación Operativa"
-      break;
-    case "is":
-      area = "creditosEnIS"
-      nombreArea = "Ingeniería de Software"
-      break;
-    case "ai":
-      area = "creditosEnTall_Pasa_Proy"
-      nombreArea = "A. Integ., Tall., Pas. y Proy."
-      break;
-    case "go":
-      area = "creditosEnGO"
-      nombreArea = "Gestión en Organizaciones"
-      break;
-    case "ia":
-      area = "creditosEnIAYR"
-      nombreArea = "Int. Artificial y Robótica"
-      break;
-    case "ch":
-      area = "creditosEnCHS"
-      nombreArea = "Ciencias H. y S."
-      break;
-  
-    default:
-      break;
-  }
+function crearLinea(texto) {
+  const linea = document.createElement("div");
+  linea.innerText = texto;
+  return linea;
+}
 
-  texto = `<u>Materias para ${nombreArea}</u>:<br/><br/>`;
-  textoOcupadas = "<br/><u>Materias ya hechas</u>:<br/>"
-  textoDisponible = "<u>Materias disponibles</u>:<br/>"
+function crearLineaMargenAabajoSubrayadaSeparada(texto, final) {
+  const linea = document.createElement("div");
+  const lineaPrincipal = document.createElement("span");
+  lineaPrincipal.innerText = texto;
+  lineaPrincipal.classList.add("subrayado");
+  const lineaFinal = document.createElement("span");
+  lineaFinal.innerText = final;
+  linea.append(lineaPrincipal);
+  linea.append(lineaFinal);
+  linea.classList.add("margen-inferior");
+  return linea;
+}
 
+function verAreas() {
+  const totBasicas = creditosBloque.creditosEnM + creditosBloque.creditosEnCE;
+  const totBT = creditosBloque.creditosEnProg + creditosBloque.creditosEnAC_SO_RC + creditosBloque.creditosEnBD_SI + creditosBloque.creditosEnMN + creditosBloque.creditosEnIO + creditosBloque.creditosEnIS + creditosBloque.creditosEnTall_Pasa_Proy + creditosBloque.creditosEnGO + creditosBloque.creditosEnIAYR;
+  const elementoPrincipal = document.createElement("div");
+  elementoPrincipal.append(crearLineaAreaSubrayadaConMargenAbajo("Cantidad de créditos por Área"));
+  elementoPrincipal.append(crearLineaNegrita("Materias Básicas", `: ${totBasicas} (${80})`));
+  elementoPrincipal.append(crearLineaArea(BloqueCreditos.creditosEnM, 70));
+  elementoPrincipal.append(crearLineaAreaConMargenAbajo(BloqueCreditos.creditosEnCE, 10));
+  elementoPrincipal.append(crearLineaNegrita("Básico-Tec,Técnicas e Int.", `: ${totBT} (${220})`));
+  elementoPrincipal.append(crearLineaArea(BloqueCreditos.creditosEnProg, 60));
+  elementoPrincipal.append(crearLineaArea(BloqueCreditos.creditosEnAC_SO_RC, 30));
+  elementoPrincipal.append(crearLineaArea(BloqueCreditos.creditosEnBD_SI, 10));
+  elementoPrincipal.append(crearLineaArea(BloqueCreditos.creditosEnMN, 8));
+  elementoPrincipal.append(crearLineaArea(BloqueCreditos.creditosEnIO, 10));
+  elementoPrincipal.append(crearLineaArea(BloqueCreditos.creditosEnIS, 10));
+  elementoPrincipal.append(crearLineaArea(BloqueCreditos.creditosEnTall_Pasa_Proy, 45));
+  elementoPrincipal.append(crearLineaArea(BloqueCreditos.creditosEnGO, 10));
+  elementoPrincipal.append(crearLineaAreaConMargenAbajo(BloqueCreditos.creditosEnIAYR, 0));
+  elementoPrincipal.append(crearLineaNegrita("Materias Complementarias", `: ${creditosBloque.creditosEnCHS} (${10})`));
+  elementoPrincipal.append(crearLineaArea(BloqueCreditos.creditosEnCHS, 10));
+  cargarEnPopup(elementoPrincipal);
+  openPopup();
+}
+
+function mostrarMateriasEnPopup(nombre){
+  const elementoPrincipal = document.createElement("div");
+  elementoPrincipal.append(crearLineaAreaSubrayadaConMargenAbajo(`Materias para ${TraduccionBloqueCreditos[nombre]}`));
+  const lineaHechas = crearLineaAreaSubrayada(`Materias ya hechas`);
+  const lineaDisponibles = crearLineaAreaSubrayada(`Materias disponibles`);
+  const materiasDisponibles = document.createElement("div");
+  const materiasHechas = document.createElement("div");
   Materias.forEach( (materia)=>{
-
-    if ( materia.area == area ){
-      if ( MateriasPersona.has(materia.nombre) ){
-        textoOcupadas += `-${materia.nombreCompleto}<br/>`;
+    if ( materia.area == nombre ){
+      if ( historialExoneradas.has(materia.nombre) ){
+        materiasHechas.append(crearLinea(`-${materia.nombreCompleto}`))
       }else{
-        textoDisponible += `-${materia.nombreCompleto}<br/>`;
+        materiasDisponibles.append(crearLinea(`-${materia.nombreCompleto}`))
       }
-
     }
-
   } )
-
-  document.getElementById("popup-text").innerHTML = texto + textoDisponible + textoOcupadas;
-
+  elementoPrincipal.append(lineaHechas);
+  materiasHechas.classList.add("margen-inferior")
+  elementoPrincipal.append(materiasHechas);
+  elementoPrincipal.append(lineaDisponibles);
+  elementoPrincipal.append(materiasDisponibles);
+  cargarEnPopup(elementoPrincipal);
+  openPopup();
 }
 
 // Funciones de asignacion de peso y creacion del HTML
 
-function asignarPesoMateria(materia){
-  let maxPesoPrevia = 0;
-  if (materia.previas.length == 0){
-    materia.peso = 1;
+function obtenerPesoDesdeRegla(regla) {
+  if (!regla) return 0;
+
+  if (regla.tipo === "predicado") {
+    if (regla.id.startsWith("aprobada:") || regla.id.startsWith("exonerada:")) {
+      const nombreMateria = regla.id.split(":")[1];
+      const dep = encontrarMateriaPorNombre(nombreMateria);
+      if (!dep) return 0;
+      if (dep.peso === 0) asignarPesoMateria(dep);
+      return dep.peso;
+    }
+    return 0;
   }
-  materia.previas.forEach( (previa) => {
 
-    let materiaA;
-    if (typeof previa == "string") {
-      materiaA = Materias.find((elemento) => elemento.curso == previa);
-    }else{
-      materiaA = previa;
-    }
-
-    if (materiaA.peso == 0){
-      asignarPesoMateria(materiaA);
-    }
-
-    if (materiaA.peso >= maxPesoPrevia && materiaA!=Aux){
-      maxPesoPrevia = materiaA.peso;
-    }
-
-    if (maxPesoPrevia>=materia.peso){
-      materia.peso = maxPesoPrevia + 1;
-    }
-
-  } )
+  if (regla.tipo === "todas" || regla.tipo === "alguna") {
+    let valorMax = 0;
+    regla.reglas.forEach( (reglaActual) => {
+      let valorRegla = obtenerPesoDesdeRegla(reglaActual);
+      if (valorRegla>valorMax) valorMax = valorRegla;
+    } );
+    return valorMax;
+  }
 }
 
-function asignarPesos(){
-  let maxTotal = 0;
-  AGI.peso = 3;
-  PAI.peso = 4;
-  Pasan.peso = 4;
-  TP.peso = 4;
-  PMPPG.peso = 4;
-  Materias.forEach( (materia) => {
-    if (materia.peso == 0){
-      asignarPesoMateria(materia);
-    }
-    if (maxTotal < materia.peso){
-      maxTotal = materia.peso;
-    }
-  } );
+function asignarPesoMateria(materia) {
+  materia.peso = obtenerPesoDesdeRegla(materia.reglaHabilitacion) + 1;
+}
 
-  PG.peso = maxTotal + 1;
-
-  for(let i = 1; i<=PG.peso; i++){
-
-    var containerDiv = document.createElement('div');
-    containerDiv.className = 'container-section';
-    var sectionDiv = document.createElement('div');
-    sectionDiv.className = 'section';
+function crearSeccionesParaMaterias(){
+  for (let i = 1; i <= PG.peso; i++) {
+    const containerDiv = document.createElement("div");
+    containerDiv.className = "container-section";
+    const sectionDiv = document.createElement("div");
+    sectionDiv.className = "section";
     sectionDiv.id = `section-materias-${i}`;
     containerDiv.appendChild(sectionDiv);
-    document.getElementById("secciones").appendChild(containerDiv);
-
+    document.getElementById(idSecciones).appendChild(containerDiv);
   }
 }
 
-function mostrarDeQueEsPrevia(materiaACalcular){
-  cont1 = 0;
-  cont2 = 0;
-  texto = "";
-  Materias.forEach( (materiaActual) => {
-    if (materiaActual.previas.includes(materiaACalcular.curso)){
-      if (cont1==0){
-        texto += `La aprobación de ${materiaACalcular.nombreCompleto} es previa de :<br/><br/>`;
-        cont1++
-      }
-      texto += `-${materiaActual.nombreCompleto}<br/>`
-    }
-  } )
-  
-  Materias.forEach( (materiaActual) => {
-    if (materiaActual.previas.includes(materiaACalcular)){
-      if (cont2==0){
-        texto += `<br/>La exoneración de ${materiaACalcular.nombreCompleto} es previa de :<br/><br/>`;
-        cont2++
-      }
-      texto += `-${materiaActual.nombreCompleto}<br/>`
-    }
-  } )
-  if (cont1+cont2==0){
-    texto = `${materiaACalcular.nombreCompleto} no es previa de ninguna materia <u>en esta página</u>.`
+function asignarPesos() {
+  let maxTotal = 0;
+  AGI.peso = 3;
+  Pasan.peso = 4;
+  TRE.peso = 2
+  Materias.forEach((materia) => {
+    if (materia.peso === 0) asignarPesoMateria(materia);
+    if (materia.peso > maxTotal) maxTotal = materia.peso;
+  });
+}
+
+function reglaDependeDeMateria(regla, codigoMateria, tipoBuscado) {
+  if (!regla) return false;
+  if (regla.tipo === "predicado") {
+    return regla.id === `${tipoBuscado}:${codigoMateria}`;
   }
-  openPopup(texto)
+  if (regla.tipo === "todas" || regla.tipo === "alguna") {
+    return regla.reglas.some((reglaActual) => reglaDependeDeMateria(reglaActual, codigoMateria, tipoBuscado));
+  }
+  if (regla.tipo === "negar") {
+    return reglaDependeDeMateria(regla.regla, codigoMateria, tipoBuscado);
+  }
+  return false;
+}
+
+function mostrarDeQueEsPrevia(nombreMateria) {
+  let materiaACalcular = encontrarMateriaPorNombre(nombreMateria)
+  let cont1 = 0;
+  let cont2 = 0;
+  const elementoFinal = document.createElement("div");
+  const elementoAprobadas = document.createElement("div");
+  const elementoExoneradas = document.createElement("div");
+  Materias.forEach((materiaActual) => {
+    if (reglaDependeDeMateria(materiaActual.reglaHabilitacion, materiaACalcular.nombre, "aprobada")) {
+      if (cont1 === 0) {
+        elementoAprobadas.append(crearLineaMargenAabajoSubrayadaSeparada(`La aprobación de ${materiaACalcular.nombreCompleto} es previa de`, ":"))
+        cont1++;
+      }
+      elementoAprobadas.append(crearLinea(`-${materiaActual.nombreCompleto}`))
+    }
+  });
+  if (cont1>0) {
+    elementoAprobadas.classList.add("margen-inferior");
+    elementoFinal.append(elementoAprobadas);
+  }
+  Materias.forEach((materiaActual) => {
+    if (reglaDependeDeMateria(materiaActual.reglaHabilitacion, materiaACalcular.nombre, "exonerada")) {
+      if (cont2 === 0) {
+        elementoExoneradas.append(crearLineaMargenAabajoSubrayadaSeparada(`La exoneración de ${materiaACalcular.nombreCompleto} es previa de`, ":"))
+        cont2++;
+      }
+      elementoExoneradas.append(crearLinea(`-${materiaActual.nombreCompleto}`))
+    }
+  });
+  if (cont2>0) {
+    elementoExoneradas.classList.add("margen-inferior");
+    elementoFinal.append(elementoExoneradas);
+  }
+  if (cont1 + cont2 === 0) {
+    elementoFinal.innerText = `${materiaACalcular.nombreCompleto} no es previa de ninguna materia en esta página.`
+  }
+  return elementoFinal;
 }
 
 seScrolleo = false;
@@ -945,60 +1078,60 @@ function crearBotonesMaterias(){
     if (materia1.peso !== materia2.peso) {
         return materia1.peso - materia2.peso;
     }
-    if (materia1.opcional !== materia2.opcional) {
-        return (materia1.opcional === "no" ? -1 : 1) - (materia2.opcional === "no" ? -1 : 1);
+    if (materia1.esOpcional !== materia2.esOpcional) {
+        return (!materia1.esOpcional ? -1 : 1) - (!materia2.esOpcional ? -1 : 1);
     }
     return materia1.nombreCompleto.localeCompare(materia2.nombreCompleto);
   });
   Materias.forEach( (materia) => {
 
-    if (materia.nombre != "MI"){
+    if (materia.nombre != MI.nombre){
       var button = document.createElement('button');
-        button.textContent = `${materia.nombreCompleto} (${materia.creditos})` ;
-        if (materia.opcional == "si"){
-          button.textContent += "*";
-        }
-        button.id = materia.nombre;
+      button.textContent = `${materia.nombreCompleto} (${materia.creditos})` ;
+      if (materia.esOpcional){
+        button.textContent += "*";
+      }
+      button.id = materia.nombre;
 
-        button.onclick = function() {
-          seScrolleo = false;
-          this.mouseIsDown = false;
-          clearTimeout(this.idTimeout);
-          toggleMateria(materia.nombre);
+      button.onclick = function() {
+        seScrolleo = false;
+        this.mouseIsDown = false;
+        clearTimeout(this.idTimeout);
+        toggleMateria(materia.nombre);
       };
 
-        button.addEventListener('mousedown', function() {
-          this.mouseIsDown = true;
-          seScrolleo = false;
-          this.idTimeout = setTimeout( () => {
-            if(this.mouseIsDown && !seScrolleo) {
-              mostrarDeQueEsPrevia(materia);
-            }
-          }, 800);
-        });
+      button.addEventListener('mousedown', function() {
+        this.mouseIsDown = true;
+        seScrolleo = false;
+        this.idTimeout = setTimeout( () => {
+          if(this.mouseIsDown && !seScrolleo) {
+            popUpGeneral(materia.nombre, "previaDe");
+          }
+        }, 800);
+      });
 
-        button.addEventListener('mouseleave', function() {
-          clearTimeout(this.idTimeout);
-          this.mouseIsDown = false;
-        });
+      button.addEventListener('mouseleave', function() {
+        clearTimeout(this.idTimeout);
+        this.mouseIsDown = false;
+      });
 
-        button.addEventListener('touchstart', function() {
-          this.mouseIsDown = true;
-          seScrolleo = false;
-          this.idTimeout = setTimeout( () => {
-            if(this.mouseIsDown && !seScrolleo) {
-              mostrarDeQueEsPrevia(materia);
-            }
-          }, 800);
-        });
+      button.addEventListener('touchstart', function() {
+        this.mouseIsDown = true;
+        seScrolleo = false;
+        this.idTimeout = setTimeout( () => {
+          if(this.mouseIsDown && !seScrolleo) {
+            popUpGeneral(materia.nombre, "previaDe");
+          }
+        }, 800);
+      });
 
-        button.addEventListener('touchmove', function() {
-          clearTimeout(this.idTimeout);
-          this.mouseIsDown = false;
-        });
+      button.addEventListener('touchmove', function() {
+        clearTimeout(this.idTimeout);
+        this.mouseIsDown = false;
+      });
 
-        let parent = document.getElementById(`section-materias-${materia.peso}`);
-        parent.appendChild(button);
+      let parent = document.getElementById(`section-materias-${materia.peso}`);
+      parent.appendChild(button);
     }
 
   } );
@@ -1006,6 +1139,7 @@ function crearBotonesMaterias(){
 }
 
 // Util solo para mobile, para poder hacer scroll apretando un boton de una materia sin que aparezca de que es previa
+
 document.addEventListener("scroll", function() {
   seScrolleo = true;
 });
@@ -1015,15 +1149,15 @@ document.addEventListener("scroll", function() {
 function checkWidth() {
   if (window.matchMedia("(min-width: 675px)").matches) {
     displayNone("checkbox-container");
-    displayFlex("navbar");
+    displayFlex(idNavbar);
   } else {
     displayFlex("checkbox-container");
-    if (seleccion) {
-      this.document.getElementById("checkbox").checked = true;
-      displayFlex("navbar");
+    if (seleccionMenu) {
+      this.document.getElementById(idCheckbox).checked = true;
+      displayFlex(idNavbar);
     } else {
-      this.document.getElementById("checkbox").checked = false;
-      displayNone("navbar");
+      this.document.getElementById(idCheckbox).checked = false;
+      displayNone(idNavbar);
     }
   }
 }
@@ -1035,23 +1169,22 @@ window.addEventListener("resize", function () {
 // Inicio de pagina
 
 function firstLoad() {
-  if (localStorage.getItem("materias")) {
-    MateriasPersona = new Set(JSON.parse(localStorage.getItem("materias")));
+  asignarPesos();
+  crearSeccionesParaMaterias();
+  crearBotonesMaterias();
+  if (localStorage.getItem(LocalStorageNombres.materiasExoneradas)||localStorage.getItem(LocalStorageNombres.materiasAprobadas)) {
+    historialExoneradas = new Set(JSON.parse(localStorage.getItem(LocalStorageNombres.materiasExoneradas)));
+    historialAprobadas = new Set(JSON.parse(localStorage.getItem(LocalStorageNombres.materiasAprobadas)));
   }
-  document.getElementById("MI").disabled = true;
-  if (localStorage.getItem("MI") == "false") {
-    toggleMI();
+  document.getElementById(MI.nombre).disabled = true;
+  if (localStorage.getItem(MI.nombre) == "false") {
+    cambiarValoresMI();
   }
-  if (localStorage.getItem("semestre")) {
-    semestreAct = localStorage.getItem("semestre");
-    toggleBotones(semestreAct);
+  if (localStorage.getItem(LocalStorageNombres.semestre)) {
+    toggleBotones(localStorage.getItem(LocalStorageNombres.semestre));
   }
-  if (!localStorage.getItem("semestre") && localStorage.getItem("MI") != "false"){
-    actualizar();
-  }
+  reconstruirEstadoPagina();
   checkWidth();
 }
 
-asignarPesos()
-crearBotonesMaterias()
 firstLoad();

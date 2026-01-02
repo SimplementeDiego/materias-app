@@ -224,6 +224,9 @@ transform: scale(1.05);
 
 #popup-text{
     padding: 5px;
+    max-height: 50vh;
+    overflow-y: auto;
+    overscroll-behavior: contain;
 }
 
 #cerrar-popup{
@@ -255,18 +258,21 @@ transform: scale(1.05);
     background-color: gray;
     margin: 0px 10px 0 10px;
 }
+
 .bloque-rojo{
     height: 20px;
     width: 20px;
     background-color: lightcoral;
     margin: 0px 10px 0 10px;
 }
+
 .bloque-azul{
     height: 20px;
     width: 20px;
     background-color: lightblue;
     margin: 0px 10px 0 10px;
 }
+
 .bloque-verde{
     height: 20px;
     width: 20px;
@@ -285,6 +291,63 @@ label img{
     width: 30px;
 }
 
+.tachado { 
+    text-decoration: line-through;
+}
+
+.rectangulo {
+    border: 1px solid black;
+    margin: 10px;
+}
+
+.subrayado {
+    text-decoration: underline;
+}
+
+.negrita {
+    font-weight: bold;
+}
+
+.margen-inferior {
+    margin-bottom: 10px;
+}
+
+.paraClick {
+    cursor: pointer;
+}
+
+.tituloPopup {
+    text-decoration: underline;
+    margin: 5px;
+}
+
+.popup-barra-superior{
+    height: 30px;
+    display: flex;
+    justify-content: space-around;
+    margin-bottom: 10px;
+    border: 1px solid black;
+}
+
+.popup-boton-barra-superior {
+    width: 100%;
+    border-radius: 0;
+    border: 0;
+    cursor: pointer;
+}
+
+.border-derecho {
+    border-right: 1px solid black;
+}
+
+.icono {
+  transition: transform 0.25s ease;
+}
+
+.icono.abierto {
+  transform: rotate(90deg);
+}
+
 @media (max-width: 675px) {
     #boxPopup{
         z-index: 10;
@@ -292,10 +355,11 @@ label img{
         top: 60px;
         height: calc(100% - 60px);
     }
+
     #boxPopup-content{
         z-index: 11;
         height: fit-content;
-        width: fit-content;
+        width: 90%;
         max-width: 80%;
         background-color: white;
         border-radius: 10px;
@@ -304,6 +368,7 @@ label img{
         margin: 20px;
         text-wrap: wrap;
     }
+
     .section{
         flex-direction: column;
         align-items: center;
@@ -311,20 +376,25 @@ label img{
         flex-wrap: nowrap;
         height: fit-content;
     }
+
     .section button{
         margin: 10px 0 10px 0;
         width: 95%;
         font-size: 3.5vw;
     }
+
     .header-content h1{
         font-size: 17px;
     }
+
     .botones-top-item{
         font-size: 12px;
     }
+
     .main-content{
         flex-direction: column;
     }
+
     .navbar{
         width: 100%;
         position: absolute;
@@ -333,53 +403,68 @@ label img{
         height: auto;
         margin-top: 0;
     }
+
     .secciones{
         width: 100%;
         height: fit-content;
         margin-left: 0;
         overflow: hidden;
     }
+
     .main-content{
         background-color: beige;
     }
+
     .botones-top button{
         margin: 0;
         box-shadow: none;
         border-radius: 0;
         width: 100%;
     }
+
+    
     .botones-top button:active{
         transform: none;
     }
+
     .area{
         background-color: rgb(241, 221, 250);
     }
+
     #boxPopup-content{
         max-width: 90%;
     }
+
     .info{
         border: 1px solid gray;
         margin: 10px;
         border-radius: 10px;
         justify-content: start;
     }
+
     .bloque-gris{
         margin: 10px;
     }
+
     .bloque-rojo{
         margin: 10px;
     }
+
     .bloque-azul{
         margin: 10px;
     }
+
     .bloque-verde{
         margin: 10px;
     }
+
     .bloque{
         margin: 10px;
     }
+
     .container-section{
         margin: 0;
         border-radius: 0;
     }
-  }
+
+}
