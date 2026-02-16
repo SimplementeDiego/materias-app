@@ -149,6 +149,9 @@ button {
     cursor: pointer;
     margin: 10px;
     color: black;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .section button:hover{
@@ -340,12 +343,25 @@ label img{
     border-right: 1px solid black;
 }
 
+.ex {
+    height: 20px;
+    width: 20px;
+    margin-right: 5px;
+    margin-left: 10px;
+}
+
+.ex-mat {
+    height: 15px;
+    width: 15px;
+    margin-right: 5px;
+}
+
 .icono {
-  transition: transform 0.25s ease;
+    transition: transform 0.25s ease;
 }
 
 .icono.abierto {
-  transform: rotate(90deg);
+    transform: rotate(90deg);
 }
 
 @media (max-width: 675px) {

@@ -107,7 +107,8 @@ class Materia {
     esOpcional,
     esLibre,
     area,
-    informacion
+    informacion,
+    se_da
   ) {
     this.nombre = nombre;
     this.creditos = creditos;
@@ -122,6 +123,7 @@ class Materia {
     this.area = area;
     this.peso = 0;
     this.informacion = informacion;
+    this.se_da = true;
   }
 }
 
@@ -194,6 +196,7 @@ const MD1 = new Materia("MD1", 9, null, "Matemática Discreta 1", Semestre.AMBOS
 MD1.informacion = [{nombre: "Eva primer semestre", valor: "https://eva.fing.edu.uy/course/view.php?id=323"}, 
                     {nombre: "Eva segundo semestre", valor: "https://eva.fing.edu.uy/course/view.php?id=1541"}, 
                     {nombre: "Programa", valor: "https://www.fing.edu.uy/sites/default/files/2024-08/Matem%C3%A1tica%20Discreta%201.pdf"}]
+MD1.se_da = false;
 const P1 = new Materia("P1", 10, null, "Programación 1", Semestre.AMBOS, false, false, BloqueCreditos.creditosEnProg, []);
 P1.informacion = [{nombre: "Eva primer semestre", valor: "https://eva.fing.edu.uy/course/view.php?id=58"}, 
                     {nombre: "Eva segundo semestre", valor: "https://eva.fing.edu.uy/course/view.php?id=1958"}, 
@@ -226,9 +229,10 @@ const PYE = new Materia("PYE", 10, todas(materiaAprobada(CDIVV),materiaExonerada
 PYE.informacion = [{nombre: "Eva primer semestre", valor: "https://eva.fing.edu.uy/course/view.php?id=54"}, 
                     {nombre: "Eva segundo semestre", valor: "https://eva.fing.edu.uy/course/view.php?id=1537"}, 
                     {nombre: "Programa", valor: "https://eva.fing.edu.uy/pluginfile.php/557128/mod_resource/content/1/programa_PyE.pdf"}]
-const PCI = new Materia("PCI", 10, todas(materiaExonerada(PYE),materiaExonerada(CDIVV),materiaExonerada(GAL2)), "Procesamiento cuántico de la información", Semestre.PRIMERO, true, false, BloqueCreditos.creditosEnM, []);
+const PCI = new Materia("PCI", 10, todas(materiaExonerada(PYE),materiaExonerada(CDIVV),materiaExonerada(GAL2)), "Procesamiento cuántico de la info.", Semestre.PRIMERO, true, false, BloqueCreditos.creditosEnM, []);
 PCI.informacion = [{nombre: "Eva", valor: "https://eva.fing.edu.uy/course/view.php?id=1903"}, 
                     {nombre: "Programa", valor: "https://eva.fing.edu.uy/pluginfile.php/529581/mod_resource/content/1/programa_proc_cuant_inf.pdf"}]
+PCI.se_da = false;
 const ITI = new Materia("ITI", 8, materiaExonerada(PYE), "Int. a la Teoría de la Información", Semestre.PRIMERO, true, false, BloqueCreditos.creditosEnM, []);
 ITI.informacion = [{nombre: "Eva", valor: "https://eva.fing.edu.uy/course/view.php?id=412"}, 
                     {nombre: "Programa", valor: "https://eva.fing.edu.uy/pluginfile.php/54492/course/section/6880/ProgramaITI-2013-Grado.pdf"}]
@@ -257,6 +261,7 @@ MMC.informacion = [{nombre: "Eva", valor: "https://eva.fing.edu.uy/course/view.p
 const FDPE = new Materia("FDPE", 8, materiaExonerada(IIO), "Fundamentos de Programación Entera", Semestre.PRIMERO, true, false, BloqueCreditos.creditosEnIO, []);
 FDPE.informacion = [{nombre: "Eva", valor: "https://eva.fing.edu.uy/course/view.php?id=269"}, 
                     {nombre: "Programa", valor: "https://eva.fing.edu.uy/pluginfile.php/37456/mod_resource/content/2/PUC_Fundamentos-de-Programacion-Entera_2018.pdf"}]
+FDPE.se_da = false;
 const MO = new Materia("MO", 6, materiaExonerada(IIO), "Modelado y Optimización", Semestre.SEGUNDO, true, false, BloqueCreditos.creditosEnIO, []);
 MO.informacion = [{nombre: "Eva", valor: "https://eva.fing.edu.uy/course/view.php?id=1070"}, 
                     {nombre: "Programa", valor: "https://eva.fing.edu.uy/pluginfile.php/360410/mod_resource/content/2/ModOpt_Programa_Bedelia_2018.pdf"}]
@@ -297,6 +302,7 @@ SO.informacion = [{nombre: "Eva", valor: "https://eva.fing.edu.uy/course/view.ph
 const CCE = new Materia("CCE", 8, todas(materiaAprobada(PYE),materiaExonerada(GAL1),materiaExonerada(CDIVV),materiaExonerada(MD1),materiaExonerada(CDIV), materiaAprobada(P3)), "Códigos para Corrección de Errores", Semestre.PRIMERO, true, false, BloqueCreditos.creditosEnM, []);
 CCE.informacion = [{nombre: "Eva", valor: "https://eva.fing.edu.uy/course/view.php?id=134"}, 
                     {nombre: "Programa", valor: "https://eva.fing.edu.uy/pluginfile.php/305518/mod_resource/content/1/Programa%20de%20Unidad%20Curricular%20Co%CC%81digos%20para%20Correccio%CC%81n%20de%20Errores%202020%20%28pendiente%20de%20aprobacio%CC%81n%29.pdf"}]
+CCE.se_da = false;
 const TACCE = new Materia("TACCE", 7, materiaAprobada(CCE), "Temas avanzados en cód. para corr. de err.", Semestre.SEGUNDO, true, false, BloqueCreditos.creditosEnM, []);
 TACCE.informacion = [{nombre: "Eva", valor: "https://eva.fing.edu.uy/course/view.php?id=456"}, 
                     {nombre: "Programa", valor: "https://eva.fing.edu.uy/pluginfile.php/60822/course/section/7408/Programa%20de%20Unidad%20Curricular%20Temas%20avanzados%20en%20c%C3%B3digos%20para%20correcci%C3%B3n%20de%20errores%202023.pdf"}]
@@ -315,6 +321,7 @@ FBD.informacion = [{nombre: "Eva", valor: "https://eva.fing.edu.uy/course/view.p
 const BDNR = new Materia("BDNR", 10, materiaExonerada(FBD), "Bases de Datos No Relacionales", Semestre.PRIMERO, true, false, BloqueCreditos.creditosEnBD_SI, []);
 BDNR.informacion = [{nombre: "Eva", valor: "https://eva.fing.edu.uy/course/view.php?id=947"}, 
                     {nombre: "Programa", valor: "https://www.fing.edu.uy/sites/default/files/propuesta-bdnr.pdf"}]
+BDNR.se_da = false;
 const CDI = new Materia("CDI", 8, materiaExonerada(FBD), "Calidad de Datos e Información", Semestre.PRIMERO, true, false, BloqueCreditos.creditosEnBD_SI, []);
 CDI.informacion = [{nombre: "Eva", valor: "https://eva.fing.edu.uy/course/view.php?id=1073"}, 
                     {nombre: "Programa", valor: "https://eva.fing.edu.uy/pluginfile.php/484275/mod_resource/content/1/Programa-CalidadDatosInf.pdf"}]
@@ -345,6 +352,7 @@ IIS.informacion = [{nombre: "Eva", valor: "https://eva.fing.edu.uy/course/view.p
 const FWS = new Materia("FWS", 8, todas(materiaExonerada(IIS),materiaExonerada(FBD)), "Fundamentos de la web semántica", Semestre.PRIMERO, true, false, BloqueCreditos.creditosEnBD_SI, []);
 FWS.informacion = [{nombre: "Eva", valor: "https://eva.fing.edu.uy/course/view.php?id=536"}, 
                     {nombre: "Programa", valor: "https://eva.fing.edu.uy/pluginfile.php/384659/mod_resource/content/1/Programa%20de%20Unidad%20Curricular-FWS.pdf"}]
+FWS.se_da = false;
 const PF = new Materia("PF", 10, todas(materiaExonerada(TL),materiaExonerada(P2),materiaExonerada(LG),materiaExonerada(MD1)), "Programación Funcional", Semestre.AMBOS, false, false, BloqueCreditos.creditosEnProg, []);
 PF.informacion = [{nombre: "Eva", valor: "https://eva.fing.edu.uy/course/view.php?id=138"}, 
                     {nombre: "Programa", valor: "https://www.fing.edu.uy/sites/default/files/cursos/2020/anexos/39014/Programaci%C3%B3n%20Funcional.pdf"}]
@@ -395,6 +403,7 @@ AGI.informacion = [{nombre: "Eva", valor: "https://eva.fing.edu.uy/course/view.p
 const CC = new Materia("CC", 8, todas(materiaAprobada(PYE),creditosMinimos(BloqueCreditos.Total,80)), "Control de Calidad", Semestre.PRIMERO, true, true, BloqueCreditos.creditosEnGO, []);
 CC.informacion = [{nombre: "Eva", valor: "https://eva.fing.edu.uy/course/view.php?id=49"}, 
                     {nombre: "Programa", valor: "https://eva.fing.edu.uy/pluginfile.php/299876/mod_resource/content/2/Programa%20Control%20de%20Calidad%20-%20nuevo%20formato.pdf"}]
+CC.se_da = false;
 const PAI = new Materia("PAI", 5, materiaAprobada(AGI), "Práctica de Administración para Ingenieros", Semestre.SEGUNDO, true, true, BloqueCreditos.creditosEnGO, []);
 PAI.informacion = [{nombre: "Eva", valor: "https://eva.fing.edu.uy/course/view.php?id=779"}, 
                     {nombre: "Programa", valor: "https://eva.fing.edu.uy/pluginfile.php/206010/mod_resource/content/4/Programa_Practica_de_Administracion_para_Ingenieros_2019_v2.pdf"}]
@@ -667,7 +676,7 @@ function isMateriaValid(materia) {
 }
 
 function evaluarMostrarMateria(materia) {
-  isMateriaValid(materia) ? displayBlock(materia.nombre) : displayNone(materia.nombre);
+  isMateriaValid(materia) ? displayFlex(materia.nombre) : displayNone(materia.nombre);
 }
 
 function mostrarBotonesDeMateriasQueCorresponda() {
@@ -965,8 +974,6 @@ function mostrarMateriasEnPopup(nombre){
   openPopup();
 }
 
-// Funciones de asignacion de peso y creacion del HTML
-
 function obtenerPesoDesdeRegla(regla) {
   if (!regla) return 0;
 
@@ -1088,10 +1095,21 @@ function crearBotonesMaterias(){
     if (materia.nombre != MI.nombre){
       var button = document.createElement('button');
       button.textContent = `${materia.nombreCompleto} (${materia.creditos})` ;
-      if (materia.esOpcional){
+      if (materia.esOpcional) {
         button.textContent += "*";
       }
       button.id = materia.nombre;
+
+      if (!materia.se_da) {
+        const menuIcon = document.createElement("img");
+        menuIcon.width = 15;
+        menuIcon.height = 15;
+        menuIcon.src = "icons/ex.png";
+        menuIcon.alt = "menu-icon";
+        menuIcon.id = "menu-icon";
+        menuIcon.className = "icono ex-mat";
+        button.prepend(menuIcon);
+      }
 
       button.onclick = function() {
         seScrolleo = false;
