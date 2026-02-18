@@ -129,7 +129,7 @@ class Materia {
 
 const todas = (...reglas) => ({ tipo: "todas", reglas });
 const alguna = (...reglas) => ({ tipo: "alguna", reglas });
-const negarRegla = (regla) => ({ tipo: "negar", regla });
+const negar = (regla) => ({ tipo: "negar", regla });
 
 const materiaAprobada = (materia) => ({
   tipo: "predicado",
@@ -328,6 +328,9 @@ CDI.informacion = [{nombre: "Eva", valor: "https://eva.fing.edu.uy/course/view.p
 const RC = new Materia("RC", 12, todas(materiaExonerada(P3),materiaAprobada(SO),materiaExonerada(CDIV),materiaAprobada(AC)), "Redes de Computadoras", Semestre.SEGUNDO, false, false, BloqueCreditos.creditosEnAC_SO_RC, []);
 RC.informacion = [{nombre: "Eva", valor: "https://eva.fing.edu.uy/course/view.php?id=335"}, 
                     {nombre: "Programa", valor: "https://eva.fing.edu.uy/pluginfile.php/82991/mod_resource/content/2/Programa%20de%20Unidad%20Curricular%20Redes%20de%20Computadoras%20-%2020191022.pdf"}]
+const SETR = new Materia("SETR", 10, todas(materiaExonerada(AC),materiaExonerada(P2)), "Sistemas embebidos para tiempo real", Semestre.PRIMERO, true, false, BloqueCreditos.creditosEnAC_SO_RC, []);
+SETR.informacion = [{nombre: "Eva", valor: "https://eva.fing.edu.uy/course/view.php?id=581"}, 
+                    {nombre: "Programa", valor: "https://www.fing.edu.uy/sites/default/files/cursos/2019/anexos/37196/Sist-EmbebidosTiempoReal-20.pdf"}]
 const RO = new Materia("RO", 10, materiaExonerada(RC), "Redes Ópticas", Semestre.SEGUNDO, true, false, BloqueCreditos.creditosEnAC_SO_RC, []);
 RO.informacion = [{nombre: "Eva", valor: "https://eva.fing.edu.uy/course/view.php?id=1862"}, 
                     {nombre: "Programa", valor: "https://www.fing.edu.uy/sites/default/files/2024-08/Redes_Opticas.pdf"}]
@@ -368,6 +371,9 @@ PIS.informacion = [{nombre: "Eva", valor: "https://eva.fing.edu.uy/course/view.p
 const AA = new Materia("AA", 12, todas(materiaExonerada(LG),materiaExonerada(PYE),materiaExonerada(P3),materiaExonerada(FBD),materiaExonerada(P4),materiaExonerada(MD2)), "Aprendizaje Automático", Semestre.SEGUNDO, true, false, BloqueCreditos.creditosEnIAYR, []);
 AA.informacion = [{nombre: "Eva", valor: "https://eva.fing.edu.uy/course/view.php?id=43"}, 
                     {nombre: "Programa", valor: "https://eva.fing.edu.uy/pluginfile.php/1583/course/section/29051/AA%20-%20Programa%20de%20Unidad%20Curricular.pdf"}]
+const TAA = new Materia("TAA", 10, materiaAprobada(AA), "Taller de Aprendizaje Automático", Semestre.PRIMERO, true, false, BloqueCreditos.creditosEnIAYR, []);
+TAA.informacion = [{nombre: "Eva", valor: "https://eva.fing.edu.uy/course/view.php?id=1492"}, 
+                    {nombre: "Programa", valor: "https://eva.fing.edu.uy/pluginfile.php/1775/course/section/7452/1-Programa_TallerAprendizajeAutomatico_actualizacion_2023_retroactiva_total%20%282%29.pdf?time=1710286794133"}]
 const RNLN = new Materia("RNLN", 10, todas(materiaExonerada(P3),materiaAprobada(AA),materiaExonerada(PYE)), "Redes Neuronales para Leng. Natural", Semestre.SEGUNDO, true, false, BloqueCreditos.creditosEnIAYR, []);
 RNLN.informacion = [{nombre: "Eva", valor: "https://eva.fing.edu.uy/course/view.php?id=1758"}, 
                     {nombre: "Programa", valor: "https://www.fing.edu.uy/sites/default/files/2023-05/REDES%20NEURONALES%20PARA%20LENGUAJE%20NATURAL.pdf"}]
@@ -397,6 +403,10 @@ const F2 = new Materia("F2", 10, todas(materiaAprobada(F1),materiaAprobada(CDIV)
 F2.informacion = [{nombre: "Eva primer semestre", valor: "https://eva.fing.edu.uy/course/view.php?id=32"}, 
                     {nombre: "Eva segundo semestre", valor: "https://eva.fing.edu.uy/course/view.php?id=1546"}, 
                     {nombre: "Programa", valor: "https://www.fing.edu.uy/sites/default/files/cursos/2011/anexos/2553/357_0.pdf"}]
+const F3 = new Materia("F3", 10, todas(materiaAprobada(CDIV), alguna(todas(materiaAprobada(F1), materiaAprobada(F2)), materiaExonerada(F1))), "Física 3", Semestre.AMBOS, true, true, BloqueCreditos.creditosEnCE, []);
+F3.informacion = [{nombre: "Eva primer semestre", valor: "https://eva.fing.edu.uy/course/view.php?id=36"}, 
+                    {nombre: "Eva segundo semestre", valor: "https://eva.fing.edu.uy/course/view.php?id=1547"}, 
+                    {nombre: "Programa", valor: "https://eva.fing.edu.uy/pluginfile.php/9232/mod_resource/content/0/Programa/nf3.pdf"}]
 const AGI = new Materia("AGI", 5, creditosMinimos(BloqueCreditos.Total,140), "Administración General para Ingenieros", Semestre.PRIMERO, true, true, BloqueCreditos.creditosEnGO, []);
 AGI.informacion = [{nombre: "Eva", valor: "https://eva.fing.edu.uy/course/view.php?id=778"}, 
                     {nombre: "Programa", valor: "https://eva.fing.edu.uy/pluginfile.php/87876/mod_folder/content/0/Programa%202024.pdf"}]
@@ -445,6 +455,7 @@ const Materias = [
   LG,
   TRE,
   F2,
+  F3,
   AC,
   PYE,
   PCI,
@@ -471,6 +482,7 @@ const Materias = [
   BDNR,
   CDI,
   RC,
+  SETR,
   RO,
   OBI,
   FO,
@@ -485,6 +497,7 @@ const Materias = [
   PFA,
   PL,
   AA,
+  TAA,
   CGA,
   FSI,
   CAP,
