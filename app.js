@@ -208,6 +208,9 @@ GAL1.informacion = [{nombre: "Eva primer semestre", valor: "https://eva.fing.edu
 const P2 = new Materia("P2", 12, materiaAprobada(P1), "Programación 2", Semestre.AMBOS, false, false, BloqueCreditos.creditosEnProg, []);
 P2.informacion = [{nombre: "Eva", valor: "https://eva.fing.edu.uy/course/view.php?id=132"}, 
                     {nombre: "Programa", valor: "https://eva.fing.edu.uy/mod/resource/view.php?id=25948"}]
+const TAR = new Materia("TAR", 10, todas(materiaExonerada(GAL1), materiaExonerada(CDIV), materiaAprobada(CDIVV)), "Topología y Análisis Real", Semestre.PRIMERO, true, false, BloqueCreditos.creditosEnM, []);
+TAR.informacion = [{nombre: "Eva", valor: "https://eva.fing.edu.uy/course/view.php?id=1279"}, 
+                    {nombre: "Programa", valor: "https://www.fing.edu.uy/sites/default/files/2022-11/1-Topologia_analisis_real_programa.pdf"}]
 const DAED = new Materia("DAED", 7, todas(materiaExonerada(P1), materiaExonerada(P2)), "Didáctica de Algorit. y Estruct. de Datos", Semestre.PRIMERO, true, false, BloqueCreditos.creditosEnProg, []);
 DAED.informacion = [{nombre: "Eva", valor: "https://eva.fing.edu.uy/course/view.php?id=874"}, 
                     {nombre: "Programa", valor: "https://eva.fing.edu.uy/pluginfile.php/217214/mod_resource/content/2/Programa-de-Unidad-Curricular-DAED.pdf"}]
@@ -511,7 +514,8 @@ const Materias = [
   MO,
   RNLN,
   AGI,
-  PAI
+  PAI,
+  TAR
 ];
 
 const botonMI = document.getElementById(MI.nombre);
