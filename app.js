@@ -218,7 +218,7 @@ TAR.informacion = [{nombre: "Eva", valor: "https://eva.fing.edu.uy/course/view.p
 const DAED = new Materia("DAED", 7, todas(materiaExonerada(P1), materiaExonerada(P2)), "Didáctica de Algorit. y Estruct. de Datos", Semestre.PRIMERO, true, false, BloqueCreditos.creditosEnProg, []);
 DAED.informacion = [{nombre: "Eva", valor: "https://eva.fing.edu.uy/course/view.php?id=874"}, 
                     {nombre: "Programa", valor: "https://eva.fing.edu.uy/pluginfile.php/45593/mod_resource/content/2/Programa-de-Unidad-Curricular-DAED.pdf"}]
-const Ec = new Materia("Ec", 7, null, "Economía", Semestre.SEGUNDO, true, false, BloqueCreditos.creditosEnCHS, []);
+const Ec = new Materia("Ec", 7, null, "Economía", Semestre.SEGUNDO, true, true, BloqueCreditos.creditosEnCHS, []);
 Ec.informacion = [{nombre: "Eva", valor: "https://eva.fing.edu.uy/course/view.php?id=1093"}, 
                     {nombre: "Programa", valor: "https://www.fing.edu.uy/static/programas/Grado/2019/Econom%C3%ADa/economia.pdf"}]
 const F1 = new Materia("F1", 10, null, "Física 1", Semestre.AMBOS, true, true, BloqueCreditos.creditosEnCE, []);
