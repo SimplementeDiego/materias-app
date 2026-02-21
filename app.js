@@ -391,7 +391,7 @@ CGA.informacion = [{nombre: "Eva", valor: "https://eva.fing.edu.uy/course/view.p
                     {nombre: "Programa", valor: "https://eva.fing.edu.uy/pluginfile.php/175013/mod_resource/content/3/Programa%20de%20Computaci%C3%B3n%20Gr%C3%A1fica%20Avanzada.pdf"}]
 const FSI = new Materia("FSI", 12, todas(materiaExonerada(SO),materiaExonerada(FBD),materiaExonerada(P3),materiaExonerada(LG),materiaExonerada(RC)), "Fundamentos de la Seguridad Informática", Semestre.PRIMERO, true, false, BloqueCreditos.creditosEnAC_SO_RC, []);
 FSI.informacion = [{nombre: "Eva", valor: "https://eva.fing.edu.uy/course/view.php?id=399"}, 
-                    {nombre: "Programa", valor: "https://eva.fing.edu.uy/pluginfile.php/191862/mod_resource/content/1/Programa%20de%20Unidad%20Curricular%20-%20FSI.pdf"}]
+                    {nombre: "Programa", valor: "https://eva.fing.edu.uy/pluginfile.php/46578/mod_resource/content/1/Programa%20de%20Unidad%20Curricular%20-%20FSI.pdf"}]
 const MI = new Materia("MI", 4, materiaExonerada("AUX"), "Matemática Inicial", Semestre.AMBOS, false, false, BloqueCreditos.creditosEnM, []);
 MI.informacion = [{nombre: "Eva primer semestre", valor: "https://eva.fing.edu.uy/course/view.php?id=1822"}, 
                     {nombre: "Eva segundo semestre", valor: "https://eva.fing.edu.uy/course/view.php?id=1535"}, 
