@@ -1145,7 +1145,7 @@ function crearBotonesMaterias(){
       const menuIcon = document.createElement("img");
       menuIcon.width = 15;
       menuIcon.height = 15;
-      menuIcon.src = "icons/ex.png";
+      menuIcon.src = "icons/ex-resized.webp";
       menuIcon.alt = "menu-icon";
       menuIcon.id = "menu-icon";
       menuIcon.className = "icono ex-mat";
