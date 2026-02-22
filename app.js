@@ -1238,6 +1238,10 @@ function firstLoad() {
     document.getElementById("mi-toggle-MI").checked = true;
     toggleMI();
   }
+  if (localStorage.getItem(FC.nombre) == "true") {
+    document.getElementById("mi-toggle-plan").checked = true;
+    togglePlan();
+  }
   if (localStorage.getItem(LocalStorageNombres.semestre)) {
     toggleBotones(localStorage.getItem(LocalStorageNombres.semestre));
   }
