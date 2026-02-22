@@ -144,6 +144,21 @@ button {
     border-radius: 10px;
 }
 
+.container-section-config {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: beige;
+    text-align: center;
+    padding: 10px;
+    min-height: calc((100vh - 60px - 150px) / 9);
+    /* cambiar esto si cambia la cantidad de secciones */
+    height: fit-content;
+    justify-content: space-around;
+    margin: 15px;
+    border-radius: 10px;
+}
+
 .section {
     width: 100%;
     display: flex;
@@ -194,11 +209,6 @@ button {
     text-decoration: underline;
 }
 
-.section-calculadora {
-    position: sticky;
-    bottom: 0;
-}
-
 .checkbox {
     display: none;
 }
@@ -209,12 +219,67 @@ button {
     margin-right: 20px;
 }
 
+.container-item-config {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+}
+
+.switch {
+    position: relative;
+    display: inline-block;
+    width: 46px;
+    height: 26px;
+}
+
+.switch-input {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    cursor: pointer;
+}
+
+.switch-slider {
+    position: absolute;
+    inset: 0;
+    border-radius: 999px;
+    background: #cfd4dc;
+    transition: background 150ms ease;
+}
+
+.switch-slider::before {
+    content: "";
+    position: absolute;
+    width: 22px;
+    height: 22px;
+    left: 2px;
+    top: 2px;
+    border-radius: 50%;
+    background: #fff;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, .25);
+    transform: translateX(0);
+    transition: transform 150ms ease;
+}
+
+.switch-input:checked+.switch-slider {
+    background: #22c55e;
+}
+
+.switch-input:checked+.switch-slider::before {
+    transform: translateX(20px);
+}
+
+.switch-input:focus-visible+.switch-slider {
+    outline: 2px solid #60a5fa;
+    outline-offset: 3px;
+}
+
 .checkbox-container {
     display: flex;
     align-items: center;
     justify-content: center;
 }
-
 
 #boxPopup {
     display: none;
@@ -471,32 +536,18 @@ label img {
 
     .info {
         border: 1px solid gray;
-        margin: 10px;
+        padding: 10px;
         border-radius: 10px;
         justify-content: start;
-    }
-
-    .bloque-gris {
-        margin: 10px;
-    }
-
-    .bloque-rojo {
-        margin: 10px;
-    }
-
-    .bloque-azul {
-        margin: 10px;
-    }
-
-    .bloque-verde {
-        margin: 10px;
-    }
-
-    .bloque {
-        margin: 10px;
+        margin-top: 10px;
     }
 
     .container-section {
+        margin: 0;
+        border-radius: 0;
+    }
+
+    .container-section-config {
         margin: 0;
         border-radius: 0;
     }

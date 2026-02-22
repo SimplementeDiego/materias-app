@@ -396,7 +396,7 @@ CGA.informacion = [{nombre: "Eva", valor: "https://eva.fing.edu.uy/course/view.p
 const FSI = new Materia("FSI", 12, todas(materiaExonerada(SO),materiaExonerada(FBD),materiaExonerada(P3),materiaExonerada(LG),materiaExonerada(RC)), "Fundamentos de la Seguridad Informática", Semestre.PRIMERO, true, false, BloqueCreditos.creditosEnAC_SO_RC, []);
 FSI.informacion = [{nombre: "Eva", valor: "https://eva.fing.edu.uy/course/view.php?id=399"}, 
                     {nombre: "Programa", valor: "https://eva.fing.edu.uy/pluginfile.php/46578/mod_resource/content/1/Programa%20de%20Unidad%20Curricular%20-%20FSI.pdf"}]
-const MI = new Materia("MI", 4, materiaExonerada("AUX"), "Matemática Inicial", Semestre.AMBOS, false, false, BloqueCreditos.creditosEnM, []);
+const MI = new Materia("MI", 4, null, "Matemática Inicial", Semestre.AMBOS, false, false, BloqueCreditos.creditosEnM, []);
 MI.informacion = [{nombre: "Eva primer semestre", valor: "https://eva.fing.edu.uy/course/view.php?id=1822"}, 
                     {nombre: "Eva segundo semestre", valor: "https://eva.fing.edu.uy/course/view.php?id=1535"}, 
                     {nombre: "Programa", valor: "https://eva.fing.edu.uy/pluginfile.php/499136/mod_resource/content/1/Programa_UC_Matematica_Inicial_modificado.pdf"}]
@@ -443,11 +443,9 @@ PG.informacion = [{nombre: "Eva", valor: "https://eva.fing.edu.uy/course/view.ph
 
 
 
-const Materias = [
-  MI,
+let Materias = [
   CC,
   MD1,
-  FC,
   CDIV,
   P1,
   GAL1,
@@ -522,10 +520,6 @@ const Materias = [
   PAI,
   TAR
 ];
-
-const botonMI = document.getElementById(MI.nombre);
-
-// FUNCIONES QUE HACEN UNA COSA
 
 function displayBlock(elemento){
   document.getElementById(elemento).style.display = "block";
@@ -617,31 +611,46 @@ window.onclick = function (event) {
   }
 };
 
-function habilitarMI() {
-  botonMI.disabled = false;
-  MI.reglaHabilitacion = null;
-  CDIV.reglaHabilitacion = materiaExonerada(MI);
-}
-
-function deshabilitarMI() {
-  botonMI.disabled = true;
-  MI.reglaHabilitacion = materiaExonerada(Bloqueante);
-  CDIV.reglaHabilitacion = null;
-}
-
-function cambiarValoresMI() {
-  botonMI.disabled ? habilitarMI() : deshabilitarMI();
-  localStorage.setItem(MI.nombre, botonMI.disabled);
-}
-
 function toggleMI() {
-  cambiarValoresMI();
+  if (Materias.includes(MI)) {
+    Materias = Materias.filter(materia => materia !== MI)
+    historialAprobadas.delete(MI.nombre);
+    historialExoneradas.delete(MI.nombre);
+    CDIV.reglaHabilitacion = null;
+  } else {
+    Materias.push(MI)
+    CDIV.reglaHabilitacion = materiaExonerada(MI);
+  }
+  asignarPesos();
+  crearSeccionesParaMaterias();
+  crearBotonesMaterias();
+  mostrarBotonesDeMateriasQueCorresponda();
+  localStorage.setItem(MI.nombre, Materias.includes(MI));
+  reconstruirEstadoPagina();
+}
+
+function togglePlan() {
+  if (Materias.includes(FC)) {
+    Materias = Materias.filter(materia => materia !== FC)
+    historialAprobadas.delete(FC.nombre);
+    historialExoneradas.delete(FC.nombre);
+    Materias.push(MD1)
+  } else {
+    Materias = Materias.filter(materia => materia !== MD1)
+    historialAprobadas.delete(MD1.nombre);
+    historialExoneradas.delete(MD1.nombre);
+    Materias.push(FC)
+  }
+  asignarPesos();
+  crearSeccionesParaMaterias();
+  crearBotonesMaterias();
+  mostrarBotonesDeMateriasQueCorresponda();
+  localStorage.setItem(FC.nombre, Materias.includes(FC));
   reconstruirEstadoPagina();
 }
 
 function toggleOpcionales() {
   seleccionOpcionales = !seleccionOpcionales;
-  document.getElementById(idButtonOpcionales).innerHTML = seleccionOpcionales ? "Opcionales: Si" : "Opcionales: No";
   mostrarBotonesDeMateriasQueCorresponda();
 }
 
@@ -677,13 +686,8 @@ function cambiarClaseActivaEnNav(idBoton) {
   document.getElementById(seleccionSemestre).classList.add(claseResaltarBotonEnNav);
 }
 
-function evaluarSiMostrarBotonToggleDeMI(){
-  seleccionSemestre==Semestre.LIBRE ? displayNone(idToggleMI) : displayBlock(idToggleMI);
-}
-
 function toggleBotones(idBoton) {
   cambiarClaseActivaEnNav(idBoton);
-  evaluarSiMostrarBotonToggleDeMI();
   mostrarBotonesDeMateriasQueCorresponda();
   localStorage.setItem(LocalStorageNombres.semestre, seleccionSemestre);
 }
@@ -1033,19 +1037,26 @@ function asignarPesoMateria(materia) {
   materia.peso = obtenerPesoDesdeRegla(materia.reglaHabilitacion) + 1;
 }
 
-function crearSeccionesParaMaterias(){
+function crearSeccionesParaMaterias() {
+  const parent = document.getElementById(idSecciones);
+  parent.querySelectorAll(".container-section").forEach(el => el.remove());
   for (let i = 1; i <= PG.peso; i++) {
     const containerDiv = document.createElement("div");
     containerDiv.className = "container-section";
+
     const sectionDiv = document.createElement("div");
     sectionDiv.className = "section";
     sectionDiv.id = `section-materias-${i}`;
+
     containerDiv.appendChild(sectionDiv);
-    document.getElementById(idSecciones).appendChild(containerDiv);
+    parent.appendChild(containerDiv);
   }
 }
 
 function asignarPesos() {
+  Materias.forEach((materia) => {
+    materia.peso = 0;
+  });
   let maxTotal = 0;
   AGI.peso = 3;
   Pasan.peso = 4;
@@ -1123,65 +1134,63 @@ function crearBotonesMaterias(){
   });
   Materias.forEach( (materia) => {
 
-    if (materia.nombre != MI.nombre){
-      var button = document.createElement('button');
-      button.textContent = `${materia.nombreCompleto} (${materia.creditos})` ;
-      if (materia.esOpcional) {
-        button.textContent += "*";
-      }
-      button.id = materia.nombre;
-
-      if (!materia.se_da) {
-        const menuIcon = document.createElement("img");
-        menuIcon.width = 15;
-        menuIcon.height = 15;
-        menuIcon.src = "icons/ex.png";
-        menuIcon.alt = "menu-icon";
-        menuIcon.id = "menu-icon";
-        menuIcon.className = "icono ex-mat";
-        button.prepend(menuIcon);
-      }
-
-      button.onclick = function() {
-        seScrolleo = false;
-        this.mouseIsDown = false;
-        clearTimeout(this.idTimeout);
-        toggleMateria(materia.nombre);
-      };
-
-      button.addEventListener('mousedown', function() {
-        this.mouseIsDown = true;
-        seScrolleo = false;
-        this.idTimeout = setTimeout( () => {
-          if(this.mouseIsDown && !seScrolleo) {
-            popUpGeneral(materia.nombre, "previaDe");
-          }
-        }, 800);
-      });
-
-      button.addEventListener('mouseleave', function() {
-        clearTimeout(this.idTimeout);
-        this.mouseIsDown = false;
-      });
-
-      button.addEventListener('touchstart', function() {
-        this.mouseIsDown = true;
-        seScrolleo = false;
-        this.idTimeout = setTimeout( () => {
-          if(this.mouseIsDown && !seScrolleo) {
-            popUpGeneral(materia.nombre, "previaDe");
-          }
-        }, 800);
-      });
-
-      button.addEventListener('touchmove', function() {
-        clearTimeout(this.idTimeout);
-        this.mouseIsDown = false;
-      });
-
-      let parent = document.getElementById(`section-materias-${materia.peso}`);
-      parent.appendChild(button);
+    var button = document.createElement('button');
+    button.textContent = `${materia.nombreCompleto} (${materia.creditos})` ;
+    if (materia.esOpcional) {
+      button.textContent += "*";
     }
+    button.id = materia.nombre;
+
+    if (!materia.se_da) {
+      const menuIcon = document.createElement("img");
+      menuIcon.width = 15;
+      menuIcon.height = 15;
+      menuIcon.src = "icons/ex.png";
+      menuIcon.alt = "menu-icon";
+      menuIcon.id = "menu-icon";
+      menuIcon.className = "icono ex-mat";
+      button.prepend(menuIcon);
+    }
+
+    button.onclick = function() {
+      seScrolleo = false;
+      this.mouseIsDown = false;
+      clearTimeout(this.idTimeout);
+      toggleMateria(materia.nombre);
+    };
+
+    button.addEventListener('mousedown', function() {
+      this.mouseIsDown = true;
+      seScrolleo = false;
+      this.idTimeout = setTimeout( () => {
+        if(this.mouseIsDown && !seScrolleo) {
+          popUpGeneral(materia.nombre, "previaDe");
+        }
+      }, 800);
+    });
+
+    button.addEventListener('mouseleave', function() {
+      clearTimeout(this.idTimeout);
+      this.mouseIsDown = false;
+    });
+
+    button.addEventListener('touchstart', function() {
+      this.mouseIsDown = true;
+      seScrolleo = false;
+      this.idTimeout = setTimeout( () => {
+        if(this.mouseIsDown && !seScrolleo) {
+          popUpGeneral(materia.nombre, "previaDe");
+        }
+      }, 800);
+    });
+
+    button.addEventListener('touchmove', function() {
+      clearTimeout(this.idTimeout);
+      this.mouseIsDown = false;
+    });
+
+    let parent = document.getElementById(`section-materias-${materia.peso}`);
+    parent.appendChild(button);
 
   } );
 
@@ -1225,9 +1234,9 @@ function firstLoad() {
     historialExoneradas = new Set(JSON.parse(localStorage.getItem(LocalStorageNombres.materiasExoneradas)));
     historialAprobadas = new Set(JSON.parse(localStorage.getItem(LocalStorageNombres.materiasAprobadas)));
   }
-  document.getElementById(MI.nombre).disabled = true;
-  if (localStorage.getItem(MI.nombre) == "false") {
-    cambiarValoresMI();
+  if (localStorage.getItem(MI.nombre) == "true") {
+    document.getElementById("mi-toggle-MI").checked = true;
+    toggleMI();
   }
   if (localStorage.getItem(LocalStorageNombres.semestre)) {
     toggleBotones(localStorage.getItem(LocalStorageNombres.semestre));

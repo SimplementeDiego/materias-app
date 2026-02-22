@@ -28,7 +28,6 @@
                 <button class="botones-item activo" onclick="toggleBotones('ambos')" id="ambos">Ambos</button>
                 <button class="botones-item" onclick="toggleBotones('libre')" id="libre">Calidad Libre</button>
                 <button class="botones-item area" onclick="verAreas()" id="areas">Ver áreas</button>
-                <button class="botones-item opcionales" onclick="toggleOpcionales()" id="op">Opcionales: Si</button>
                 <a class="botones-item sugerencia link-boton" href="https://forms.gle/jN9WEGE2hGvLxeNKA">Hacer sugerencia</a>
                 <button class="botones-item reset" onclick="reset()">Reset</button>
     
@@ -56,7 +55,7 @@
                 
             </div>
 
-            <div class="container-section no-bt">
+            <div class="container-section-config no-bt">
                 <p class="tituloSeccion">Información</p>
                 <div class="section">
                     <div class="info">
@@ -86,11 +85,33 @@
                 </div>
             </div>
 
-            <div class="container-section">
-                <p class="tituloSeccion">Opcional</p>
+            <div class="container-section-config">
+                <p class="tituloSeccion">Configuración</p>
                 <div class="section">
-                    <button onclick="toggleMI()" style="background-color: lightcyan;" id="activarMI">(Activar | Desactivar)</button>
-                    <button onclick="toggleMateria('MI')" id="MI" >Matemática Inicial (4)</button>
+                    <div class="container-item-config info">
+                        <label class="label-config" for="mi-toggle-MI">Matemática Inicial</label>
+
+                        <label class="switch">
+                            <input type="checkbox" id="mi-toggle-MI" class="switch-input" onclick="toggleMI()">
+                            <span class="switch-slider" aria-hidden="true"></span>
+                        </label>
+                    </div>
+                    <div class="container-item-config info">
+                        <label class="label-config" for="mi-toggle-plan">Plan 2025</label>
+
+                        <label class="switch">
+                            <input type="checkbox" id="mi-toggle-plan" class="switch-input" onclick="togglePlan()">
+                            <span class="switch-slider" aria-hidden="true"></span>
+                        </label>
+                    </div>
+                    <div class="container-item-config info">
+                        <label class="label-config" for="mi-toggle-opcionales">Opcionales</label>
+
+                        <label class="switch">
+                            <input type="checkbox" id="mi-toggle-opcionales" class="switch-input" onclick="toggleOpcionales()" checked>
+                            <span class="switch-slider" aria-hidden="true"></span>
+                        </label>
+                    </div>
                 </div>
             </div>
 
