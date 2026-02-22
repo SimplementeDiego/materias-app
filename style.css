@@ -335,7 +335,7 @@ button {
     align-items: center;
     justify-content: center;
     text-align: center;
-    width: 80%;
+    width: 300px;
     margin: 10px;
 }
 
@@ -535,6 +535,7 @@ label img {
     }
 
     .info {
+        width: 80%;
         border: 1px solid gray;
         padding: 10px;
         border-radius: 10px;
