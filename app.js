@@ -64,14 +64,12 @@ const colorExonerada = "lightgreen";
 const colorHabilitada = "lightcoral";
 const colorDeshabilitada = "gray";
 
-const idToggleMI = "activarMI";
 const idSecciones = "secciones";
 const idPopUp = "boxPopup";
 const idTextInPopup = "popup-text";
 const idCheckbox = "checkbox";
 const idNavbar = "navbar";
 const idButtonCloseInPopup = "cerrar-popup";
-const idButtonOpcionales = "op";
 const idTitulo = "titulo";
 
 let historialAprobadas = new Set();
@@ -107,8 +105,7 @@ class Materia {
     esOpcional,
     esLibre,
     area,
-    informacion,
-    se_da
+    informacion
   ) {
     this.nombre = nombre;
     this.creditos = creditos;
@@ -183,7 +180,6 @@ function evaluarRegla(regla) {
   }
 }
 
-const Bloqueante = new Materia("Bloqueante", 0, null, "Bloqueante", "", true, false, "");
 const CDIV = new Materia("CDIV", 13, null, "Cálculo DIV", Semestre.AMBOS, false, true, BloqueCreditos.creditosEnM, []);
 CDIV.informacion = [{nombre: "Eva primer semestre", valor: "https://eva.fing.edu.uy/course/view.php?id=1024"}, 
                     {nombre: "Eva segundo semestre", valor: "https://eva.fing.edu.uy/course/view.php?id=1504"}, 
@@ -712,7 +708,6 @@ function mostrarBotonesDeMateriasQueCorresponda() {
 function toggleMenu() {
   isNavbarOpen() ? displayFlex(idNavbar) : displayNone(idNavbar);
   document.getElementById("menu-icon").classList.toggle("abierto");
-  
   seleccionMenu = !seleccionMenu;
 }
 
@@ -759,46 +754,48 @@ function actualizarCreditosTitulo() {
 }
 
 function hastaQueNoHayaCambio(){
-  let materiasAprobadas = {};
-  let materiasExoneradas = {};
-  let huboCambioEnHistoriales = true;
-  while (huboCambioEnHistoriales) {
-    resetCreditos();
-    huboCambioEnHistoriales = false;
-    for (const materia of Materias) {
-      materiasAprobadas[materia.nombre] = false;
-      materiasExoneradas[materia.nombre] = false;
-    }
-    let seMarcoNuevaMateria = true;
-    while (seMarcoNuevaMateria) {
-      seMarcoNuevaMateria = false;
-      Materias.forEach((materia) => {
-        const { cumple } = evaluarRegla(materia.reglaHabilitacion);
-        if ( !materiasAprobadas[materia.nombre] && cumple && historialAprobadas.has(materia.nombre) ) {
-          materiasAprobadas[materia.nombre] = true;
-          seMarcoNuevaMateria = true;
-        }
-        if ( !materiasExoneradas[materia.nombre] && cumple && historialExoneradas.has(materia.nombre) ) {
-          sumarCreditos(materia);
-          materiasExoneradas[materia.nombre] = true;
-          seMarcoNuevaMateria = true;
-        }
-      });
-    }
-    for (const materia of Materias) {
-      if (!materiasAprobadas[materia.nombre]){
-        if (historialAprobadas.delete(materia.nombre) || historialExoneradas.delete(materia.nombre)) huboCambioEnHistoriales=true;
-      }else{
-        if (!materiasExoneradas[materia.nombre]){
-          if (historialExoneradas.delete(materia.nombre)) huboCambioEnHistoriales=true;
-        }
+  let auxHistorialAprobadas = historialAprobadas;
+  let auxHistorialExoneradas = historialExoneradas;
+  historialAprobadas = new Set();
+  historialExoneradas = new Set();
+  let huboCambio = true;
+  while (huboCambio) {
+    calcularCreditos();
+    huboCambio = false;
+    auxHistorialAprobadas.forEach( (nombreMateria) => {
+      let materia = encontrarMateriaPorNombre(nombreMateria);
+      let {cumple} = evaluarRegla(materia.reglaHabilitacion);
+      if (cumple) {
+        huboCambio = true;
+        auxHistorialAprobadas.delete(nombreMateria);
+        historialAprobadas.add(nombreMateria);
       }
-    }
+    })
+    if (huboCambio) continue; 
+    auxHistorialExoneradas.forEach( (nombreMateria) => {
+      let materia = encontrarMateriaPorNombre(nombreMateria);
+      let {cumple} = evaluarRegla(materia.reglaHabilitacion);
+      if (cumple) {
+        huboCambio = true;
+        auxHistorialExoneradas.delete(nombreMateria);
+        historialExoneradas.add(nombreMateria);
+        sumarCreditos(materia);
+      }
+    })
   }
 }
 
+function calcularCreditos() {
+  resetCreditos();
+  historialExoneradas.forEach((nombreMateria) => {
+    let materia = encontrarMateriaPorNombre(nombreMateria);
+    sumarCreditos(materia);
+  });
+}
+
 function reconstruirEstadoPagina() {
-  hastaQueNoHayaCambio()
+  hastaQueNoHayaCambio();
+  calcularCreditos();
   Materias.forEach((materia) => { establecerEstadoBotonMateria(materia); });
   actualizarCreditosTitulo();
   localStorage.setItem(LocalStorageNombres.materiasExoneradas, JSON.stringify(Array.from(historialExoneradas.values())));
@@ -985,8 +982,8 @@ function verAreas() {
 function mostrarMateriasEnPopup(nombre){
   const elementoPrincipal = document.createElement("div");
   elementoPrincipal.append(crearLineaAreaSubrayadaConMargenAbajo(`Materias para ${TraduccionBloqueCreditos[nombre]}`));
-  const lineaHechas = crearLineaAreaSubrayada(`Materias ya hechas`);
-  const lineaDisponibles = crearLineaAreaSubrayada(`Materias disponibles`);
+  const lineaHechas = crearLineaAreaSubrayada("Materias ya hechas");
+  const lineaDisponibles = crearLineaAreaSubrayada("Materias disponibles");
   const materiasDisponibles = document.createElement("div");
   const materiasHechas = document.createElement("div");
   Materias.forEach( (materia)=>{
@@ -1120,7 +1117,7 @@ function mostrarDeQueEsPrevia(nombreMateria) {
   return elementoFinal;
 }
 
-seScrolleo = false;
+let seScrolleo = false;
 
 function crearBotonesMaterias(){
   Materias.sort((materia1, materia2) => {
@@ -1134,7 +1131,7 @@ function crearBotonesMaterias(){
   });
   Materias.forEach( (materia) => {
 
-    var button = document.createElement('button');
+    var button = document.createElement("button");
     button.textContent = `${materia.nombreCompleto} (${materia.creditos})` ;
     if (materia.esOpcional) {
       button.textContent += "*";
@@ -1159,7 +1156,7 @@ function crearBotonesMaterias(){
       toggleMateria(materia.nombre);
     };
 
-    button.addEventListener('mousedown', function() {
+    button.addEventListener("mousedown", function() {
       this.mouseIsDown = true;
       seScrolleo = false;
       this.idTimeout = setTimeout( () => {
@@ -1169,12 +1166,12 @@ function crearBotonesMaterias(){
       }, 800);
     });
 
-    button.addEventListener('mouseleave', function() {
+    button.addEventListener("mouseleave", function() {
       clearTimeout(this.idTimeout);
       this.mouseIsDown = false;
     });
 
-    button.addEventListener('touchstart', function() {
+    button.addEventListener("touchstart", function() {
       this.mouseIsDown = true;
       seScrolleo = false;
       this.idTimeout = setTimeout( () => {
@@ -1184,7 +1181,7 @@ function crearBotonesMaterias(){
       }, 800);
     });
 
-    button.addEventListener('touchmove', function() {
+    button.addEventListener("touchmove", function() {
       clearTimeout(this.idTimeout);
       this.mouseIsDown = false;
     });
