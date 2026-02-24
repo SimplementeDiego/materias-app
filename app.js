@@ -876,6 +876,7 @@ function verRespuestas() {
   tituloRespuesta1.innerText = "Sobre Plan 2025";
   const infoRespuesta1 = document.createElement("div");
   infoRespuesta1.classList.add("info-respuesta");
+  infoRespuesta1.classList.add("margen-inferior-20");
   infoRespuesta1.innerText = "Voy a ir agregando materias del Plan 2025 cuando se vaya publicando más información, como los programas y los Evas. Si considerás que una materia ya puede ser agregada, enviala como sugerencia."
   seccionRespuesta1.append(tituloRespuesta1);
   seccionRespuesta1.append(infoRespuesta1);
@@ -886,6 +887,7 @@ function verRespuestas() {
   tituloRespuesta2.innerText = "Sobre lista de materias de cada área";
   const infoRespuesta2 = document.createElement("div");
   infoRespuesta2.classList.add("info-respuesta");
+  infoRespuesta2.classList.add("margen-inferior-20");
   infoRespuesta2.innerText = 'Entrando a "Ver áreas", al darle clic a un área, como por ejemplo "Matemática", debería aparecer una lista de materias.'
   seccionRespuesta2.append(tituloRespuesta2);
   seccionRespuesta2.append(infoRespuesta2);
@@ -896,6 +898,7 @@ function verRespuestas() {
   tituloRespuesta3.innerText = "Sobre currícula Analista";
   const infoRespuesta3 = document.createElement("div");
   infoRespuesta3.classList.add("info-respuesta");
+  infoRespuesta3.classList.add("margen-inferior-20");
   infoRespuesta3.innerText = 'Estoy viendo como implementar esto de la mejor manera para que sea útil.'
   seccionRespuesta3.append(tituloRespuesta3);
   seccionRespuesta3.append(infoRespuesta3);
