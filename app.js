@@ -867,10 +867,53 @@ function calcularHTMLIndicarPrevias(regla) {
   return elementoSalida;
 }
 
-function verRespuestas() {
+function verRespuestas() {  
   const elementoPrincipal = document.createElement("div");
-  elementoPrincipal.append(crearLineaNegrita("Sobre Plan 2025", ``));
-  elementoPrincipal.append(crearLineaNegrita("Sobre materias de cada área", ``));
+
+  const seccionRespuesta1 = document.createElement("div");
+  const tituloRespuesta1 = document.createElement("div");
+  tituloRespuesta1.classList.add("titulo-respuesta");
+  tituloRespuesta1.innerText = "Sobre Plan 2025";
+  const infoRespuesta1 = document.createElement("div");
+  infoRespuesta1.classList.add("info-respuesta");
+  infoRespuesta1.innerText = "Voy a ir agregando materias del Plan 2025 cuando se vaya publicando más información, como los programas y los Evas. Si considerás que una materia ya puede ser agregada, enviala como sugerencia."
+  seccionRespuesta1.append(tituloRespuesta1);
+  seccionRespuesta1.append(infoRespuesta1);
+
+  const seccionRespuesta2 = document.createElement("div");
+  const tituloRespuesta2 = document.createElement("div");
+  tituloRespuesta2.classList.add("titulo-respuesta");
+  tituloRespuesta2.innerText = "Sobre lista de materias de cada área";
+  const infoRespuesta2 = document.createElement("div");
+  infoRespuesta2.classList.add("info-respuesta");
+  infoRespuesta2.innerText = 'Entrando a "Ver áreas", al darle clic a un área, como por ejemplo "Matemática", debería aparecer una lista de materias.'
+  seccionRespuesta2.append(tituloRespuesta2);
+  seccionRespuesta2.append(infoRespuesta2);
+
+  const seccionRespuesta3 = document.createElement("div");
+  const tituloRespuesta3 = document.createElement("div");
+  tituloRespuesta3.classList.add("titulo-respuesta");
+  tituloRespuesta3.innerText = "Sobre currícula Analista";
+  const infoRespuesta3 = document.createElement("div");
+  infoRespuesta3.classList.add("info-respuesta");
+  infoRespuesta3.innerText = 'Estoy viendo como implementar esto de la mejor manera para que sea útil.'
+  seccionRespuesta3.append(tituloRespuesta3);
+  seccionRespuesta3.append(infoRespuesta3);
+
+  const seccionRespuesta4 = document.createElement("div");
+  const tituloRespuesta4 = document.createElement("div");
+  tituloRespuesta4.classList.add("titulo-respuesta");
+  tituloRespuesta4.innerText = "Sobre ver información de materias no deshabilitadas";
+  const infoRespuesta4 = document.createElement("div");
+  infoRespuesta4.classList.add("info-respuesta");
+  infoRespuesta4.innerText = 'Manteniendo apretado el clic o tap en un botón de cualquier materia abre el menú de previas, previa de, y más información.'
+  seccionRespuesta4.append(tituloRespuesta4);
+  seccionRespuesta4.append(infoRespuesta4);
+
+  elementoPrincipal.append(seccionRespuesta1)
+  elementoPrincipal.append(seccionRespuesta2)
+  elementoPrincipal.append(seccionRespuesta3)
+  elementoPrincipal.append(seccionRespuesta4)
   cargarEnPopup(elementoPrincipal);
   openPopup();
 }
