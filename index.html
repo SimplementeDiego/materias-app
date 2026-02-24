@@ -10,35 +10,31 @@
 </head>
 <body>
     
-    <header class="header-content">
+    <header>
 
-        <div class="titulo-container">
-            <h1 id="titulo">Materias | Créditos: 0</h1>
-            <div class="checkbox-container" id="checkbox-container">
-                <label for="checkbox" class="label"><img src="icons/ham-resized.webp" alt="menu-icon" id="menu-icon" class="icono"></label>
-                <input type="checkbox" class="checkbox" id="checkbox" onclick="toggleMenu()">
+        <div id="titulo-principal-container">
+            <h1 id="titulo-principal-texto">Materias | Créditos: 0</h1>
+            <div id="titulo-principal-checkbox-container">
+                <label for="input-ham" id="label-ham"><img src="icons/ham-resized.webp" alt="menu-icon" id="img-ham"></label>
+                <input type="checkbox" id="input-ham" onclick="toggleMenu()">
             </div>
         </div>
 
-        <nav class="navbar" id="navbar">
-            <div class="botones-top">
-            
-                <button onclick="toggleBotones('primero')" id="primero" class="botones-item">1er Semestre</button>
-                <button onclick="toggleBotones('segundo')" id="segundo" class="botones-item">2do Semestre</button>
-                <button class="botones-item activo" onclick="toggleBotones('ambos')" id="ambos">Ambos</button>
-                <button class="botones-item" onclick="toggleBotones('libre')" id="libre">Calidad Libre</button>
-                <button class="botones-item area" onclick="verAreas()" id="areas">Ver áreas</button>
-                <a class="botones-item sugerencia link-boton" href="https://forms.gle/jN9WEGE2hGvLxeNKA">Hacer sugerencia</a>
-                <button class="botones-item reset" onclick="reset()">Reset</button>
-    
-            </div>
+        <nav id="navbar">
+            <button onclick="toggleBotones('primero')" id="primero" class="navbar-boton">1er Semestre</button>
+            <button onclick="toggleBotones('segundo')" id="segundo" class="navbar-boton">2do Semestre</button>
+            <button onclick="toggleBotones('ambos')" id="ambos" class="navbar-boton activo">Ambos</button>
+            <button onclick="toggleBotones('libre')" id="libre" class="navbar-boton">Calidad Libre</button>
+            <button onclick="verAreas()" id="areas" class="navbar-boton">Ver áreas</button>
+            <a class="navbar-boton link-boton" id="sugerencia" href="https://forms.gle/jN9WEGE2hGvLxeNKA">Hacer sugerencia</a>
+            <button onclick="reset()" id="reset" class="navbar-boton">Reset</button>
         </nav>
 
     </header>
 
-    <main class="main-content">
+    <main>
 
-        <div class="secciones" id="secciones">
+        <div id="secciones">
 
             <div id="boxPopup">
 

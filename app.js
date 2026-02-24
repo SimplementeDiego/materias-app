@@ -67,10 +67,12 @@ const colorDeshabilitada = "gray";
 const idSecciones = "secciones";
 const idPopUp = "boxPopup";
 const idTextInPopup = "popup-text";
-const idCheckbox = "checkbox";
+const idCheckbox = "input-ham";
 const idNavbar = "navbar";
 const idButtonCloseInPopup = "cerrar-popup";
-const idTitulo = "titulo";
+const idTitulo = "titulo-principal-texto";
+const idHamContainer = "titulo-principal-checkbox-container";
+const idHam = "img-ham";
 
 let historialAprobadas = new Set();
 let historialExoneradas = new Set();
@@ -80,18 +82,18 @@ let seleccionSemestre = Semestre.AMBOS;
 let valorBarra = BarraPopup.Previas;
 
 let creditosBloque = {
-  creditosEnM: 0, // 70              | MI + MD1 + CDIV + GAL1 + CDIVV + GAL2 + MD2 + PYE + LOG = 88
-  creditosEnCE: 0, // 10             | F1 = 10
-  creditosEnProg: 0, // 60           | P1 + P2 + P3 + P4 + TL = 64
-  creditosEnAC_SO_RC: 0, // 30       | AC + SO + RC = 36
-  creditosEnBD_SI: 0, // 10          | FBD = 15
-  creditosEnMN: 0, // 8              | MN = 8
-  creditosEnIO: 0, // 10             | IIO = 10
-  creditosEnIS: 0, // 10             | IIS = 10
-  creditosEnTall_Pasa_Proy: 0, // 45 | PG + PIS + TP = 60
-  creditosEnGO: 0, // 10             | AGI + PAI = 10
-  creditosEnIAYR: 0, // 0            |
-  creditosEnCHS: 0, // 10            | EC + PCIC = 10
+  creditosEnM: 0,
+  creditosEnCE: 0,
+  creditosEnProg: 0,
+  creditosEnAC_SO_RC: 0,
+  creditosEnBD_SI: 0,
+  creditosEnMN: 0,
+  creditosEnIO: 0,
+  creditosEnIS: 0,
+  creditosEnTall_Pasa_Proy: 0,
+  creditosEnGO: 0,
+  creditosEnIAYR: 0,
+  creditosEnCHS: 0,
   Total: 0,
 };
 
@@ -707,7 +709,7 @@ function mostrarBotonesDeMateriasQueCorresponda() {
 
 function toggleMenu() {
   isNavbarOpen() ? displayFlex(idNavbar) : displayNone(idNavbar);
-  document.getElementById("menu-icon").classList.toggle("abierto");
+  document.getElementById(idHam).classList.toggle("abierto");
   seleccionMenu = !seleccionMenu;
 }
 
@@ -764,11 +766,17 @@ function hastaQueNoHayaCambio(){
     huboCambio = false;
     auxHistorialAprobadas.forEach( (nombreMateria) => {
       let materia = encontrarMateriaPorNombre(nombreMateria);
-      let {cumple} = evaluarRegla(materia.reglaHabilitacion);
-      if (cumple) {
-        huboCambio = true;
+      if (!materia) {
         auxHistorialAprobadas.delete(nombreMateria);
-        historialAprobadas.add(nombreMateria);
+        auxHistorialExoneradas.delete(nombreMateria);
+        huboCambio = true;
+      } else {
+        let {cumple} = evaluarRegla(materia.reglaHabilitacion);
+        if (cumple) {
+          huboCambio = true;
+          auxHistorialAprobadas.delete(nombreMateria);
+          historialAprobadas.add(nombreMateria);
+        }
       }
     })
     if (huboCambio) continue; 
@@ -859,10 +867,22 @@ function calcularHTMLIndicarPrevias(regla) {
   return elementoSalida;
 }
 
+function verRespuestas() {
+  const elementoPrincipal = document.createElement("div");
+  elementoPrincipal.append(crearLineaNegrita("Sobre Plan 2025", ``));
+  elementoPrincipal.append(crearLineaNegrita("Sobre materias de cada área", ``));
+  cargarEnPopup(elementoPrincipal);
+  openPopup();
+}
+
 function indicarInformacion(nombreMateria) {
   let htmlFinal = document.createElement("div");
   const materiaAct = encontrarMateriaPorNombre(nombreMateria);
   htmlFinal.append(crearLineaAreaSubrayadaConMargenAbajo(`Información de ${materiaAct.nombreCompleto}`));
+  const line = document.createElement("div");
+  line.innerText = `Aporta créditos en el área de ${TraduccionBloqueCreditos[materiaAct.area]}`
+  line.onclick = () => { mostrarMateriasEnPopup(BloqueCreditos[materiaAct.area]) }
+  htmlFinal.append(line);
   materiaAct.informacion.forEach( ({ nombre, valor }) => {
     const a = document.createElement("a");
     a.href = valor;
@@ -1203,10 +1223,10 @@ document.addEventListener("scroll", function() {
 
 function checkWidth() {
   if (window.matchMedia("(min-width: 675px)").matches) {
-    displayNone("checkbox-container");
+    displayNone(idHamContainer);
     displayFlex(idNavbar);
   } else {
-    displayFlex("checkbox-container");
+    displayFlex(idHamContainer);
     if (seleccionMenu) {
       this.document.getElementById(idCheckbox).checked = true;
       displayFlex(idNavbar);
