@@ -65,14 +65,18 @@ const colorHabilitada = "lightcoral";
 const colorDeshabilitada = "gray";
 
 const idSecciones = "secciones";
-const idPopUp = "boxPopup";
-const idTextInPopup = "popup-text";
+const idPopUp = "popup-container";
+const idTextInPopup = "popup-materia-contenido";
 const idCheckbox = "input-ham";
 const idNavbar = "navbar";
 const idButtonCloseInPopup = "cerrar-popup";
 const idTitulo = "titulo-principal-texto";
 const idHamContainer = "titulo-principal-checkbox-container";
 const idHam = "img-ham";
+const idPopupMateria = "popup-materia";
+const idPopupRespuestas = "popup-respuestas"
+const idPopupAreas = "popup-areas";
+const idPopupListaMaterias = "popup-lista-materias"
 
 let historialAprobadas = new Set();
 let historialExoneradas = new Set();
@@ -80,6 +84,7 @@ let seleccionOpcionales = true;
 let seleccionMenu = false;
 let seleccionSemestre = Semestre.AMBOS;
 let valorBarra = BarraPopup.Previas;
+let popUpActual = idPopupMateria;
 
 let creditosBloque = {
   creditosEnM: 0,
@@ -531,41 +536,31 @@ function displayFlex(elemento){
   document.getElementById(elemento).style.display = "flex";
 }
 
-function cargarEnPopup(elemento) {
-  document.getElementById(idTextInPopup).innerHTML = "";
-  document.getElementById(idTextInPopup).append(elemento);
-}
-
-function openPopup() {
-  desactivarBarraPopup()
-  closeNavIfMobile();
-  displayFlex(idPopUp);
-  document.getElementById(idButtonCloseInPopup).focus();
-}
-
-function openPopupConBarra() {
+function openPopup(proximoPopup) {
+  displayNone(popUpActual);
+  popUpActual = proximoPopup;
+  displayBlock(proximoPopup);
   closeNavIfMobile();
   displayFlex(idPopUp);
   document.getElementById(idButtonCloseInPopup).focus();
 }
 
 function closePopup() {
-  desactivarBarraPopup();
   displayNone(idPopUp);
 }
 
 function activarBarraPopup(nombreMateria, valor) {
-  displayFlex("popup-barra-superior");
+  displayFlex("popup-materia-barra-superior");
   document.getElementById(valorBarra).classList.remove("activo");
   valorBarra = valor;
   document.getElementById(valor).classList.add("activo");
   document.getElementById(BarraPopup.Previas).onclick = () => { popUpGeneral(nombreMateria,"previas") };
   document.getElementById(BarraPopup.PreviaDe).onclick = () => { popUpGeneral(nombreMateria,"previaDe") };
-  document.getElementById(BarraPopup.Informacion).onclick =() => { popUpGeneral(nombreMateria,"informacion") };
+  document.getElementById(BarraPopup.Informacion).onclick = () => { popUpGeneral(nombreMateria,"informacion") };
 }
 
 function desactivarBarraPopup(){
-  displayNone("popup-barra-superior");
+  displayNone("popup-materia-barra-superior");
 }
 
 function popUpGeneral(nombreMateria, valor) {
@@ -584,8 +579,9 @@ function popUpGeneral(nombreMateria, valor) {
       break;
   }
   containerPrincipal.append(contenidoInferior);
-  cargarEnPopup(containerPrincipal);
-  openPopupConBarra();
+  document.getElementById(idTextInPopup).innerHTML = "";
+  document.getElementById(idTextInPopup).append(containerPrincipal);
+  openPopup(idPopupMateria);
 }
 
 function isMobileDevice(){
@@ -619,10 +615,9 @@ function toggleMI() {
     Materias.push(MI)
     CDIV.reglaHabilitacion = materiaExonerada(MI);
   }
-  asignarPesos();
-  crearSeccionesParaMaterias();
-  crearBotonesMaterias();
+  rehacerPaginaSinEstado();
   mostrarBotonesDeMateriasQueCorresponda();
+  mostrarSeccionesQueCorrespondan();
   localStorage.setItem(MI.nombre, Materias.includes(MI));
   reconstruirEstadoPagina();
 }
@@ -639,10 +634,9 @@ function togglePlan() {
     historialExoneradas.delete(MD1.nombre);
     Materias.push(FC)
   }
-  asignarPesos();
-  crearSeccionesParaMaterias();
-  crearBotonesMaterias();
+  rehacerPaginaSinEstado();
   mostrarBotonesDeMateriasQueCorresponda();
+  mostrarSeccionesQueCorrespondan();
   localStorage.setItem(FC.nombre, Materias.includes(FC));
   reconstruirEstadoPagina();
 }
@@ -650,6 +644,7 @@ function togglePlan() {
 function toggleOpcionales() {
   seleccionOpcionales = !seleccionOpcionales;
   mostrarBotonesDeMateriasQueCorresponda();
+  mostrarSeccionesQueCorrespondan();
 }
 
 function encontrarMateriaPorNombre(nombre) {
@@ -687,6 +682,7 @@ function cambiarClaseActivaEnNav(idBoton) {
 function toggleBotones(idBoton) {
   cambiarClaseActivaEnNav(idBoton);
   mostrarBotonesDeMateriasQueCorresponda();
+  mostrarSeccionesQueCorrespondan();
   localStorage.setItem(LocalStorageNombres.semestre, seleccionSemestre);
 }
 
@@ -755,7 +751,7 @@ function actualizarCreditosTitulo() {
   document.getElementById(idTitulo).textContent = `Materias | Créditos: ${creditosBloque.Total}`;
 }
 
-function hastaQueNoHayaCambio(){
+function reconstruyoEstadoValido(){
   let auxHistorialAprobadas = historialAprobadas;
   let auxHistorialExoneradas = historialExoneradas;
   historialAprobadas = new Set();
@@ -802,7 +798,7 @@ function calcularCreditos() {
 }
 
 function reconstruirEstadoPagina() {
-  hastaQueNoHayaCambio();
+  reconstruyoEstadoValido();
   calcularCreditos();
   Materias.forEach((materia) => { establecerEstadoBotonMateria(materia); });
   actualizarCreditosTitulo();
@@ -836,7 +832,7 @@ function calcularHTMLIndicarPrevias(regla) {
   if (regla.tipo === "todas") {
     let tituloSalida = document.createElement("div");
     tituloSalida.innerText = "Debe cumplir todo lo siguiente";
-    tituloSalida.classList.add("tituloPopup");
+    tituloSalida.classList.add("titulo-popup");
     elementoSalida.append(tituloSalida);
     regla.reglas.forEach( (reglaActual) => { 
       elementoSalida.append(calcularHTMLIndicarPrevias(reglaActual)); 
@@ -845,7 +841,7 @@ function calcularHTMLIndicarPrevias(regla) {
   if (regla.tipo === "alguna") {
     let tituloSalida = document.createElement("div");
     tituloSalida.innerText = "Debe cumplir alguna de las siguientes opciones";
-    tituloSalida.classList.add("tituloPopup");
+    tituloSalida.classList.add("titulo-popup");
     elementoSalida.append(tituloSalida)
     let opcionNumero = 1;
     regla.reglas.forEach( (reglaActual) => { 
@@ -860,7 +856,7 @@ function calcularHTMLIndicarPrevias(regla) {
   if (regla.tipo === "negar") {
     let tituloSalida = document.createElement("div");
     tituloSalida.innerText = "No cumplir lo siguiente";
-    tituloSalida.classList.add("tituloPopup");
+    tituloSalida.classList.add("titulo-popup");
     elementoSalida.append(tituloSalida);
     elementoSalida.append(calcularHTMLIndicarPrevias(regla.regla)); 
   }
@@ -868,69 +864,7 @@ function calcularHTMLIndicarPrevias(regla) {
 }
 
 function verRespuestas() {  
-  const elementoPrincipal = document.createElement("div");
-
-  const seccionRespuesta1 = document.createElement("div");
-  const tituloRespuesta1 = document.createElement("div");
-  tituloRespuesta1.classList.add("titulo-respuesta");
-  tituloRespuesta1.innerText = "Sobre Plan 2025";
-  const infoRespuesta1 = document.createElement("div");
-  infoRespuesta1.classList.add("info-respuesta");
-  infoRespuesta1.classList.add("margen-inferior-20");
-  infoRespuesta1.innerText = "Voy a ir agregando materias del Plan 2025 cuando se vaya publicando más información, como los programas y los Evas. Si considerás que una materia ya puede ser agregada, enviala como sugerencia."
-  seccionRespuesta1.append(tituloRespuesta1);
-  seccionRespuesta1.append(infoRespuesta1);
-
-  const seccionRespuesta2 = document.createElement("div");
-  const tituloRespuesta2 = document.createElement("div");
-  tituloRespuesta2.classList.add("titulo-respuesta");
-  tituloRespuesta2.innerText = "Sobre lista de materias de cada área";
-  const infoRespuesta2 = document.createElement("div");
-  infoRespuesta2.classList.add("info-respuesta");
-  infoRespuesta2.classList.add("margen-inferior-20");
-  infoRespuesta2.innerText = 'Entrando a "Ver áreas", al darle clic o tap a un área, como por ejemplo "Matemática", debería aparecer una lista de materias.'
-  seccionRespuesta2.append(tituloRespuesta2);
-  seccionRespuesta2.append(infoRespuesta2);
-
-  const seccionRespuesta3 = document.createElement("div");
-  const tituloRespuesta3 = document.createElement("div");
-  tituloRespuesta3.classList.add("titulo-respuesta");
-  tituloRespuesta3.innerText = "Sobre currícula Analista";
-  const infoRespuesta3 = document.createElement("div");
-  infoRespuesta3.classList.add("info-respuesta");
-  infoRespuesta3.classList.add("margen-inferior-20");
-  infoRespuesta3.innerText = 'Estoy viendo como implementar esto de la mejor manera para que sea útil.'
-  seccionRespuesta3.append(tituloRespuesta3);
-  seccionRespuesta3.append(infoRespuesta3);
-
-  const seccionRespuesta4 = document.createElement("div");
-  const tituloRespuesta4 = document.createElement("div");
-  tituloRespuesta4.classList.add("titulo-respuesta");
-  tituloRespuesta4.innerText = "Sobre ver información de materias no deshabilitadas";
-  const infoRespuesta4 = document.createElement("div");
-  infoRespuesta4.classList.add("info-respuesta");
-  infoRespuesta4.classList.add("margen-inferior-20");
-  infoRespuesta4.innerText = 'Manteniendo apretado el clic o tap en un botón de cualquier materia abre el menú de previas, previa de, y más información.'
-  seccionRespuesta4.append(tituloRespuesta4);
-  seccionRespuesta4.append(infoRespuesta4);
-
-  const seccionRespuesta5 = document.createElement("div");
-  const tituloRespuesta5 = document.createElement("div");
-  tituloRespuesta5.classList.add("titulo-respuesta");
-  tituloRespuesta5.innerText = "Sobre poder agregarte tus propias materias";
-  const infoRespuesta5 = document.createElement("div");
-  infoRespuesta5.classList.add("info-respuesta");
-  infoRespuesta5.innerText = 'Lo tengo pensado implementar. Tengo que arreglar unos temas de funcionamiento interno antes, así que va a estar en un tiempo.'
-  seccionRespuesta5.append(tituloRespuesta5);
-  seccionRespuesta5.append(infoRespuesta5);
-
-  elementoPrincipal.append(seccionRespuesta1)
-  elementoPrincipal.append(seccionRespuesta2)
-  elementoPrincipal.append(seccionRespuesta3)
-  elementoPrincipal.append(seccionRespuesta4)
-  elementoPrincipal.append(seccionRespuesta5)
-  cargarEnPopup(elementoPrincipal);
-  openPopup();
+  openPopup(idPopupRespuestas);
 }
 
 function indicarInformacion(nombreMateria) {
@@ -1053,8 +987,9 @@ function verAreas() {
   elementoPrincipal.append(crearLineaAreaConMargenAbajo(BloqueCreditos.creditosEnIAYR, 0));
   elementoPrincipal.append(crearLineaNegrita("Materias Complementarias", `: ${creditosBloque.creditosEnCHS} (${10})`));
   elementoPrincipal.append(crearLineaArea(BloqueCreditos.creditosEnCHS, 10));
-  cargarEnPopup(elementoPrincipal);
-  openPopup();
+  document.getElementById(idPopupAreas).innerHTML = "";
+  document.getElementById(idPopupAreas).append(elementoPrincipal);
+  openPopup(idPopupAreas);
 }
 
 function mostrarMateriasEnPopup(nombre){
@@ -1078,8 +1013,9 @@ function mostrarMateriasEnPopup(nombre){
   elementoPrincipal.append(materiasHechas);
   elementoPrincipal.append(lineaDisponibles);
   elementoPrincipal.append(materiasDisponibles);
-  cargarEnPopup(elementoPrincipal);
-  openPopup();
+  document.getElementById(idPopupListaMaterias).innerHTML = "";
+  document.getElementById(idPopupListaMaterias).append(elementoPrincipal);
+  openPopup(idPopupListaMaterias);
 }
 
 function obtenerPesoDesdeRegla(regla) {
@@ -1114,16 +1050,16 @@ function asignarPesoMateria(materia) {
 
 function crearSeccionesParaMaterias() {
   const parent = document.getElementById(idSecciones);
-  parent.querySelectorAll(".container-section").forEach(el => el.remove());
+  parent.querySelectorAll(".container-seccion").forEach(el => el.remove());
   for (let i = 1; i <= PG.peso; i++) {
     const containerDiv = document.createElement("div");
-    containerDiv.className = "container-section";
+    containerDiv.className = "container-seccion";
 
-    const sectionDiv = document.createElement("div");
-    sectionDiv.className = "section";
-    sectionDiv.id = `section-materias-${i}`;
+    const seccionDiv = document.createElement("div");
+    seccionDiv.className = "seccion-contenido";
+    seccionDiv.id = `seccion-materias-${i}`;
 
-    containerDiv.appendChild(sectionDiv);
+    containerDiv.appendChild(seccionDiv);
     parent.appendChild(containerDiv);
   }
 }
@@ -1210,6 +1146,7 @@ function crearBotonesMaterias(){
   Materias.forEach( (materia) => {
 
     var button = document.createElement("button");
+    button.classList.add("boton-materia")
     button.textContent = `${materia.nombreCompleto} (${materia.creditos})` ;
     if (materia.esOpcional) {
       button.textContent += "*";
@@ -1264,7 +1201,7 @@ function crearBotonesMaterias(){
       this.mouseIsDown = false;
     });
 
-    let parent = document.getElementById(`section-materias-${materia.peso}`);
+    let parent = document.getElementById(`seccion-materias-${materia.peso}`);
     parent.appendChild(button);
 
   } );
@@ -1301,10 +1238,28 @@ window.addEventListener("resize", function () {
 
 // Inicio de pagina
 
-function firstLoad() {
+function mostrarSeccionesQueCorrespondan() {
+  for (let index = 0; index < PG.peso; index++) {
+    const interno = document.getElementById(`seccion-materias-${index+1}`);
+    const externo = interno.closest(".container-seccion");
+    const listaBotones = interno.querySelectorAll(".boton-materia");
+    const allHidden = Array.from(listaBotones).every(btn => {
+      const estiloBoton = getComputedStyle(btn);
+      return estiloBoton.display === "none";
+    });
+    externo.style.display = allHidden ? "none" : "flex";
+  }
+}
+
+function rehacerPaginaSinEstado(){
   asignarPesos();
   crearSeccionesParaMaterias();
   crearBotonesMaterias();
+  mostrarSeccionesQueCorrespondan();
+}
+
+function firstLoad() {
+  rehacerPaginaSinEstado();
   if (localStorage.getItem(LocalStorageNombres.materiasExoneradas)||localStorage.getItem(LocalStorageNombres.materiasAprobadas)) {
     historialExoneradas = new Set(JSON.parse(localStorage.getItem(LocalStorageNombres.materiasExoneradas)));
     historialAprobadas = new Set(JSON.parse(localStorage.getItem(LocalStorageNombres.materiasAprobadas)));

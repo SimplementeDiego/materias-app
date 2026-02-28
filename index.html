@@ -37,24 +37,68 @@
 
         <div id="secciones">
 
-            <div id="boxPopup">
+            <div id="popup-container">
 
-                <div id="boxPopup-content">
-                    <div id="popup-barra-superior" class="popup-barra-superior">
-                        <button class="popup-boton-barra-superior border-derecho" id="previas">Previas</button>
-                        <button class="popup-boton-barra-superior border-derecho" id="previaDe">Previa de</button>
-                        <button class="popup-boton-barra-superior" id="informacion" >Información</button>
+                <div id="popup">
+                    <div id="popup-materia">
+                        <div id="popup-materia-barra-superior">
+                            <button class="popup-materia-boton-barra-superior border-derecho" id="previas">Previas</button>
+                            <button class="popup-materia-boton-barra-superior border-derecho" id="previaDe">Previa de</button>
+                            <button class="popup-materia-boton-barra-superior" id="informacion" >Información</button>
+                        </div>
+                        <div id="popup-materia-contenido" ></div>
                     </div>
-                    <div id="popup-text" ></div>
+
+                    <div id="popup-respuestas">
+                        <div>
+                            <div class="titulo-respuesta">Sobre Plan 2025</div>
+                            <div class="info-respuesta margen-inferior-20">
+                                Voy a ir agregando materias del Plan 2025 cuando se vaya publicando más información, como los programas y los Evas. Si considerás que una materia ya puede ser agregada, enviala como sugerencia.
+                            </div>
+                        </div>
+                        <div>
+                            <div class="titulo-respuesta">Sobre lista de materias de cada área</div>
+                            <div class="info-respuesta margen-inferior-20">
+                                Entrando a "Ver áreas", al darle clic o tap a un área, como por ejemplo "Matemática", debería aparecer una lista de materias.
+                            </div>
+                        </div>
+                        <div>
+                            <div class="titulo-respuesta">Sobre currícula Analista</div>
+                            <div class="info-respuesta margen-inferior-20">
+                                Estoy viendo como implementar esto de la mejor manera para que sea útil.
+                            </div>
+                        </div>
+                        <div>
+                            <div class="titulo-respuesta">Sobre ver información de materias no deshabilitadas</div>
+                            <div class="info-respuesta margen-inferior-20">
+                                Manteniendo apretado el clic o tap en un botón de cualquier materia abre el menú de previas, previa de, y más información.
+                            </div>
+                        </div>
+                        <div>
+                            <div class="titulo-respuesta">Sobre poder agregarte tus propias materias</div>
+                            <div class="info-respuesta">
+                                Lo tengo pensado implementar. Tengo que arreglar unos temas de funcionamiento interno antes, así que va a estar en un tiempo.
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="popup-areas">
+                        
+                    </div>
+
+                    <div id="popup-lista-materias">
+                        
+                    </div>
+                    
                     <button onclick="closePopup()" id="cerrar-popup">Cerrar</button>
                 </div>
                 
                 
             </div>
 
-            <div class="container-section-config no-bt">
-                <p class="tituloSeccion">Información</p>
-                <div class="section">
+            <div class="container-seccion-estatico no-bt">
+                <p class="titulo-seccion">Información</p>
+                <div class="seccion-contenido">
                     <div class="info">
                         <div class="bloque-gris"></div>
                         Materia no habilitada.
@@ -82,11 +126,11 @@
                 </div>
             </div>
 
-            <div class="container-section-config">
-                <p class="tituloSeccion">Configuración</p>
-                <div class="section">
+            <div class="container-seccion-estatico">
+                <p class="titulo-seccion">Configuración</p>
+                <div class="seccion-contenido">
                     <div class="container-item-config info">
-                        <label class="label-config" for="mi-toggle-MI">Matemática Inicial</label>
+                        <label for="mi-toggle-MI">Matemática Inicial</label>
 
                         <label class="switch">
                             <input type="checkbox" id="mi-toggle-MI" class="switch-input" onclick="toggleMI()">
@@ -94,7 +138,7 @@
                         </label>
                     </div>
                     <div class="container-item-config info">
-                        <label class="label-config" for="mi-toggle-plan">Plan 2025</label>
+                        <label for="mi-toggle-plan">Plan 2025</label>
 
                         <label class="switch">
                             <input type="checkbox" id="mi-toggle-plan" class="switch-input" onclick="togglePlan()">
@@ -102,7 +146,7 @@
                         </label>
                     </div>
                     <div class="container-item-config info">
-                        <label class="label-config" for="mi-toggle-opcionales">Opcionales</label>
+                        <label for="mi-toggle-opcionales">Opcionales</label>
 
                         <label class="switch">
                             <input type="checkbox" id="mi-toggle-opcionales" class="switch-input" onclick="toggleOpcionales()" checked>
