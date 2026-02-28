@@ -888,7 +888,7 @@ function verRespuestas() {
   const infoRespuesta2 = document.createElement("div");
   infoRespuesta2.classList.add("info-respuesta");
   infoRespuesta2.classList.add("margen-inferior-20");
-  infoRespuesta2.innerText = 'Entrando a "Ver áreas", al darle clic a un área, como por ejemplo "Matemática", debería aparecer una lista de materias.'
+  infoRespuesta2.innerText = 'Entrando a "Ver áreas", al darle clic o tap a un área, como por ejemplo "Matemática", debería aparecer una lista de materias.'
   seccionRespuesta2.append(tituloRespuesta2);
   seccionRespuesta2.append(infoRespuesta2);
 
@@ -909,14 +909,26 @@ function verRespuestas() {
   tituloRespuesta4.innerText = "Sobre ver información de materias no deshabilitadas";
   const infoRespuesta4 = document.createElement("div");
   infoRespuesta4.classList.add("info-respuesta");
+  infoRespuesta4.classList.add("margen-inferior-20");
   infoRespuesta4.innerText = 'Manteniendo apretado el clic o tap en un botón de cualquier materia abre el menú de previas, previa de, y más información.'
   seccionRespuesta4.append(tituloRespuesta4);
   seccionRespuesta4.append(infoRespuesta4);
+
+  const seccionRespuesta5 = document.createElement("div");
+  const tituloRespuesta5 = document.createElement("div");
+  tituloRespuesta5.classList.add("titulo-respuesta");
+  tituloRespuesta5.innerText = "Sobre poder agregarte tus propias materias";
+  const infoRespuesta5 = document.createElement("div");
+  infoRespuesta5.classList.add("info-respuesta");
+  infoRespuesta5.innerText = 'Lo tengo pensado implementar. Tengo que arreglar unos temas de funcionamiento interno antes, así que va a estar en un tiempo.'
+  seccionRespuesta5.append(tituloRespuesta5);
+  seccionRespuesta5.append(infoRespuesta5);
 
   elementoPrincipal.append(seccionRespuesta1)
   elementoPrincipal.append(seccionRespuesta2)
   elementoPrincipal.append(seccionRespuesta3)
   elementoPrincipal.append(seccionRespuesta4)
+  elementoPrincipal.append(seccionRespuesta5)
   cargarEnPopup(elementoPrincipal);
   openPopup();
 }
