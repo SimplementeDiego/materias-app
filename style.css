@@ -95,6 +95,10 @@ header {
     background-color: lightcyan;
 }
 
+#ajustar-creditos {
+    background-color: lightsalmon;
+}
+
 #reset {
     background-color: lightcoral;
 }
@@ -155,6 +159,8 @@ main {
 }
 
 #popup {
+    display: flex;
+    flex-direction: column;
     z-index: 11;
     height: fit-content;
     width: 500px;
@@ -165,14 +171,19 @@ main {
     text-align: center;
     margin: 20px;
     text-wrap: wrap;
+    max-height: 50vh;
+    overflow-y: auto;
+    overscroll-behavior: contain;
 }
 
 #popup-materia-barra-superior {
     height: 30px;
+    width: 100%;
     display: flex;
     justify-content: space-around;
     margin-bottom: 10px;
     border: 1px solid black;
+    flex-shrink: 0;
 }
 
 .popup-materia-boton-barra-superior {
@@ -188,9 +199,8 @@ main {
 
 #popup-materia-contenido {
     padding: 5px;
-    max-height: 50vh;
+    flex: 1 1 auto;
     overflow-y: auto;
-    overscroll-behavior: contain;
 }
 
 .titulo-respuesta {
@@ -356,8 +366,78 @@ main {
     outline-offset: 3px;
 }
 
-#popup-materia, #popup-respuestas, #popup-areas, #popup-lista-materias {
+#popup-materia, #popup-respuestas, #popup-areas, #popup-lista-materias, #popup-ajustar-creditos {
     display: none;
+    overflow-y: auto;
+    flex: 1 1 auto;
+    width: 100%;
+    align-items: center;
+    flex-direction: column;
+    height: 100%;
+    overscroll-behavior: contain;
+}
+
+#parte-listar-creditos {
+    margin-top: 20px;
+    width: 100%;
+}
+
+#tabla-registros{
+    width: 100%;
+    display: flex;
+    overflow-y: auto;
+    max-height: 300px;
+}
+
+#columna-area, #columna-creditos, #columna-eliminar {
+    display: flex;
+    flex-direction: column;
+    width: fit-content;
+    flex: 1 1 auto;
+}
+
+.entrada-area {
+    border-left: 1px solid black;
+}
+
+.cabezal {
+    background-color: lightgray;
+    border-top: 1px solid black;
+}
+
+.entrada-area, .entrada-creditos, .entrada-eliminar {
+    border-bottom: 1px solid black;
+    height: 30px;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.entrada-eliminar {
+    border-right: 1px solid black;
+}
+
+.icono-basura {
+    height: 15px;
+    width: 15px;
+    cursor: pointer;
+}
+
+#select-agregar-creditos {
+    padding: 5px;
+}
+
+#input-agregar-creditos {
+    padding: 5px;
+}
+
+#boton-agregar-creditos {
+    padding: 5px;
+}
+
+#popup-ajustar-creditos {
+    flex-direction: column;
 }
 
 /* Aca terminan las clases estaticas que aparecen en el HTML */
@@ -436,6 +516,10 @@ main {
     margin-right: 5px;
 }
 
+#basura-icon{
+    width: 13px;
+}
+
 @media (max-width: 675px) {
 
     #titulo-principal-texto {
@@ -488,13 +572,13 @@ main {
     #popup {
         z-index: 11;
         height: fit-content;
-        width: 90%;
-        max-width: 90%;
+        width: 95%;
+        max-width: 95%;
         background-color: white;
         border-radius: 10px;
         padding: 10px;
         text-align: center;
-        margin: 20px;
+        margin: 0;
         text-wrap: wrap;
     }
 
@@ -520,7 +604,23 @@ main {
         margin-top: 10px;
     }
 
+    #tabla-registros{
+        flex: 1 1 auto;
+    }
+
     /* Aca terminan las clases estaticas del HTML */
+
+    #parte-agregar-creditos {
+        flex-direction: column;
+    }
+
+    #select-agregar-creditos, #input-agregar-creditos, #boton-agregar-creditos {
+        width: 100%;
+    }
+
+    #select-agregar-creditos, #input-agregar-creditos {
+        margin-bottom: 10px;
+    }
 
     .boton-materia {
         margin: 10px 0 10px 0;

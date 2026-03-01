@@ -76,8 +76,11 @@ const idHam = "img-ham";
 const idPopupMateria = "popup-materia";
 const idPopupRespuestas = "popup-respuestas"
 const idPopupAreas = "popup-areas";
-const idPopupListaMaterias = "popup-lista-materias"
+const idPopupListaMaterias = "popup-lista-materias";
+const idPopupAjustarCreditos = "popup-ajustar-creditos";
 
+const registros = [];
+const creditosPorArea = new Map();
 let historialAprobadas = new Set();
 let historialExoneradas = new Set();
 let seleccionOpcionales = true;
@@ -539,7 +542,7 @@ function displayFlex(elemento){
 function openPopup(proximoPopup) {
   displayNone(popUpActual);
   popUpActual = proximoPopup;
-  displayBlock(proximoPopup);
+  displayFlex(proximoPopup);
   closeNavIfMobile();
   displayFlex(idPopUp);
   document.getElementById(idButtonCloseInPopup).focus();
@@ -760,7 +763,8 @@ function reconstruyoEstadoValido(){
   while (huboCambio) {
     calcularCreditos();
     huboCambio = false;
-    auxHistorialAprobadas.forEach( (nombreMateria) => {
+    const copiaAprobadas = new Set(auxHistorialAprobadas);
+    copiaAprobadas.forEach( (nombreMateria) => {
       let materia = encontrarMateriaPorNombre(nombreMateria);
       if (!materia) {
         auxHistorialAprobadas.delete(nombreMateria);
@@ -775,8 +779,9 @@ function reconstruyoEstadoValido(){
         }
       }
     })
-    if (huboCambio) continue; 
-    auxHistorialExoneradas.forEach( (nombreMateria) => {
+    if (huboCambio) continue;
+    const copiaExoneradas = new Set(auxHistorialExoneradas);
+    copiaExoneradas.forEach( (nombreMateria) => {
       let materia = encontrarMateriaPorNombre(nombreMateria);
       let {cumple} = evaluarRegla(materia.reglaHabilitacion);
       if (cumple) {
@@ -791,6 +796,14 @@ function reconstruyoEstadoValido(){
 
 function calcularCreditos() {
   resetCreditos();
+  for (const [area, cantidad] of creditosPorArea) {
+    if (area in creditosBloque) {
+      creditosBloque[area] += cantidad;
+      if (area !== "Total") {
+        creditosBloque.Total += cantidad;
+      }
+    }
+  }
   historialExoneradas.forEach((nombreMateria) => {
     let materia = encontrarMateriaPorNombre(nombreMateria);
     sumarCreditos(materia);
@@ -1159,7 +1172,6 @@ function crearBotonesMaterias(){
       menuIcon.height = 15;
       menuIcon.src = "icons/ex-resized.webp";
       menuIcon.alt = "menu-icon";
-      menuIcon.id = "menu-icon";
       menuIcon.className = "icono ex-mat";
       button.prepend(menuIcon);
     }
@@ -1236,6 +1248,88 @@ window.addEventListener("resize", function () {
   checkWidth();
 });
 
+function agregarCreditos() {
+  const select = document.getElementById("select-agregar-creditos");
+  select.innerHTML = "";
+  for (const key of Object.keys(BloqueCreditos)) {
+    const value = BloqueCreditos[key];
+    const opt = document.createElement("option");
+    opt.value = value;
+    opt.textContent = TraduccionBloqueCreditos[value] ?? value;
+    select.appendChild(opt);
+  }
+  actualizarRegistros();
+  openPopup(idPopupAjustarCreditos);
+}
+
+function actualizarRegistros() {
+  const columnaArea = document.getElementById("columna-area")
+  const columnaCreditos = document.getElementById("columna-creditos")
+  const columnaFecha = document.getElementById("columna-eliminar")
+  columnaArea.innerHTML = "";
+  columnaCreditos.innerHTML = "";
+  columnaFecha.innerHTML = "";
+  const cabezalArea = document.createElement("div");
+  cabezalArea.classList.add("entrada-area");
+  cabezalArea.classList.add("cabezal");
+  cabezalArea.textContent = "Área";
+  const cabezalCreditos = document.createElement("div");
+  cabezalCreditos.classList.add("entrada-creditos");
+  cabezalCreditos.classList.add("cabezal");
+  cabezalCreditos.textContent = "Créd.";
+  const cabezalEliminar = document.createElement("div");
+  cabezalEliminar.classList.add("entrada-eliminar");
+  cabezalEliminar.classList.add("cabezal");
+  columnaArea.appendChild(cabezalArea);
+  columnaCreditos.appendChild(cabezalCreditos);
+  columnaFecha.appendChild(cabezalEliminar);
+  for (const [index, registro] of registros.entries()) {
+    const { area, creditos } = registro;
+    const divArea = document.createElement("div");
+    divArea.classList.add("entrada-area");
+    divArea.textContent = TraduccionBloqueCreditos[area];
+    const divCreditos = document.createElement("div");
+    divCreditos.classList.add("entrada-creditos");
+    divCreditos.textContent = String(creditos);
+    const divEliminar = document.createElement("div");
+    divEliminar.classList.add("entrada-eliminar");
+    const iconoBasura = document.createElement("img");
+    iconoBasura.onclick = () => {
+      registros.splice(index, 1);
+      creditosPorArea.set(area, (creditosPorArea.get(area) ?? 0) - creditos);
+      actualizarRegistros();
+      reconstruirEstadoPagina();
+    }
+    iconoBasura.width = 15;
+    iconoBasura.height = 15;
+    iconoBasura.src = "icons/basura-resized.webp";
+    iconoBasura.alt = "basura-icon";
+    iconoBasura.id = "basura-icon";
+    iconoBasura.className = "icono-basura";
+    divEliminar.append(iconoBasura);
+    columnaArea.appendChild(divArea);
+    columnaCreditos.appendChild(divCreditos);
+    columnaFecha.appendChild(divEliminar);
+  }
+  localStorage.setItem("registros", JSON.stringify(registros));
+  localStorage.setItem("creditosPorArea", JSON.stringify(Array.from(creditosPorArea.entries())));
+}
+
+function eventoAjustarCreditos() {
+  const area = document.getElementById("select-agregar-creditos").value;
+  const creditos = Number(document.getElementById("input-agregar-creditos").value);
+  if (creditos!=0) {
+    if (!Number.isInteger(creditos)) {
+      alert("Créditos debe ser un entero");
+      return;
+    }
+    creditosPorArea.set(area, (creditosPorArea.get(area) ?? 0) + creditos);
+    registros.push({ area, creditos });
+    actualizarRegistros();
+    reconstruirEstadoPagina();
+  }  
+}
+
 // Inicio de pagina
 
 function mostrarSeccionesQueCorrespondan() {
@@ -1274,6 +1368,10 @@ function firstLoad() {
   }
   if (localStorage.getItem(LocalStorageNombres.semestre)) {
     toggleBotones(localStorage.getItem(LocalStorageNombres.semestre));
+  }
+  if (localStorage.getItem("registros")) {
+    registros.splice(0, registros.length, ...(JSON.parse(localStorage.getItem("registros") ?? "[]")));
+    creditosPorArea.clear(), (JSON.parse(localStorage.getItem("creditosPorArea") ?? "[]")).forEach(([k,v]) => creditosPorArea.set(k,v));
   }
   reconstruirEstadoPagina();
   checkWidth();

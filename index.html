@@ -29,6 +29,7 @@
             <a class="navbar-boton link-boton" id="sugerencia" href="https://forms.gle/jN9WEGE2hGvLxeNKA">Hacer sugerencia</a>
             <button onclick="verRespuestas()" id="respuestas" class="navbar-boton">Respuestas</button>
             <button onclick="reset()" id="reset" class="navbar-boton">Reset</button>
+            <button onclick="agregarCreditos()" id="ajustar-creditos" class="navbar-boton">Ajustar créditos</button>
         </nav>
 
     </header>
@@ -77,7 +78,7 @@
                         <div>
                             <div class="titulo-respuesta">Sobre poder agregarte tus propias materias</div>
                             <div class="info-respuesta">
-                                Lo tengo pensado implementar. Tengo que arreglar unos temas de funcionamiento interno antes, así que va a estar en un tiempo.
+                                Lo tengo pensado implementar. Tengo que arreglar unos temas de funcionamiento interno antes, así que va a estar en un tiempo. De mientras, implementé la posibilidad de agregar y restar créditos manualmente.
                             </div>
                         </div>
                     </div>
@@ -88,6 +89,27 @@
 
                     <div id="popup-lista-materias">
                         
+                    </div>
+
+                    <div id="popup-ajustar-creditos">
+                        <div id="parte-agregar-creditos">
+                            <select name="agregar-creditos" id="select-agregar-creditos"></select>
+                            <input type="number" id="input-agregar-creditos" step="1">
+                            <button type="button" onclick="eventoAjustarCreditos()" id="boton-agregar-creditos">Listo</button>
+                        </div>
+                        <div id="parte-listar-creditos">
+                            <div id="tabla-registros">
+                                <div id="columna-area">
+
+                                </div>
+                                <div id="columna-creditos">
+
+                                </div>
+                                <div id="columna-eliminar">
+
+                                </div>
+                            </div>
+                        </div>
                     </div>
                     
                     <button onclick="closePopup()" id="cerrar-popup">Cerrar</button>
