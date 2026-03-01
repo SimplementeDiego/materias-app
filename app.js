@@ -78,6 +78,7 @@ const idPopupRespuestas = "popup-respuestas"
 const idPopupAreas = "popup-areas";
 const idPopupListaMaterias = "popup-lista-materias";
 const idPopupAjustarCreditos = "popup-ajustar-creditos";
+const idPopupReset = "popup-reset";
 
 const registros = [];
 const creditosPorArea = new Map();
@@ -819,10 +820,15 @@ function reconstruirEstadoPagina() {
   localStorage.setItem(LocalStorageNombres.materiasAprobadas, JSON.stringify(Array.from(historialAprobadas.values())));
 }
 
-function reset() {
+function borrarProgreso() {
   historialAprobadas.clear();
   historialExoneradas.clear();
   reconstruirEstadoPagina();
+  closePopup();
+}
+
+function reset() {
+  openPopup(idPopupReset);
 }
 
 function sumarCreditos(materia) {
