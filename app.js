@@ -39,6 +39,7 @@ const TraduccionBloqueCreditos = Object.freeze({
   creditosEnGO: "Gestión en Organizaciones",
   creditosEnIAYR: "Int. Artificial y Robótica",
   creditosEnCHS: "Ciencias H. y S.",
+  creditosEnOpcionales: "Materias Opcionales",
   Total: "Total"
 });
 
@@ -55,6 +56,7 @@ const BloqueCreditos = Object.freeze({
   creditosEnGO: "creditosEnGO",
   creditosEnIAYR: "creditosEnIAYR",
   creditosEnCHS: "creditosEnCHS",
+  creditosEnOpcionales : "creditosEnOpcionales",
   Total: "Total",
 });
 
@@ -103,6 +105,7 @@ let creditosBloque = {
   creditosEnGO: 0,
   creditosEnIAYR: 0,
   creditosEnCHS: 0,
+  creditosEnOpcionales: 0,
   Total: 0,
 };
 
@@ -326,6 +329,10 @@ TACCE.informacion = [{nombre: "Eva", valor: "https://eva.fing.edu.uy/course/view
 const PMPPG = new Materia("PMPPG", 10, todas(materiaExonerada(P2),alguna(materiaExonerada(AC),materiaExonerada(SO),todas(materiaAprobada(AC),materiaAprobada(SO)))), "Prog. masivamente paralela en p. gráficos", Semestre.PRIMERO, true, false, BloqueCreditos.creditosEnAC_SO_RC, []);
 PMPPG.informacion = [{nombre: "Eva", valor: "https://eva.fing.edu.uy/course/view.php?id=1076"}, 
                     {nombre: "Programa", valor: "https://eva.fing.edu.uy/pluginfile.php/51679/mod_resource/content/2/Programa_PMPenGPU_Grado2024.pdf"}]
+const TEP = new Materia("TEP", 8, todas(creditosMinimos(BloqueCreditos.Total,55),alguna(materiaExonerada(F1),todas(materiaExonerada(GAL1),materiaAprobada(GAL2)),todas(materiaExonerada(CDIV),materiaAprobada(CDIVV)))), "Tutorías entre Pares", Semestre.AMBOS, true, false, BloqueCreditos.creditosEnOpcionales, []);
+TEP.informacion = [{nombre: "Eva primer semestre", valor: "https://eva.fing.edu.uy/course/view.php?id=1617"},
+                    {nombre: "Eva segundo semestre", valor: "https://eva.fing.edu.uy/course/view.php?id=1555"}, 
+                    {nombre: "Programa", valor: "https://www.fing.edu.uy/sites/default/files/2024-06/TUTOR%C3%8DAS%20ENTRE%20PARES%20%282024%29.pdf"}]
 const FO = new Materia("FO", 6, todas(materiaExonerada(CDIVV),materiaAprobada(P1),materiaExonerada(GAL2)), "Fundamentos de Optimización", Semestre.PRIMERO, true, false, BloqueCreditos.creditosEnIO, []);
 FO.informacion = [{nombre: "Eva", valor: "https://eva.fing.edu.uy/course/view.php?id=1513"}, 
                     {nombre: "Programa", valor: "https://eva.fing.edu.uy/pluginfile.php/36863/mod_resource/content/1/Programa_Unidad_Curricular_Optimizacion.pdf"}]
@@ -508,6 +515,7 @@ let Materias = [
   PMPPG,
   ALN,
   IIS,
+  TEP,
   FWS,
   PF,
   PFA,
@@ -733,6 +741,7 @@ function resetCreditos() {
   creditosBloque.creditosEnGO = 0;
   creditosBloque.creditosEnIAYR = 0;
   creditosBloque.creditosEnCHS = 0;
+  creditosBloque.creditosEnOpcionales = 0;
   creditosBloque.Total = 0;
 }
 
@@ -1012,7 +1021,9 @@ function verAreas() {
   elementoPrincipal.append(crearLineaArea(BloqueCreditos.creditosEnGO, 10));
   elementoPrincipal.append(crearLineaAreaConMargenAbajo(BloqueCreditos.creditosEnIAYR, 0));
   elementoPrincipal.append(crearLineaNegrita("Materias Complementarias", `: ${creditosBloque.creditosEnCHS} (${10})`));
-  elementoPrincipal.append(crearLineaArea(BloqueCreditos.creditosEnCHS, 10));
+  elementoPrincipal.append(crearLineaAreaConMargenAbajo(BloqueCreditos.creditosEnCHS, 10));
+  elementoPrincipal.append(crearLineaNegrita("Materias Opcionales", `: ${creditosBloque.creditosEnOpcionales} (${0})`));
+  elementoPrincipal.append(crearLineaAreaConMargenAbajo(BloqueCreditos.creditosEnOpcionales, 0));
   document.getElementById(idPopupAreas).innerHTML = "";
   document.getElementById(idPopupAreas).append(elementoPrincipal);
   openPopup(idPopupAreas);
@@ -1366,27 +1377,41 @@ function rehacerPaginaSinEstado(){
 }
 
 function firstLoad() {
-  rehacerPaginaSinEstado();
   if (localStorage.getItem(LocalStorageNombres.materiasExoneradas)||localStorage.getItem(LocalStorageNombres.materiasAprobadas)) {
     historialExoneradas = new Set(JSON.parse(localStorage.getItem(LocalStorageNombres.materiasExoneradas)));
     historialAprobadas = new Set(JSON.parse(localStorage.getItem(LocalStorageNombres.materiasAprobadas)));
   }
   if (localStorage.getItem(MI.nombre) == "true") {
     document.getElementById("mi-toggle-MI").checked = true;
-    toggleMI();
+    if (Materias.includes(MI)) {
+      Materias = Materias.filter(materia => materia !== MI)
+      CDIV.reglaHabilitacion = null;
+    } else {
+      Materias.push(MI)
+      CDIV.reglaHabilitacion = materiaExonerada(MI);
+    }
   }
   if (localStorage.getItem(FC.nombre) == "true") {
     document.getElementById("mi-toggle-plan").checked = true;
-    togglePlan();
-  }
-  if (localStorage.getItem(LocalStorageNombres.semestre)) {
-    toggleBotones(localStorage.getItem(LocalStorageNombres.semestre));
+    if (Materias.includes(FC)) {
+      Materias = Materias.filter(materia => materia !== FC)
+      Materias = Materias.filter(materia => materia !== IC)
+      Materias.push(MD1)
+    } else {
+      Materias = Materias.filter(materia => materia !== MD1)
+      Materias.push(FC);
+      Materias.push(IC);
+    }
   }
   if (localStorage.getItem("registros")) {
     registros.splice(0, registros.length, ...(JSON.parse(localStorage.getItem("registros") ?? "[]")));
     creditosPorArea.clear(), (JSON.parse(localStorage.getItem("creditosPorArea") ?? "[]")).forEach(([k,v]) => creditosPorArea.set(k,v));
   }
+  rehacerPaginaSinEstado();
   reconstruirEstadoPagina();
+  if (localStorage.getItem(LocalStorageNombres.semestre)) {
+    toggleBotones(localStorage.getItem(LocalStorageNombres.semestre));
+  }
   checkWidth();
 }
 
