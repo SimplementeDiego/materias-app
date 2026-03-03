@@ -191,6 +191,9 @@ function evaluarRegla(regla) {
   }
 }
 
+const IC = new Materia("IC", 5, null, "Introducción a la Computación", Semestre.PRIMERO, false, false, BloqueCreditos.creditosEnProg, []);
+IC.informacion = [{nombre: "Eva", valor: "https://eva.fing.edu.uy/course/view.php?id=1988"}, 
+                    {nombre: "Programa", valor: "https://eva.fing.edu.uy/pluginfile.php/92316/mod_resource/content/1/Programa-introcomp.pdf"}]
 const CDIV = new Materia("CDIV", 13, null, "Cálculo DIV", Semestre.AMBOS, false, true, BloqueCreditos.creditosEnM, []);
 CDIV.informacion = [{nombre: "Eva primer semestre", valor: "https://eva.fing.edu.uy/course/view.php?id=1024"}, 
                     {nombre: "Eva segundo semestre", valor: "https://eva.fing.edu.uy/course/view.php?id=1504"}, 
@@ -629,14 +632,18 @@ function toggleMI() {
 function togglePlan() {
   if (Materias.includes(FC)) {
     Materias = Materias.filter(materia => materia !== FC)
+    Materias = Materias.filter(materia => materia !== IC)
     historialAprobadas.delete(FC.nombre);
     historialExoneradas.delete(FC.nombre);
+    historialAprobadas.delete(IC.nombre);
+    historialExoneradas.delete(IC.nombre);
     Materias.push(MD1)
   } else {
     Materias = Materias.filter(materia => materia !== MD1)
     historialAprobadas.delete(MD1.nombre);
     historialExoneradas.delete(MD1.nombre);
-    Materias.push(FC)
+    Materias.push(FC);
+    Materias.push(IC);
   }
   rehacerPaginaSinEstado();
   mostrarBotonesDeMateriasQueCorresponda();
