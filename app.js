@@ -310,7 +310,7 @@ CV.informacion = [{nombre: "Eva primer semestre", valor: "https://eva.fing.edu.u
 const ED = new Materia("ED", 10, todas(materiaExonerada(GAL2),materiaAprobada(CDIVV),materiaExonerada(GAL1),materiaExonerada(CDIV)), "Int. a las Ec. Diferenciales", Semestre.SEGUNDO, true, true, BloqueCreditos.creditosEnM, []);
 ED.informacion = [{nombre: "Eva", valor: "https://eva.fing.edu.uy/course/view.php?id=342"}, 
                     {nombre: "Programa", valor: "https://www.fing.edu.uy/sites/default/files/2024-08/Programa_Introducci%C3%B3n%20a%20las%20ecuaciones%20diferenciales.pdf"}]
-const TL = new Materia("TL", 12, todas(materiaAprobada(P3),materiaExonerada(CDIV),materiaExonerada(GAL1),materiaExonerada(LG),alguna(materiaExonerada(MD1),materiaExonerada(FC))), "Teoría de Lenguajes", Semestre.PRIMERO, false, false, BloqueCreditos.creditosEnProg, []);
+const TL = new Materia("TL", 12, todas(materiaExonerada(P2),materiaExonerada(CDIV),materiaExonerada(GAL1),materiaExonerada(LG),alguna(materiaExonerada(MD1),materiaExonerada(FC))), "Teoría de Lenguajes", Semestre.PRIMERO, false, false, BloqueCreditos.creditosEnProg, []);
 TL.informacion = [{nombre: "Eva", valor: "https://eva.fing.edu.uy/course/view.php?id=687"}, 
                     {nombre: "Programa", valor: "https://www.fing.edu.uy/sites/default/files/Programa%20de%20Unidad%20Curricular%20TeoLeng.pdf"}]
 const FVC = new Materia("FVC", 5, todas(materiaAprobada(CV),materiaExonerada(CDIVV)), "Funciones de Variable Compleja", Semestre.PRIMERO, true, true, BloqueCreditos.creditosEnM, []);
