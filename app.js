@@ -434,10 +434,9 @@ F3.informacion = [{nombre: "Eva primer semestre", valor: "https://eva.fing.edu.u
 const AGI = new Materia("AGI", 5, creditosMinimos(BloqueCreditos.Total,140), "Administración General para Ingenieros", Semestre.PRIMERO, true, true, BloqueCreditos.creditosEnGO, []);
 AGI.informacion = [{nombre: "Eva", valor: "https://eva.fing.edu.uy/course/view.php?id=778"}, 
                     {nombre: "Programa", valor: "https://eva.fing.edu.uy/pluginfile.php/73141/mod_folder/content/0/Programa%202024.pdf"}]
-const CC = new Materia("CC", 8, todas(materiaAprobada(PYE),creditosMinimos(BloqueCreditos.Total,80)), "Control de Calidad", Semestre.PRIMERO, true, true, BloqueCreditos.creditosEnGO, []);
+const CC = new Materia("CC", 8, todas(materiaAprobada(PYE),creditosMinimos(BloqueCreditos.Total,80)), "Control de Calidad", Semestre.SEGUNDO, true, true, BloqueCreditos.creditosEnGO, []);
 CC.informacion = [{nombre: "Eva", valor: "https://eva.fing.edu.uy/course/view.php?id=49"}, 
                     {nombre: "Programa", valor: "https://eva.fing.edu.uy/pluginfile.php/26508/mod_resource/content/2/Programa%20Control%20de%20Calidad%20-%20nuevo%20formato.pdf"}]
-CC.se_da = false;
 const PAI = new Materia("PAI", 5, materiaAprobada(AGI), "Práctica de Administración para Ingenieros", Semestre.SEGUNDO, true, true, BloqueCreditos.creditosEnGO, []);
 PAI.informacion = [{nombre: "Eva", valor: "https://eva.fing.edu.uy/course/view.php?id=779"}, 
                     {nombre: "Programa", valor: "https://eva.fing.edu.uy/pluginfile.php/71749/mod_resource/content/4/Programa_Practica_de_Administracion_para_Ingenieros_2019_v2.pdf"}]
