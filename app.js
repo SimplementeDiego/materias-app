@@ -196,7 +196,7 @@ function evaluarRegla(regla) {
 
 const IC = new Materia("IC", 5, null, "Introducción a la Computación", Semestre.PRIMERO, false, false, BloqueCreditos.creditosEnProg, []);
 IC.informacion = [{nombre: "Eva", valor: "https://eva.fing.edu.uy/course/view.php?id=1988"}, 
-                    {nombre: "Programa", valor: "https://eva.fing.edu.uy/pluginfile.php/92316/mod_resource/content/1/Programa-introcomp.pdf"}]
+                    {nombre: "Programa", valor: "https://eva.fing.edu.uy/pluginfile.php/92316/mod_resource/content/1/Programa-introcomp.pdf"}]         
 const CDIV = new Materia("CDIV", 13, null, "Cálculo DIV", Semestre.AMBOS, false, true, BloqueCreditos.creditosEnM, []);
 CDIV.informacion = [{nombre: "Eva primer semestre", valor: "https://eva.fing.edu.uy/course/view.php?id=1024"}, 
                     {nombre: "Eva segundo semestre", valor: "https://eva.fing.edu.uy/course/view.php?id=1504"}, 
@@ -269,6 +269,9 @@ MN.informacion = [{nombre: "Eva", valor: "https://eva.fing.edu.uy/course/view.ph
 const P4 = new Materia("P4", 15, todas(materiaExonerada(GAL1),materiaExonerada(CDIV),alguna(materiaExonerada(MD1),materiaExonerada(FC)),materiaExonerada(P2)), "Programación 4", Semestre.PRIMERO, false, false, BloqueCreditos.creditosEnProg, []);
 P4.informacion = [{nombre: "Eva", valor: "https://eva.fing.edu.uy/course/view.php?id=413"}, 
                     {nombre: "Programa", valor: "https://eva.fing.edu.uy/pluginfile.php/50913/mod_resource/content/2/programa_curso.pdf"}]
+const PFPPS = new Materia("PFPPS", 7, materiaAprobada(P4), "Princ. y Fund. del Proc. Pers. de Software", Semestre.PRIMERO, true, false, BloqueCreditos.creditosEnIS, []);
+PFPPS.informacion = [{nombre: "Eva", valor: "https://eva.fing.edu.uy/course/view.php?id=633"}, 
+                    {nombre: "Programa", valor: "https://www.fing.edu.uy/static/programas/Grado/2017/Principios%20y%20Fundamentos%20del%20Proceso%20Personal%20de%20Software/principios%20y%20fundamentos%20del%20Proceso%20personal%20de%20software.pdf"}]
 const IIO = new Materia("IIO", 10, todas(materiaExonerada(GAL2),materiaExonerada(PYE),materiaExonerada(CDIVV),materiaExonerada(CDIV),materiaExonerada(GAL1)), "Int. a la Investigación de Operaciones", Semestre.PRIMERO, false, false, BloqueCreditos.creditosEnIO, []);
 IIO.informacion = [{nombre: "Eva", valor: "https://eva.fing.edu.uy/course/view.php?id=994"}, 
                     {nombre: "Programa", valor: "https://eva.fing.edu.uy/pluginfile.php/47534/mod_resource/content/2/Programa%20IIO%202018.pdf"}]
@@ -483,6 +486,7 @@ let Materias = [
   PCI,
   MN,
   P4,
+  PFPPS,
   AAL,
   CV,
   ED,
