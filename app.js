@@ -392,6 +392,9 @@ PFA.informacion = [{nombre: "Eva", valor: "https://eva.fing.edu.uy/course/view.p
 const PL = new Materia("PL", 10, todas(materiaExonerada(TL),materiaExonerada(P3),materiaExonerada(MD2),materiaExonerada(LG)), "Programación Lógica", Semestre.PRIMERO, false, false, BloqueCreditos.creditosEnProg, []);
 PL.informacion = [{nombre: "Eva", valor: "https://eva.fing.edu.uy/course/view.php?id=293"}, 
                     {nombre: "Programa", valor: "https://eva.fing.edu.uy/pluginfile.php/51520/mod_resource/content/2/PL_programaOficial2018.pdf"}]
+const CFPTT = new Materia("CFPTT", 12, todas(materiaExonerada(LG),alguna(materiaAprobada(PF),materiaAprobada(PL))), "Const. Formal de Prog. en Teoría de Tipos", Semestre.SEGUNDO, true, false, BloqueCreditos.creditosEnProg, []);
+CFPTT.informacion = [{nombre: "Eva", valor: "https://eva.fing.edu.uy/course/view.php?id=363"}, 
+                    {nombre: "Programa", valor: "https://www.fing.edu.uy/sites/default/files/Programa%20de%20Unidad%20Curricular%20CFPTT%20.pdf"}]
 const PIS = new Materia("PIS", 15, todas(materiaAprobada(IIS),materiaExonerada(P4)), "Proyecto de Ingeniería de Software", Semestre.SEGUNDO, false, false, BloqueCreditos.creditosEnTall_Pasa_Proy, []);
 PIS.informacion = [{nombre: "Eva", valor: "https://eva.fing.edu.uy/course/view.php?id=573"}, 
                     {nombre: "Programa", valor: "https://www.fing.edu.uy/sites/default/files/cursos/2020/anexos/39036/Proyecto%20de%20Ingenier%C3%ADa%20de%20Software.pdf"}]
@@ -523,6 +526,7 @@ let Materias = [
   PF,
   PFA,
   PL,
+  CFPTT,
   AA,
   TAA,
   CGA,
