@@ -194,357 +194,96 @@ function evaluarRegla(regla) {
   }
 }
 
-const IC = new Materia("IC", 5, null, "Introducción a la Computación", Semestre.PRIMERO, false, false, BloqueCreditos.creditosEnProg, []);
-IC.informacion = [{nombre: "Eva", valor: "https://eva.fing.edu.uy/course/view.php?id=1988"}, 
-                    {nombre: "Programa", valor: "https://eva.fing.edu.uy/pluginfile.php/92316/mod_resource/content/1/Programa-introcomp.pdf"}]         
-const CDIV = new Materia("CDIV", 13, null, "Cálculo DIV", Semestre.AMBOS, false, true, BloqueCreditos.creditosEnM, []);
-CDIV.informacion = [{nombre: "Eva primer semestre", valor: "https://eva.fing.edu.uy/course/view.php?id=1024"}, 
-                    {nombre: "Eva segundo semestre", valor: "https://eva.fing.edu.uy/course/view.php?id=1504"}, 
-                    {nombre: "Programa", valor: "https://eva.fing.edu.uy/pluginfile.php/73997/mod_resource/content/4/Ficha%20del%20curso.pdf"}]
-const CDIVV = new Materia("CDIVV", 13, materiaAprobada(CDIV), "Cálculo DIVV", Semestre.AMBOS, false, true, BloqueCreditos.creditosEnM, []);
-CDIVV.informacion = [{nombre: "Eva primer semestre", valor: "https://eva.fing.edu.uy/course/view.php?id=1594"}, 
-                    {nombre: "Eva segundo semestre", valor: "https://eva.fing.edu.uy/course/view.php?id=1131"}, 
-                    {nombre: "Programa", valor: "https://eva.fing.edu.uy/pluginfile.php/35367/mod_resource/content/1/Programa_Unidad_Curricular_calculo_varias_variables.pdf"}]
-const MD1 = new Materia("MD1", 9, null, "Matemática Discreta 1", Semestre.AMBOS, false, true, BloqueCreditos.creditosEnM, []);
-MD1.informacion = [{nombre: "Eva primer semestre", valor: "https://eva.fing.edu.uy/course/view.php?id=323"}, 
-                    {nombre: "Eva segundo semestre", valor: "https://eva.fing.edu.uy/course/view.php?id=1541"}, 
-                    {nombre: "Programa", valor: "https://www.fing.edu.uy/sites/default/files/2024-08/Matem%C3%A1tica%20Discreta%201.pdf"}]
-MD1.se_da = false;
-const FC = new Materia("FC", 9, negar(materiaExonerada(MD1)), "Fundamentos de la combinatoria", Semestre.PRIMERO, false, true, BloqueCreditos.creditosEnM, []);
-FC.informacion = [{nombre: "Eva", valor: "https://eva.fing.edu.uy/course/view.php?id=2008"}, 
-                    {nombre: "Programa", valor: "https://eva.fing.edu.uy/pluginfile.php/90476/mod_resource/content/1/Programa.pdf"}]
-MD1.reglaHabilitacion = negar(materiaExonerada(FC));
-const P1 = new Materia("P1", 10, null, "Programación 1", Semestre.AMBOS, false, false, BloqueCreditos.creditosEnProg, []);
-P1.informacion = [{nombre: "Eva primer semestre", valor: "https://eva.fing.edu.uy/course/view.php?id=58"}, 
-                    {nombre: "Eva segundo semestre", valor: "https://eva.fing.edu.uy/course/view.php?id=1958"}, 
-                    {nombre: "Programa", valor: "https://eva.fing.edu.uy/pluginfile.php/49951/mod_resource/content/2/ProgramaP12024.pdf"}]
-const GAL1 = new Materia("GAL1", 9, null, "Geometría y Álgebra Lineal 1", Semestre.AMBOS, false, true, BloqueCreditos.creditosEnM, []);
-GAL1.informacion = [{nombre: "Eva primer semestre", valor: "https://eva.fing.edu.uy/course/view.php?id=1597"}, 
-                    {nombre: "Eva segundo semestre", valor: "https://eva.fing.edu.uy/course/view.php?id=1442"}, 
-                    {nombre: "Programa", valor: "https://www.fing.edu.uy/sites/default/files/2024-08/GAL1_Programa.pdf"}]
-const P2 = new Materia("P2", 12, materiaAprobada(P1), "Programación 2", Semestre.AMBOS, false, false, BloqueCreditos.creditosEnProg, []);
-P2.informacion = [{nombre: "Eva", valor: "https://eva.fing.edu.uy/course/view.php?id=132"}, 
-                    {nombre: "Programa", valor: "https://eva.fing.edu.uy/pluginfile.php/50251/mod_resource/content/6/Programa%20de%20Unidad%20Curricular%20-%20P2%202017-%2012creditos.pdf"}]
-const TAR = new Materia("TAR", 10, todas(materiaExonerada(GAL1), materiaExonerada(CDIV), materiaAprobada(CDIVV)), "Topología y Análisis Real", Semestre.PRIMERO, true, false, BloqueCreditos.creditosEnM, []);
-TAR.informacion = [{nombre: "Eva", valor: "https://eva.fing.edu.uy/course/view.php?id=1279"}, 
-                    {nombre: "Programa", valor: "https://www.fing.edu.uy/sites/default/files/2022-11/1-Topologia_analisis_real_programa.pdf"}]
-const DAED = new Materia("DAED", 7, todas(materiaExonerada(P1), materiaExonerada(P2)), "Didáctica de Algorit. y Estruct. de Datos", Semestre.PRIMERO, true, false, BloqueCreditos.creditosEnProg, []);
-DAED.informacion = [{nombre: "Eva", valor: "https://eva.fing.edu.uy/course/view.php?id=874"}, 
-                    {nombre: "Programa", valor: "https://eva.fing.edu.uy/pluginfile.php/45593/mod_resource/content/2/Programa-de-Unidad-Curricular-DAED.pdf"}]
-const Ec = new Materia("Ec", 7, null, "Economía", Semestre.SEGUNDO, true, true, BloqueCreditos.creditosEnCHS, []);
-Ec.informacion = [{nombre: "Eva", valor: "https://eva.fing.edu.uy/course/view.php?id=1093"}, 
-                    {nombre: "Programa", valor: "https://www.fing.edu.uy/static/programas/Grado/2019/Econom%C3%ADa/economia.pdf"}]
-const F1 = new Materia("F1", 10, null, "Física 1", Semestre.AMBOS, true, true, BloqueCreditos.creditosEnCE, []);
-F1.informacion = [{nombre: "Eva primer semestre", valor: "https://eva.fing.edu.uy/course/view.php?id=87"}, 
-                    {nombre: "Eva segundo semestre", valor: "https://eva.fing.edu.uy/course/view.php?id=1545"}, 
-                    {nombre: "Programa", valor: "https://eva.fing.edu.uy/pluginfile.php/73445/mod_resource/content/2/f1_1151.pdf"}]
-const GAL2 = new Materia("GAL2", 9, materiaAprobada(GAL1), "Geometría y Álgebra Lineal 2", Semestre.AMBOS, false, true, BloqueCreditos.creditosEnM, []);
-GAL2.informacion = [{nombre: "Eva primer semestre", valor: "https://eva.fing.edu.uy/course/view.php?id=270"}, 
-                    {nombre: "Eva segundo semestre", valor: "https://eva.fing.edu.uy/course/view.php?id=203"}, 
-                    {nombre: "Programa", valor: "https://eva.fing.edu.uy/pluginfile.php/37189/mod_resource/content/2/Programa%20GAL%202.pdf"}]
-const AAL = new Materia("AAL", 9, todas(materiaExonerada(GAL2),materiaExonerada(CDIV)), "Aplicaciones del Álgebra Lineal", Semestre.SEGUNDO, true, false, BloqueCreditos.creditosEnMN, []);
-AAL.informacion = [{nombre: "Eva", valor: "https://eva.fing.edu.uy/course/view.php?id=1543"}, 
-                    {nombre: "Programa", valor: "https://eva.fing.edu.uy/pluginfile.php/35094/mod_resource/content/7/Aplicaciones%20del%20%C3%81lgebra%20Lineal.pdf"}]
-const PYE = new Materia("PYE", 10, todas(materiaAprobada(CDIVV),materiaExonerada(GAL1),materiaExonerada(CDIV)), "Probabilidad y Estadistica", Semestre.AMBOS, false, true, BloqueCreditos.creditosEnM, []);
-PYE.informacion = [{nombre: "Eva primer semestre", valor: "https://eva.fing.edu.uy/course/view.php?id=54"}, 
-                    {nombre: "Eva segundo semestre", valor: "https://eva.fing.edu.uy/course/view.php?id=1537"}, 
-                    {nombre: "Programa", valor: "https://eva.fing.edu.uy/pluginfile.php/40052/mod_resource/content/1/programa_PyE.pdf"}]
-const PCI = new Materia("PCI", 10, todas(materiaExonerada(PYE),materiaExonerada(CDIVV),materiaExonerada(GAL2)), "Procesamiento cuántico de la info.", Semestre.PRIMERO, true, false, BloqueCreditos.creditosEnM, []);
-PCI.informacion = [{nombre: "Eva", valor: "https://eva.fing.edu.uy/course/view.php?id=1903"}, 
-                    {nombre: "Programa", valor: "https://eva.fing.edu.uy/pluginfile.php/11372/mod_resource/content/1/programa_proc_cuant_inf.pdf"}]
-PCI.se_da = false;
-const ITI = new Materia("ITI", 8, materiaExonerada(PYE), "Int. a la Teoría de la Información", Semestre.PRIMERO, true, false, BloqueCreditos.creditosEnM, []);
-ITI.informacion = [{nombre: "Eva", valor: "https://eva.fing.edu.uy/course/view.php?id=412"}, 
-                    {nombre: "Programa", valor: "https://eva.fing.edu.uy/pluginfile.php/631/course/section/2052/ProgramaITI-2013-Grado.pdf"}]
-const MD2 = new Materia("MD2", 9, todas(alguna(materiaAprobada(MD1),materiaAprobada(FC)),materiaAprobada(GAL1)), "Matemática Discreta 2", Semestre.AMBOS, false, true, BloqueCreditos.creditosEnM, []);
-MD2.informacion = [{nombre: "Eva primer semestre", valor: "https://eva.fing.edu.uy/course/view.php?id=267"}, 
-                    {nombre: "Eva segundo semestre", valor: "https://eva.fing.edu.uy/course/view.php?id=1542"}, 
-                    {nombre: "Programa", valor: "https://www.fing.edu.uy/sites/default/files/2024-09/Matem%C3%A1tica%20Discreta%202.pdf"}]
-const LG = new Materia("LG", 12, alguna(materiaAprobada(MD1),materiaAprobada(FC)), "Lógica", Semestre.PRIMERO, false, false, BloqueCreditos.creditosEnM, []);
-LG.informacion = [{nombre: "Eva", valor: "https://eva.fing.edu.uy/course/view.php?id=394"}, 
-                    {nombre: "Programa", valor: "https://eva.fing.edu.uy/pluginfile.php/48291/mod_resource/content/2/Programa%20de%20Unidad%20Curricular%20Logica.pdf"}]
-const MN = new Materia("MN", 10, todas(materiaExonerada(CDIVV),materiaExonerada(P1),materiaExonerada(GAL2),materiaExonerada(GAL1),materiaExonerada(CDIV)), "Métodos Numéricos", Semestre.SEGUNDO, false, false, BloqueCreditos.creditosEnMN, []);
-MN.informacion = [{nombre: "Eva", valor: "https://eva.fing.edu.uy/course/view.php?id=62"}, 
-                    {nombre: "Programa (viejo)", valor: "https://www.fing.edu.uy/sites/default/files/2025-06/metodos_numericos_2024.pdf"}]
-const P4 = new Materia("P4", 15, todas(materiaExonerada(GAL1),materiaExonerada(CDIV),alguna(materiaExonerada(MD1),materiaExonerada(FC)),materiaExonerada(P2)), "Programación 4", Semestre.PRIMERO, false, false, BloqueCreditos.creditosEnProg, []);
-P4.informacion = [{nombre: "Eva", valor: "https://eva.fing.edu.uy/course/view.php?id=413"}, 
-                    {nombre: "Programa", valor: "https://eva.fing.edu.uy/pluginfile.php/50913/mod_resource/content/2/programa_curso.pdf"}]
-const PFPPS = new Materia("PFPPS", 7, materiaAprobada(P4), "Princ. y Fund. del Proc. Pers. de Software", Semestre.PRIMERO, true, false, BloqueCreditos.creditosEnIS, []);
-PFPPS.informacion = [{nombre: "Eva", valor: "https://eva.fing.edu.uy/course/view.php?id=633"}, 
-                    {nombre: "Programa", valor: "https://www.fing.edu.uy/static/programas/Grado/2017/Principios%20y%20Fundamentos%20del%20Proceso%20Personal%20de%20Software/principios%20y%20fundamentos%20del%20Proceso%20personal%20de%20software.pdf"}]
-const IIO = new Materia("IIO", 10, todas(materiaExonerada(GAL2),materiaExonerada(PYE),materiaExonerada(CDIVV),materiaExonerada(CDIV),materiaExonerada(GAL1)), "Int. a la Investigación de Operaciones", Semestre.PRIMERO, false, false, BloqueCreditos.creditosEnIO, []);
-IIO.informacion = [{nombre: "Eva", valor: "https://eva.fing.edu.uy/course/view.php?id=994"}, 
-                    {nombre: "Programa", valor: "https://eva.fing.edu.uy/pluginfile.php/47534/mod_resource/content/2/Programa%20IIO%202018.pdf"}]
-const ADA = new Materia("ADA", 10, materiaExonerada(IIO), "Algoritmos de Aproximación", Semestre.SEGUNDO, true, false, BloqueCreditos.creditosEnIO, []);
-ADA.informacion = [{nombre: "Eva", valor: "https://eva.fing.edu.uy/course/view.php?id=914"}, 
-                    {nombre: "Programa", valor: "https://eva.fing.edu.uy/pluginfile.php/58168/mod_resource/content/2/AA-2025%20%281%29%20%281%29.pdf"}]
-const MMC = new Materia("MMC", 8, todas(materiaExonerada(PYE),materiaExonerada(IIO)), "Métodos de Monte Carlo", Semestre.PRIMERO, true, false, BloqueCreditos.creditosEnMN, []);
-MMC.informacion = [{nombre: "Eva", valor: "https://eva.fing.edu.uy/course/view.php?id=24"}, 
-                    {nombre: "Programa", valor: "https://www.fing.edu.uy/sites/default/files/2022-06/M%C3%A9todos%20de%20Monte%20Carlo.pdf"}]
-const FDPE = new Materia("FDPE", 8, materiaExonerada(IIO), "Fundamentos de Programación Entera", Semestre.PRIMERO, true, false, BloqueCreditos.creditosEnIO, []);
-FDPE.informacion = [{nombre: "Eva", valor: "https://eva.fing.edu.uy/course/view.php?id=269"}, 
-                    {nombre: "Programa", valor: "https://eva.fing.edu.uy/pluginfile.php/47033/mod_resource/content/2/PUC_Fundamentos-de-Programacion-Entera_2018.pdf"}]
-FDPE.se_da = false;
-const MO = new Materia("MO", 6, materiaExonerada(IIO), "Modelado y Optimización", Semestre.SEGUNDO, true, false, BloqueCreditos.creditosEnIO, []);
-MO.informacion = [{nombre: "Eva", valor: "https://eva.fing.edu.uy/course/view.php?id=1070"}, 
-                    {nombre: "Programa", valor: "https://eva.fing.edu.uy/pluginfile.php/48929/mod_resource/content/2/ModOpt_Programa_Bedelia_2018.pdf"}]
-const OBI = new Materia("OBI", 8, materiaExonerada(IIO), "Optimización bajo Incertidumbre", Semestre.PRIMERO, true, false, BloqueCreditos.creditosEnIO, []);
-OBI.informacion = [{nombre: "Eva", valor: "https://eva.fing.edu.uy/course/view.php?id=397"}, 
-                    {nombre: "Programa", valor: "https://eva.fing.edu.uy/pluginfile.php/57177/mod_resource/content/7/PUC_Optimizacion-bajo-Incertidumbre_2018.pdf"}]
-const IOGR = new Materia("IOGR", 6, materiaExonerada(IIO), "Investigación de Oper. y Gest. de Riesgos", Semestre.SEGUNDO, true, false, BloqueCreditos.creditosEnIO, []);
-IOGR.informacion = [{nombre: "Eva", valor: "https://eva.fing.edu.uy/course/view.php?id=38"}, 
-                    {nombre: "Programa", valor: "https://eva.fing.edu.uy/pluginfile.php/48237/mod_resource/content/1/Programa%20de%20Investigacion%20Operativa%20y%20Gestion%20de%20Riesgos.pdf"}]
-const P3 = new Materia("P3", 15, todas(materiaAprobada(P2),materiaExonerada(P1),alguna(materiaExonerada(MD1),materiaExonerada(FC))), "Programación 3", Semestre.SEGUNDO, false, true, BloqueCreditos.creditosEnProg, []);
-P3.informacion = [{nombre: "Eva", valor: "https://eva.fing.edu.uy/course/view.php?id=39"}, 
-                    {nombre: "Programa", valor: "https://eva.fing.edu.uy/pluginfile.php/50602/mod_resource/content/4/ProgramaUCProgramacion3%20-%202024.pdf"}]
-const FRA = new Materia("FRA", 7, todas(creditosMinimos(BloqueCreditos.creditosEnCE,10),creditosMinimos(BloqueCreditos.creditosEnAC_SO_RC,12), materiaAprobada(P3), materiaExonerada(P2), materiaExonerada(LG)), "Fundamentos de la Robótica Autónoma", Semestre.PRIMERO, true, false, BloqueCreditos.creditosEnIAYR, []);
-FRA.informacion = [{nombre: "Eva", valor: "https://eva.fing.edu.uy/course/view.php?id=869"}, 
-                    {nombre: "Programa", valor: "https://eva.fing.edu.uy/pluginfile.php/46349/mod_resource/content/7/fra_programa_2026.pdf"}]
-const ALN = new Materia("ALN", 9, todas(materiaExonerada(P3),materiaExonerada(MN)), "Álgebra Lineal Numérica", Semestre.SEGUNDO, true, false, BloqueCreditos.creditosEnMN, []);
-ALN.informacion = [{nombre: "Eva", valor: "https://eva.fing.edu.uy/course/view.php?id=1143"}, 
-                    {nombre: "Programa", valor: "https://eva.fing.edu.uy/pluginfile.php/43937/mod_resource/content/1/ProgramaALN.pdf"}]
-const AC = new Materia("AC", 10, todas(materiaAprobada(LG),materiaAprobada(P2),materiaExonerada(P1),alguna(materiaAprobada(MD1),materiaAprobada(FC))), "Arquitectura de Computadoras", Semestre.SEGUNDO, false, true, BloqueCreditos.creditosEnAC_SO_RC, []);
-AC.informacion = [{nombre: "Eva", valor: "https://eva.fing.edu.uy/course/view.php?id=195"}, 
-                    {nombre: "Programa", valor: "https://eva.fing.edu.uy/pluginfile.php/44348/mod_resource/content/1/programa-arqcomp-2024.pdf"}]
-const CV = new Materia("CV", 10, todas(materiaAprobada(CDIVV),materiaExonerada(GAL1),materiaExonerada(CDIV)), "Cálculo Vectorial", Semestre.AMBOS, true, true, BloqueCreditos.creditosEnM, []);
-CV.informacion = [{nombre: "Eva primer semestre", valor: "https://eva.fing.edu.uy/course/view.php?id=1498"}, 
-                    {nombre: "Eva segundo semestre", valor: "https://eva.fing.edu.uy/course/view.php?id=1183"}, 
-                    {nombre: "Programa", valor: "https://eva.fing.edu.uy/pluginfile.php/36477/mod_resource/content/1/Ficha%20-%20Ca%CC%81lculo%20Vectorial.pdf"}]
-const ED = new Materia("ED", 10, todas(materiaExonerada(GAL2),materiaAprobada(CDIVV),materiaExonerada(GAL1),materiaExonerada(CDIV)), "Int. a las Ec. Diferenciales", Semestre.SEGUNDO, true, true, BloqueCreditos.creditosEnM, []);
-ED.informacion = [{nombre: "Eva", valor: "https://eva.fing.edu.uy/course/view.php?id=342"}, 
-                    {nombre: "Programa", valor: "https://www.fing.edu.uy/sites/default/files/2024-08/Programa_Introducci%C3%B3n%20a%20las%20ecuaciones%20diferenciales.pdf"}]
-const TL = new Materia("TL", 12, todas(materiaExonerada(P2),materiaExonerada(CDIV),materiaExonerada(GAL1),materiaExonerada(LG),alguna(materiaExonerada(MD1),materiaExonerada(FC))), "Teoría de Lenguajes", Semestre.PRIMERO, false, false, BloqueCreditos.creditosEnProg, []);
-TL.informacion = [{nombre: "Eva", valor: "https://eva.fing.edu.uy/course/view.php?id=687"}, 
-                    {nombre: "Programa", valor: "https://www.fing.edu.uy/sites/default/files/Programa%20de%20Unidad%20Curricular%20TeoLeng.pdf"}]
-const FVC = new Materia("FVC", 5, todas(materiaAprobada(CV),materiaExonerada(CDIVV)), "Funciones de Variable Compleja", Semestre.PRIMERO, true, true, BloqueCreditos.creditosEnM, []);
-FVC.informacion = [{nombre: "Eva", valor: "https://eva.fing.edu.uy/course/view.php?id=55"}, 
-                    {nombre: "Programa", valor: "https://eva.fing.edu.uy/pluginfile.php/36683/mod_resource/content/2/%20Programa%202019/fvc%20corregido%20%281%29.pdf"}]
-const SO = new Materia("SO", 12, todas(materiaAprobada(AC),materiaExonerada(GAL1),materiaExonerada(CDIV),materiaExonerada(P2),alguna(materiaExonerada(MD1),materiaExonerada(FC))), "Sistemas Operativos", Semestre.PRIMERO, false, false, BloqueCreditos.creditosEnAC_SO_RC, []);
-SO.informacion = [{nombre: "Eva", valor: "https://eva.fing.edu.uy/course/view.php?id=679"}, 
-                    {nombre: "Programa", valor: "https://eva.fing.edu.uy/pluginfile.php/52825/mod_resource/content/1/Programa-SO.pdf"}]
-const CCE = new Materia("CCE", 8, todas(materiaAprobada(PYE),materiaExonerada(GAL1),materiaExonerada(CDIVV),alguna(materiaExonerada(MD1),materiaExonerada(FC)),materiaExonerada(CDIV), materiaAprobada(P3)), "Códigos para Corrección de Errores", Semestre.PRIMERO, true, false, BloqueCreditos.creditosEnM, []);
-CCE.informacion = [{nombre: "Eva", valor: "https://eva.fing.edu.uy/course/view.php?id=134"}, 
-                    {nombre: "Programa", valor: "https://eva.fing.edu.uy/pluginfile.php/45183/mod_resource/content/1/Programa%20de%20Unidad%20Curricular%20Co%CC%81digos%20para%20Correccio%CC%81n%20de%20Errores%202020%20%28pendiente%20de%20aprobacio%CC%81n%29.pdf"}]
-CCE.se_da = false;
-const TACCE = new Materia("TACCE", 7, materiaAprobada(CCE), "Temas avanzados en cód. para corr. de err.", Semestre.SEGUNDO, true, false, BloqueCreditos.creditosEnM, []);
-TACCE.informacion = [{nombre: "Eva", valor: "https://eva.fing.edu.uy/course/view.php?id=456"}, 
-                    {nombre: "Programa", valor: "https://eva.fing.edu.uy/pluginfile.php/683/course/section/2272/Programa%20de%20Unidad%20Curricular%20Temas%20avanzados%20en%20c%C3%B3digos%20para%20correcci%C3%B3n%20de%20errores%202023.pdf"}]
-const PMPPG = new Materia("PMPPG", 10, todas(materiaExonerada(P2),alguna(materiaExonerada(AC),materiaExonerada(SO),todas(materiaAprobada(AC),materiaAprobada(SO)))), "Prog. masivamente paralela en p. gráficos", Semestre.PRIMERO, true, false, BloqueCreditos.creditosEnAC_SO_RC, []);
-PMPPG.informacion = [{nombre: "Eva", valor: "https://eva.fing.edu.uy/course/view.php?id=1076"}, 
-                    {nombre: "Programa", valor: "https://eva.fing.edu.uy/pluginfile.php/51679/mod_resource/content/2/Programa_PMPenGPU_Grado2024.pdf"}]
-const TEP = new Materia("TEP", 8, todas(creditosMinimos(BloqueCreditos.Total,55),alguna(materiaExonerada(F1),todas(materiaExonerada(GAL1),materiaAprobada(GAL2)),todas(materiaExonerada(CDIV),materiaAprobada(CDIVV)))), "Tutorías entre Pares", Semestre.AMBOS, true, false, BloqueCreditos.creditosEnOpcionales, []);
-TEP.informacion = [{nombre: "Eva primer semestre", valor: "https://eva.fing.edu.uy/course/view.php?id=1617"},
-                    {nombre: "Eva segundo semestre", valor: "https://eva.fing.edu.uy/course/view.php?id=1555"}, 
-                    {nombre: "Programa", valor: "https://www.fing.edu.uy/sites/default/files/2024-06/TUTOR%C3%8DAS%20ENTRE%20PARES%20%282024%29.pdf"}]
-const FO = new Materia("FO", 6, todas(materiaExonerada(CDIVV),materiaAprobada(P1),materiaExonerada(GAL2)), "Fundamentos de Optimización", Semestre.PRIMERO, true, false, BloqueCreditos.creditosEnIO, []);
-FO.informacion = [{nombre: "Eva", valor: "https://eva.fing.edu.uy/course/view.php?id=1513"}, 
-                    {nombre: "Programa", valor: "https://eva.fing.edu.uy/pluginfile.php/36863/mod_resource/content/1/Programa_Unidad_Curricular_Optimizacion.pdf"}]
-const OCA = new Materia("OCA", 10, materiaExonerada(IIO), "Optimización Continua y Aplicaciones", Semestre.SEGUNDO, true, false, BloqueCreditos.creditosEnIO, []);
-OCA.informacion = [{nombre: "Eva", valor: "https://eva.fing.edu.uy/course/view.php?id=1538"}, 
-                    {nombre: "Programa", valor: "https://www.fing.edu.uy/sites/default/files/2023-10/optimizacion%20continua%20y%20aplicaciones_1640.pdf"}]
-const FBD = new Materia("FBD", 15, todas(materiaExonerada(LG),materiaExonerada(P3),materiaExonerada(MD2)), "Fundamentos de Bases de Datos", Semestre.SEGUNDO, false, false, BloqueCreditos.creditosEnBD_SI, []);
-FBD.informacion = [{nombre: "Eva", valor: "https://eva.fing.edu.uy/course/view.php?id=330"}, 
-                    {nombre: "Programa", valor: "https://eva.fing.edu.uy/pluginfile.php/545/course/section/1643/Programa-FBD.pdf?time=1627317936142"}]
-const BDNR = new Materia("BDNR", 10, materiaExonerada(FBD), "Bases de Datos No Relacionales", Semestre.PRIMERO, true, false, BloqueCreditos.creditosEnBD_SI, []);
-BDNR.informacion = [{nombre: "Eva", valor: "https://eva.fing.edu.uy/course/view.php?id=947"}, 
-                    {nombre: "Programa", valor: "https://www.fing.edu.uy/sites/default/files/propuesta-bdnr.pdf"}]
-BDNR.se_da = false;
-const CDI = new Materia("CDI", 8, materiaExonerada(FBD), "Calidad de Datos e Información", Semestre.PRIMERO, true, false, BloqueCreditos.creditosEnBD_SI, []);
-CDI.informacion = [{nombre: "Eva", valor: "https://eva.fing.edu.uy/course/view.php?id=1073"}, 
-                    {nombre: "Programa", valor: "https://eva.fing.edu.uy/pluginfile.php/45151/mod_resource/content/1/Programa-CalidadDatosInf.pdf"}]
-const RC = new Materia("RC", 12, todas(materiaExonerada(P3),materiaAprobada(SO),materiaExonerada(CDIV),materiaAprobada(AC)), "Redes de Computadoras", Semestre.SEGUNDO, false, false, BloqueCreditos.creditosEnAC_SO_RC, []);
-RC.informacion = [{nombre: "Eva", valor: "https://eva.fing.edu.uy/course/view.php?id=335"}, 
-                    {nombre: "Programa", valor: "https://eva.fing.edu.uy/pluginfile.php/52289/mod_resource/content/2/Programa%20de%20Unidad%20Curricular%20Redes%20de%20Computadoras%20-%2020191022.pdf"}]
-const SETR = new Materia("SETR", 10, todas(materiaExonerada(AC),materiaExonerada(P2)), "Sistemas embebidos para tiempo real", Semestre.PRIMERO, true, false, BloqueCreditos.creditosEnAC_SO_RC, []);
-SETR.informacion = [{nombre: "Eva", valor: "https://eva.fing.edu.uy/course/view.php?id=581"}, 
-                    {nombre: "Programa", valor: "https://www.fing.edu.uy/sites/default/files/cursos/2019/anexos/37196/Sist-EmbebidosTiempoReal-20.pdf"}]
-const RO = new Materia("RO", 10, materiaExonerada(RC), "Redes Ópticas", Semestre.SEGUNDO, true, false, BloqueCreditos.creditosEnAC_SO_RC, []);
-RO.informacion = [{nombre: "Eva", valor: "https://eva.fing.edu.uy/course/view.php?id=1862"}, 
-                    {nombre: "Programa", valor: "https://www.fing.edu.uy/sites/default/files/2024-08/Redes_Opticas.pdf"}]
-const TSI = new Materia("TSI", 10, todas(materiaAprobada(RC),materiaExonerada(FBD),materiaExonerada(P3)), "Taller de Seguridad Informática", Semestre.SEGUNDO, true, false, BloqueCreditos.creditosEnTall_Pasa_Proy, []);
-TSI.informacion = [{nombre: "Eva", valor: "https://eva.fing.edu.uy/course/view.php?id=324"}, 
-                    {nombre: "Programa", valor: "https://eva.fing.edu.uy/pluginfile.php/53898/mod_folder/content/0/Programa%20de%20Unidad%20Curricular.pdf"}]
-const ADAR = new Materia("ADAR", 8, todas(materiaExonerada(P3),materiaExonerada(RC)), "Análisis y Diseño de Al. Dis. en Redes", Semestre.SEGUNDO, true, false, BloqueCreditos.creditosEnAC_SO_RC, []);
-ADAR.informacion = [{nombre: "Eva", valor: "https://eva.fing.edu.uy/course/view.php?id=145"}, 
-                    {nombre: "Programa", valor: "https://eva.fing.edu.uy/pluginfile.php/44090/mod_resource/content/0/Programa_ADADR.pdf"}]
-const CAP = new Materia("CAP", 10, todas(materiaAprobada(P4),materiaAprobada(RC),materiaAprobada(SO),materiaAprobada(AC)), "Computación de alta performance", Semestre.PRIMERO, true, false, BloqueCreditos.creditosEnAC_SO_RC, []);
-CAP.informacion = [{nombre: "Eva", valor: "https://eva.fing.edu.uy/course/view.php?id=1064"}, 
-                    {nombre: "Programa", valor: "https://www.fing.edu.uy/sites/default/files/2023-04/Computaci%C3%B3n%20de%20alta%20performance.pdf"}]
-const TP = new Materia("TP", 15, alguna(todas(materiaExonerada(P3),materiaAprobada(P4)),materiaExonerada(P4)), "Taller de Programación", Semestre.SEGUNDO, false, false, BloqueCreditos.creditosEnTall_Pasa_Proy, []);
-TP.informacion = [{nombre: "Eva", valor: "https://eva.fing.edu.uy/course/view.php?id=315"}, 
-                    {nombre: "Programa", valor: "https://eva.fing.edu.uy/pluginfile.php/53463/mod_resource/content/5/programaTProg2017_APROBADO.pdf"}]
-const IPLN = new Materia("IPLN", 12, todas(materiaExonerada(P4),materiaAprobada(TP),materiaExonerada(LG),materiaExonerada(P3),materiaExonerada(TL),materiaExonerada(PYE)), "Int. al Procesamiento de Leng. Natural", Semestre.SEGUNDO, true, false, BloqueCreditos.creditosEnIAYR, []);
-IPLN.informacion = [{nombre: "Eva", valor: "https://eva.fing.edu.uy/course/view.php?id=211"}, 
-                    {nombre: "Programa", valor: "https://eva.fing.edu.uy/pluginfile.php/47980/mod_resource/content/0/Programa%20de%20Unidad%20Curricular%20IntroPLN%20Grado.pdf"}]
-const IIS = new Materia("IIS", 10, todas(materiaAprobada(TP),materiaAprobada(FBD),materiaAprobada(P4)), "Taller Introductorio de Ing. de Software", Semestre.PRIMERO, false, false, BloqueCreditos.creditosEnIS, []);
-IIS.informacion = [{nombre: "Eva", valor: "https://eva.fing.edu.uy/course/view.php?id=613"}, 
-                    {nombre: "Programa", valor: "https://eva.fing.edu.uy/pluginfile.php/54380/mod_page/content/7/Programa%20TIIS%20-%202025.pdf"}]
-const FWS = new Materia("FWS", 8, todas(materiaExonerada(IIS),materiaExonerada(FBD)), "Fundamentos de la web semántica", Semestre.PRIMERO, true, false, BloqueCreditos.creditosEnBD_SI, []);
-FWS.informacion = [{nombre: "Eva", valor: "https://eva.fing.edu.uy/course/view.php?id=536"}, 
-                    {nombre: "Programa", valor: "https://eva.fing.edu.uy/pluginfile.php/46740/mod_resource/content/1/Programa%20de%20Unidad%20Curricular-FWS.pdf"}]
-FWS.se_da = false;
-const PF = new Materia("PF", 10, todas(materiaExonerada(TL),materiaExonerada(P2),materiaExonerada(LG),alguna(materiaExonerada(MD1),materiaExonerada(FC))), "Programación Funcional", Semestre.AMBOS, false, false, BloqueCreditos.creditosEnProg, []);
-PF.informacion = [{nombre: "Eva", valor: "https://eva.fing.edu.uy/course/view.php?id=138"}, 
-                    {nombre: "Programa", valor: "https://www.fing.edu.uy/sites/default/files/cursos/2020/anexos/39014/Programaci%C3%B3n%20Funcional.pdf"}]
-const PFA = new Materia("PFA", 12, materiaAprobada(PF), "Programación Funcional Avanzada", Semestre.SEGUNDO, true, false, BloqueCreditos.creditosEnProg, []);
-PFA.informacion = [{nombre: "Eva", valor: "https://eva.fing.edu.uy/course/view.php?id=965"}, 
-                    {nombre: "Programa", valor: "https://www.fing.edu.uy/sites/default/files/2025-10/programacion-funcional-avanzada_1350.pdf"}]
-const PL = new Materia("PL", 10, todas(materiaExonerada(TL),materiaExonerada(P3),materiaExonerada(MD2),materiaExonerada(LG)), "Programación Lógica", Semestre.PRIMERO, false, false, BloqueCreditos.creditosEnProg, []);
-PL.informacion = [{nombre: "Eva", valor: "https://eva.fing.edu.uy/course/view.php?id=293"}, 
-                    {nombre: "Programa", valor: "https://eva.fing.edu.uy/pluginfile.php/51520/mod_resource/content/2/PL_programaOficial2018.pdf"}]
-const CFPTT = new Materia("CFPTT", 12, todas(materiaExonerada(LG),alguna(materiaAprobada(PF),materiaAprobada(PL))), "Const. Formal de Prog. en Teoría de Tipos", Semestre.SEGUNDO, true, false, BloqueCreditos.creditosEnProg, []);
-CFPTT.informacion = [{nombre: "Eva", valor: "https://eva.fing.edu.uy/course/view.php?id=363"}, 
-                    {nombre: "Programa", valor: "https://www.fing.edu.uy/sites/default/files/Programa%20de%20Unidad%20Curricular%20CFPTT%20.pdf"}]
-const PIS = new Materia("PIS", 15, todas(materiaAprobada(IIS),materiaExonerada(P4)), "Proyecto de Ingeniería de Software", Semestre.SEGUNDO, false, false, BloqueCreditos.creditosEnTall_Pasa_Proy, []);
-PIS.informacion = [{nombre: "Eva", valor: "https://eva.fing.edu.uy/course/view.php?id=573"}, 
-                    {nombre: "Programa", valor: "https://www.fing.edu.uy/sites/default/files/cursos/2020/anexos/39036/Proyecto%20de%20Ingenier%C3%ADa%20de%20Software.pdf"}]
-const AA = new Materia("AA", 12, todas(materiaExonerada(LG),materiaExonerada(PYE),materiaExonerada(P3),materiaExonerada(FBD),materiaExonerada(P4),materiaExonerada(MD2)), "Aprendizaje Automático", Semestre.SEGUNDO, true, false, BloqueCreditos.creditosEnIAYR, []);
-AA.informacion = [{nombre: "Eva", valor: "https://eva.fing.edu.uy/course/view.php?id=43"}, 
-                    {nombre: "Programa", valor: "https://eva.fing.edu.uy/pluginfile.php/221/course/section/209/AA%20-%20Programa%20de%20Unidad%20Curricular.pdf"}]
-const TAA = new Materia("TAA", 10, materiaAprobada(AA), "Taller de Aprendizaje Automático", Semestre.PRIMERO, true, false, BloqueCreditos.creditosEnIAYR, []);
-TAA.informacion = [{nombre: "Eva", valor: "https://eva.fing.edu.uy/course/view.php?id=1492"}, 
-                    {nombre: "Programa", valor: "https://eva.fing.edu.uy/pluginfile.php/1775/course/section/7452/1-Programa_TallerAprendizajeAutomatico_actualizacion_2023_retroactiva_total%20%282%29.pdf?time=1710286794133"}]
-const RNLN = new Materia("RNLN", 10, todas(materiaExonerada(P3),materiaAprobada(AA),materiaExonerada(PYE)), "Redes Neuronales para Leng. Natural", Semestre.SEGUNDO, true, false, BloqueCreditos.creditosEnIAYR, []);
-RNLN.informacion = [{nombre: "Eva", valor: "https://eva.fing.edu.uy/course/view.php?id=1758"}, 
-                    {nombre: "Programa", valor: "https://www.fing.edu.uy/sites/default/files/2023-05/REDES%20NEURONALES%20PARA%20LENGUAJE%20NATURAL.pdf"}]
-const AE = new Materia("AE", 10, todas(materiaExonerada(P4),materiaExonerada(PYE),materiaExonerada(IIO)), "Algoritmos Evolutivos", Semestre.SEGUNDO, true, false, BloqueCreditos.creditosEnIO, []);
-AE.informacion = [{nombre: "Eva", valor: "https://eva.fing.edu.uy/course/view.php?id=1049"}, 
-                    {nombre: "Programa", valor: "https://eva.fing.edu.uy/pluginfile.php/44000/mod_resource/content/2/Programa%20de%20Unidad%20Curricular%20Algoritmos%20Evolutivos.pdf"}]
-const ICG = new Materia("ICG", 10, todas(materiaExonerada(P3),materiaExonerada(P4),materiaAprobada(GAL2),materiaExonerada(GAL1)), "Int. a la Computación Gráfica", Semestre.PRIMERO, true, false, BloqueCreditos.creditosEnProg, []);
-ICG.informacion = [{nombre: "Eva", valor: "https://eva.fing.edu.uy/course/view.php?id=205"}, 
-                    {nombre: "Programa", valor: "https://www.fing.edu.uy/inco/cursos/compgraf/Programa/Programa.Int.a.la.Comp.Grafica-1316.pdf"}]
-const CGA = new Materia("CGA", 12, materiaAprobada(ICG), "Computación Gráfica Avanzada", Semestre.SEGUNDO, true, false, BloqueCreditos.creditosEnProg, []);
-CGA.informacion = [{nombre: "Eva", valor: "https://eva.fing.edu.uy/course/view.php?id=1067"}, 
-                    {nombre: "Programa", valor: "https://eva.fing.edu.uy/pluginfile.php/45437/mod_resource/content/3/Programa%20de%20Computaci%C3%B3n%20Gr%C3%A1fica%20Avanzada.pdf"}]
-const FSI = new Materia("FSI", 12, todas(materiaExonerada(SO),materiaExonerada(FBD),materiaExonerada(P3),materiaExonerada(LG),materiaExonerada(RC)), "Fundamentos de la Seguridad Informática", Semestre.PRIMERO, true, false, BloqueCreditos.creditosEnAC_SO_RC, []);
-FSI.informacion = [{nombre: "Eva", valor: "https://eva.fing.edu.uy/course/view.php?id=399"}, 
-                    {nombre: "Programa", valor: "https://eva.fing.edu.uy/pluginfile.php/46578/mod_resource/content/1/Programa%20de%20Unidad%20Curricular%20-%20FSI.pdf"}]
-const MI = new Materia("MI", 4, null, "Matemática Inicial", Semestre.AMBOS, false, false, BloqueCreditos.creditosEnM, []);
-MI.informacion = [{nombre: "Eva primer semestre", valor: "https://eva.fing.edu.uy/course/view.php?id=1822"}, 
-                    {nombre: "Eva segundo semestre", valor: "https://eva.fing.edu.uy/course/view.php?id=1535"}, 
-                    {nombre: "Programa", valor: "https://eva.fing.edu.uy/pluginfile.php/499136/mod_resource/content/1/Programa_UC_Matematica_Inicial_modificado.pdf"}]
-const CTS = new Materia("CTS", 8, null, "Ciencia, Tecnología y Sociedad", Semestre.PRIMERO, true, false, BloqueCreditos.creditosEnCHS, []);
-CTS.informacion = [{nombre: "Eva", valor: "https://eva.fing.edu.uy/course/view.php?id=1243"}, 
-                    {nombre: "Programa", valor: "https://eva.fing.edu.uy/pluginfile.php/71255/mod_resource/content/2/Programa%20Unidad%20Curricular%20Ciencia%20Tecnolog%C3%ADa%20y%20Sociedad%20%28Cod.%201223%29.pdf"}]
-const TRE = new Materia("TRE", 6, creditosMinimos(BloqueCreditos.creditosEnProg,10), "Taller de Robótica Educativa", Semestre.PRIMERO, true, false, BloqueCreditos.creditosEnTall_Pasa_Proy, []);
-TRE.informacion = [{nombre: "Eva", valor: "https://eva.fing.edu.uy/course/view.php?id=1187"}, 
-                    {nombre: "Programa", valor: "https://eva.fing.edu.uy/pluginfile.php/53819/mod_resource/content/4/Programataller-robedu-butia_v20180817.pdf"}]
-const F2 = new Materia("F2", 10, todas(materiaAprobada(F1),materiaAprobada(CDIV)), "Física 2", Semestre.AMBOS, true, true, BloqueCreditos.creditosEnCE, []);
-F2.informacion = [{nombre: "Eva primer semestre", valor: "https://eva.fing.edu.uy/course/view.php?id=32"}, 
-                    {nombre: "Eva segundo semestre", valor: "https://eva.fing.edu.uy/course/view.php?id=1546"}, 
-                    {nombre: "Programa", valor: "https://www.fing.edu.uy/sites/default/files/cursos/2011/anexos/2553/357_0.pdf"}]
-const F3 = new Materia("F3", 10, todas(materiaAprobada(CDIV), alguna(todas(materiaAprobada(F1), materiaAprobada(F2)), materiaExonerada(F1))), "Física 3", Semestre.AMBOS, true, true, BloqueCreditos.creditosEnCE, []);
-F3.informacion = [{nombre: "Eva primer semestre", valor: "https://eva.fing.edu.uy/course/view.php?id=36"}, 
-                    {nombre: "Eva segundo semestre", valor: "https://eva.fing.edu.uy/course/view.php?id=1547"}, 
-                    {nombre: "Programa", valor: "https://eva.fing.edu.uy/pluginfile.php/9232/mod_resource/content/0/Programa/nf3.pdf"}]
-const AGI = new Materia("AGI", 5, creditosMinimos(BloqueCreditos.Total,140), "Administración General para Ingenieros", Semestre.PRIMERO, true, true, BloqueCreditos.creditosEnGO, []);
-AGI.informacion = [{nombre: "Eva", valor: "https://eva.fing.edu.uy/course/view.php?id=778"}, 
-                    {nombre: "Programa", valor: "https://eva.fing.edu.uy/pluginfile.php/73141/mod_folder/content/0/Programa%202024.pdf"}]
-const CC = new Materia("CC", 8, todas(materiaAprobada(PYE),creditosMinimos(BloqueCreditos.Total,80)), "Control de Calidad", Semestre.SEGUNDO, true, true, BloqueCreditos.creditosEnGO, []);
-CC.informacion = [{nombre: "Eva", valor: "https://eva.fing.edu.uy/course/view.php?id=49"}, 
-                    {nombre: "Programa", valor: "https://eva.fing.edu.uy/pluginfile.php/26508/mod_resource/content/2/Programa%20Control%20de%20Calidad%20-%20nuevo%20formato.pdf"}]
-const PAI = new Materia("PAI", 5, materiaAprobada(AGI), "Práctica de Administración para Ingenieros", Semestre.SEGUNDO, true, true, BloqueCreditos.creditosEnGO, []);
-PAI.informacion = [{nombre: "Eva", valor: "https://eva.fing.edu.uy/course/view.php?id=779"}, 
-                    {nombre: "Programa", valor: "https://eva.fing.edu.uy/pluginfile.php/71749/mod_resource/content/4/Programa_Practica_de_Administracion_para_Ingenieros_2019_v2.pdf"}]
-const PCIC = new Materia("PCIC", 3, null, "Políticas Científicas en Inf. y Comp.", Semestre.SEGUNDO, true, false, BloqueCreditos.creditosEnCHS, []);
-PCIC.informacion = [{nombre: "Eva", valor: "https://eva.fing.edu.uy/course/view.php?id=1311"}, 
-                    {nombre: "Programa", valor: "https://www.fing.edu.uy/sites/default/files/cursos/2011/anexos/3559/Pol%C3%ADticas%20Cient%C3%ADficas%20en%20Inform%C3%A1tica%20y%20Computaci%C3%B3n.pdf"}]
-const ASS = new Materia("ASS", 10, todas(creditosMinimos(BloqueCreditos.creditosEnGO,10),materiaAprobada(RC),materiaAprobada(SO),materiaAprobada(FBD),materiaAprobada(IIS),materiaExonerada(AC)), "Administración y Seguridad de Sistemas", Semestre.PRIMERO, true, false, BloqueCreditos.creditosEnBD_SI, []);
-ASS.informacion = [{nombre: "Eva", valor: "https://eva.fing.edu.uy/course/view.php?id=785"}, 
-                    {nombre: "Programa", valor: "https://www.fing.edu.uy/sites/default/files/Programa%20de%20Unidad%20Curricular%20ASS.pdf"}]
-const Pasan = new Materia("Pasan", 10, creditosMinimos(BloqueCreditos.Total,200), "Pasantía", Semestre.AMBOS, true, false, BloqueCreditos.creditosEnTall_Pasa_Proy, []);
-Pasan.informacion = [{nombre: "Eva", valor: "https://eva.fing.edu.uy/course/view.php?id=702"}, 
-                    {nombre: "Programa", valor: "https://eva.fing.edu.uy/pluginfile.php/49439/mod_resource/content/2/Pasantia_programa.pdf"}]
-const PG = new Materia("PG", 30, alguna(
-                                        creditosMinimos(BloqueCreditos.Total,380),
-                                        todas(creditosMinimos(BloqueCreditos.Total,365),materiaAprobada(TP),materiaAprobada(PIS),materiaAprobada(TL),materiaAprobada(MN),materiaAprobada(P4),materiaAprobada(IIS),materiaAprobada(P3),materiaAprobada(FBD),materiaAprobada(SO),materiaAprobada(IIO),materiaAprobada(AC)),
-                                        todas(creditosMinimos(BloqueCreditos.Total,330),creditosMinimos(BloqueCreditos.creditosEnMN,8),creditosMinimos(BloqueCreditos.creditosEnTall_Pasa_Proy,15),creditosMinimos(BloqueCreditos.creditosEnProg,60),creditosMinimos(BloqueCreditos.creditosEnBD_SI,10),creditosMinimos(BloqueCreditos.creditosEnIO,10),creditosMinimos(BloqueCreditos.creditosEnIS,10),creditosMinimos(BloqueCreditos.creditosEnM,70),creditosMinimos(BloqueCreditos.creditosEnGO,10),creditosMinimos(BloqueCreditos.creditosEnAC_SO_RC,30),creditosMinimos(BloqueCreditos.creditosEnCHS,10)))
-                      , "Proyecto de Grado", Semestre.AMBOS, false, false, BloqueCreditos.creditosEnTall_Pasa_Proy, []);
-PG.informacion = [{nombre: "Eva", valor: "https://eva.fing.edu.uy/course/view.php?id=627"}, 
-                    {nombre: "Programa", valor: "https://eva.fing.edu.uy/pluginfile.php/51946/mod_resource/content/1/Programa%20de%20Unidad%20Curricular%20Proyecto%20de%20Grado.pdf"}]
+let Materias = [];
+let IC;
+let CDIV;
+let MD1;
+let FC;
+let MI;
+let TRE;
+let AGI;
+let Pasan;
+let PG;
 
+const materiasPorNombre = new Map();
+const nombresMateriasExcluidasInicialmente = new Set(["IC", "FC", "MI"]);
 
+function reglaDesdeJson(regla) {
+  if (!regla) return null;
+  if (regla.tipo === "materiaAprobada") {
+    return materiaAprobada(materiasPorNombre.get(regla.materia));
+  }
+  if (regla.tipo === "materiaExonerada") {
+    return materiaExonerada(materiasPorNombre.get(regla.materia));
+  }
+  if (regla.tipo === "creditosMinimos") {
+    return creditosMinimos(BloqueCreditos[regla.area], regla.cantidad);
+  }
+  if (regla.tipo === "todas") {
+    return todas(...regla.reglas.map(reglaDesdeJson));
+  }
+  if (regla.tipo === "alguna") {
+    return alguna(...regla.reglas.map(reglaDesdeJson));
+  }
+  if (regla.tipo === "negar") {
+    return negar(reglaDesdeJson(regla.regla));
+  }
+  return null;
+}
 
-let Materias = [
-  CC,
-  MD1,
-  CDIV,
-  P1,
-  GAL1,
-  Ec,
-  F1,
-  CTS,
-  PCIC,
-  CDIVV,
-  P2,
-  DAED,
-  GAL2,
-  MD2,
-  LG,
-  TRE,
-  F2,
-  F3,
-  AC,
-  PYE,
-  PCI,
-  MN,
-  P4,
-  PFPPS,
-  AAL,
-  CV,
-  ED,
-  TP,
-  IIO,
-  ADA,
-  MMC,
-  FDPE,
-  P3,
-  FRA,
-  SO,
-  Pasan,
-  ITI,
-  FVC,
-  CCE,
-  TACCE,
-  TL,
-  FBD,
-  BDNR,
-  CDI,
-  RC,
-  SETR,
-  RO,
-  OBI,
-  FO,
-  OCA,
-  AE,
-  ICG,
-  PMPPG,
-  ALN,
-  IIS,
-  TEP,
-  FWS,
-  PF,
-  PFA,
-  PL,
-  CFPTT,
-  AA,
-  TAA,
-  CGA,
-  FSI,
-  CAP,
-  ADAR,
-  TSI,
-  PIS,
-  ASS,
-  PG,
-  IPLN,
-  IOGR,
-  MO,
-  RNLN,
-  AGI,
-  PAI,
-  TAR
-];
+function actualizarMateriaDesdeJson(materia, datos) {
+  const creditosPorArea = datos.creditosPorArea ?? [];
+  materia.nombreCompleto = datos.nombreCompleto;
+  materia.creditos = datos.creditos;
+  materia.semestre = datos.semestre;
+  materia.esOpcional = datos.esOpcional;
+  materia.esLibre = datos.esLibre;
+  materia.se_da = datos.seDa;
+  materia.informacion = datos.informacion ?? [];
+  materia.creditosPorArea = creditosPorArea;
+  materia.area = creditosPorArea[0]?.area;
+  materia.reglaHabilitacion = reglaDesdeJson(datos.reglaHabilitacion);
+}
+
+function guardarMateriasNecesarias() {
+  IC = materiasPorNombre.get("IC");
+  CDIV = materiasPorNombre.get("CDIV");
+  MD1 = materiasPorNombre.get("MD1");
+  FC = materiasPorNombre.get("FC");
+  MI = materiasPorNombre.get("MI");
+  TRE = materiasPorNombre.get("TRE");
+  AGI = materiasPorNombre.get("AGI");
+  Pasan = materiasPorNombre.get("Pasan");
+  PG = materiasPorNombre.get("PG");
+}
+
+async function cargarMateriasDesdeJson() {
+  const response = await fetch("./materias.json");
+  const materiasJson = await response.json();
+  materiasPorNombre.clear();
+  materiasJson.forEach((datos) => {
+    const area = datos.creditosPorArea?.[0]?.area;
+    materiasPorNombre.set(
+      datos.id,
+      new Materia(
+        datos.id,
+        datos.creditos,
+        null,
+        datos.nombreCompleto,
+        datos.semestre,
+        datos.esOpcional,
+        datos.esLibre,
+        area,
+        datos.informacion ?? []
+      )
+    );
+  });
+  materiasJson.forEach((datos) => {
+    actualizarMateriaDesdeJson(materiasPorNombre.get(datos.id), datos);
+  });
+  guardarMateriasNecesarias();
+  Materias = materiasJson.map((datos) => materiasPorNombre.get(datos.id)).filter((materia) => !nombresMateriasExcluidasInicialmente.has(materia.nombre));
+}
 
 function displayBlock(elemento){
   document.getElementById(elemento).style.display = "block";
@@ -856,8 +595,11 @@ function reset() {
 
 function sumarCreditos(materia) {
   if (historialExoneradas.has(materia.nombre)) {
-    creditosBloque.Total += materia.creditos;
-    creditosBloque[BloqueCreditos[materia.area]] += materia.creditos;
+    const aportes = materia.creditosPorArea ?? [{ area: materia.area, creditos: materia.creditos }];
+    aportes.forEach(({ area, creditos }) => {
+      creditosBloque.Total += creditos;
+      creditosBloque[BloqueCreditos[area]] += creditos;
+    });
   }
 }
 
@@ -1383,7 +1125,8 @@ function rehacerPaginaSinEstado(){
   mostrarSeccionesQueCorrespondan();
 }
 
-function firstLoad() {
+async function firstLoad() {
+  await cargarMateriasDesdeJson();
   if (localStorage.getItem(LocalStorageNombres.materiasExoneradas)||localStorage.getItem(LocalStorageNombres.materiasAprobadas)) {
     historialExoneradas = new Set(JSON.parse(localStorage.getItem(LocalStorageNombres.materiasExoneradas)));
     historialAprobadas = new Set(JSON.parse(localStorage.getItem(LocalStorageNombres.materiasAprobadas)));
@@ -1422,4 +1165,7 @@ function firstLoad() {
   checkWidth();
 }
 
-firstLoad();
+firstLoad().catch((error) => {
+  console.error("No se pudo cargar materias.json", error);
+});
+

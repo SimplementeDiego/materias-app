@@ -1,0 +1,3342 @@
+[
+  {
+    "id": "IC",
+    "nombreCompleto": "Introducción a la Computación",
+    "creditos": 5,
+    "creditosPorArea": [
+      {
+        "area": "creditosEnProg",
+        "creditos": 5
+      }
+    ],
+    "reglaHabilitacion": null,
+    "semestre": "primero",
+    "esOpcional": false,
+    "esLibre": false,
+    "seDa": true,
+    "informacion": [
+      {
+        "nombre": "Eva",
+        "valor": "https://eva.fing.edu.uy/course/view.php?id=1988"
+      },
+      {
+        "nombre": "Programa",
+        "valor": "https://eva.fing.edu.uy/pluginfile.php/92316/mod_resource/content/1/Programa-introcomp.pdf"
+      }
+    ]
+  },
+  {
+    "id": "CDIV",
+    "nombreCompleto": "Cálculo DIV",
+    "creditos": 13,
+    "creditosPorArea": [
+      {
+        "area": "creditosEnM",
+        "creditos": 13
+      }
+    ],
+    "reglaHabilitacion": null,
+    "semestre": "ambos",
+    "esOpcional": false,
+    "esLibre": true,
+    "seDa": true,
+    "informacion": [
+      {
+        "nombre": "Eva primer semestre",
+        "valor": "https://eva.fing.edu.uy/course/view.php?id=1024"
+      },
+      {
+        "nombre": "Eva segundo semestre",
+        "valor": "https://eva.fing.edu.uy/course/view.php?id=1504"
+      },
+      {
+        "nombre": "Programa",
+        "valor": "https://eva.fing.edu.uy/pluginfile.php/73997/mod_resource/content/4/Ficha%20del%20curso.pdf"
+      }
+    ]
+  },
+  {
+    "id": "CDIVV",
+    "nombreCompleto": "Cálculo DIVV",
+    "creditos": 13,
+    "creditosPorArea": [
+      {
+        "area": "creditosEnM",
+        "creditos": 13
+      }
+    ],
+    "reglaHabilitacion": {
+      "tipo": "materiaAprobada",
+      "materia": "CDIV"
+    },
+    "semestre": "ambos",
+    "esOpcional": false,
+    "esLibre": true,
+    "seDa": true,
+    "informacion": [
+      {
+        "nombre": "Eva primer semestre",
+        "valor": "https://eva.fing.edu.uy/course/view.php?id=1594"
+      },
+      {
+        "nombre": "Eva segundo semestre",
+        "valor": "https://eva.fing.edu.uy/course/view.php?id=1131"
+      },
+      {
+        "nombre": "Programa",
+        "valor": "https://eva.fing.edu.uy/pluginfile.php/35367/mod_resource/content/1/Programa_Unidad_Curricular_calculo_varias_variables.pdf"
+      }
+    ]
+  },
+  {
+    "id": "MD1",
+    "nombreCompleto": "Matemática Discreta 1",
+    "creditos": 9,
+    "creditosPorArea": [
+      {
+        "area": "creditosEnM",
+        "creditos": 9
+      }
+    ],
+    "reglaHabilitacion": {
+      "tipo": "negar",
+      "regla": {
+        "tipo": "materiaExonerada",
+        "materia": "FC"
+      }
+    },
+    "semestre": "ambos",
+    "esOpcional": false,
+    "esLibre": true,
+    "seDa": false,
+    "informacion": [
+      {
+        "nombre": "Eva primer semestre",
+        "valor": "https://eva.fing.edu.uy/course/view.php?id=323"
+      },
+      {
+        "nombre": "Eva segundo semestre",
+        "valor": "https://eva.fing.edu.uy/course/view.php?id=1541"
+      },
+      {
+        "nombre": "Programa",
+        "valor": "https://www.fing.edu.uy/sites/default/files/2024-08/Matem%C3%A1tica%20Discreta%201.pdf"
+      }
+    ]
+  },
+  {
+    "id": "FC",
+    "nombreCompleto": "Fundamentos de la combinatoria",
+    "creditos": 9,
+    "creditosPorArea": [
+      {
+        "area": "creditosEnM",
+        "creditos": 9
+      }
+    ],
+    "reglaHabilitacion": {
+      "tipo": "negar",
+      "regla": {
+        "tipo": "materiaExonerada",
+        "materia": "MD1"
+      }
+    },
+    "semestre": "primero",
+    "esOpcional": false,
+    "esLibre": true,
+    "seDa": true,
+    "informacion": [
+      {
+        "nombre": "Eva",
+        "valor": "https://eva.fing.edu.uy/course/view.php?id=2008"
+      },
+      {
+        "nombre": "Programa",
+        "valor": "https://eva.fing.edu.uy/pluginfile.php/90476/mod_resource/content/1/Programa.pdf"
+      }
+    ]
+  },
+  {
+    "id": "P1",
+    "nombreCompleto": "Programación 1",
+    "creditos": 10,
+    "creditosPorArea": [
+      {
+        "area": "creditosEnProg",
+        "creditos": 10
+      }
+    ],
+    "reglaHabilitacion": null,
+    "semestre": "ambos",
+    "esOpcional": false,
+    "esLibre": false,
+    "seDa": true,
+    "informacion": [
+      {
+        "nombre": "Eva primer semestre",
+        "valor": "https://eva.fing.edu.uy/course/view.php?id=58"
+      },
+      {
+        "nombre": "Eva segundo semestre",
+        "valor": "https://eva.fing.edu.uy/course/view.php?id=1958"
+      },
+      {
+        "nombre": "Programa",
+        "valor": "https://eva.fing.edu.uy/pluginfile.php/49951/mod_resource/content/2/ProgramaP12024.pdf"
+      }
+    ]
+  },
+  {
+    "id": "GAL1",
+    "nombreCompleto": "Geometría y Álgebra Lineal 1",
+    "creditos": 9,
+    "creditosPorArea": [
+      {
+        "area": "creditosEnM",
+        "creditos": 9
+      }
+    ],
+    "reglaHabilitacion": null,
+    "semestre": "ambos",
+    "esOpcional": false,
+    "esLibre": true,
+    "seDa": true,
+    "informacion": [
+      {
+        "nombre": "Eva primer semestre",
+        "valor": "https://eva.fing.edu.uy/course/view.php?id=1597"
+      },
+      {
+        "nombre": "Eva segundo semestre",
+        "valor": "https://eva.fing.edu.uy/course/view.php?id=1442"
+      },
+      {
+        "nombre": "Programa",
+        "valor": "https://www.fing.edu.uy/sites/default/files/2024-08/GAL1_Programa.pdf"
+      }
+    ]
+  },
+  {
+    "id": "P2",
+    "nombreCompleto": "Programación 2",
+    "creditos": 12,
+    "creditosPorArea": [
+      {
+        "area": "creditosEnProg",
+        "creditos": 12
+      }
+    ],
+    "reglaHabilitacion": {
+      "tipo": "materiaAprobada",
+      "materia": "P1"
+    },
+    "semestre": "ambos",
+    "esOpcional": false,
+    "esLibre": false,
+    "seDa": true,
+    "informacion": [
+      {
+        "nombre": "Eva",
+        "valor": "https://eva.fing.edu.uy/course/view.php?id=132"
+      },
+      {
+        "nombre": "Programa",
+        "valor": "https://eva.fing.edu.uy/pluginfile.php/50251/mod_resource/content/6/Programa%20de%20Unidad%20Curricular%20-%20P2%202017-%2012creditos.pdf"
+      }
+    ]
+  },
+  {
+    "id": "TAR",
+    "nombreCompleto": "Topología y Análisis Real",
+    "creditos": 10,
+    "creditosPorArea": [
+      {
+        "area": "creditosEnM",
+        "creditos": 10
+      }
+    ],
+    "reglaHabilitacion": {
+      "tipo": "todas",
+      "reglas": [
+        {
+          "tipo": "materiaExonerada",
+          "materia": "GAL1"
+        },
+        {
+          "tipo": "materiaExonerada",
+          "materia": "CDIV"
+        },
+        {
+          "tipo": "materiaAprobada",
+          "materia": "CDIVV"
+        }
+      ]
+    },
+    "semestre": "primero",
+    "esOpcional": true,
+    "esLibre": false,
+    "seDa": true,
+    "informacion": [
+      {
+        "nombre": "Eva",
+        "valor": "https://eva.fing.edu.uy/course/view.php?id=1279"
+      },
+      {
+        "nombre": "Programa",
+        "valor": "https://www.fing.edu.uy/sites/default/files/2022-11/1-Topologia_analisis_real_programa.pdf"
+      }
+    ]
+  },
+  {
+    "id": "DAED",
+    "nombreCompleto": "Didáctica de Algorit. y Estruct. de Datos",
+    "creditos": 7,
+    "creditosPorArea": [
+      {
+        "area": "creditosEnProg",
+        "creditos": 7
+      }
+    ],
+    "reglaHabilitacion": {
+      "tipo": "todas",
+      "reglas": [
+        {
+          "tipo": "materiaExonerada",
+          "materia": "P1"
+        },
+        {
+          "tipo": "materiaExonerada",
+          "materia": "P2"
+        }
+      ]
+    },
+    "semestre": "primero",
+    "esOpcional": true,
+    "esLibre": false,
+    "seDa": true,
+    "informacion": [
+      {
+        "nombre": "Eva",
+        "valor": "https://eva.fing.edu.uy/course/view.php?id=874"
+      },
+      {
+        "nombre": "Programa",
+        "valor": "https://eva.fing.edu.uy/pluginfile.php/45593/mod_resource/content/2/Programa-de-Unidad-Curricular-DAED.pdf"
+      }
+    ]
+  },
+  {
+    "id": "Ec",
+    "nombreCompleto": "Economía",
+    "creditos": 7,
+    "creditosPorArea": [
+      {
+        "area": "creditosEnCHS",
+        "creditos": 7
+      }
+    ],
+    "reglaHabilitacion": null,
+    "semestre": "segundo",
+    "esOpcional": true,
+    "esLibre": true,
+    "seDa": true,
+    "informacion": [
+      {
+        "nombre": "Eva",
+        "valor": "https://eva.fing.edu.uy/course/view.php?id=1093"
+      },
+      {
+        "nombre": "Programa",
+        "valor": "https://www.fing.edu.uy/static/programas/Grado/2019/Econom%C3%ADa/economia.pdf"
+      }
+    ]
+  },
+  {
+    "id": "F1",
+    "nombreCompleto": "Física 1",
+    "creditos": 10,
+    "creditosPorArea": [
+      {
+        "area": "creditosEnCE",
+        "creditos": 10
+      }
+    ],
+    "reglaHabilitacion": null,
+    "semestre": "ambos",
+    "esOpcional": true,
+    "esLibre": true,
+    "seDa": true,
+    "informacion": [
+      {
+        "nombre": "Eva primer semestre",
+        "valor": "https://eva.fing.edu.uy/course/view.php?id=87"
+      },
+      {
+        "nombre": "Eva segundo semestre",
+        "valor": "https://eva.fing.edu.uy/course/view.php?id=1545"
+      },
+      {
+        "nombre": "Programa",
+        "valor": "https://eva.fing.edu.uy/pluginfile.php/73445/mod_resource/content/2/f1_1151.pdf"
+      }
+    ]
+  },
+  {
+    "id": "GAL2",
+    "nombreCompleto": "Geometría y Álgebra Lineal 2",
+    "creditos": 9,
+    "creditosPorArea": [
+      {
+        "area": "creditosEnM",
+        "creditos": 9
+      }
+    ],
+    "reglaHabilitacion": {
+      "tipo": "materiaAprobada",
+      "materia": "GAL1"
+    },
+    "semestre": "ambos",
+    "esOpcional": false,
+    "esLibre": true,
+    "seDa": true,
+    "informacion": [
+      {
+        "nombre": "Eva primer semestre",
+        "valor": "https://eva.fing.edu.uy/course/view.php?id=270"
+      },
+      {
+        "nombre": "Eva segundo semestre",
+        "valor": "https://eva.fing.edu.uy/course/view.php?id=203"
+      },
+      {
+        "nombre": "Programa",
+        "valor": "https://eva.fing.edu.uy/pluginfile.php/37189/mod_resource/content/2/Programa%20GAL%202.pdf"
+      }
+    ]
+  },
+  {
+    "id": "AAL",
+    "nombreCompleto": "Aplicaciones del Álgebra Lineal",
+    "creditos": 9,
+    "creditosPorArea": [
+      {
+        "area": "creditosEnMN",
+        "creditos": 9
+      }
+    ],
+    "reglaHabilitacion": {
+      "tipo": "todas",
+      "reglas": [
+        {
+          "tipo": "materiaExonerada",
+          "materia": "GAL2"
+        },
+        {
+          "tipo": "materiaExonerada",
+          "materia": "CDIV"
+        }
+      ]
+    },
+    "semestre": "segundo",
+    "esOpcional": true,
+    "esLibre": false,
+    "seDa": true,
+    "informacion": [
+      {
+        "nombre": "Eva",
+        "valor": "https://eva.fing.edu.uy/course/view.php?id=1543"
+      },
+      {
+        "nombre": "Programa",
+        "valor": "https://eva.fing.edu.uy/pluginfile.php/35094/mod_resource/content/7/Aplicaciones%20del%20%C3%81lgebra%20Lineal.pdf"
+      }
+    ]
+  },
+  {
+    "id": "PYE",
+    "nombreCompleto": "Probabilidad y Estadistica",
+    "creditos": 10,
+    "creditosPorArea": [
+      {
+        "area": "creditosEnM",
+        "creditos": 10
+      }
+    ],
+    "reglaHabilitacion": {
+      "tipo": "todas",
+      "reglas": [
+        {
+          "tipo": "materiaAprobada",
+          "materia": "CDIVV"
+        },
+        {
+          "tipo": "materiaExonerada",
+          "materia": "GAL1"
+        },
+        {
+          "tipo": "materiaExonerada",
+          "materia": "CDIV"
+        }
+      ]
+    },
+    "semestre": "ambos",
+    "esOpcional": false,
+    "esLibre": true,
+    "seDa": true,
+    "informacion": [
+      {
+        "nombre": "Eva primer semestre",
+        "valor": "https://eva.fing.edu.uy/course/view.php?id=54"
+      },
+      {
+        "nombre": "Eva segundo semestre",
+        "valor": "https://eva.fing.edu.uy/course/view.php?id=1537"
+      },
+      {
+        "nombre": "Programa",
+        "valor": "https://eva.fing.edu.uy/pluginfile.php/40052/mod_resource/content/1/programa_PyE.pdf"
+      }
+    ]
+  },
+  {
+    "id": "PCI",
+    "nombreCompleto": "Procesamiento cuántico de la info.",
+    "creditos": 10,
+    "creditosPorArea": [
+      {
+        "area": "creditosEnM",
+        "creditos": 10
+      }
+    ],
+    "reglaHabilitacion": {
+      "tipo": "todas",
+      "reglas": [
+        {
+          "tipo": "materiaExonerada",
+          "materia": "PYE"
+        },
+        {
+          "tipo": "materiaExonerada",
+          "materia": "CDIVV"
+        },
+        {
+          "tipo": "materiaExonerada",
+          "materia": "GAL2"
+        }
+      ]
+    },
+    "semestre": "primero",
+    "esOpcional": true,
+    "esLibre": false,
+    "seDa": false,
+    "informacion": [
+      {
+        "nombre": "Eva",
+        "valor": "https://eva.fing.edu.uy/course/view.php?id=1903"
+      },
+      {
+        "nombre": "Programa",
+        "valor": "https://eva.fing.edu.uy/pluginfile.php/11372/mod_resource/content/1/programa_proc_cuant_inf.pdf"
+      }
+    ]
+  },
+  {
+    "id": "ITI",
+    "nombreCompleto": "Int. a la Teoría de la Información",
+    "creditos": 8,
+    "creditosPorArea": [
+      {
+        "area": "creditosEnM",
+        "creditos": 8
+      }
+    ],
+    "reglaHabilitacion": {
+      "tipo": "materiaExonerada",
+      "materia": "PYE"
+    },
+    "semestre": "primero",
+    "esOpcional": true,
+    "esLibre": false,
+    "seDa": true,
+    "informacion": [
+      {
+        "nombre": "Eva",
+        "valor": "https://eva.fing.edu.uy/course/view.php?id=412"
+      },
+      {
+        "nombre": "Programa",
+        "valor": "https://eva.fing.edu.uy/pluginfile.php/631/course/section/2052/ProgramaITI-2013-Grado.pdf"
+      }
+    ]
+  },
+  {
+    "id": "MD2",
+    "nombreCompleto": "Matemática Discreta 2",
+    "creditos": 9,
+    "creditosPorArea": [
+      {
+        "area": "creditosEnM",
+        "creditos": 9
+      }
+    ],
+    "reglaHabilitacion": {
+      "tipo": "todas",
+      "reglas": [
+        {
+          "tipo": "alguna",
+          "reglas": [
+            {
+              "tipo": "materiaAprobada",
+              "materia": "MD1"
+            },
+            {
+              "tipo": "materiaAprobada",
+              "materia": "FC"
+            }
+          ]
+        },
+        {
+          "tipo": "materiaAprobada",
+          "materia": "GAL1"
+        }
+      ]
+    },
+    "semestre": "ambos",
+    "esOpcional": false,
+    "esLibre": true,
+    "seDa": true,
+    "informacion": [
+      {
+        "nombre": "Eva primer semestre",
+        "valor": "https://eva.fing.edu.uy/course/view.php?id=267"
+      },
+      {
+        "nombre": "Eva segundo semestre",
+        "valor": "https://eva.fing.edu.uy/course/view.php?id=1542"
+      },
+      {
+        "nombre": "Programa",
+        "valor": "https://www.fing.edu.uy/sites/default/files/2024-09/Matem%C3%A1tica%20Discreta%202.pdf"
+      }
+    ]
+  },
+  {
+    "id": "LG",
+    "nombreCompleto": "Lógica",
+    "creditos": 12,
+    "creditosPorArea": [
+      {
+        "area": "creditosEnM",
+        "creditos": 12
+      }
+    ],
+    "reglaHabilitacion": {
+      "tipo": "alguna",
+      "reglas": [
+        {
+          "tipo": "materiaAprobada",
+          "materia": "MD1"
+        },
+        {
+          "tipo": "materiaAprobada",
+          "materia": "FC"
+        }
+      ]
+    },
+    "semestre": "primero",
+    "esOpcional": false,
+    "esLibre": false,
+    "seDa": true,
+    "informacion": [
+      {
+        "nombre": "Eva",
+        "valor": "https://eva.fing.edu.uy/course/view.php?id=394"
+      },
+      {
+        "nombre": "Programa",
+        "valor": "https://eva.fing.edu.uy/pluginfile.php/48291/mod_resource/content/2/Programa%20de%20Unidad%20Curricular%20Logica.pdf"
+      }
+    ]
+  },
+  {
+    "id": "MN",
+    "nombreCompleto": "Métodos Numéricos",
+    "creditos": 10,
+    "creditosPorArea": [
+      {
+        "area": "creditosEnMN",
+        "creditos": 10
+      }
+    ],
+    "reglaHabilitacion": {
+      "tipo": "todas",
+      "reglas": [
+        {
+          "tipo": "materiaExonerada",
+          "materia": "CDIVV"
+        },
+        {
+          "tipo": "materiaExonerada",
+          "materia": "P1"
+        },
+        {
+          "tipo": "materiaExonerada",
+          "materia": "GAL2"
+        },
+        {
+          "tipo": "materiaExonerada",
+          "materia": "GAL1"
+        },
+        {
+          "tipo": "materiaExonerada",
+          "materia": "CDIV"
+        }
+      ]
+    },
+    "semestre": "segundo",
+    "esOpcional": false,
+    "esLibre": false,
+    "seDa": true,
+    "informacion": [
+      {
+        "nombre": "Eva",
+        "valor": "https://eva.fing.edu.uy/course/view.php?id=62"
+      },
+      {
+        "nombre": "Programa (viejo)",
+        "valor": "https://www.fing.edu.uy/sites/default/files/2025-06/metodos_numericos_2024.pdf"
+      }
+    ]
+  },
+  {
+    "id": "P4",
+    "nombreCompleto": "Programación 4",
+    "creditos": 15,
+    "creditosPorArea": [
+      {
+        "area": "creditosEnProg",
+        "creditos": 15
+      }
+    ],
+    "reglaHabilitacion": {
+      "tipo": "todas",
+      "reglas": [
+        {
+          "tipo": "materiaExonerada",
+          "materia": "GAL1"
+        },
+        {
+          "tipo": "materiaExonerada",
+          "materia": "CDIV"
+        },
+        {
+          "tipo": "alguna",
+          "reglas": [
+            {
+              "tipo": "materiaExonerada",
+              "materia": "MD1"
+            },
+            {
+              "tipo": "materiaExonerada",
+              "materia": "FC"
+            }
+          ]
+        },
+        {
+          "tipo": "materiaExonerada",
+          "materia": "P2"
+        }
+      ]
+    },
+    "semestre": "primero",
+    "esOpcional": false,
+    "esLibre": false,
+    "seDa": true,
+    "informacion": [
+      {
+        "nombre": "Eva",
+        "valor": "https://eva.fing.edu.uy/course/view.php?id=413"
+      },
+      {
+        "nombre": "Programa",
+        "valor": "https://eva.fing.edu.uy/pluginfile.php/50913/mod_resource/content/2/programa_curso.pdf"
+      }
+    ]
+  },
+  {
+    "id": "PFPPS",
+    "nombreCompleto": "Princ. y Fund. del Proc. Pers. de Software",
+    "creditos": 7,
+    "creditosPorArea": [
+      {
+        "area": "creditosEnIS",
+        "creditos": 7
+      }
+    ],
+    "reglaHabilitacion": {
+      "tipo": "materiaAprobada",
+      "materia": "P4"
+    },
+    "semestre": "primero",
+    "esOpcional": true,
+    "esLibre": false,
+    "seDa": true,
+    "informacion": [
+      {
+        "nombre": "Eva",
+        "valor": "https://eva.fing.edu.uy/course/view.php?id=633"
+      },
+      {
+        "nombre": "Programa",
+        "valor": "https://www.fing.edu.uy/static/programas/Grado/2017/Principios%20y%20Fundamentos%20del%20Proceso%20Personal%20de%20Software/principios%20y%20fundamentos%20del%20Proceso%20personal%20de%20software.pdf"
+      }
+    ]
+  },
+  {
+    "id": "IIO",
+    "nombreCompleto": "Int. a la Investigación de Operaciones",
+    "creditos": 10,
+    "creditosPorArea": [
+      {
+        "area": "creditosEnIO",
+        "creditos": 10
+      }
+    ],
+    "reglaHabilitacion": {
+      "tipo": "todas",
+      "reglas": [
+        {
+          "tipo": "materiaExonerada",
+          "materia": "GAL2"
+        },
+        {
+          "tipo": "materiaExonerada",
+          "materia": "PYE"
+        },
+        {
+          "tipo": "materiaExonerada",
+          "materia": "CDIVV"
+        },
+        {
+          "tipo": "materiaExonerada",
+          "materia": "CDIV"
+        },
+        {
+          "tipo": "materiaExonerada",
+          "materia": "GAL1"
+        }
+      ]
+    },
+    "semestre": "primero",
+    "esOpcional": false,
+    "esLibre": false,
+    "seDa": true,
+    "informacion": [
+      {
+        "nombre": "Eva",
+        "valor": "https://eva.fing.edu.uy/course/view.php?id=994"
+      },
+      {
+        "nombre": "Programa",
+        "valor": "https://eva.fing.edu.uy/pluginfile.php/47534/mod_resource/content/2/Programa%20IIO%202018.pdf"
+      }
+    ]
+  },
+  {
+    "id": "ADA",
+    "nombreCompleto": "Algoritmos de Aproximación",
+    "creditos": 10,
+    "creditosPorArea": [
+      {
+        "area": "creditosEnIO",
+        "creditos": 10
+      }
+    ],
+    "reglaHabilitacion": {
+      "tipo": "materiaExonerada",
+      "materia": "IIO"
+    },
+    "semestre": "segundo",
+    "esOpcional": true,
+    "esLibre": false,
+    "seDa": true,
+    "informacion": [
+      {
+        "nombre": "Eva",
+        "valor": "https://eva.fing.edu.uy/course/view.php?id=914"
+      },
+      {
+        "nombre": "Programa",
+        "valor": "https://eva.fing.edu.uy/pluginfile.php/58168/mod_resource/content/2/AA-2025%20%281%29%20%281%29.pdf"
+      }
+    ]
+  },
+  {
+    "id": "MMC",
+    "nombreCompleto": "Métodos de Monte Carlo",
+    "creditos": 8,
+    "creditosPorArea": [
+      {
+        "area": "creditosEnMN",
+        "creditos": 8
+      }
+    ],
+    "reglaHabilitacion": {
+      "tipo": "todas",
+      "reglas": [
+        {
+          "tipo": "materiaExonerada",
+          "materia": "PYE"
+        },
+        {
+          "tipo": "materiaExonerada",
+          "materia": "IIO"
+        }
+      ]
+    },
+    "semestre": "primero",
+    "esOpcional": true,
+    "esLibre": false,
+    "seDa": true,
+    "informacion": [
+      {
+        "nombre": "Eva",
+        "valor": "https://eva.fing.edu.uy/course/view.php?id=24"
+      },
+      {
+        "nombre": "Programa",
+        "valor": "https://www.fing.edu.uy/sites/default/files/2022-06/M%C3%A9todos%20de%20Monte%20Carlo.pdf"
+      }
+    ]
+  },
+  {
+    "id": "FDPE",
+    "nombreCompleto": "Fundamentos de Programación Entera",
+    "creditos": 8,
+    "creditosPorArea": [
+      {
+        "area": "creditosEnIO",
+        "creditos": 8
+      }
+    ],
+    "reglaHabilitacion": {
+      "tipo": "materiaExonerada",
+      "materia": "IIO"
+    },
+    "semestre": "primero",
+    "esOpcional": true,
+    "esLibre": false,
+    "seDa": false,
+    "informacion": [
+      {
+        "nombre": "Eva",
+        "valor": "https://eva.fing.edu.uy/course/view.php?id=269"
+      },
+      {
+        "nombre": "Programa",
+        "valor": "https://eva.fing.edu.uy/pluginfile.php/47033/mod_resource/content/2/PUC_Fundamentos-de-Programacion-Entera_2018.pdf"
+      }
+    ]
+  },
+  {
+    "id": "MO",
+    "nombreCompleto": "Modelado y Optimización",
+    "creditos": 6,
+    "creditosPorArea": [
+      {
+        "area": "creditosEnIO",
+        "creditos": 6
+      }
+    ],
+    "reglaHabilitacion": {
+      "tipo": "materiaExonerada",
+      "materia": "IIO"
+    },
+    "semestre": "segundo",
+    "esOpcional": true,
+    "esLibre": false,
+    "seDa": true,
+    "informacion": [
+      {
+        "nombre": "Eva",
+        "valor": "https://eva.fing.edu.uy/course/view.php?id=1070"
+      },
+      {
+        "nombre": "Programa",
+        "valor": "https://eva.fing.edu.uy/pluginfile.php/48929/mod_resource/content/2/ModOpt_Programa_Bedelia_2018.pdf"
+      }
+    ]
+  },
+  {
+    "id": "OBI",
+    "nombreCompleto": "Optimización bajo Incertidumbre",
+    "creditos": 8,
+    "creditosPorArea": [
+      {
+        "area": "creditosEnIO",
+        "creditos": 8
+      }
+    ],
+    "reglaHabilitacion": {
+      "tipo": "materiaExonerada",
+      "materia": "IIO"
+    },
+    "semestre": "primero",
+    "esOpcional": true,
+    "esLibre": false,
+    "seDa": true,
+    "informacion": [
+      {
+        "nombre": "Eva",
+        "valor": "https://eva.fing.edu.uy/course/view.php?id=397"
+      },
+      {
+        "nombre": "Programa",
+        "valor": "https://eva.fing.edu.uy/pluginfile.php/57177/mod_resource/content/7/PUC_Optimizacion-bajo-Incertidumbre_2018.pdf"
+      }
+    ]
+  },
+  {
+    "id": "IOGR",
+    "nombreCompleto": "Investigación de Oper. y Gest. de Riesgos",
+    "creditos": 6,
+    "creditosPorArea": [
+      {
+        "area": "creditosEnIO",
+        "creditos": 6
+      }
+    ],
+    "reglaHabilitacion": {
+      "tipo": "materiaExonerada",
+      "materia": "IIO"
+    },
+    "semestre": "segundo",
+    "esOpcional": true,
+    "esLibre": false,
+    "seDa": true,
+    "informacion": [
+      {
+        "nombre": "Eva",
+        "valor": "https://eva.fing.edu.uy/course/view.php?id=38"
+      },
+      {
+        "nombre": "Programa",
+        "valor": "https://eva.fing.edu.uy/pluginfile.php/48237/mod_resource/content/1/Programa%20de%20Investigacion%20Operativa%20y%20Gestion%20de%20Riesgos.pdf"
+      }
+    ]
+  },
+  {
+    "id": "P3",
+    "nombreCompleto": "Programación 3",
+    "creditos": 15,
+    "creditosPorArea": [
+      {
+        "area": "creditosEnProg",
+        "creditos": 15
+      }
+    ],
+    "reglaHabilitacion": {
+      "tipo": "todas",
+      "reglas": [
+        {
+          "tipo": "materiaAprobada",
+          "materia": "P2"
+        },
+        {
+          "tipo": "materiaExonerada",
+          "materia": "P1"
+        },
+        {
+          "tipo": "alguna",
+          "reglas": [
+            {
+              "tipo": "materiaExonerada",
+              "materia": "MD1"
+            },
+            {
+              "tipo": "materiaExonerada",
+              "materia": "FC"
+            }
+          ]
+        }
+      ]
+    },
+    "semestre": "segundo",
+    "esOpcional": false,
+    "esLibre": true,
+    "seDa": true,
+    "informacion": [
+      {
+        "nombre": "Eva",
+        "valor": "https://eva.fing.edu.uy/course/view.php?id=39"
+      },
+      {
+        "nombre": "Programa",
+        "valor": "https://eva.fing.edu.uy/pluginfile.php/50602/mod_resource/content/4/ProgramaUCProgramacion3%20-%202024.pdf"
+      }
+    ]
+  },
+  {
+    "id": "FRA",
+    "nombreCompleto": "Fundamentos de la Robótica Autónoma",
+    "creditos": 7,
+    "creditosPorArea": [
+      {
+        "area": "creditosEnIAYR",
+        "creditos": 7
+      }
+    ],
+    "reglaHabilitacion": {
+      "tipo": "todas",
+      "reglas": [
+        {
+          "tipo": "creditosMinimos",
+          "area": "creditosEnCE",
+          "cantidad": 10
+        },
+        {
+          "tipo": "creditosMinimos",
+          "area": "creditosEnAC_SO_RC",
+          "cantidad": 12
+        },
+        {
+          "tipo": "materiaAprobada",
+          "materia": "P3"
+        },
+        {
+          "tipo": "materiaExonerada",
+          "materia": "P2"
+        },
+        {
+          "tipo": "materiaExonerada",
+          "materia": "LG"
+        }
+      ]
+    },
+    "semestre": "primero",
+    "esOpcional": true,
+    "esLibre": false,
+    "seDa": true,
+    "informacion": [
+      {
+        "nombre": "Eva",
+        "valor": "https://eva.fing.edu.uy/course/view.php?id=869"
+      },
+      {
+        "nombre": "Programa",
+        "valor": "https://eva.fing.edu.uy/pluginfile.php/46349/mod_resource/content/7/fra_programa_2026.pdf"
+      }
+    ]
+  },
+  {
+    "id": "ALN",
+    "nombreCompleto": "Álgebra Lineal Numérica",
+    "creditos": 9,
+    "creditosPorArea": [
+      {
+        "area": "creditosEnMN",
+        "creditos": 9
+      }
+    ],
+    "reglaHabilitacion": {
+      "tipo": "todas",
+      "reglas": [
+        {
+          "tipo": "materiaExonerada",
+          "materia": "P3"
+        },
+        {
+          "tipo": "materiaExonerada",
+          "materia": "MN"
+        }
+      ]
+    },
+    "semestre": "segundo",
+    "esOpcional": true,
+    "esLibre": false,
+    "seDa": true,
+    "informacion": [
+      {
+        "nombre": "Eva",
+        "valor": "https://eva.fing.edu.uy/course/view.php?id=1143"
+      },
+      {
+        "nombre": "Programa",
+        "valor": "https://eva.fing.edu.uy/pluginfile.php/43937/mod_resource/content/1/ProgramaALN.pdf"
+      }
+    ]
+  },
+  {
+    "id": "AC",
+    "nombreCompleto": "Arquitectura de Computadoras",
+    "creditos": 10,
+    "creditosPorArea": [
+      {
+        "area": "creditosEnAC_SO_RC",
+        "creditos": 10
+      }
+    ],
+    "reglaHabilitacion": {
+      "tipo": "todas",
+      "reglas": [
+        {
+          "tipo": "materiaAprobada",
+          "materia": "LG"
+        },
+        {
+          "tipo": "materiaAprobada",
+          "materia": "P2"
+        },
+        {
+          "tipo": "materiaExonerada",
+          "materia": "P1"
+        },
+        {
+          "tipo": "alguna",
+          "reglas": [
+            {
+              "tipo": "materiaAprobada",
+              "materia": "MD1"
+            },
+            {
+              "tipo": "materiaAprobada",
+              "materia": "FC"
+            }
+          ]
+        }
+      ]
+    },
+    "semestre": "segundo",
+    "esOpcional": false,
+    "esLibre": true,
+    "seDa": true,
+    "informacion": [
+      {
+        "nombre": "Eva",
+        "valor": "https://eva.fing.edu.uy/course/view.php?id=195"
+      },
+      {
+        "nombre": "Programa",
+        "valor": "https://eva.fing.edu.uy/pluginfile.php/44348/mod_resource/content/1/programa-arqcomp-2024.pdf"
+      }
+    ]
+  },
+  {
+    "id": "CV",
+    "nombreCompleto": "Cálculo Vectorial",
+    "creditos": 10,
+    "creditosPorArea": [
+      {
+        "area": "creditosEnM",
+        "creditos": 10
+      }
+    ],
+    "reglaHabilitacion": {
+      "tipo": "todas",
+      "reglas": [
+        {
+          "tipo": "materiaAprobada",
+          "materia": "CDIVV"
+        },
+        {
+          "tipo": "materiaExonerada",
+          "materia": "GAL1"
+        },
+        {
+          "tipo": "materiaExonerada",
+          "materia": "CDIV"
+        }
+      ]
+    },
+    "semestre": "ambos",
+    "esOpcional": true,
+    "esLibre": true,
+    "seDa": true,
+    "informacion": [
+      {
+        "nombre": "Eva primer semestre",
+        "valor": "https://eva.fing.edu.uy/course/view.php?id=1498"
+      },
+      {
+        "nombre": "Eva segundo semestre",
+        "valor": "https://eva.fing.edu.uy/course/view.php?id=1183"
+      },
+      {
+        "nombre": "Programa",
+        "valor": "https://eva.fing.edu.uy/pluginfile.php/36477/mod_resource/content/1/Ficha%20-%20Ca%CC%81lculo%20Vectorial.pdf"
+      }
+    ]
+  },
+  {
+    "id": "ED",
+    "nombreCompleto": "Int. a las Ec. Diferenciales",
+    "creditos": 10,
+    "creditosPorArea": [
+      {
+        "area": "creditosEnM",
+        "creditos": 10
+      }
+    ],
+    "reglaHabilitacion": {
+      "tipo": "todas",
+      "reglas": [
+        {
+          "tipo": "materiaExonerada",
+          "materia": "GAL2"
+        },
+        {
+          "tipo": "materiaAprobada",
+          "materia": "CDIVV"
+        },
+        {
+          "tipo": "materiaExonerada",
+          "materia": "GAL1"
+        },
+        {
+          "tipo": "materiaExonerada",
+          "materia": "CDIV"
+        }
+      ]
+    },
+    "semestre": "segundo",
+    "esOpcional": true,
+    "esLibre": true,
+    "seDa": true,
+    "informacion": [
+      {
+        "nombre": "Eva",
+        "valor": "https://eva.fing.edu.uy/course/view.php?id=342"
+      },
+      {
+        "nombre": "Programa",
+        "valor": "https://www.fing.edu.uy/sites/default/files/2024-08/Programa_Introducci%C3%B3n%20a%20las%20ecuaciones%20diferenciales.pdf"
+      }
+    ]
+  },
+  {
+    "id": "TL",
+    "nombreCompleto": "Teoría de Lenguajes",
+    "creditos": 12,
+    "creditosPorArea": [
+      {
+        "area": "creditosEnProg",
+        "creditos": 12
+      }
+    ],
+    "reglaHabilitacion": {
+      "tipo": "todas",
+      "reglas": [
+        {
+          "tipo": "materiaExonerada",
+          "materia": "P2"
+        },
+        {
+          "tipo": "materiaExonerada",
+          "materia": "CDIV"
+        },
+        {
+          "tipo": "materiaExonerada",
+          "materia": "GAL1"
+        },
+        {
+          "tipo": "materiaExonerada",
+          "materia": "LG"
+        },
+        {
+          "tipo": "alguna",
+          "reglas": [
+            {
+              "tipo": "materiaExonerada",
+              "materia": "MD1"
+            },
+            {
+              "tipo": "materiaExonerada",
+              "materia": "FC"
+            }
+          ]
+        }
+      ]
+    },
+    "semestre": "primero",
+    "esOpcional": false,
+    "esLibre": false,
+    "seDa": true,
+    "informacion": [
+      {
+        "nombre": "Eva",
+        "valor": "https://eva.fing.edu.uy/course/view.php?id=687"
+      },
+      {
+        "nombre": "Programa",
+        "valor": "https://www.fing.edu.uy/sites/default/files/Programa%20de%20Unidad%20Curricular%20TeoLeng.pdf"
+      }
+    ]
+  },
+  {
+    "id": "FVC",
+    "nombreCompleto": "Funciones de Variable Compleja",
+    "creditos": 5,
+    "creditosPorArea": [
+      {
+        "area": "creditosEnM",
+        "creditos": 5
+      }
+    ],
+    "reglaHabilitacion": {
+      "tipo": "todas",
+      "reglas": [
+        {
+          "tipo": "materiaAprobada",
+          "materia": "CV"
+        },
+        {
+          "tipo": "materiaExonerada",
+          "materia": "CDIVV"
+        }
+      ]
+    },
+    "semestre": "primero",
+    "esOpcional": true,
+    "esLibre": true,
+    "seDa": true,
+    "informacion": [
+      {
+        "nombre": "Eva",
+        "valor": "https://eva.fing.edu.uy/course/view.php?id=55"
+      },
+      {
+        "nombre": "Programa",
+        "valor": "https://eva.fing.edu.uy/pluginfile.php/36683/mod_resource/content/2/%20Programa%202019/fvc%20corregido%20%281%29.pdf"
+      }
+    ]
+  },
+  {
+    "id": "SO",
+    "nombreCompleto": "Sistemas Operativos",
+    "creditos": 12,
+    "creditosPorArea": [
+      {
+        "area": "creditosEnAC_SO_RC",
+        "creditos": 12
+      }
+    ],
+    "reglaHabilitacion": {
+      "tipo": "todas",
+      "reglas": [
+        {
+          "tipo": "materiaAprobada",
+          "materia": "AC"
+        },
+        {
+          "tipo": "materiaExonerada",
+          "materia": "GAL1"
+        },
+        {
+          "tipo": "materiaExonerada",
+          "materia": "CDIV"
+        },
+        {
+          "tipo": "materiaExonerada",
+          "materia": "P2"
+        },
+        {
+          "tipo": "alguna",
+          "reglas": [
+            {
+              "tipo": "materiaExonerada",
+              "materia": "MD1"
+            },
+            {
+              "tipo": "materiaExonerada",
+              "materia": "FC"
+            }
+          ]
+        }
+      ]
+    },
+    "semestre": "primero",
+    "esOpcional": false,
+    "esLibre": false,
+    "seDa": true,
+    "informacion": [
+      {
+        "nombre": "Eva",
+        "valor": "https://eva.fing.edu.uy/course/view.php?id=679"
+      },
+      {
+        "nombre": "Programa",
+        "valor": "https://eva.fing.edu.uy/pluginfile.php/52825/mod_resource/content/1/Programa-SO.pdf"
+      }
+    ]
+  },
+  {
+    "id": "CCE",
+    "nombreCompleto": "Códigos para Corrección de Errores",
+    "creditos": 8,
+    "creditosPorArea": [
+      {
+        "area": "creditosEnM",
+        "creditos": 8
+      }
+    ],
+    "reglaHabilitacion": {
+      "tipo": "todas",
+      "reglas": [
+        {
+          "tipo": "materiaAprobada",
+          "materia": "PYE"
+        },
+        {
+          "tipo": "materiaExonerada",
+          "materia": "GAL1"
+        },
+        {
+          "tipo": "materiaExonerada",
+          "materia": "CDIVV"
+        },
+        {
+          "tipo": "alguna",
+          "reglas": [
+            {
+              "tipo": "materiaExonerada",
+              "materia": "MD1"
+            },
+            {
+              "tipo": "materiaExonerada",
+              "materia": "FC"
+            }
+          ]
+        },
+        {
+          "tipo": "materiaExonerada",
+          "materia": "CDIV"
+        },
+        {
+          "tipo": "materiaAprobada",
+          "materia": "P3"
+        }
+      ]
+    },
+    "semestre": "primero",
+    "esOpcional": true,
+    "esLibre": false,
+    "seDa": false,
+    "informacion": [
+      {
+        "nombre": "Eva",
+        "valor": "https://eva.fing.edu.uy/course/view.php?id=134"
+      },
+      {
+        "nombre": "Programa",
+        "valor": "https://eva.fing.edu.uy/pluginfile.php/45183/mod_resource/content/1/Programa%20de%20Unidad%20Curricular%20Co%CC%81digos%20para%20Correccio%CC%81n%20de%20Errores%202020%20%28pendiente%20de%20aprobacio%CC%81n%29.pdf"
+      }
+    ]
+  },
+  {
+    "id": "TACCE",
+    "nombreCompleto": "Temas avanzados en cód. para corr. de err.",
+    "creditos": 7,
+    "creditosPorArea": [
+      {
+        "area": "creditosEnM",
+        "creditos": 7
+      }
+    ],
+    "reglaHabilitacion": {
+      "tipo": "materiaAprobada",
+      "materia": "CCE"
+    },
+    "semestre": "segundo",
+    "esOpcional": true,
+    "esLibre": false,
+    "seDa": true,
+    "informacion": [
+      {
+        "nombre": "Eva",
+        "valor": "https://eva.fing.edu.uy/course/view.php?id=456"
+      },
+      {
+        "nombre": "Programa",
+        "valor": "https://eva.fing.edu.uy/pluginfile.php/683/course/section/2272/Programa%20de%20Unidad%20Curricular%20Temas%20avanzados%20en%20c%C3%B3digos%20para%20correcci%C3%B3n%20de%20errores%202023.pdf"
+      }
+    ]
+  },
+  {
+    "id": "PMPPG",
+    "nombreCompleto": "Prog. masivamente paralela en p. gráficos",
+    "creditos": 10,
+    "creditosPorArea": [
+      {
+        "area": "creditosEnAC_SO_RC",
+        "creditos": 10
+      }
+    ],
+    "reglaHabilitacion": {
+      "tipo": "todas",
+      "reglas": [
+        {
+          "tipo": "materiaExonerada",
+          "materia": "P2"
+        },
+        {
+          "tipo": "alguna",
+          "reglas": [
+            {
+              "tipo": "materiaExonerada",
+              "materia": "AC"
+            },
+            {
+              "tipo": "materiaExonerada",
+              "materia": "SO"
+            },
+            {
+              "tipo": "todas",
+              "reglas": [
+                {
+                  "tipo": "materiaAprobada",
+                  "materia": "AC"
+                },
+                {
+                  "tipo": "materiaAprobada",
+                  "materia": "SO"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "semestre": "primero",
+    "esOpcional": true,
+    "esLibre": false,
+    "seDa": true,
+    "informacion": [
+      {
+        "nombre": "Eva",
+        "valor": "https://eva.fing.edu.uy/course/view.php?id=1076"
+      },
+      {
+        "nombre": "Programa",
+        "valor": "https://eva.fing.edu.uy/pluginfile.php/51679/mod_resource/content/2/Programa_PMPenGPU_Grado2024.pdf"
+      }
+    ]
+  },
+  {
+    "id": "TEP",
+    "nombreCompleto": "Tutorías entre Pares",
+    "creditos": 8,
+    "creditosPorArea": [
+      {
+        "area": "creditosEnOpcionales",
+        "creditos": 8
+      }
+    ],
+    "reglaHabilitacion": {
+      "tipo": "todas",
+      "reglas": [
+        {
+          "tipo": "creditosMinimos",
+          "area": "Total",
+          "cantidad": 55
+        },
+        {
+          "tipo": "alguna",
+          "reglas": [
+            {
+              "tipo": "materiaExonerada",
+              "materia": "F1"
+            },
+            {
+              "tipo": "todas",
+              "reglas": [
+                {
+                  "tipo": "materiaExonerada",
+                  "materia": "GAL1"
+                },
+                {
+                  "tipo": "materiaAprobada",
+                  "materia": "GAL2"
+                }
+              ]
+            },
+            {
+              "tipo": "todas",
+              "reglas": [
+                {
+                  "tipo": "materiaExonerada",
+                  "materia": "CDIV"
+                },
+                {
+                  "tipo": "materiaAprobada",
+                  "materia": "CDIVV"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "semestre": "ambos",
+    "esOpcional": true,
+    "esLibre": false,
+    "seDa": true,
+    "informacion": [
+      {
+        "nombre": "Eva primer semestre",
+        "valor": "https://eva.fing.edu.uy/course/view.php?id=1617"
+      },
+      {
+        "nombre": "Eva segundo semestre",
+        "valor": "https://eva.fing.edu.uy/course/view.php?id=1555"
+      },
+      {
+        "nombre": "Programa",
+        "valor": "https://www.fing.edu.uy/sites/default/files/2024-06/TUTOR%C3%8DAS%20ENTRE%20PARES%20%282024%29.pdf"
+      }
+    ]
+  },
+  {
+    "id": "FO",
+    "nombreCompleto": "Fundamentos de Optimización",
+    "creditos": 6,
+    "creditosPorArea": [
+      {
+        "area": "creditosEnIO",
+        "creditos": 6
+      }
+    ],
+    "reglaHabilitacion": {
+      "tipo": "todas",
+      "reglas": [
+        {
+          "tipo": "materiaExonerada",
+          "materia": "CDIVV"
+        },
+        {
+          "tipo": "materiaAprobada",
+          "materia": "P1"
+        },
+        {
+          "tipo": "materiaExonerada",
+          "materia": "GAL2"
+        }
+      ]
+    },
+    "semestre": "primero",
+    "esOpcional": true,
+    "esLibre": false,
+    "seDa": true,
+    "informacion": [
+      {
+        "nombre": "Eva",
+        "valor": "https://eva.fing.edu.uy/course/view.php?id=1513"
+      },
+      {
+        "nombre": "Programa",
+        "valor": "https://eva.fing.edu.uy/pluginfile.php/36863/mod_resource/content/1/Programa_Unidad_Curricular_Optimizacion.pdf"
+      }
+    ]
+  },
+  {
+    "id": "OCA",
+    "nombreCompleto": "Optimización Continua y Aplicaciones",
+    "creditos": 10,
+    "creditosPorArea": [
+      {
+        "area": "creditosEnIO",
+        "creditos": 10
+      }
+    ],
+    "reglaHabilitacion": {
+      "tipo": "materiaExonerada",
+      "materia": "IIO"
+    },
+    "semestre": "segundo",
+    "esOpcional": true,
+    "esLibre": false,
+    "seDa": true,
+    "informacion": [
+      {
+        "nombre": "Eva",
+        "valor": "https://eva.fing.edu.uy/course/view.php?id=1538"
+      },
+      {
+        "nombre": "Programa",
+        "valor": "https://www.fing.edu.uy/sites/default/files/2023-10/optimizacion%20continua%20y%20aplicaciones_1640.pdf"
+      }
+    ]
+  },
+  {
+    "id": "FBD",
+    "nombreCompleto": "Fundamentos de Bases de Datos",
+    "creditos": 15,
+    "creditosPorArea": [
+      {
+        "area": "creditosEnBD_SI",
+        "creditos": 15
+      }
+    ],
+    "reglaHabilitacion": {
+      "tipo": "todas",
+      "reglas": [
+        {
+          "tipo": "materiaExonerada",
+          "materia": "LG"
+        },
+        {
+          "tipo": "materiaExonerada",
+          "materia": "P3"
+        },
+        {
+          "tipo": "materiaExonerada",
+          "materia": "MD2"
+        }
+      ]
+    },
+    "semestre": "segundo",
+    "esOpcional": false,
+    "esLibre": false,
+    "seDa": true,
+    "informacion": [
+      {
+        "nombre": "Eva",
+        "valor": "https://eva.fing.edu.uy/course/view.php?id=330"
+      },
+      {
+        "nombre": "Programa",
+        "valor": "https://eva.fing.edu.uy/pluginfile.php/545/course/section/1643/Programa-FBD.pdf?time=1627317936142"
+      }
+    ]
+  },
+  {
+    "id": "BDNR",
+    "nombreCompleto": "Bases de Datos No Relacionales",
+    "creditos": 10,
+    "creditosPorArea": [
+      {
+        "area": "creditosEnBD_SI",
+        "creditos": 10
+      }
+    ],
+    "reglaHabilitacion": {
+      "tipo": "materiaExonerada",
+      "materia": "FBD"
+    },
+    "semestre": "primero",
+    "esOpcional": true,
+    "esLibre": false,
+    "seDa": false,
+    "informacion": [
+      {
+        "nombre": "Eva",
+        "valor": "https://eva.fing.edu.uy/course/view.php?id=947"
+      },
+      {
+        "nombre": "Programa",
+        "valor": "https://www.fing.edu.uy/sites/default/files/propuesta-bdnr.pdf"
+      }
+    ]
+  },
+  {
+    "id": "CDI",
+    "nombreCompleto": "Calidad de Datos e Información",
+    "creditos": 8,
+    "creditosPorArea": [
+      {
+        "area": "creditosEnBD_SI",
+        "creditos": 8
+      }
+    ],
+    "reglaHabilitacion": {
+      "tipo": "materiaExonerada",
+      "materia": "FBD"
+    },
+    "semestre": "primero",
+    "esOpcional": true,
+    "esLibre": false,
+    "seDa": true,
+    "informacion": [
+      {
+        "nombre": "Eva",
+        "valor": "https://eva.fing.edu.uy/course/view.php?id=1073"
+      },
+      {
+        "nombre": "Programa",
+        "valor": "https://eva.fing.edu.uy/pluginfile.php/45151/mod_resource/content/1/Programa-CalidadDatosInf.pdf"
+      }
+    ]
+  },
+  {
+    "id": "RC",
+    "nombreCompleto": "Redes de Computadoras",
+    "creditos": 12,
+    "creditosPorArea": [
+      {
+        "area": "creditosEnAC_SO_RC",
+        "creditos": 12
+      }
+    ],
+    "reglaHabilitacion": {
+      "tipo": "todas",
+      "reglas": [
+        {
+          "tipo": "materiaExonerada",
+          "materia": "P3"
+        },
+        {
+          "tipo": "materiaAprobada",
+          "materia": "SO"
+        },
+        {
+          "tipo": "materiaExonerada",
+          "materia": "CDIV"
+        },
+        {
+          "tipo": "materiaAprobada",
+          "materia": "AC"
+        }
+      ]
+    },
+    "semestre": "segundo",
+    "esOpcional": false,
+    "esLibre": false,
+    "seDa": true,
+    "informacion": [
+      {
+        "nombre": "Eva",
+        "valor": "https://eva.fing.edu.uy/course/view.php?id=335"
+      },
+      {
+        "nombre": "Programa",
+        "valor": "https://eva.fing.edu.uy/pluginfile.php/52289/mod_resource/content/2/Programa%20de%20Unidad%20Curricular%20Redes%20de%20Computadoras%20-%2020191022.pdf"
+      }
+    ]
+  },
+  {
+    "id": "SETR",
+    "nombreCompleto": "Sistemas embebidos para tiempo real",
+    "creditos": 10,
+    "creditosPorArea": [
+      {
+        "area": "creditosEnAC_SO_RC",
+        "creditos": 10
+      }
+    ],
+    "reglaHabilitacion": {
+      "tipo": "todas",
+      "reglas": [
+        {
+          "tipo": "materiaExonerada",
+          "materia": "AC"
+        },
+        {
+          "tipo": "materiaExonerada",
+          "materia": "P2"
+        }
+      ]
+    },
+    "semestre": "primero",
+    "esOpcional": true,
+    "esLibre": false,
+    "seDa": true,
+    "informacion": [
+      {
+        "nombre": "Eva",
+        "valor": "https://eva.fing.edu.uy/course/view.php?id=581"
+      },
+      {
+        "nombre": "Programa",
+        "valor": "https://www.fing.edu.uy/sites/default/files/cursos/2019/anexos/37196/Sist-EmbebidosTiempoReal-20.pdf"
+      }
+    ]
+  },
+  {
+    "id": "RO",
+    "nombreCompleto": "Redes Ópticas",
+    "creditos": 10,
+    "creditosPorArea": [
+      {
+        "area": "creditosEnAC_SO_RC",
+        "creditos": 10
+      }
+    ],
+    "reglaHabilitacion": {
+      "tipo": "materiaExonerada",
+      "materia": "RC"
+    },
+    "semestre": "segundo",
+    "esOpcional": true,
+    "esLibre": false,
+    "seDa": true,
+    "informacion": [
+      {
+        "nombre": "Eva",
+        "valor": "https://eva.fing.edu.uy/course/view.php?id=1862"
+      },
+      {
+        "nombre": "Programa",
+        "valor": "https://www.fing.edu.uy/sites/default/files/2024-08/Redes_Opticas.pdf"
+      }
+    ]
+  },
+  {
+    "id": "TSI",
+    "nombreCompleto": "Taller de Seguridad Informática",
+    "creditos": 10,
+    "creditosPorArea": [
+      {
+        "area": "creditosEnTall_Pasa_Proy",
+        "creditos": 10
+      }
+    ],
+    "reglaHabilitacion": {
+      "tipo": "todas",
+      "reglas": [
+        {
+          "tipo": "materiaAprobada",
+          "materia": "RC"
+        },
+        {
+          "tipo": "materiaExonerada",
+          "materia": "FBD"
+        },
+        {
+          "tipo": "materiaExonerada",
+          "materia": "P3"
+        }
+      ]
+    },
+    "semestre": "segundo",
+    "esOpcional": true,
+    "esLibre": false,
+    "seDa": true,
+    "informacion": [
+      {
+        "nombre": "Eva",
+        "valor": "https://eva.fing.edu.uy/course/view.php?id=324"
+      },
+      {
+        "nombre": "Programa",
+        "valor": "https://eva.fing.edu.uy/pluginfile.php/53898/mod_folder/content/0/Programa%20de%20Unidad%20Curricular.pdf"
+      }
+    ]
+  },
+  {
+    "id": "ADAR",
+    "nombreCompleto": "Análisis y Diseño de Al. Dis. en Redes",
+    "creditos": 8,
+    "creditosPorArea": [
+      {
+        "area": "creditosEnAC_SO_RC",
+        "creditos": 8
+      }
+    ],
+    "reglaHabilitacion": {
+      "tipo": "todas",
+      "reglas": [
+        {
+          "tipo": "materiaExonerada",
+          "materia": "P3"
+        },
+        {
+          "tipo": "materiaExonerada",
+          "materia": "RC"
+        }
+      ]
+    },
+    "semestre": "segundo",
+    "esOpcional": true,
+    "esLibre": false,
+    "seDa": true,
+    "informacion": [
+      {
+        "nombre": "Eva",
+        "valor": "https://eva.fing.edu.uy/course/view.php?id=145"
+      },
+      {
+        "nombre": "Programa",
+        "valor": "https://eva.fing.edu.uy/pluginfile.php/44090/mod_resource/content/0/Programa_ADADR.pdf"
+      }
+    ]
+  },
+  {
+    "id": "CAP",
+    "nombreCompleto": "Computación de alta performance",
+    "creditos": 10,
+    "creditosPorArea": [
+      {
+        "area": "creditosEnAC_SO_RC",
+        "creditos": 10
+      }
+    ],
+    "reglaHabilitacion": {
+      "tipo": "todas",
+      "reglas": [
+        {
+          "tipo": "materiaAprobada",
+          "materia": "P4"
+        },
+        {
+          "tipo": "materiaAprobada",
+          "materia": "RC"
+        },
+        {
+          "tipo": "materiaAprobada",
+          "materia": "SO"
+        },
+        {
+          "tipo": "materiaAprobada",
+          "materia": "AC"
+        }
+      ]
+    },
+    "semestre": "primero",
+    "esOpcional": true,
+    "esLibre": false,
+    "seDa": true,
+    "informacion": [
+      {
+        "nombre": "Eva",
+        "valor": "https://eva.fing.edu.uy/course/view.php?id=1064"
+      },
+      {
+        "nombre": "Programa",
+        "valor": "https://www.fing.edu.uy/sites/default/files/2023-04/Computaci%C3%B3n%20de%20alta%20performance.pdf"
+      }
+    ]
+  },
+  {
+    "id": "TP",
+    "nombreCompleto": "Taller de Programación",
+    "creditos": 15,
+    "creditosPorArea": [
+      {
+        "area": "creditosEnTall_Pasa_Proy",
+        "creditos": 15
+      }
+    ],
+    "reglaHabilitacion": {
+      "tipo": "alguna",
+      "reglas": [
+        {
+          "tipo": "todas",
+          "reglas": [
+            {
+              "tipo": "materiaExonerada",
+              "materia": "P3"
+            },
+            {
+              "tipo": "materiaAprobada",
+              "materia": "P4"
+            }
+          ]
+        },
+        {
+          "tipo": "materiaExonerada",
+          "materia": "P4"
+        }
+      ]
+    },
+    "semestre": "segundo",
+    "esOpcional": false,
+    "esLibre": false,
+    "seDa": true,
+    "informacion": [
+      {
+        "nombre": "Eva",
+        "valor": "https://eva.fing.edu.uy/course/view.php?id=315"
+      },
+      {
+        "nombre": "Programa",
+        "valor": "https://eva.fing.edu.uy/pluginfile.php/53463/mod_resource/content/5/programaTProg2017_APROBADO.pdf"
+      }
+    ]
+  },
+  {
+    "id": "IPLN",
+    "nombreCompleto": "Int. al Procesamiento de Leng. Natural",
+    "creditos": 12,
+    "creditosPorArea": [
+      {
+        "area": "creditosEnIAYR",
+        "creditos": 12
+      }
+    ],
+    "reglaHabilitacion": {
+      "tipo": "todas",
+      "reglas": [
+        {
+          "tipo": "materiaExonerada",
+          "materia": "P4"
+        },
+        {
+          "tipo": "materiaAprobada",
+          "materia": "TP"
+        },
+        {
+          "tipo": "materiaExonerada",
+          "materia": "LG"
+        },
+        {
+          "tipo": "materiaExonerada",
+          "materia": "P3"
+        },
+        {
+          "tipo": "materiaExonerada",
+          "materia": "TL"
+        },
+        {
+          "tipo": "materiaExonerada",
+          "materia": "PYE"
+        }
+      ]
+    },
+    "semestre": "segundo",
+    "esOpcional": true,
+    "esLibre": false,
+    "seDa": true,
+    "informacion": [
+      {
+        "nombre": "Eva",
+        "valor": "https://eva.fing.edu.uy/course/view.php?id=211"
+      },
+      {
+        "nombre": "Programa",
+        "valor": "https://eva.fing.edu.uy/pluginfile.php/47980/mod_resource/content/0/Programa%20de%20Unidad%20Curricular%20IntroPLN%20Grado.pdf"
+      }
+    ]
+  },
+  {
+    "id": "IIS",
+    "nombreCompleto": "Taller Introductorio de Ing. de Software",
+    "creditos": 10,
+    "creditosPorArea": [
+      {
+        "area": "creditosEnIS",
+        "creditos": 10
+      }
+    ],
+    "reglaHabilitacion": {
+      "tipo": "todas",
+      "reglas": [
+        {
+          "tipo": "materiaAprobada",
+          "materia": "TP"
+        },
+        {
+          "tipo": "materiaAprobada",
+          "materia": "FBD"
+        },
+        {
+          "tipo": "materiaAprobada",
+          "materia": "P4"
+        }
+      ]
+    },
+    "semestre": "primero",
+    "esOpcional": false,
+    "esLibre": false,
+    "seDa": true,
+    "informacion": [
+      {
+        "nombre": "Eva",
+        "valor": "https://eva.fing.edu.uy/course/view.php?id=613"
+      },
+      {
+        "nombre": "Programa",
+        "valor": "https://eva.fing.edu.uy/pluginfile.php/54380/mod_page/content/7/Programa%20TIIS%20-%202025.pdf"
+      }
+    ]
+  },
+  {
+    "id": "FWS",
+    "nombreCompleto": "Fundamentos de la web semántica",
+    "creditos": 8,
+    "creditosPorArea": [
+      {
+        "area": "creditosEnBD_SI",
+        "creditos": 8
+      }
+    ],
+    "reglaHabilitacion": {
+      "tipo": "todas",
+      "reglas": [
+        {
+          "tipo": "materiaExonerada",
+          "materia": "IIS"
+        },
+        {
+          "tipo": "materiaExonerada",
+          "materia": "FBD"
+        }
+      ]
+    },
+    "semestre": "primero",
+    "esOpcional": true,
+    "esLibre": false,
+    "seDa": false,
+    "informacion": [
+      {
+        "nombre": "Eva",
+        "valor": "https://eva.fing.edu.uy/course/view.php?id=536"
+      },
+      {
+        "nombre": "Programa",
+        "valor": "https://eva.fing.edu.uy/pluginfile.php/46740/mod_resource/content/1/Programa%20de%20Unidad%20Curricular-FWS.pdf"
+      }
+    ]
+  },
+  {
+    "id": "PF",
+    "nombreCompleto": "Programación Funcional",
+    "creditos": 10,
+    "creditosPorArea": [
+      {
+        "area": "creditosEnProg",
+        "creditos": 10
+      }
+    ],
+    "reglaHabilitacion": {
+      "tipo": "todas",
+      "reglas": [
+        {
+          "tipo": "materiaExonerada",
+          "materia": "TL"
+        },
+        {
+          "tipo": "materiaExonerada",
+          "materia": "P2"
+        },
+        {
+          "tipo": "materiaExonerada",
+          "materia": "LG"
+        },
+        {
+          "tipo": "alguna",
+          "reglas": [
+            {
+              "tipo": "materiaExonerada",
+              "materia": "MD1"
+            },
+            {
+              "tipo": "materiaExonerada",
+              "materia": "FC"
+            }
+          ]
+        }
+      ]
+    },
+    "semestre": "ambos",
+    "esOpcional": false,
+    "esLibre": false,
+    "seDa": true,
+    "informacion": [
+      {
+        "nombre": "Eva",
+        "valor": "https://eva.fing.edu.uy/course/view.php?id=138"
+      },
+      {
+        "nombre": "Programa",
+        "valor": "https://www.fing.edu.uy/sites/default/files/cursos/2020/anexos/39014/Programaci%C3%B3n%20Funcional.pdf"
+      }
+    ]
+  },
+  {
+    "id": "PFA",
+    "nombreCompleto": "Programación Funcional Avanzada",
+    "creditos": 12,
+    "creditosPorArea": [
+      {
+        "area": "creditosEnProg",
+        "creditos": 12
+      }
+    ],
+    "reglaHabilitacion": {
+      "tipo": "materiaAprobada",
+      "materia": "PF"
+    },
+    "semestre": "segundo",
+    "esOpcional": true,
+    "esLibre": false,
+    "seDa": true,
+    "informacion": [
+      {
+        "nombre": "Eva",
+        "valor": "https://eva.fing.edu.uy/course/view.php?id=965"
+      },
+      {
+        "nombre": "Programa",
+        "valor": "https://www.fing.edu.uy/sites/default/files/2025-10/programacion-funcional-avanzada_1350.pdf"
+      }
+    ]
+  },
+  {
+    "id": "PL",
+    "nombreCompleto": "Programación Lógica",
+    "creditos": 10,
+    "creditosPorArea": [
+      {
+        "area": "creditosEnProg",
+        "creditos": 10
+      }
+    ],
+    "reglaHabilitacion": {
+      "tipo": "todas",
+      "reglas": [
+        {
+          "tipo": "materiaExonerada",
+          "materia": "TL"
+        },
+        {
+          "tipo": "materiaExonerada",
+          "materia": "P3"
+        },
+        {
+          "tipo": "materiaExonerada",
+          "materia": "MD2"
+        },
+        {
+          "tipo": "materiaExonerada",
+          "materia": "LG"
+        }
+      ]
+    },
+    "semestre": "primero",
+    "esOpcional": false,
+    "esLibre": false,
+    "seDa": true,
+    "informacion": [
+      {
+        "nombre": "Eva",
+        "valor": "https://eva.fing.edu.uy/course/view.php?id=293"
+      },
+      {
+        "nombre": "Programa",
+        "valor": "https://eva.fing.edu.uy/pluginfile.php/51520/mod_resource/content/2/PL_programaOficial2018.pdf"
+      }
+    ]
+  },
+  {
+    "id": "CFPTT",
+    "nombreCompleto": "Const. Formal de Prog. en Teoría de Tipos",
+    "creditos": 12,
+    "creditosPorArea": [
+      {
+        "area": "creditosEnProg",
+        "creditos": 12
+      }
+    ],
+    "reglaHabilitacion": {
+      "tipo": "todas",
+      "reglas": [
+        {
+          "tipo": "materiaExonerada",
+          "materia": "LG"
+        },
+        {
+          "tipo": "alguna",
+          "reglas": [
+            {
+              "tipo": "materiaAprobada",
+              "materia": "PF"
+            },
+            {
+              "tipo": "materiaAprobada",
+              "materia": "PL"
+            }
+          ]
+        }
+      ]
+    },
+    "semestre": "segundo",
+    "esOpcional": true,
+    "esLibre": false,
+    "seDa": true,
+    "informacion": [
+      {
+        "nombre": "Eva",
+        "valor": "https://eva.fing.edu.uy/course/view.php?id=363"
+      },
+      {
+        "nombre": "Programa",
+        "valor": "https://www.fing.edu.uy/sites/default/files/Programa%20de%20Unidad%20Curricular%20CFPTT%20.pdf"
+      }
+    ]
+  },
+  {
+    "id": "PIS",
+    "nombreCompleto": "Proyecto de Ingeniería de Software",
+    "creditos": 15,
+    "creditosPorArea": [
+      {
+        "area": "creditosEnTall_Pasa_Proy",
+        "creditos": 15
+      }
+    ],
+    "reglaHabilitacion": {
+      "tipo": "todas",
+      "reglas": [
+        {
+          "tipo": "materiaAprobada",
+          "materia": "IIS"
+        },
+        {
+          "tipo": "materiaExonerada",
+          "materia": "P4"
+        }
+      ]
+    },
+    "semestre": "segundo",
+    "esOpcional": false,
+    "esLibre": false,
+    "seDa": true,
+    "informacion": [
+      {
+        "nombre": "Eva",
+        "valor": "https://eva.fing.edu.uy/course/view.php?id=573"
+      },
+      {
+        "nombre": "Programa",
+        "valor": "https://www.fing.edu.uy/sites/default/files/cursos/2020/anexos/39036/Proyecto%20de%20Ingenier%C3%ADa%20de%20Software.pdf"
+      }
+    ]
+  },
+  {
+    "id": "AA",
+    "nombreCompleto": "Aprendizaje Automático",
+    "creditos": 12,
+    "creditosPorArea": [
+      {
+        "area": "creditosEnIAYR",
+        "creditos": 12
+      }
+    ],
+    "reglaHabilitacion": {
+      "tipo": "todas",
+      "reglas": [
+        {
+          "tipo": "materiaExonerada",
+          "materia": "LG"
+        },
+        {
+          "tipo": "materiaExonerada",
+          "materia": "PYE"
+        },
+        {
+          "tipo": "materiaExonerada",
+          "materia": "P3"
+        },
+        {
+          "tipo": "materiaExonerada",
+          "materia": "FBD"
+        },
+        {
+          "tipo": "materiaExonerada",
+          "materia": "P4"
+        },
+        {
+          "tipo": "materiaExonerada",
+          "materia": "MD2"
+        }
+      ]
+    },
+    "semestre": "segundo",
+    "esOpcional": true,
+    "esLibre": false,
+    "seDa": true,
+    "informacion": [
+      {
+        "nombre": "Eva",
+        "valor": "https://eva.fing.edu.uy/course/view.php?id=43"
+      },
+      {
+        "nombre": "Programa",
+        "valor": "https://eva.fing.edu.uy/pluginfile.php/221/course/section/209/AA%20-%20Programa%20de%20Unidad%20Curricular.pdf"
+      }
+    ]
+  },
+  {
+    "id": "TAA",
+    "nombreCompleto": "Taller de Aprendizaje Automático",
+    "creditos": 10,
+    "creditosPorArea": [
+      {
+        "area": "creditosEnIAYR",
+        "creditos": 10
+      }
+    ],
+    "reglaHabilitacion": {
+      "tipo": "materiaAprobada",
+      "materia": "AA"
+    },
+    "semestre": "primero",
+    "esOpcional": true,
+    "esLibre": false,
+    "seDa": true,
+    "informacion": [
+      {
+        "nombre": "Eva",
+        "valor": "https://eva.fing.edu.uy/course/view.php?id=1492"
+      },
+      {
+        "nombre": "Programa",
+        "valor": "https://eva.fing.edu.uy/pluginfile.php/1775/course/section/7452/1-Programa_TallerAprendizajeAutomatico_actualizacion_2023_retroactiva_total%20%282%29.pdf?time=1710286794133"
+      }
+    ]
+  },
+  {
+    "id": "RNLN",
+    "nombreCompleto": "Redes Neuronales para Leng. Natural",
+    "creditos": 10,
+    "creditosPorArea": [
+      {
+        "area": "creditosEnIAYR",
+        "creditos": 10
+      }
+    ],
+    "reglaHabilitacion": {
+      "tipo": "todas",
+      "reglas": [
+        {
+          "tipo": "materiaExonerada",
+          "materia": "P3"
+        },
+        {
+          "tipo": "materiaAprobada",
+          "materia": "AA"
+        },
+        {
+          "tipo": "materiaExonerada",
+          "materia": "PYE"
+        }
+      ]
+    },
+    "semestre": "segundo",
+    "esOpcional": true,
+    "esLibre": false,
+    "seDa": true,
+    "informacion": [
+      {
+        "nombre": "Eva",
+        "valor": "https://eva.fing.edu.uy/course/view.php?id=1758"
+      },
+      {
+        "nombre": "Programa",
+        "valor": "https://www.fing.edu.uy/sites/default/files/2023-05/REDES%20NEURONALES%20PARA%20LENGUAJE%20NATURAL.pdf"
+      }
+    ]
+  },
+  {
+    "id": "AE",
+    "nombreCompleto": "Algoritmos Evolutivos",
+    "creditos": 10,
+    "creditosPorArea": [
+      {
+        "area": "creditosEnIO",
+        "creditos": 10
+      }
+    ],
+    "reglaHabilitacion": {
+      "tipo": "todas",
+      "reglas": [
+        {
+          "tipo": "materiaExonerada",
+          "materia": "P4"
+        },
+        {
+          "tipo": "materiaExonerada",
+          "materia": "PYE"
+        },
+        {
+          "tipo": "materiaExonerada",
+          "materia": "IIO"
+        }
+      ]
+    },
+    "semestre": "segundo",
+    "esOpcional": true,
+    "esLibre": false,
+    "seDa": true,
+    "informacion": [
+      {
+        "nombre": "Eva",
+        "valor": "https://eva.fing.edu.uy/course/view.php?id=1049"
+      },
+      {
+        "nombre": "Programa",
+        "valor": "https://eva.fing.edu.uy/pluginfile.php/44000/mod_resource/content/2/Programa%20de%20Unidad%20Curricular%20Algoritmos%20Evolutivos.pdf"
+      }
+    ]
+  },
+  {
+    "id": "ICG",
+    "nombreCompleto": "Int. a la Computación Gráfica",
+    "creditos": 10,
+    "creditosPorArea": [
+      {
+        "area": "creditosEnProg",
+        "creditos": 10
+      }
+    ],
+    "reglaHabilitacion": {
+      "tipo": "todas",
+      "reglas": [
+        {
+          "tipo": "materiaExonerada",
+          "materia": "P3"
+        },
+        {
+          "tipo": "materiaExonerada",
+          "materia": "P4"
+        },
+        {
+          "tipo": "materiaAprobada",
+          "materia": "GAL2"
+        },
+        {
+          "tipo": "materiaExonerada",
+          "materia": "GAL1"
+        }
+      ]
+    },
+    "semestre": "primero",
+    "esOpcional": true,
+    "esLibre": false,
+    "seDa": true,
+    "informacion": [
+      {
+        "nombre": "Eva",
+        "valor": "https://eva.fing.edu.uy/course/view.php?id=205"
+      },
+      {
+        "nombre": "Programa",
+        "valor": "https://www.fing.edu.uy/inco/cursos/compgraf/Programa/Programa.Int.a.la.Comp.Grafica-1316.pdf"
+      }
+    ]
+  },
+  {
+    "id": "CGA",
+    "nombreCompleto": "Computación Gráfica Avanzada",
+    "creditos": 12,
+    "creditosPorArea": [
+      {
+        "area": "creditosEnProg",
+        "creditos": 12
+      }
+    ],
+    "reglaHabilitacion": {
+      "tipo": "materiaAprobada",
+      "materia": "ICG"
+    },
+    "semestre": "segundo",
+    "esOpcional": true,
+    "esLibre": false,
+    "seDa": true,
+    "informacion": [
+      {
+        "nombre": "Eva",
+        "valor": "https://eva.fing.edu.uy/course/view.php?id=1067"
+      },
+      {
+        "nombre": "Programa",
+        "valor": "https://eva.fing.edu.uy/pluginfile.php/45437/mod_resource/content/3/Programa%20de%20Computaci%C3%B3n%20Gr%C3%A1fica%20Avanzada.pdf"
+      }
+    ]
+  },
+  {
+    "id": "FSI",
+    "nombreCompleto": "Fundamentos de la Seguridad Informática",
+    "creditos": 12,
+    "creditosPorArea": [
+      {
+        "area": "creditosEnAC_SO_RC",
+        "creditos": 12
+      }
+    ],
+    "reglaHabilitacion": {
+      "tipo": "todas",
+      "reglas": [
+        {
+          "tipo": "materiaExonerada",
+          "materia": "SO"
+        },
+        {
+          "tipo": "materiaExonerada",
+          "materia": "FBD"
+        },
+        {
+          "tipo": "materiaExonerada",
+          "materia": "P3"
+        },
+        {
+          "tipo": "materiaExonerada",
+          "materia": "LG"
+        },
+        {
+          "tipo": "materiaExonerada",
+          "materia": "RC"
+        }
+      ]
+    },
+    "semestre": "primero",
+    "esOpcional": true,
+    "esLibre": false,
+    "seDa": true,
+    "informacion": [
+      {
+        "nombre": "Eva",
+        "valor": "https://eva.fing.edu.uy/course/view.php?id=399"
+      },
+      {
+        "nombre": "Programa",
+        "valor": "https://eva.fing.edu.uy/pluginfile.php/46578/mod_resource/content/1/Programa%20de%20Unidad%20Curricular%20-%20FSI.pdf"
+      }
+    ]
+  },
+  {
+    "id": "MI",
+    "nombreCompleto": "Matemática Inicial",
+    "creditos": 4,
+    "creditosPorArea": [
+      {
+        "area": "creditosEnM",
+        "creditos": 4
+      }
+    ],
+    "reglaHabilitacion": null,
+    "semestre": "ambos",
+    "esOpcional": false,
+    "esLibre": false,
+    "seDa": true,
+    "informacion": [
+      {
+        "nombre": "Eva primer semestre",
+        "valor": "https://eva.fing.edu.uy/course/view.php?id=1822"
+      },
+      {
+        "nombre": "Eva segundo semestre",
+        "valor": "https://eva.fing.edu.uy/course/view.php?id=1535"
+      },
+      {
+        "nombre": "Programa",
+        "valor": "https://eva.fing.edu.uy/pluginfile.php/499136/mod_resource/content/1/Programa_UC_Matematica_Inicial_modificado.pdf"
+      }
+    ]
+  },
+  {
+    "id": "CTS",
+    "nombreCompleto": "Ciencia, Tecnología y Sociedad",
+    "creditos": 8,
+    "creditosPorArea": [
+      {
+        "area": "creditosEnCHS",
+        "creditos": 8
+      }
+    ],
+    "reglaHabilitacion": null,
+    "semestre": "primero",
+    "esOpcional": true,
+    "esLibre": false,
+    "seDa": true,
+    "informacion": [
+      {
+        "nombre": "Eva",
+        "valor": "https://eva.fing.edu.uy/course/view.php?id=1243"
+      },
+      {
+        "nombre": "Programa",
+        "valor": "https://eva.fing.edu.uy/pluginfile.php/71255/mod_resource/content/2/Programa%20Unidad%20Curricular%20Ciencia%20Tecnolog%C3%ADa%20y%20Sociedad%20%28Cod.%201223%29.pdf"
+      }
+    ]
+  },
+  {
+    "id": "TRE",
+    "nombreCompleto": "Taller de Robótica Educativa",
+    "creditos": 6,
+    "creditosPorArea": [
+      {
+        "area": "creditosEnTall_Pasa_Proy",
+        "creditos": 6
+      }
+    ],
+    "reglaHabilitacion": {
+      "tipo": "creditosMinimos",
+      "area": "creditosEnProg",
+      "cantidad": 10
+    },
+    "semestre": "primero",
+    "esOpcional": true,
+    "esLibre": false,
+    "seDa": true,
+    "informacion": [
+      {
+        "nombre": "Eva",
+        "valor": "https://eva.fing.edu.uy/course/view.php?id=1187"
+      },
+      {
+        "nombre": "Programa",
+        "valor": "https://eva.fing.edu.uy/pluginfile.php/53819/mod_resource/content/4/Programataller-robedu-butia_v20180817.pdf"
+      }
+    ]
+  },
+  {
+    "id": "F2",
+    "nombreCompleto": "Física 2",
+    "creditos": 10,
+    "creditosPorArea": [
+      {
+        "area": "creditosEnCE",
+        "creditos": 10
+      }
+    ],
+    "reglaHabilitacion": {
+      "tipo": "todas",
+      "reglas": [
+        {
+          "tipo": "materiaAprobada",
+          "materia": "F1"
+        },
+        {
+          "tipo": "materiaAprobada",
+          "materia": "CDIV"
+        }
+      ]
+    },
+    "semestre": "ambos",
+    "esOpcional": true,
+    "esLibre": true,
+    "seDa": true,
+    "informacion": [
+      {
+        "nombre": "Eva primer semestre",
+        "valor": "https://eva.fing.edu.uy/course/view.php?id=32"
+      },
+      {
+        "nombre": "Eva segundo semestre",
+        "valor": "https://eva.fing.edu.uy/course/view.php?id=1546"
+      },
+      {
+        "nombre": "Programa",
+        "valor": "https://www.fing.edu.uy/sites/default/files/cursos/2011/anexos/2553/357_0.pdf"
+      }
+    ]
+  },
+  {
+    "id": "F3",
+    "nombreCompleto": "Física 3",
+    "creditos": 10,
+    "creditosPorArea": [
+      {
+        "area": "creditosEnCE",
+        "creditos": 10
+      }
+    ],
+    "reglaHabilitacion": {
+      "tipo": "todas",
+      "reglas": [
+        {
+          "tipo": "materiaAprobada",
+          "materia": "CDIV"
+        },
+        {
+          "tipo": "alguna",
+          "reglas": [
+            {
+              "tipo": "todas",
+              "reglas": [
+                {
+                  "tipo": "materiaAprobada",
+                  "materia": "F1"
+                },
+                {
+                  "tipo": "materiaAprobada",
+                  "materia": "F2"
+                }
+              ]
+            },
+            {
+              "tipo": "materiaExonerada",
+              "materia": "F1"
+            }
+          ]
+        }
+      ]
+    },
+    "semestre": "ambos",
+    "esOpcional": true,
+    "esLibre": true,
+    "seDa": true,
+    "informacion": [
+      {
+        "nombre": "Eva primer semestre",
+        "valor": "https://eva.fing.edu.uy/course/view.php?id=36"
+      },
+      {
+        "nombre": "Eva segundo semestre",
+        "valor": "https://eva.fing.edu.uy/course/view.php?id=1547"
+      },
+      {
+        "nombre": "Programa",
+        "valor": "https://eva.fing.edu.uy/pluginfile.php/9232/mod_resource/content/0/Programa/nf3.pdf"
+      }
+    ]
+  },
+  {
+    "id": "AGI",
+    "nombreCompleto": "Administración General para Ingenieros",
+    "creditos": 5,
+    "creditosPorArea": [
+      {
+        "area": "creditosEnGO",
+        "creditos": 5
+      }
+    ],
+    "reglaHabilitacion": {
+      "tipo": "creditosMinimos",
+      "area": "Total",
+      "cantidad": 140
+    },
+    "semestre": "primero",
+    "esOpcional": true,
+    "esLibre": true,
+    "seDa": true,
+    "informacion": [
+      {
+        "nombre": "Eva",
+        "valor": "https://eva.fing.edu.uy/course/view.php?id=778"
+      },
+      {
+        "nombre": "Programa",
+        "valor": "https://eva.fing.edu.uy/pluginfile.php/73141/mod_folder/content/0/Programa%202024.pdf"
+      }
+    ]
+  },
+  {
+    "id": "CC",
+    "nombreCompleto": "Control de Calidad",
+    "creditos": 8,
+    "creditosPorArea": [
+      {
+        "area": "creditosEnGO",
+        "creditos": 8
+      }
+    ],
+    "reglaHabilitacion": {
+      "tipo": "todas",
+      "reglas": [
+        {
+          "tipo": "materiaAprobada",
+          "materia": "PYE"
+        },
+        {
+          "tipo": "creditosMinimos",
+          "area": "Total",
+          "cantidad": 80
+        }
+      ]
+    },
+    "semestre": "segundo",
+    "esOpcional": true,
+    "esLibre": true,
+    "seDa": true,
+    "informacion": [
+      {
+        "nombre": "Eva",
+        "valor": "https://eva.fing.edu.uy/course/view.php?id=49"
+      },
+      {
+        "nombre": "Programa",
+        "valor": "https://eva.fing.edu.uy/pluginfile.php/26508/mod_resource/content/2/Programa%20Control%20de%20Calidad%20-%20nuevo%20formato.pdf"
+      }
+    ]
+  },
+  {
+    "id": "PAI",
+    "nombreCompleto": "Práctica de Administración para Ingenieros",
+    "creditos": 5,
+    "creditosPorArea": [
+      {
+        "area": "creditosEnGO",
+        "creditos": 5
+      }
+    ],
+    "reglaHabilitacion": {
+      "tipo": "materiaAprobada",
+      "materia": "AGI"
+    },
+    "semestre": "segundo",
+    "esOpcional": true,
+    "esLibre": true,
+    "seDa": true,
+    "informacion": [
+      {
+        "nombre": "Eva",
+        "valor": "https://eva.fing.edu.uy/course/view.php?id=779"
+      },
+      {
+        "nombre": "Programa",
+        "valor": "https://eva.fing.edu.uy/pluginfile.php/71749/mod_resource/content/4/Programa_Practica_de_Administracion_para_Ingenieros_2019_v2.pdf"
+      }
+    ]
+  },
+  {
+    "id": "PCIC",
+    "nombreCompleto": "Políticas Científicas en Inf. y Comp.",
+    "creditos": 3,
+    "creditosPorArea": [
+      {
+        "area": "creditosEnCHS",
+        "creditos": 3
+      }
+    ],
+    "reglaHabilitacion": null,
+    "semestre": "segundo",
+    "esOpcional": true,
+    "esLibre": false,
+    "seDa": true,
+    "informacion": [
+      {
+        "nombre": "Eva",
+        "valor": "https://eva.fing.edu.uy/course/view.php?id=1311"
+      },
+      {
+        "nombre": "Programa",
+        "valor": "https://www.fing.edu.uy/sites/default/files/cursos/2011/anexos/3559/Pol%C3%ADticas%20Cient%C3%ADficas%20en%20Inform%C3%A1tica%20y%20Computaci%C3%B3n.pdf"
+      }
+    ]
+  },
+  {
+    "id": "ASS",
+    "nombreCompleto": "Administración y Seguridad de Sistemas",
+    "creditos": 10,
+    "creditosPorArea": [
+      {
+        "area": "creditosEnBD_SI",
+        "creditos": 10
+      }
+    ],
+    "reglaHabilitacion": {
+      "tipo": "todas",
+      "reglas": [
+        {
+          "tipo": "creditosMinimos",
+          "area": "creditosEnGO",
+          "cantidad": 10
+        },
+        {
+          "tipo": "materiaAprobada",
+          "materia": "RC"
+        },
+        {
+          "tipo": "materiaAprobada",
+          "materia": "SO"
+        },
+        {
+          "tipo": "materiaAprobada",
+          "materia": "FBD"
+        },
+        {
+          "tipo": "materiaAprobada",
+          "materia": "IIS"
+        },
+        {
+          "tipo": "materiaExonerada",
+          "materia": "AC"
+        }
+      ]
+    },
+    "semestre": "primero",
+    "esOpcional": true,
+    "esLibre": false,
+    "seDa": true,
+    "informacion": [
+      {
+        "nombre": "Eva",
+        "valor": "https://eva.fing.edu.uy/course/view.php?id=785"
+      },
+      {
+        "nombre": "Programa",
+        "valor": "https://www.fing.edu.uy/sites/default/files/Programa%20de%20Unidad%20Curricular%20ASS.pdf"
+      }
+    ]
+  },
+  {
+    "id": "Pasan",
+    "nombreCompleto": "Pasantía",
+    "creditos": 10,
+    "creditosPorArea": [
+      {
+        "area": "creditosEnTall_Pasa_Proy",
+        "creditos": 10
+      }
+    ],
+    "reglaHabilitacion": {
+      "tipo": "creditosMinimos",
+      "area": "Total",
+      "cantidad": 200
+    },
+    "semestre": "ambos",
+    "esOpcional": true,
+    "esLibre": false,
+    "seDa": true,
+    "informacion": [
+      {
+        "nombre": "Eva",
+        "valor": "https://eva.fing.edu.uy/course/view.php?id=702"
+      },
+      {
+        "nombre": "Programa",
+        "valor": "https://eva.fing.edu.uy/pluginfile.php/49439/mod_resource/content/2/Pasantia_programa.pdf"
+      }
+    ]
+  },
+  {
+    "id": "PG",
+    "nombreCompleto": "Proyecto de Grado",
+    "creditos": 30,
+    "creditosPorArea": [
+      {
+        "area": "creditosEnTall_Pasa_Proy",
+        "creditos": 30
+      }
+    ],
+    "reglaHabilitacion": {
+      "tipo": "alguna",
+      "reglas": [
+        {
+          "tipo": "creditosMinimos",
+          "area": "Total",
+          "cantidad": 380
+        },
+        {
+          "tipo": "todas",
+          "reglas": [
+            {
+              "tipo": "creditosMinimos",
+              "area": "Total",
+              "cantidad": 365
+            },
+            {
+              "tipo": "materiaAprobada",
+              "materia": "TP"
+            },
+            {
+              "tipo": "materiaAprobada",
+              "materia": "PIS"
+            },
+            {
+              "tipo": "materiaAprobada",
+              "materia": "TL"
+            },
+            {
+              "tipo": "materiaAprobada",
+              "materia": "MN"
+            },
+            {
+              "tipo": "materiaAprobada",
+              "materia": "P4"
+            },
+            {
+              "tipo": "materiaAprobada",
+              "materia": "IIS"
+            },
+            {
+              "tipo": "materiaAprobada",
+              "materia": "P3"
+            },
+            {
+              "tipo": "materiaAprobada",
+              "materia": "FBD"
+            },
+            {
+              "tipo": "materiaAprobada",
+              "materia": "SO"
+            },
+            {
+              "tipo": "materiaAprobada",
+              "materia": "IIO"
+            },
+            {
+              "tipo": "materiaAprobada",
+              "materia": "AC"
+            }
+          ]
+        },
+        {
+          "tipo": "todas",
+          "reglas": [
+            {
+              "tipo": "creditosMinimos",
+              "area": "Total",
+              "cantidad": 330
+            },
+            {
+              "tipo": "creditosMinimos",
+              "area": "creditosEnMN",
+              "cantidad": 8
+            },
+            {
+              "tipo": "creditosMinimos",
+              "area": "creditosEnTall_Pasa_Proy",
+              "cantidad": 15
+            },
+            {
+              "tipo": "creditosMinimos",
+              "area": "creditosEnProg",
+              "cantidad": 60
+            },
+            {
+              "tipo": "creditosMinimos",
+              "area": "creditosEnBD_SI",
+              "cantidad": 10
+            },
+            {
+              "tipo": "creditosMinimos",
+              "area": "creditosEnIO",
+              "cantidad": 10
+            },
+            {
+              "tipo": "creditosMinimos",
+              "area": "creditosEnIS",
+              "cantidad": 10
+            },
+            {
+              "tipo": "creditosMinimos",
+              "area": "creditosEnM",
+              "cantidad": 70
+            },
+            {
+              "tipo": "creditosMinimos",
+              "area": "creditosEnGO",
+              "cantidad": 10
+            },
+            {
+              "tipo": "creditosMinimos",
+              "area": "creditosEnAC_SO_RC",
+              "cantidad": 30
+            },
+            {
+              "tipo": "creditosMinimos",
+              "area": "creditosEnCHS",
+              "cantidad": 10
+            }
+          ]
+        }
+      ]
+    },
+    "semestre": "ambos",
+    "esOpcional": false,
+    "esLibre": false,
+    "seDa": true,
+    "informacion": [
+      {
+        "nombre": "Eva",
+        "valor": "https://eva.fing.edu.uy/course/view.php?id=627"
+      },
+      {
+        "nombre": "Programa",
+        "valor": "https://eva.fing.edu.uy/pluginfile.php/51946/mod_resource/content/1/Programa%20de%20Unidad%20Curricular%20Proyecto%20de%20Grado.pdf"
+      }
+    ]
+  }
+]
