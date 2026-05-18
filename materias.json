@@ -2389,6 +2389,48 @@
     ]
   },
   {
+    "id": "MERC",
+    "nombreCompleto": "Mod. Est. para la Regr. y la Clas.",
+    "creditos": 6,
+    "creditosPorArea": [
+      {
+        "area": "creditosEnIAYR",
+        "creditos": 6
+      }
+    ],
+    "reglaHabilitacion": {
+      "tipo": "todas",
+      "reglas": [
+        {
+          "tipo": "materiaExonerada",
+          "materia": "PYE"
+        },
+        {
+          "tipo": "materiaExonerada",
+          "materia": "CDIVV"
+        },
+        {
+          "tipo": "materiaExonerada",
+          "materia": "GAL2"
+        }
+      ]
+    },
+    "semestre": "segundo",
+    "esOpcional": true,
+    "esLibre": false,
+    "seDa": true,
+    "informacion": [
+      {
+        "nombre": "Eva",
+        "valor": "https://eva.fing.edu.uy/course/view.php?id=1514"
+      },
+      {
+        "nombre": "Programa",
+        "valor": "https://www.fing.edu.uy/sites/default/files/2021-05/doc03005420210520161806.pdf"
+      }
+    ]
+  },
+  {
     "id": "IPLN",
     "nombreCompleto": "Int. al Procesamiento de Leng. Natural",
     "creditos": 12,
