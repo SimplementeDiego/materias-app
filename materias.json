@@ -2153,6 +2153,242 @@
     ]
   },
   {
+    "id": "TVS",
+    "nombreCompleto": "Taller de Verificación de Software",
+    "creditos": 8,
+    "creditosPorArea": [
+      {
+        "area": "creditosEnIS",
+        "creditos": 8
+      }
+    ],
+    "reglaHabilitacion": {
+      "tipo": "todas",
+      "reglas": [
+        {
+          "tipo": "materiaExonerada",
+          "materia": "FBD"
+        },
+        {
+          "tipo": "materiaAprobada",
+          "materia": "IIS"
+        }
+      ]
+    },
+    "semestre": "primero",
+    "esOpcional": true,
+    "esLibre": false,
+    "seDa": true,
+    "informacion": [
+      {
+        "nombre": "Eva",
+        "valor": "https://eva.fing.edu.uy/course/view.php?id=722"
+      },
+      {
+        "nombre": "Programa",
+        "valor": "https://eva.fing.edu.uy/pluginfile.php/57230/mod_resource/content/3/Programa.pdf"
+      }
+    ]
+  },
+  {
+    "id": "TSIGE",
+    "nombreCompleto": "Taller de Sist. de Inf. Geográficos Emp.",
+    "creditos": 8,
+    "creditosPorArea": [
+      {
+        "area": "creditosEnTall_Pasa_Proy",
+        "creditos": 8
+      }
+    ],
+    "reglaHabilitacion": {
+      "tipo": "todas",
+      "reglas": [
+        {
+          "tipo": "materiaExonerada",
+          "materia": "FBD"
+        },
+        {
+          "tipo": "materiaAprobada",
+          "materia": "TP"
+        }
+      ]
+    },
+    "semestre": "primero",
+    "esOpcional": true,
+    "esLibre": false,
+    "seDa": true,
+    "informacion": [
+      {
+        "nombre": "Eva",
+        "valor": "https://eva.fing.edu.uy/course/view.php?id=429"
+      },
+      {
+        "nombre": "Programa",
+        "valor": "https://eva.fing.edu.uy/pluginfile.php/54105/mod_resource/content/2/ProgramaTSIGE_2018.pdf"
+      }
+    ]
+  },
+  {
+    "id": "TSCF",
+    "nombreCompleto": "Taller de Sistemas Ciber-Físicos",
+    "creditos": 12,
+    "creditosPorArea": [
+      {
+        "area": "creditosEnAC_SO_RC",
+        "creditos": 6
+      },
+      {
+        "area": "creditosEnIAYR",
+        "creditos": 6
+      }
+    ],
+    "reglaHabilitacion": {
+      "tipo": "todas",
+      "reglas": [
+        {
+          "tipo": "creditosMinimos",
+          "area": "Total",
+          "cantidad": 200
+        },
+        {
+          "tipo": "materiaExonerada",
+          "materia": "AC"
+        },
+        {
+          "tipo": "materiaExonerada",
+          "materia": "SO"
+        },
+        {
+          "tipo": "materiaAprobada",
+          "materia": "RC"
+        }
+      ]
+    },
+    "semestre": "primero",
+    "esOpcional": true,
+    "esLibre": false,
+    "seDa": true,
+    "informacion": [
+      {
+        "nombre": "Eva",
+        "valor": "https://eva.fing.edu.uy/course/view.php?id=1074"
+      },
+      {
+        "nombre": "Programa",
+        "valor": "https://www.fing.edu.uy/sites/default/files/cursos/2020/anexos/37405/doc00799520200217115427.pdf"
+      }
+    ]
+  },
+  {
+    "id": "TETI",
+    "nombreCompleto": "Taller de Eval. de Tecn. de la Inf.",
+    "creditos": 10,
+    "creditosPorArea": [
+      {
+        "area": "creditosEnTall_Pasa_Proy",
+        "creditos": 10
+      }
+    ],
+    "reglaHabilitacion": {
+      "tipo": "todas",
+      "reglas": [
+        {
+          "tipo": "materiaExonerada",
+          "materia": "FBD"
+        },
+        {
+          "tipo": "materiaExonerada",
+          "materia": "P4"
+        },
+        {
+          "tipo": "materiaAprobada",
+          "materia": "TP"
+        }
+      ]
+    },
+    "semestre": "primero",
+    "esOpcional": true,
+    "esLibre": false,
+    "seDa": true,
+    "informacion": [
+      {
+        "nombre": "Eva",
+        "valor": "https://eva.fing.edu.uy/course/view.php?id=1138"
+      },
+      {
+        "nombre": "Programa",
+        "valor": "https://eva.fing.edu.uy/pluginfile.php/53007/mod_resource/content/2/Programa%20de%20Unidad%20Curricular%20-%20TETI.pdf"
+      }
+    ]
+  },
+  {
+    "id": "MESECR",
+    "nombreCompleto": "Mét. Ef. de S. p. la E. de Conf. en Redes",
+    "creditos": 4,
+    "creditosPorArea": [
+      {
+        "area": "creditosEnIO",
+        "creditos": 4
+      }
+    ],
+    "reglaHabilitacion": {
+      "tipo": "todas",
+      "reglas": [
+        {
+          "tipo": "materiaExonerada",
+          "materia": "IIO"
+        },
+        {
+          "tipo": "materiaExonerada",
+          "materia": "P2"
+        }
+      ]
+    },
+    "semestre": "primero",
+    "esOpcional": true,
+    "esLibre": false,
+    "seDa": true,
+    "informacion": [
+      {
+        "nombre": "Eva",
+        "valor": "https://eva.fing.edu.uy/course/view.php?id=1333"
+      },
+      {
+        "nombre": "Programa",
+        "valor": "https://www.fing.edu.uy/sites/default/files/2024-06/M%C3%A9todos%20eficientes%20de%20simulaci%C3%B3n%20parala%20estimaci%C3%B3n%20de%20confiabilidad%20de%20redes_1897.pdf"
+      }
+    ]
+  },
+  {
+    "id": "GSEAP",
+    "nombreCompleto": "Gestión de soft. para equipos alt. perf.",
+    "creditos": 9,
+    "creditosPorArea": [
+      {
+        "area": "creditosEnIS",
+        "creditos": 9
+      }
+    ],
+    "reglaHabilitacion": {
+      "tipo": "materiaAprobada",
+      "materia": "IIS"
+    },
+    "semestre": "primero",
+    "esOpcional": true,
+    "esLibre": false,
+    "seDa": true,
+    "informacion": [
+      {
+        "nombre": "Eva",
+        "valor": "https://eva.fing.edu.uy/user/index.php?id=801"
+      },
+      {
+        "nombre": "Programa",
+        "valor": "https://eva.fing.edu.uy/pluginfile.php/93114/mod_resource/content/1/GRADO%20-%20GestSoftEquipAltaPerformantesProgramaUC.pdf"
+      }
+    ]
+  },
+  {
     "id": "IPLN",
     "nombreCompleto": "Int. al Procesamiento de Leng. Natural",
     "creditos": 12,

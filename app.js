@@ -595,12 +595,20 @@ function reset() {
 
 function sumarCreditos(materia) {
   if (historialExoneradas.has(materia.nombre)) {
-    const aportes = materia.creditosPorArea ?? [{ area: materia.area, creditos: materia.creditos }];
+    const aportes = obtenerAportesMateria(materia);
     aportes.forEach(({ area, creditos }) => {
       creditosBloque.Total += creditos;
       creditosBloque[BloqueCreditos[area]] += creditos;
     });
   }
+}
+
+function obtenerAportesMateria(materia) {
+  return materia.creditosPorArea?.length ? materia.creditosPorArea : [{ area: materia.area, creditos: materia.creditos }];
+}
+
+function materiaAportaEnArea(materia, areaBuscada) {
+  return obtenerAportesMateria(materia).some(({ area }) => area === areaBuscada);
 }
 
 function calcularHTMLIndicarPrevias(regla) {
@@ -655,10 +663,14 @@ function indicarInformacion(nombreMateria) {
   let htmlFinal = document.createElement("div");
   const materiaAct = encontrarMateriaPorNombre(nombreMateria);
   htmlFinal.append(crearLineaAreaSubrayadaConMargenAbajo(`Información de ${materiaAct.nombreCompleto}`));
-  const line = document.createElement("div");
-  line.innerText = `Aporta créditos en el área de ${TraduccionBloqueCreditos[materiaAct.area]}`
-  line.onclick = () => { mostrarMateriasEnPopup(BloqueCreditos[materiaAct.area]) }
-  htmlFinal.append(line);
+  obtenerAportesMateria(materiaAct).forEach(({ area, creditos }) => {
+    const areaNormalizada = area;
+    const line = document.createElement("div");
+    line.innerText = `Aporta ${creditos} créditos en el área de ${TraduccionBloqueCreditos[areaNormalizada]}`;
+    line.onclick = () => { mostrarMateriasEnPopup(areaNormalizada) };
+    line.classList.add("paraClick");
+    htmlFinal.append(line);
+  });
   materiaAct.informacion.forEach( ({ nombre, valor }) => {
     const a = document.createElement("a");
     a.href = valor;
@@ -786,7 +798,7 @@ function mostrarMateriasEnPopup(nombre){
   const materiasDisponibles = document.createElement("div");
   const materiasHechas = document.createElement("div");
   Materias.forEach( (materia)=>{
-    if ( materia.area == nombre ){
+    if (materiaAportaEnArea(materia, nombre)){
       if ( historialExoneradas.has(materia.nombre) ){
         materiasHechas.append(crearLinea(`-${materia.nombreCompleto}`))
       }else{
