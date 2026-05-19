@@ -3,6 +3,8 @@
     box-sizing: border-box;
     padding: 0;
     margin: 0;
+    font-size: 1rem;
+    font-family: 'Courier New', Courier, monospace;
 }
 
 button {
@@ -13,12 +15,13 @@ button {
 header {
     height: 60px;
     width: 100%;
-    background-color: lightpink;
+    background-color: white;
     display: flex;
     flex-direction: column;
     position: sticky;
     top: 0;
     z-index: 999;
+    border-bottom: 1px solid rgb(224, 224, 224);
 }
 
 #titulo-principal-container {
@@ -31,6 +34,7 @@ header {
 
 #titulo-principal-texto {
     margin-left: 10px;
+    font-size: 2rem;
 }
 
 #titulo-principal-checkbox-container {
@@ -60,15 +64,15 @@ header {
 }
 
 #navbar {
-    width: 200px;
+    width: 30%;
     display: flex;
-    position: absolute;
-    margin-top: 60px;
     height: calc(100vh - 60px);
     flex-direction: column;
-    background-color: rgb(206, 206, 172);
+    background-color: rgb(236, 247, 255);
     z-index: 10;
     align-items: center;
+    max-width: 250px;
+    min-width: 200px;
 }
 
 .navbar-boton {
@@ -76,11 +80,11 @@ header {
     height: 40px;
     border: none;
     background-color: lightgrey;
-    border-radius: 10px;
+    border-radius: 5px;
     margin-top: 20px;
     box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.5);
     cursor: pointer;
-    font-size: 15px;
+    font-weight: bold;
 }
 
 .navbar-boton:active {
@@ -92,7 +96,7 @@ header {
 }
 
 #areas {
-    background-color: lightcyan;
+    background-color: rgb(188, 255, 255);
 }
 
 #ajustar-creditos {
@@ -108,7 +112,6 @@ header {
     display: flex;
     justify-content: center;
     align-items: center;
-    font-family: Arial, Helvetica, sans-serif;
 }
 
 #respuestas {
@@ -135,12 +138,11 @@ main {
 #secciones {
     display: flex;
     flex-direction: column;
-    width: calc(100% - 200px);
     overflow-y: auto;
     height: calc(100vh - 60px);
-    margin-left: 200px;
-    background-color: rgb(206, 206, 172);
-    justify-content: space-around;
+    background-color: rgb(236, 247, 255);
+    justify-content: flex-start;
+    width: 100%;
 }
 
 #popup-container {
@@ -236,13 +238,14 @@ main {
     display: flex;
     flex-direction: column;
     align-items: center;
-    background-color: beige;
+    background-color: white;
     text-align: center;
     padding: 10px;
     height: fit-content;
     justify-content: space-around;
-    margin: 15px;
+    margin: 10px;
     border-radius: 10px;
+    border: 1px solid rgb(224, 224, 224);
 }
 
 .no-bt {
@@ -256,7 +259,7 @@ main {
 .seccion-contenido {
     width: 100%;
     display: flex;
-    justify-content: space-around;
+    justify-content: center;
     align-items: center;
     flex-wrap: wrap;
 }
@@ -266,8 +269,25 @@ main {
     align-items: center;
     justify-content: center;
     text-align: left;
-    width: 300px;
+    width: fit-content;
     margin: 10px;
+    border: 1px solid rgb(224, 224, 224);
+    padding: 10px;
+    border-radius: 5px;
+    background-color: rgb(236, 247, 255);
+}
+
+.infoToggles {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    text-align: left;
+    width: fit-content;
+    margin: 10px;
+    border: 1px solid rgb(224, 224, 224);
+    padding: 10px;
+    border-radius: 5px;
+    background-color: rgb(236, 247, 255);
 }
 
 .bloque-gris {
@@ -439,16 +459,15 @@ main {
     cursor: pointer;
 }
 
-#select-agregar-creditos {
+#select-agregar-creditos, #input-agregar-creditos, #boton-agregar-creditos {
+    width: 100%;
     padding: 5px;
 }
 
-#input-agregar-creditos {
+#input-agregar-creditos, #boton-agregar-creditos {
+    width: 45%;
     padding: 5px;
-}
-
-#boton-agregar-creditos {
-    padding: 5px;
+    margin-top: 10px;
 }
 
 #popup-ajustar-creditos {
@@ -461,21 +480,21 @@ main {
     display: flex;
     flex-direction: column;
     align-items: center;
-    background-color: beige;
+    background-color: white;
     text-align: center;
     padding: 10px;
     justify-content: space-around;
-    margin: 15px;
+    margin: 10px;
     border-radius: 10px;
     flex: 1 1 auto;
+    border: 1px solid rgb(224, 224, 224);
 }
 
 .boton-materia {
-    padding: 5px 15px 5px 15px;
-    height: 30px;
+    padding: 10px 15px 10px 15px;
     width: fit-content;
     background-color: gray;
-    border-radius: 15px;
+    border-radius: 5px;
     border: none;
     box-shadow: 3px 3px 5px rgb(184, 184, 175);
     transition: 0.3s;
@@ -485,14 +504,9 @@ main {
     display: flex;
     justify-content: center;
     align-items: center;
-}
-
-.boton-materia:hover {
-    transform: scale(1.05);
-}
-
-.boton-materia:active {
-    transform: scale(0.95);
+    height: fit-content;
+    min-height: 40px;
+    font-weight: bold;
 }
 
 .tachado {
@@ -518,6 +532,8 @@ main {
 
 .paraClick {
     cursor: pointer;
+    border: 1px solid rgb(224, 224, 224);
+    margin: 5px;
 }
 
 .titulo-popup {
@@ -535,19 +551,29 @@ main {
     width: 13px;
 }
 
+#input-buscar-materia,
+#select-filtrar-area {
+    max-width: 100%;
+    min-width: 0;
+    padding: 5px;
+}
+
 @media (max-width: 675px) {
 
     #titulo-principal-texto {
-        font-size: 17px;
+        font-size: 1rem;
     }
     
     #navbar {
         width: 100%;
+        max-width: 100%;
+        min-width: 100%;
         position: absolute;
         top: 60px;
         z-index: 10;
         height: auto;
         margin-top: 0;
+        position: sticky;
     }
 
     .navbar-boton {
@@ -555,14 +581,11 @@ main {
         box-shadow: none;
         border-radius: 0;
         width: 100%;
+        
     }
 
     .navbar-boton:active {
         transform: none;
-    }
-
-    #areas {
-        background-color: rgb(241, 221, 250);
     }
 
     main {
@@ -582,6 +605,7 @@ main {
         left: 0;
         top: 60px;
         height: calc(100% - 60px);
+        align-items: flex-start;
     }
 
     #popup {
@@ -593,13 +617,9 @@ main {
         border-radius: 10px;
         padding: 10px;
         text-align: center;
-        margin: 0;
+        margin: 10px 0;
         text-wrap: wrap;
-    }
-
-    .container-seccion-estatico {
-        margin: 0;
-        border-radius: 0;
+        max-height: calc(100vh - 80px);
     }
 
     .seccion-contenido {
@@ -611,11 +631,20 @@ main {
     }
 
     .info {
-        width: 80%;
+        width: 95%;
         border: 1px solid gray;
         padding: 10px;
         border-radius: 10px;
         justify-content: start;
+        margin-top: 10px;
+    }
+
+    .infoToggles {
+        width: 95%;
+        border: 1px solid gray;
+        padding: 10px;
+        border-radius: 10px;
+        justify-content: space-between;
         margin-top: 10px;
     }
 
@@ -631,6 +660,7 @@ main {
 
     #select-agregar-creditos, #input-agregar-creditos, #boton-agregar-creditos {
         width: 100%;
+        margin-top: 0px;
     }
 
     #select-agregar-creditos, #input-agregar-creditos {
@@ -640,12 +670,16 @@ main {
     .boton-materia {
         margin: 10px 0 10px 0;
         width: 95%;
-        font-size: 3.5vw;
     }
 
-    .container-seccion {
-        margin: 0;
-        border-radius: 0;
+    .filtros {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 8px;
     }
 
+    #input-buscar-materia,
+    #select-filtrar-area {
+        width: 100%;
+    }
 }

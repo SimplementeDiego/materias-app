@@ -81,6 +81,8 @@ const idPopupAreas = "popup-areas";
 const idPopupListaMaterias = "popup-lista-materias";
 const idPopupAjustarCreditos = "popup-ajustar-creditos";
 const idPopupReset = "popup-reset";
+const idInputBuscarMateria = "input-buscar-materia";
+const idSelectFiltrarArea = "select-filtrar-area";
 
 const registros = [];
 const creditosPorArea = new Map();
@@ -91,6 +93,8 @@ let seleccionMenu = false;
 let seleccionSemestre = Semestre.AMBOS;
 let valorBarra = BarraPopup.Previas;
 let popUpActual = idPopupMateria;
+let filtroTextoMateria = "";
+let filtroAreaMateria = "";
 
 let creditosBloque = {
   creditosEnM: 0,
@@ -451,13 +455,50 @@ function toggleBotones(idBoton) {
   localStorage.setItem(LocalStorageNombres.semestre, seleccionSemestre);
 }
 
+function normalizarTexto(texto) {
+  return texto.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+}
+
+function materiaCumpleFiltroTexto(materia) {
+  if (!filtroTextoMateria) return true;
+  const textoMateria = normalizarTexto(`${materia.nombre} ${materia.nombreCompleto}`);
+  return textoMateria.includes(filtroTextoMateria);
+}
+
+function materiaCumpleFiltroArea(materia) {
+  return !filtroAreaMateria || materiaAportaEnArea(materia, filtroAreaMateria);
+}
+
+function actualizarFiltroMaterias() {
+  filtroTextoMateria = normalizarTexto(document.getElementById(idInputBuscarMateria).value.trim());
+  filtroAreaMateria = document.getElementById(idSelectFiltrarArea).value;
+  mostrarBotonesDeMateriasQueCorresponda();
+  mostrarSeccionesQueCorrespondan();
+}
+
+function cargarOpcionesFiltroAreas() {
+  const select = document.getElementById(idSelectFiltrarArea);
+  select.innerHTML = "";
+  const opcionTodas = document.createElement("option");
+  opcionTodas.value = "";
+  opcionTodas.textContent = "Todas";
+  select.appendChild(opcionTodas);
+  Object.values(BloqueCreditos).forEach((area) => {
+    if (area === BloqueCreditos.Total) return;
+    const option = document.createElement("option");
+    option.value = area;
+    option.textContent = TraduccionBloqueCreditos[area] ?? area;
+    select.appendChild(option);
+  });
+}
+
 function isMateriaValid(materia) {
   let semestreLibre = (seleccionSemestre==Semestre.LIBRE && materia.esLibre);
   let semestreAmbos = (seleccionSemestre==Semestre.AMBOS);
   let semestrePrimero = (seleccionSemestre==Semestre.PRIMERO && (materia.semestre==Semestre.PRIMERO || materia.semestre==Semestre.AMBOS))
   let semestreSegundo = (seleccionSemestre==Semestre.SEGUNDO && (materia.semestre==Semestre.SEGUNDO || materia.semestre==Semestre.AMBOS))
   let opcionales = (seleccionOpcionales || !materia.esOpcional);
-  return (semestreLibre || semestreAmbos || semestrePrimero || semestreSegundo) && opcionales;
+  return (semestreLibre || semestreAmbos || semestrePrimero || semestreSegundo) && opcionales && materiaCumpleFiltroTexto(materia) && materiaCumpleFiltroArea(materia);
 }
 
 function evaluarMostrarMateria(materia) {
@@ -1139,6 +1180,7 @@ function rehacerPaginaSinEstado(){
 
 async function firstLoad() {
   await cargarMateriasDesdeJson();
+  cargarOpcionesFiltroAreas();
   if (localStorage.getItem(LocalStorageNombres.materiasExoneradas)||localStorage.getItem(LocalStorageNombres.materiasAprobadas)) {
     historialExoneradas = new Set(JSON.parse(localStorage.getItem(LocalStorageNombres.materiasExoneradas)));
     historialAprobadas = new Set(JSON.parse(localStorage.getItem(LocalStorageNombres.materiasAprobadas)));

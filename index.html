@@ -20,6 +20,10 @@
             </div>
         </div>
 
+    </header>
+
+    <main>
+
         <nav id="navbar">
             <button onclick="toggleBotones('primero')" id="primero" class="navbar-boton">1er Semestre</button>
             <button onclick="toggleBotones('segundo')" id="segundo" class="navbar-boton">2do Semestre</button>
@@ -31,10 +35,6 @@
             <button onclick="reset()" id="reset" class="navbar-boton">Reset</button>
             <button onclick="agregarCreditos()" id="ajustar-creditos" class="navbar-boton">Ajustar créditos</button>
         </nav>
-
-    </header>
-
-    <main>
 
         <div id="secciones">
 
@@ -123,7 +123,7 @@
                 
             </div>
 
-            <div class="container-seccion-estatico no-bt">
+            <div class="container-seccion-estatico">
                 <p class="titulo-seccion">Información</p>
                 <div class="seccion-contenido">
                     <div class="info">
@@ -156,7 +156,7 @@
             <div class="container-seccion-estatico">
                 <p class="titulo-seccion">Configuración</p>
                 <div class="seccion-contenido">
-                    <div class="container-item-config info">
+                    <div class="container-item-config infoToggles">
                         <label for="mi-toggle-MI">Matemática Inicial</label>
 
                         <label class="switch">
@@ -164,7 +164,7 @@
                             <span class="switch-slider" aria-hidden="true"></span>
                         </label>
                     </div>
-                    <div class="container-item-config info">
+                    <div class="container-item-config infoToggles">
                         <label for="mi-toggle-plan">Plan 2025</label>
 
                         <label class="switch">
@@ -172,13 +172,29 @@
                             <span class="switch-slider" aria-hidden="true"></span>
                         </label>
                     </div>
-                    <div class="container-item-config info">
+                    <div class="container-item-config infoToggles">
                         <label for="mi-toggle-opcionales">Opcionales</label>
 
                         <label class="switch">
                             <input type="checkbox" id="mi-toggle-opcionales" class="switch-input" onclick="toggleOpcionales()" checked>
                             <span class="switch-slider" aria-hidden="true"></span>
                         </label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="container-seccion-estatico">
+                <p class="titulo-seccion">Buscar o filtrar</p>
+                <div class="seccion-contenido">
+                    <div class="container-item-config info filtros">
+                        <label for="input-buscar-materia">Materia</label>
+                        <input type="search" id="input-buscar-materia" placeholder="Nombre o sigla" oninput="actualizarFiltroMaterias()">
+                    </div>
+                    <div class="container-item-config info filtros">
+                        <label for="select-filtrar-area">Área</label>
+                        <select id="select-filtrar-area" onchange="actualizarFiltroMaterias()">
+                            <option value="">Todas</option>
+                        </select>
                     </div>
                 </div>
             </div>

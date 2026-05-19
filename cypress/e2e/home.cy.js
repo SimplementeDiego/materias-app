@@ -38,11 +38,13 @@ describe("Home", () => {
     it("default plan 1997", () => {
         cy.get("#FC").should("not.exist");
         cy.get("#MD1").should("exist");
+        cy.get("#MD1").scrollIntoView()
         cy.get("#MD1").should("be.visible");
     });
 
     it("default opcionales", () => {
         cy.get("#CTS").should("exist");
+        cy.get("#CTS").scrollIntoView()
         cy.get("#CTS").should("be.visible");
     });
 
@@ -85,14 +87,17 @@ describe("Home", () => {
 
     it("default ambos semestres", () => {
         cy.get("#CTS").should("exist");
+        cy.get("#CTS").scrollIntoView()
         cy.get("#CTS").should("be.visible");
         cy.get("#Ec").should("exist");
+        cy.get("#Ec").scrollIntoView()
         cy.get("#Ec").should("be.visible");
     });
 
     it("probar 1er, 2do y calidad libre", () => {
         cy.get("#primero").click();
         cy.get("#CTS").should("exist");
+        cy.get("#CTS").scrollIntoView()
         cy.get("#CTS").should("be.visible");
         cy.get("#Ec").should("exist");
         cy.get("#Ec").should("not.be.visible");
@@ -100,6 +105,7 @@ describe("Home", () => {
         cy.get("#CTS").should("exist");
         cy.get("#CTS").should("not.be.visible");
         cy.get("#Ec").should("exist");
+        cy.get("#Ec").scrollIntoView()
         cy.get("#Ec").should("be.visible");
         cy.get("#libre").click();
         cy.get("#P1").should("exist");

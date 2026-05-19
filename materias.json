@@ -289,7 +289,7 @@
   },
   {
     "id": "DAED",
-    "nombreCompleto": "Didáctica de Algorit. y Estruct. de Datos",
+    "nombreCompleto": "Didáctica de Algoritmos y Estructuras de Datos",
     "creditos": 7,
     "creditosPorArea": [
       {
@@ -500,7 +500,7 @@
   },
   {
     "id": "PCI",
-    "nombreCompleto": "Procesamiento cuántico de la info.",
+    "nombreCompleto": "Procesamiento Cuántico de la Información",
     "creditos": 10,
     "creditosPorArea": [
       {
@@ -542,7 +542,7 @@
   },
   {
     "id": "ITI",
-    "nombreCompleto": "Int. a la Teoría de la Información",
+    "nombreCompleto": "Introducción a la Teoría de la Información",
     "creditos": 8,
     "creditosPorArea": [
       {
@@ -765,7 +765,7 @@
   },
   {
     "id": "PFPPS",
-    "nombreCompleto": "Princ. y Fund. del Proc. Pers. de Software",
+    "nombreCompleto": "Principios y Fundamentos del Proceso Personal de Software",
     "creditos": 7,
     "creditosPorArea": [
       {
@@ -794,7 +794,7 @@
   },
   {
     "id": "IIO",
-    "nombreCompleto": "Int. a la Investigación de Operaciones",
+    "nombreCompleto": "Introducción a la Investigación de Operaciones",
     "creditos": 10,
     "creditosPorArea": [
       {
@@ -969,7 +969,7 @@
   },
   {
     "id": "OBI",
-    "nombreCompleto": "Optimización bajo Incertidumbre",
+    "nombreCompleto": "Optimización Bajo Incertidumbre",
     "creditos": 8,
     "creditosPorArea": [
       {
@@ -998,7 +998,7 @@
   },
   {
     "id": "IOGR",
-    "nombreCompleto": "Investigación de Oper. y Gest. de Riesgos",
+    "nombreCompleto": "Investigacion de Operaciones y Gestion de Riesgos",
     "creditos": 6,
     "creditosPorArea": [
       {
@@ -1269,7 +1269,7 @@
   },
   {
     "id": "ED",
-    "nombreCompleto": "Int. a las Ec. Diferenciales",
+    "nombreCompleto": "Introducción a las Ecuaciones Diferenciales",
     "creditos": 10,
     "creditosPorArea": [
       {
@@ -1534,7 +1534,7 @@
   },
   {
     "id": "TACCE",
-    "nombreCompleto": "Temas avanzados en cód. para corr. de err.",
+    "nombreCompleto": "Temas Avanzados en Códigos para Corrección de Errores",
     "creditos": 7,
     "creditosPorArea": [
       {
@@ -1563,7 +1563,7 @@
   },
   {
     "id": "PMPPG",
-    "nombreCompleto": "Prog. masivamente paralela en p. gráficos",
+    "nombreCompleto": "Programación Masivamente Paralela en Procesadores Gráficos",
     "creditos": 10,
     "creditosPorArea": [
       {
@@ -1914,7 +1914,7 @@
   },
   {
     "id": "SETR",
-    "nombreCompleto": "Sistemas embebidos para tiempo real",
+    "nombreCompleto": "Sistemas Embebidos para Tiempo Real",
     "creditos": 10,
     "creditosPorArea": [
       {
@@ -2023,7 +2023,7 @@
   },
   {
     "id": "ADAR",
-    "nombreCompleto": "Análisis y Diseño de Al. Dis. en Redes",
+    "nombreCompleto": "Análisis y Diseño de Algoritmos Distribuidos en Redes",
     "creditos": 8,
     "creditosPorArea": [
       {
@@ -2061,7 +2061,7 @@
   },
   {
     "id": "CAP",
-    "nombreCompleto": "Computación de alta performance",
+    "nombreCompleto": "Computación de Alta Performance",
     "creditos": 10,
     "creditosPorArea": [
       {
@@ -2192,7 +2192,7 @@
   },
   {
     "id": "TSIGE",
-    "nombreCompleto": "Taller de Sist. de Inf. Geográficos Emp.",
+    "nombreCompleto": "Taller de Sistemas de Información Geográficos Empresariales",
     "creditos": 8,
     "creditosPorArea": [
       {
@@ -2281,7 +2281,7 @@
   },
   {
     "id": "TETI",
-    "nombreCompleto": "Taller de Eval. de Tecn. de la Inf.",
+    "nombreCompleto": "Taller de Evaluación de Tecnologías de la Información",
     "creditos": 10,
     "creditosPorArea": [
       {
@@ -2323,7 +2323,7 @@
   },
   {
     "id": "MESECR",
-    "nombreCompleto": "Mét. Ef. de S. p. la E. de Conf. en Redes",
+    "nombreCompleto": "Métodos Eficientes de Simulación para la Estimación de Confiabilidad en Redes",
     "creditos": 4,
     "creditosPorArea": [
       {
@@ -2361,7 +2361,7 @@
   },
   {
     "id": "GSEAP",
-    "nombreCompleto": "Gestión de soft. para equipos alt. perf.",
+    "nombreCompleto": "Gestión de Software para Equipos Altamente Performantes",
     "creditos": 9,
     "creditosPorArea": [
       {
@@ -2390,7 +2390,7 @@
   },
   {
     "id": "MERC",
-    "nombreCompleto": "Mod. Est. para la Regr. y la Clas.",
+    "nombreCompleto": "Modelos Estadísticos para la Regresión y la Clasificación",
     "creditos": 6,
     "creditosPorArea": [
       {
@@ -2432,7 +2432,7 @@
   },
   {
     "id": "IPLN",
-    "nombreCompleto": "Int. al Procesamiento de Leng. Natural",
+    "nombreCompleto": "Introducción al Procesamiento de Lenguaje Natural",
     "creditos": 12,
     "creditosPorArea": [
       {
@@ -2486,7 +2486,7 @@
   },
   {
     "id": "IIS",
-    "nombreCompleto": "Taller Introductorio de Ing. de Software",
+    "nombreCompleto": "Taller Introductorio de Ingeniería de Software",
     "creditos": 10,
     "creditosPorArea": [
       {
@@ -2528,7 +2528,7 @@
   },
   {
     "id": "FWS",
-    "nombreCompleto": "Fundamentos de la web semántica",
+    "nombreCompleto": "Fundamentos de la Web Semántica",
     "creditos": 8,
     "creditosPorArea": [
       {
@@ -2696,7 +2696,7 @@
   },
   {
     "id": "CFPTT",
-    "nombreCompleto": "Const. Formal de Prog. en Teoría de Tipos",
+    "nombreCompleto": "Construcción Formal de Programas en Teoría de Tipos",
     "creditos": 12,
     "creditosPorArea": [
       {
@@ -2864,7 +2864,7 @@
   },
   {
     "id": "RNLN",
-    "nombreCompleto": "Redes Neuronales para Leng. Natural",
+    "nombreCompleto": "Redes Neuronales para Lenguaje Natural",
     "creditos": 10,
     "creditosPorArea": [
       {
@@ -2948,7 +2948,7 @@
   },
   {
     "id": "ICG",
-    "nombreCompleto": "Int. a la Computación Gráfica",
+    "nombreCompleto": "Introducción a la Computación Gráfica",
     "creditos": 10,
     "creditosPorArea": [
       {
@@ -3359,7 +3359,7 @@
   },
   {
     "id": "PCIC",
-    "nombreCompleto": "Políticas Científicas en Inf. y Comp.",
+    "nombreCompleto": "Políticas Científicas en Informática y Computación",
     "creditos": 3,
     "creditosPorArea": [
       {
