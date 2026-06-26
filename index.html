@@ -1,12 +1,12 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="Materias Computación">
     <title>Materias</title>
     <link rel="icon" type="image/x-icon" href="/icons/bookmark.ico">
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="style.css?v=1">
 </head>
 <body>
     
@@ -29,6 +29,7 @@
             <button onclick="toggleBotones('segundo')" id="segundo" class="navbar-boton">2do Semestre</button>
             <button onclick="toggleBotones('ambos')" id="ambos" class="navbar-boton activo">Ambos</button>
             <button onclick="toggleBotones('libre')" id="libre" class="navbar-boton">Calidad Libre</button>
+            <button onclick="verPlanificacion()" id="planificacion" class="navbar-boton">Planificar</button>
             <button onclick="verAreas()" id="areas" class="navbar-boton">Ver áreas</button>
             <a class="navbar-boton link-boton" id="sugerencia" href="https://forms.gle/jN9WEGE2hGvLxeNKA">Hacer sugerencia</a>
             <button onclick="verRespuestas()" id="respuestas" class="navbar-boton">Respuestas</button>
@@ -66,7 +67,7 @@
                         <div>
                             <div class="titulo-respuesta">Sobre currícula Analista</div>
                             <div class="info-respuesta margen-inferior-20">
-                                Estoy viendo como implementar esto de la mejor manera para que sea útil.
+                                Estoy viendo cómo implementar esto de la mejor manera para que sea útil.
                             </div>
                         </div>
                         <div>
@@ -123,6 +124,9 @@
                 
             </div>
 
+            <div id="vista-planificacion" class="container-seccion-estatico">
+            </div>
+
             <div class="container-seccion-estatico">
                 <p class="titulo-seccion">Información</p>
                 <div class="seccion-contenido">
@@ -143,11 +147,11 @@
                         Materia exonerada.
                     </div>
                     <div class="info">
-                        <img src="icons/asterisk-resized.webp" alt="ast-icon" id="ast-icon" class="ex bloque">
+                        <img src="icons/asterisk-resized.webp" alt="ast-icon" class="ex bloque">
                         <span>Materia opcional.</span>
                     </div>
                     <div class="info">
-                        <img src="icons/ex-resized.webp" alt="insc-icon" id="insc-icon" class="ex bloque">
+                        <img src="icons/ex-resized.webp" alt="insc-icon" class="ex bloque">
                         <span>No aparece inscripción en Bedelías</span>
                     </div>
                 </div>
@@ -203,7 +207,7 @@
         
     </main>
 
-    <script src="./app.js"></script>
+    <script src="./app.js?v=1"></script>
 
 </body>
 </html>

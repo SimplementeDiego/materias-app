@@ -1,9 +1,10 @@
-//comentar y revisar codigo
+// revisar codigo
 
 const LocalStorageNombres = Object.freeze({
   materiasAprobadas: "materiasAprobadas",
   materiasExoneradas: "materiasExoneradas",
-  semestre : "semestre"
+  semestre : "semestre",
+  planificacionSemestres: "planificacionSemestres"
 });
 
 const Semestre = Object.freeze({
@@ -81,6 +82,8 @@ const idPopupAreas = "popup-areas";
 const idPopupListaMaterias = "popup-lista-materias";
 const idPopupAjustarCreditos = "popup-ajustar-creditos";
 const idPopupReset = "popup-reset";
+const idVistaPlanificacion = "vista-planificacion";
+const idBotonPlanificacion = "planificacion";
 const idInputBuscarMateria = "input-buscar-materia";
 const idSelectFiltrarArea = "select-filtrar-area";
 
@@ -88,9 +91,11 @@ const registros = [];
 const creditosPorArea = new Map();
 let historialAprobadas = new Set();
 let historialExoneradas = new Set();
+let planificacionSemestres = [];
 let seleccionOpcionales = true;
 let seleccionMenu = false;
 let seleccionSemestre = Semestre.AMBOS;
+let vistaPlanificacionActiva = false;
 let valorBarra = BarraPopup.Previas;
 let popUpActual = idPopupMateria;
 let filtroTextoMateria = "";
@@ -289,10 +294,6 @@ async function cargarMateriasDesdeJson() {
   Materias = materiasJson.map((datos) => materiasPorNombre.get(datos.id)).filter((materia) => !nombresMateriasExcluidasInicialmente.has(materia.nombre));
 }
 
-function displayBlock(elemento){
-  document.getElementById(elemento).style.display = "block";
-}
-
 function displayNone(elemento){
   document.getElementById(elemento).style.display = "none";
 }
@@ -322,10 +323,6 @@ function activarBarraPopup(nombreMateria, valor) {
   document.getElementById(BarraPopup.Previas).onclick = () => { popUpGeneral(nombreMateria,"previas") };
   document.getElementById(BarraPopup.PreviaDe).onclick = () => { popUpGeneral(nombreMateria,"previaDe") };
   document.getElementById(BarraPopup.Informacion).onclick = () => { popUpGeneral(nombreMateria,"informacion") };
-}
-
-function desactivarBarraPopup(){
-  displayNone("popup-materia-barra-superior");
 }
 
 function popUpGeneral(nombreMateria, valor) {
@@ -442,16 +439,40 @@ function toggleMateria(nombre) {
   reconstruirEstadoPagina();
 }
 
+function obtenerIdNavbarValido(idBoton) {
+  const idsValidos = [...Object.values(Semestre), idBotonPlanificacion];
+  return idsValidos.includes(idBoton) ? idBoton : Semestre.AMBOS;
+}
+
+function obtenerIdSemestreValido(idBoton) {
+  return Object.values(Semestre).includes(idBoton) ? idBoton : Semestre.AMBOS;
+}
+
 function cambiarClaseActivaEnNav(idBoton) {
-  document.getElementById(seleccionSemestre).classList.remove(claseResaltarBotonEnNav);
-  seleccionSemestre = idBoton;
+  const idBotonValido = obtenerIdNavbarValido(idBoton);
+  document.getElementById(seleccionSemestre)?.classList.remove(claseResaltarBotonEnNav);
+  seleccionSemestre = idBotonValido;
   document.getElementById(seleccionSemestre).classList.add(claseResaltarBotonEnNav);
 }
 
+function mostrarVistaPlanificacion(activar) {
+  vistaPlanificacionActiva = activar;
+  const vistaPlanificacion = document.getElementById(idVistaPlanificacion);
+  vistaPlanificacion.style.display = activar ? "flex" : "none";
+  document.querySelectorAll(`#${idSecciones} > .container-seccion, #${idSecciones} > .container-seccion-estatico`).forEach((seccion) => {
+    if (seccion.id !== idVistaPlanificacion) {
+      seccion.style.display = activar ? "none" : "";
+    }
+  });
+  if (!activar) {
+    mostrarSeccionesQueCorrespondan();
+  }
+}
+
 function toggleBotones(idBoton) {
-  cambiarClaseActivaEnNav(idBoton);
+  cambiarClaseActivaEnNav(obtenerIdSemestreValido(idBoton));
   mostrarBotonesDeMateriasQueCorresponda();
-  mostrarSeccionesQueCorrespondan();
+  mostrarVistaPlanificacion(false);
   localStorage.setItem(LocalStorageNombres.semestre, seleccionSemestre);
 }
 
@@ -558,6 +579,22 @@ function actualizarCreditosTitulo() {
   document.getElementById(idTitulo).textContent = `Materias | Créditos: ${creditosBloque.Total}`;
 }
 
+function leerJsonLocalStorage(nombre, valorPorDefecto) {
+  const guardado = localStorage.getItem(nombre);
+  if (!guardado) return valorPorDefecto;
+  try {
+    return JSON.parse(guardado);
+  } catch (error) {
+    return valorPorDefecto;
+  }
+}
+
+function esRegistroCreditoValido(registro) {
+  return registro &&
+    typeof registro.area === "string" &&
+    Number.isFinite(registro.creditos);
+}
+
 function reconstruyoEstadoValido(){
   let auxHistorialAprobadas = historialAprobadas;
   let auxHistorialExoneradas = historialExoneradas;
@@ -587,6 +624,11 @@ function reconstruyoEstadoValido(){
     const copiaExoneradas = new Set(auxHistorialExoneradas);
     copiaExoneradas.forEach( (nombreMateria) => {
       let materia = encontrarMateriaPorNombre(nombreMateria);
+      if (!materia) {
+        auxHistorialExoneradas.delete(nombreMateria);
+        huboCambio = true;
+        return;
+      }
       let {cumple} = evaluarRegla(materia.reglaHabilitacion);
       if (cumple) {
         huboCambio = true;
@@ -610,7 +652,7 @@ function calcularCreditos() {
   }
   historialExoneradas.forEach((nombreMateria) => {
     let materia = encontrarMateriaPorNombre(nombreMateria);
-    sumarCreditos(materia);
+    if (materia) sumarCreditos(materia);
   });
 }
 
@@ -623,10 +665,22 @@ function reconstruirEstadoPagina() {
   localStorage.setItem(LocalStorageNombres.materiasAprobadas, JSON.stringify(Array.from(historialAprobadas.values())));
 }
 
+function renderizarPlanificacionSiActiva() {
+  if (vistaPlanificacionActiva) {
+    renderizarPlanificacion();
+  }
+}
+
 function borrarProgreso() {
   historialAprobadas.clear();
   historialExoneradas.clear();
+  registros.splice(0, registros.length);
+  creditosPorArea.clear();
+  planificacionSemestres = [];
+  guardarPlanificacion();
+  actualizarRegistros();
   reconstruirEstadoPagina();
+  renderizarPlanificacionSiActiva();
   closePopup();
 }
 
@@ -646,6 +700,25 @@ function sumarCreditos(materia) {
 
 function obtenerAportesMateria(materia) {
   return materia.creditosPorArea?.length ? materia.creditosPorArea : [{ area: materia.area, creditos: materia.creditos }];
+}
+
+function calcularCreditosMateria(materia) {
+  return obtenerAportesMateria(materia).reduce((total, { creditos }) => total + creditos, 0);
+}
+
+function calcularCreditosMaterias(nombresMaterias) {
+  return nombresMaterias.reduce((total, nombreMateria) => {
+    const materia = encontrarMateriaPorNombre(nombreMateria);
+    return materia ? total + calcularCreditosMateria(materia) : total;
+  }, 0);
+}
+
+function calcularCreditosPlanHastaSemestre(indiceSemestre) {
+  let total = creditosBloque.Total;
+  for (let i = 0; i <= indiceSemestre; i++) {
+    total += calcularCreditosMaterias(planificacionSemestres[i]?.materias ?? []);
+  }
+  return total;
 }
 
 function materiaAportaEnArea(materia, areaBuscada) {
@@ -698,6 +771,330 @@ function calcularHTMLIndicarPrevias(regla) {
 
 function verRespuestas() {  
   openPopup(idPopupRespuestas);
+}
+
+function guardarPlanificacion() {
+  localStorage.setItem(LocalStorageNombres.planificacionSemestres, JSON.stringify(planificacionSemestres));
+}
+
+function cargarPlanificacionDesdeStorage() {
+  const planificacion = leerJsonLocalStorage(LocalStorageNombres.planificacionSemestres, []);
+  planificacionSemestres = Array.isArray(planificacion) ? planificacion : [];
+}
+
+function normalizarSemestrePlanificado(semestre) {
+  return semestre === Semestre.SEGUNDO ? Semestre.SEGUNDO : Semestre.PRIMERO;
+}
+
+function textoSemestrePlanificado(semestre) {
+  return semestre === Semestre.SEGUNDO ? "2do semestre" : "1er semestre";
+}
+
+function materiaSeDictaEnSemestrePlanificado(materia, semestre) {
+  if (!materia || materia.se_da === false) return false;
+  return materia.semestre === Semestre.AMBOS || materia.semestre === semestre;
+}
+
+function ejecutarConEstadoTemporal(aprobadas, exoneradas, callback) {
+  const historialAprobadasAnterior = historialAprobadas;
+  const historialExoneradasAnterior = historialExoneradas;
+  const creditosBloqueAnterior = { ...creditosBloque };
+  historialAprobadas = new Set(aprobadas);
+  historialExoneradas = new Set(exoneradas);
+  calcularCreditos();
+  try {
+    return callback();
+  } finally {
+    historialAprobadas = historialAprobadasAnterior;
+    historialExoneradas = historialExoneradasAnterior;
+    creditosBloque = creditosBloqueAnterior;
+  }
+}
+
+function materiaHabilitadaParaPlan(materia, aprobadas, exoneradas) {
+  return ejecutarConEstadoTemporal(aprobadas, exoneradas, () => evaluarRegla(materia.reglaHabilitacion).cumple);
+}
+
+function obtenerContextoPlanificacion(indiceSemestre) {
+  const aprobadas = new Set(historialAprobadas);
+  const exoneradas = new Set(historialExoneradas);
+  historialExoneradas.forEach((nombreMateria) => aprobadas.add(nombreMateria));
+  const yaConsideradas = new Set([...aprobadas, ...exoneradas]);
+
+  for (let i = 0; i < indiceSemestre; i++) {
+    (planificacionSemestres[i]?.materias ?? []).forEach((nombreMateria) => {
+      aprobadas.add(nombreMateria);
+      exoneradas.add(nombreMateria);
+      yaConsideradas.add(nombreMateria);
+    });
+  }
+
+  return { aprobadas, exoneradas, yaConsideradas };
+}
+
+function normalizarPlanificacion() {
+  const planificacionNormalizada = [];
+  const aprobadas = new Set(historialAprobadas);
+  const exoneradas = new Set(historialExoneradas);
+  historialExoneradas.forEach((nombreMateria) => aprobadas.add(nombreMateria));
+  const yaConsideradas = new Set([...aprobadas, ...exoneradas]);
+
+  planificacionSemestres.forEach((semestrePlanificado) => {
+    const semestre = normalizarSemestrePlanificado(semestrePlanificado?.semestre);
+    const materias = Array.isArray(semestrePlanificado?.materias) ? semestrePlanificado.materias : [];
+    const materiasValidas = [];
+
+    materias.forEach((nombreMateria) => {
+      const materia = encontrarMateriaPorNombre(nombreMateria);
+      if (
+        !materia ||
+        materiasValidas.includes(nombreMateria) ||
+        yaConsideradas.has(nombreMateria) ||
+        !materiaHabilitadaParaPlan(materia, aprobadas, exoneradas)
+      ) {
+        return;
+      }
+      materiasValidas.push(nombreMateria);
+    });
+
+    materiasValidas.forEach((nombreMateria) => {
+      aprobadas.add(nombreMateria);
+      exoneradas.add(nombreMateria);
+      yaConsideradas.add(nombreMateria);
+    });
+
+    planificacionNormalizada.push({
+      semestre,
+      materias: materiasValidas,
+      abierto: semestrePlanificado?.abierto !== false,
+    });
+  });
+
+  planificacionSemestres = planificacionNormalizada;
+}
+
+function obtenerMateriasDisponiblesParaPlan(indiceSemestre) {
+  const semestrePlanificado = planificacionSemestres[indiceSemestre];
+  const seleccionadasActuales = new Set(semestrePlanificado?.materias ?? []);
+  const { aprobadas, exoneradas, yaConsideradas } = obtenerContextoPlanificacion(indiceSemestre);
+
+  return Materias.filter((materia) => (
+    !seleccionadasActuales.has(materia.nombre) &&
+    !yaConsideradas.has(materia.nombre) &&
+    materiaHabilitadaParaPlan(materia, aprobadas, exoneradas)
+  )).sort((materia1, materia2) => materia1.nombreCompleto.localeCompare(materia2.nombreCompleto));
+}
+
+function crearBotonPlanificador(texto, color, onClick) {
+  const button = document.createElement("button");
+  button.type = "button";
+  button.classList.add("boton-planificador");
+  button.textContent = texto;
+  button.style.background = color;
+  button.onclick = onClick;
+  return button;
+}
+
+function renderizarExoneradasPlanificador() {
+  const detalles = document.createElement("details");
+  detalles.classList.add("planificador-bloque");
+
+  const resumen = document.createElement("summary");
+  resumen.textContent = `Materias exoneradas (${historialExoneradas.size})`;
+  detalles.append(resumen);
+
+  const lista = document.createElement("div");
+  lista.classList.add("planificador-lista-botones");
+
+  Materias.forEach((materia) => {
+    const estaExonerada = historialExoneradas.has(materia.nombre);
+    const estaAprobada = historialAprobadas.has(materia.nombre);
+    const habilitada = materia.estado === Estado.HABILITADA || materia.estado === Estado.APROBADA || materia.estado === Estado.EXONERADA;
+    const color = estaExonerada ? colorExonerada : (estaAprobada ? colorAprobada : (habilitada ? colorHabilitada : colorDeshabilitada));
+    const button = crearBotonPlanificador(materia.nombreCompleto, color, () => toggleExoneradaPlanificador(materia.nombre));
+    button.disabled = !habilitada;
+    lista.append(button);
+  });
+
+  detalles.append(lista);
+  return detalles;
+}
+
+function crearSelectorSemestrePlanificado(indiceSemestre, semestreActual) {
+  const select = document.createElement("select");
+  select.classList.add("selector-planificador");
+
+  [Semestre.PRIMERO, Semestre.SEGUNDO].forEach((semestre) => {
+    const option = document.createElement("option");
+    option.value = semestre;
+    option.textContent = textoSemestrePlanificado(semestre);
+    option.selected = semestre === semestreActual;
+    select.append(option);
+  });
+
+  select.onchange = () => cambiarSemestrePlanificado(indiceSemestre, select.value);
+  return select;
+}
+
+function renderizarSemestrePlanificado(semestrePlanificado, indiceSemestre) {
+  const container = document.createElement("details");
+  container.classList.add("planificador-semestre");
+  container.open = semestrePlanificado.abierto !== false;
+  container.ontoggle = () => {
+    if (planificacionSemestres[indiceSemestre]) {
+      planificacionSemestres[indiceSemestre].abierto = container.open;
+      guardarPlanificacion();
+    }
+  };
+
+  const summary = document.createElement("summary");
+  summary.classList.add("planificador-summary");
+  const cantidadMaterias = semestrePlanificado.materias.length;
+  const cantidadCreditos = calcularCreditosMaterias(semestrePlanificado.materias);
+  const totalCreditos = calcularCreditosPlanHastaSemestre(indiceSemestre);
+  summary.textContent = `Semestre ${indiceSemestre + 1} (${cantidadMaterias} materias, ${cantidadCreditos} créditos, total ${totalCreditos})`;
+  container.append(summary);
+
+  const encabezado = document.createElement("div");
+  encabezado.classList.add("planificador-encabezado");
+
+  const botonEliminar = crearBotonPlanificador("Eliminar", colorDeshabilitada, () => eliminarSemestrePlanificado(indiceSemestre));
+  encabezado.append(crearSelectorSemestrePlanificado(indiceSemestre, semestrePlanificado.semestre));
+  encabezado.append(botonEliminar);
+  container.append(encabezado);
+
+  container.append(crearLineaAreaSubrayada("Seleccionadas"));
+  const seleccionadas = document.createElement("div");
+  seleccionadas.classList.add("planificador-lista-botones");
+  if (semestrePlanificado.materias.length === 0) {
+    seleccionadas.append(crearLinea("Sin materias seleccionadas."));
+  } else {
+    semestrePlanificado.materias.forEach((nombreMateria) => {
+      const materia = encontrarMateriaPorNombre(nombreMateria);
+      const seDicta = materiaSeDictaEnSemestrePlanificado(materia, semestrePlanificado.semestre);
+      const textoBoton = seDicta ? materia.nombreCompleto : `${materia.nombreCompleto} (no se dicta)`;
+      const button = crearBotonPlanificador(textoBoton, colorAprobada, () => quitarMateriaPlanificada(indiceSemestre, nombreMateria));
+      if (!seDicta) {
+        button.classList.add("materia-fuera-semestre");
+        button.title = "Esta materia no se dicta en el semestre seleccionado o no aparece en Bedelías.";
+      }
+      seleccionadas.append(button);
+    });
+  }
+  container.append(seleccionadas);
+
+  const agregarContainer = document.createElement("div");
+  agregarContainer.classList.add("planificador-agregar");
+  const materiasDisponibles = obtenerMateriasDisponiblesParaPlan(indiceSemestre);
+  if (materiasDisponibles.length === 0) {
+    agregarContainer.append(crearLinea("No hay materias habilitadas para agregar."));
+  } else {
+    const botonMostrarSelector = crearBotonPlanificador("+", colorHabilitada, () => {
+      selectorContainer.classList.toggle("oculto");
+    });
+    botonMostrarSelector.classList.add("boton-planificador-mas");
+
+    const selectorContainer = document.createElement("div");
+    selectorContainer.classList.add("planificador-selector-container");
+    selectorContainer.classList.add("oculto");
+
+    const select = document.createElement("select");
+    select.classList.add("selector-planificador-materia");
+    materiasDisponibles.forEach((materia) => {
+      const seDicta = materiaSeDictaEnSemestrePlanificado(materia, semestrePlanificado.semestre);
+      const option = document.createElement("option");
+      option.value = materia.nombre;
+      option.textContent = seDicta ? materia.nombreCompleto : `${materia.nombreCompleto} (no se dicta)`;
+      if (!seDicta) {
+        option.classList.add("materia-fuera-semestre-option");
+        option.title = "Esta materia no se dicta en el semestre seleccionado o no aparece en Bedelías.";
+      }
+      select.append(option);
+    });
+
+    const botonAgregar = crearBotonPlanificador("Agregar", colorHabilitada, () => agregarMateriaPlanificada(indiceSemestre, select.value));
+    selectorContainer.append(select);
+    selectorContainer.append(botonAgregar);
+    agregarContainer.append(botonMostrarSelector);
+    agregarContainer.append(selectorContainer);
+  }
+  container.append(agregarContainer);
+
+  return container;
+}
+
+function renderizarPlanificacion() {
+  normalizarPlanificacion();
+  guardarPlanificacion();
+
+  const contenedor = document.getElementById(idVistaPlanificacion);
+  contenedor.innerHTML = "";
+
+  const titulo = document.createElement("div");
+  titulo.classList.add("titulo-popup");
+  titulo.textContent = "Planificación de semestres";
+  contenedor.append(titulo);
+  contenedor.append(renderizarExoneradasPlanificador());
+
+  const botonAgregarSemestre = crearBotonPlanificador("Agregar semestre", "lightgray", agregarSemestrePlanificado);
+  contenedor.append(botonAgregarSemestre);
+
+  const contenedorSemestres = document.createElement("div");
+  contenedorSemestres.classList.add("planificador-bloque");
+  if (planificacionSemestres.length === 0) {
+    contenedorSemestres.append(crearLinea("No hay semestres planificados."));
+  } else {
+    planificacionSemestres.forEach((semestrePlanificado, indiceSemestre) => {
+      contenedorSemestres.append(renderizarSemestrePlanificado(semestrePlanificado, indiceSemestre));
+    });
+  }
+  contenedor.append(contenedorSemestres);
+}
+
+function verPlanificacion() {
+  cambiarClaseActivaEnNav(idBotonPlanificacion);
+  mostrarVistaPlanificacion(true);
+  renderizarPlanificacion();
+  closeNavIfMobile();
+}
+
+function agregarSemestrePlanificado() {
+  const ultimoSemestre = planificacionSemestres[planificacionSemestres.length - 1]?.semestre;
+  const proximoSemestre = ultimoSemestre === Semestre.PRIMERO ? Semestre.SEGUNDO : Semestre.PRIMERO;
+  planificacionSemestres.push({ semestre: proximoSemestre, materias: [], abierto: true });
+  renderizarPlanificacion();
+}
+
+function eliminarSemestrePlanificado(indiceSemestre) {
+  planificacionSemestres.splice(indiceSemestre, 1);
+  renderizarPlanificacion();
+}
+
+function cambiarSemestrePlanificado(indiceSemestre, semestre) {
+  planificacionSemestres[indiceSemestre].semestre = normalizarSemestrePlanificado(semestre);
+  renderizarPlanificacion();
+}
+
+function agregarMateriaPlanificada(indiceSemestre, nombreMateria) {
+  planificacionSemestres[indiceSemestre].materias.push(nombreMateria);
+  renderizarPlanificacion();
+}
+
+function quitarMateriaPlanificada(indiceSemestre, nombreMateria) {
+  planificacionSemestres[indiceSemestre].materias = planificacionSemestres[indiceSemestre].materias.filter((materia) => materia !== nombreMateria);
+  renderizarPlanificacion();
+}
+
+function toggleExoneradaPlanificador(nombreMateria) {
+  if (historialExoneradas.has(nombreMateria)) {
+    historialExoneradas.delete(nombreMateria);
+    historialAprobadas.delete(nombreMateria);
+  } else {
+    historialAprobadas.add(nombreMateria);
+    historialExoneradas.add(nombreMateria);
+  }
+  reconstruirEstadoPagina();
+  renderizarPlanificacion();
 }
 
 function indicarInformacion(nombreMateria) {
@@ -812,7 +1209,7 @@ function verAreas() {
   elementoPrincipal.append(crearLineaNegrita("Materias Básicas", `: ${totBasicas} (${80})`));
   elementoPrincipal.append(crearLineaArea(BloqueCreditos.creditosEnM, 70));
   elementoPrincipal.append(crearLineaAreaConMargenAbajo(BloqueCreditos.creditosEnCE, 10));
-  elementoPrincipal.append(crearLineaNegrita("Básico-Tec,Técnicas e Int.", `: ${totBT} (${220})`));
+  elementoPrincipal.append(crearLineaNegrita("Básico-Tec, Técnicas e Int.", `: ${totBT} (${220})`));
   elementoPrincipal.append(crearLineaArea(BloqueCreditos.creditosEnProg, 60));
   elementoPrincipal.append(crearLineaArea(BloqueCreditos.creditosEnAC_SO_RC, 30));
   elementoPrincipal.append(crearLineaArea(BloqueCreditos.creditosEnBD_SI, 10));
@@ -907,13 +1304,11 @@ function asignarPesos() {
   Materias.forEach((materia) => {
     materia.peso = 0;
   });
-  let maxTotal = 0;
   AGI.peso = 3;
   Pasan.peso = 4;
   TRE.peso = 2
   Materias.forEach((materia) => {
     if (materia.peso === 0) asignarPesoMateria(materia);
-    if (materia.peso > maxTotal) maxTotal = materia.peso;
   });
 }
 
@@ -1125,12 +1520,12 @@ function actualizarRegistros() {
       creditosPorArea.set(area, (creditosPorArea.get(area) ?? 0) - creditos);
       actualizarRegistros();
       reconstruirEstadoPagina();
+      renderizarPlanificacionSiActiva();
     }
     iconoBasura.width = 15;
     iconoBasura.height = 15;
     iconoBasura.src = "icons/basura-resized.webp";
-    iconoBasura.alt = "basura-icon";
-    iconoBasura.id = "basura-icon";
+    iconoBasura.alt = "Eliminar registro";
     iconoBasura.className = "icono-basura";
     divEliminar.append(iconoBasura);
     columnaArea.appendChild(divArea);
@@ -1153,12 +1548,14 @@ function eventoAjustarCreditos() {
     registros.push({ area, creditos });
     actualizarRegistros();
     reconstruirEstadoPagina();
+    renderizarPlanificacionSiActiva();
   }  
 }
 
 // Inicio de pagina
 
 function mostrarSeccionesQueCorrespondan() {
+  if (vistaPlanificacionActiva) return;
   for (let index = 0; index < PG.peso; index++) {
     const interno = document.getElementById(`seccion-materias-${index+1}`);
     const externo = interno.closest(".container-seccion");
@@ -1181,10 +1578,11 @@ function rehacerPaginaSinEstado(){
 async function firstLoad() {
   await cargarMateriasDesdeJson();
   cargarOpcionesFiltroAreas();
-  if (localStorage.getItem(LocalStorageNombres.materiasExoneradas)||localStorage.getItem(LocalStorageNombres.materiasAprobadas)) {
-    historialExoneradas = new Set(JSON.parse(localStorage.getItem(LocalStorageNombres.materiasExoneradas)));
-    historialAprobadas = new Set(JSON.parse(localStorage.getItem(LocalStorageNombres.materiasAprobadas)));
-  }
+  cargarPlanificacionDesdeStorage();
+  const materiasExoneradasGuardadas = leerJsonLocalStorage(LocalStorageNombres.materiasExoneradas, []);
+  const materiasAprobadasGuardadas = leerJsonLocalStorage(LocalStorageNombres.materiasAprobadas, []);
+  historialExoneradas = new Set(Array.isArray(materiasExoneradasGuardadas) ? materiasExoneradasGuardadas : []);
+  historialAprobadas = new Set(Array.isArray(materiasAprobadasGuardadas) ? materiasAprobadasGuardadas : []);
   if (localStorage.getItem(MI.nombre) == "true") {
     document.getElementById("mi-toggle-MI").checked = true;
     if (Materias.includes(MI)) {
@@ -1207,12 +1605,22 @@ async function firstLoad() {
       Materias.push(IC);
     }
   }
-  if (localStorage.getItem("registros")) {
-    registros.splice(0, registros.length, ...(JSON.parse(localStorage.getItem("registros") ?? "[]")));
-    creditosPorArea.clear(), (JSON.parse(localStorage.getItem("creditosPorArea") ?? "[]")).forEach(([k,v]) => creditosPorArea.set(k,v));
+  const registrosGuardados = leerJsonLocalStorage("registros", []);
+  const creditosPorAreaGuardados = leerJsonLocalStorage("creditosPorArea", []);
+  const registrosValidos = Array.isArray(registrosGuardados) ? registrosGuardados.filter(esRegistroCreditoValido) : [];
+  registros.splice(0, registros.length, ...registrosValidos);
+  creditosPorArea.clear();
+  if (Array.isArray(creditosPorAreaGuardados)) {
+    creditosPorAreaGuardados.forEach((entrada) => {
+      if (Array.isArray(entrada) && typeof entrada[0] === "string" && Number.isFinite(entrada[1])) {
+        creditosPorArea.set(entrada[0], entrada[1]);
+      }
+    });
   }
   rehacerPaginaSinEstado();
   reconstruirEstadoPagina();
+  normalizarPlanificacion();
+  guardarPlanificacion();
   if (localStorage.getItem(LocalStorageNombres.semestre)) {
     toggleBotones(localStorage.getItem(LocalStorageNombres.semestre));
   }

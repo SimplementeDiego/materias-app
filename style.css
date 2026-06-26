@@ -103,6 +103,14 @@ header {
     background-color: lightsalmon;
 }
 
+#planificacion {
+    background-color: lightyellow;
+}
+
+#planificacion.activo {
+    background-color: lightskyblue;
+}
+
 #reset {
     background-color: lightcoral;
 }
@@ -175,6 +183,7 @@ main {
     text-wrap: wrap;
     max-height: 50vh;
     overflow-y: auto;
+    overflow-x: hidden;
     overscroll-behavior: contain;
 }
 
@@ -246,10 +255,6 @@ main {
     margin: 10px;
     border-radius: 10px;
     border: 1px solid rgb(224, 224, 224);
-}
-
-.no-bt {
-    border-top: none;
 }
 
 .titulo-seccion {
@@ -455,7 +460,7 @@ main {
 
 .icono-basura {
     height: 15px;
-    width: 15px;
+    width: 13px;
     cursor: pointer;
 }
 
@@ -472,6 +477,122 @@ main {
 
 #popup-ajustar-creditos {
     flex-direction: column;
+}
+
+#vista-planificacion {
+    align-items: stretch;
+    display: none;
+    gap: 12px;
+    justify-content: flex-start;
+    min-height: calc(100vh - 80px);
+    overflow-x: hidden;
+    text-align: left;
+}
+
+.planificador-bloque,
+.planificador-semestre {
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    border: 1px solid rgb(224, 224, 224);
+    border-radius: 5px;
+    padding: 10px;
+    background-color: rgb(236, 247, 255);
+}
+
+.planificador-semestre {
+    margin-top: 10px;
+}
+
+.planificador-summary {
+    cursor: pointer;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.planificador-encabezado {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    margin-bottom: 10px;
+}
+
+.planificador-lista-botones {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 8px;
+    margin-top: 8px;
+}
+
+.boton-planificador {
+    border: none;
+    border-radius: 5px;
+    box-shadow: 1px 1px 3px rgb(184, 184, 175);
+    color: black;
+    cursor: pointer;
+    font-weight: bold;
+    padding: 8px;
+    max-width: 100%;
+}
+
+.boton-planificador:disabled {
+    cursor: not-allowed;
+    opacity: 0.65;
+}
+
+.boton-planificador:active {
+    transform: scale(0.95);
+}
+
+.boton-planificador-mas {
+    font-size: 1.2rem;
+    min-width: 40px;
+}
+
+.selector-planificador {
+    padding: 6px;
+    min-width: 130px;
+}
+
+.planificador-agregar {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 10px;
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+}
+
+.planificador-selector-container {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    flex: 1 1 auto;
+    gap: 8px;
+    max-width: 100%;
+    min-width: 0;
+}
+
+.selector-planificador-materia {
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    padding: 6px;
+}
+
+.oculto {
+    display: none;
+}
+
+.materia-fuera-semestre {
+    background-color: #fff3cd !important;
+    border: 2px solid #b00020;
+}
+
+.materia-fuera-semestre-option {
+    background-color: #fff3cd;
 }
 
 /* Aca terminan las clases estaticas que aparecen en el HTML */
@@ -547,10 +668,6 @@ main {
     margin-right: 5px;
 }
 
-#basura-icon{
-    width: 13px;
-}
-
 #input-buscar-materia,
 #select-filtrar-area {
     max-width: 100%;
@@ -568,7 +685,6 @@ main {
         width: 100%;
         max-width: 100%;
         min-width: 100%;
-        position: absolute;
         top: 60px;
         z-index: 10;
         height: auto;
@@ -680,6 +796,35 @@ main {
 
     #input-buscar-materia,
     #select-filtrar-area {
+        width: 100%;
+    }
+
+    .planificador-encabezado {
+        align-items: stretch;
+        flex-direction: column;
+    }
+
+    .selector-planificador,
+    .boton-planificador {
+        width: 100%;
+    }
+
+    .planificador-agregar {
+        align-items: stretch;
+        flex-direction: column;
+    }
+
+    .planificador-selector-container {
+        align-items: stretch;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .planificador-selector-container.oculto {
+        display: none;
+    }
+
+    .selector-planificador-materia {
         width: 100%;
     }
 }
