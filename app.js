@@ -1047,13 +1047,16 @@ function obtenerMateriasDisponiblesParaPlan(indiceSemestre) {
   )).sort((materia1, materia2) => materia1.nombreCompleto.localeCompare(materia2.nombreCompleto));
 }
 
-function crearBotonPlanificador(texto, color, onClick) {
+function crearBotonPlanificador(texto, color, onClick, ariaLabel = "") {
   const button = document.createElement("button");
   button.type = "button";
   button.classList.add("boton-planificador");
   button.textContent = texto;
   button.style.background = color;
   button.onclick = onClick;
+  if (ariaLabel) {
+    button.setAttribute("aria-label", ariaLabel);
+  }
   return button;
 }
 
@@ -1199,9 +1202,10 @@ function renderizarSemestrePlanificado(semestrePlanificado, indiceSemestre) {
       const fila = document.createElement("div");
       fila.classList.add("planificador-materia-seleccionada");
       const button = crearBotonPlanificador(textoBoton, color, () => avanzarResultadoMateriaPlanificada(indiceSemestre, nombreMateria));
-      const botonEliminar = crearBotonPlanificador("X", colorDeshabilitada, () => quitarMateriaPlanificada(indiceSemestre, nombreMateria));
+      const textoEliminar = `Eliminar ${materia.nombreCompleto} de la planificación`;
+      const botonEliminar = crearBotonPlanificador("X", colorDeshabilitada, () => quitarMateriaPlanificada(indiceSemestre, nombreMateria), textoEliminar);
       botonEliminar.classList.add("boton-planificador-eliminar");
-      botonEliminar.title = "Eliminar de la planificación";
+      botonEliminar.title = textoEliminar;
       if (!seDicta) {
         button.classList.add("materia-fuera-semestre");
         button.title = "Esta materia no se dicta en el semestre seleccionado o no aparece en Bedelías.";
@@ -1220,13 +1224,18 @@ function renderizarSemestrePlanificado(semestrePlanificado, indiceSemestre) {
     agregarContainer.append(crearLinea("No hay materias habilitadas para agregar."));
   } else {
     const botonMostrarSelector = crearBotonPlanificador("+", colorHabilitada, () => {
-      selectorContainer.classList.toggle("oculto");
-    });
+      const selectorOculto = selectorContainer.classList.toggle("oculto");
+      botonMostrarSelector.setAttribute("aria-expanded", String(!selectorOculto));
+    }, "Mostrar materias para agregar");
     botonMostrarSelector.classList.add("boton-planificador-mas");
+    botonMostrarSelector.title = "Mostrar materias para agregar";
+    botonMostrarSelector.setAttribute("aria-expanded", "false");
 
     const selectorContainer = document.createElement("div");
+    selectorContainer.id = `selector-planificador-materia-${indiceSemestre}`;
     selectorContainer.classList.add("planificador-selector-container");
     selectorContainer.classList.add("oculto");
+    botonMostrarSelector.setAttribute("aria-controls", selectorContainer.id);
 
     const select = document.createElement("select");
     select.classList.add("selector-planificador-materia");
@@ -1657,7 +1666,7 @@ function crearBotonesMaterias(){
       menuIcon.width = 15;
       menuIcon.height = 15;
       menuIcon.src = "icons/ex-resized.webp";
-      menuIcon.alt = "menu-icon";
+      menuIcon.alt = "No aparece inscripción en Bedelías";
       menuIcon.className = "icono ex-mat";
       button.prepend(menuIcon);
     }
