@@ -5,7 +5,9 @@ const LocalStorageNombres = Object.freeze({
   materiasExoneradas: "materiasExoneradas",
   semestre : "semestre",
   vistaSeleccionada: "vistaSeleccionada",
-  planificacionSemestres: "planificacionSemestres"
+  planificacionSemestres: "planificacionSemestres",
+  planificacionUsaEstadoActual: "planificacionUsaEstadoActual",
+  planificacionExoneradasBase: "planificacionExoneradasBase"
 });
 
 const Semestre = Object.freeze({
@@ -13,6 +15,16 @@ const Semestre = Object.freeze({
   SEGUNDO: "segundo",
   AMBOS: "ambos",
   LIBRE: "libre"
+});
+
+const PeriodoPlanificado = Object.freeze({
+  EXAMENES: "examenes"
+});
+
+const ResultadoPlanificado = Object.freeze({
+  HABILITADA: "habilitada",
+  CURSO: "curso",
+  EXONERADA: "exonerada"
 });
 
 const BarraPopup = Object.freeze({
@@ -93,6 +105,8 @@ const creditosPorArea = new Map();
 let historialAprobadas = new Set();
 let historialExoneradas = new Set();
 let planificacionSemestres = [];
+let planificacionExoneradasBase = new Set();
+let planificacionUsaEstadoActual = true;
 let seleccionOpcionales = true;
 let seleccionMenu = false;
 let seleccionSemestre = Semestre.AMBOS;
@@ -660,6 +674,14 @@ function calcularCreditos() {
   });
 }
 
+function calcularCreditosSinCreditosManuales() {
+  resetCreditos();
+  historialExoneradas.forEach((nombreMateria) => {
+    let materia = encontrarMateriaPorNombre(nombreMateria);
+    if (materia) sumarCreditos(materia);
+  });
+}
+
 function reconstruirEstadoPagina() {
   reconstruyoEstadoValido();
   calcularCreditos();
@@ -681,6 +703,8 @@ function borrarProgreso() {
   registros.splice(0, registros.length);
   creditosPorArea.clear();
   planificacionSemestres = [];
+  planificacionExoneradasBase.clear();
+  planificacionUsaEstadoActual = true;
   guardarPlanificacion();
   actualizarRegistros();
   reconstruirEstadoPagina();
@@ -717,10 +741,18 @@ function calcularCreditosMaterias(nombresMaterias) {
   }, 0);
 }
 
+function calcularCreditosBasePlanificacion() {
+  if (planificacionUsaEstadoActual) return creditosBloque.Total;
+  return calcularCreditosMaterias(Array.from(planificacionExoneradasBase.values()));
+}
+
 function calcularCreditosPlanHastaSemestre(indiceSemestre) {
-  let total = creditosBloque.Total;
+  let total = calcularCreditosBasePlanificacion();
   for (let i = 0; i <= indiceSemestre; i++) {
-    total += calcularCreditosMaterias(planificacionSemestres[i]?.materias ?? []);
+    const semestrePlanificado = planificacionSemestres[i];
+    total += calcularCreditosMaterias(
+      obtenerNombresExoneradasPlanificadas(semestrePlanificado?.materias ?? [], semestrePlanificado?.semestre)
+    );
   }
   return total;
 }
@@ -779,33 +811,104 @@ function verRespuestas() {
 
 function guardarPlanificacion() {
   localStorage.setItem(LocalStorageNombres.planificacionSemestres, JSON.stringify(planificacionSemestres));
+  localStorage.setItem(LocalStorageNombres.planificacionUsaEstadoActual, JSON.stringify(planificacionUsaEstadoActual));
+  localStorage.setItem(LocalStorageNombres.planificacionExoneradasBase, JSON.stringify(Array.from(planificacionExoneradasBase.values())));
 }
 
 function cargarPlanificacionDesdeStorage() {
   const planificacion = leerJsonLocalStorage(LocalStorageNombres.planificacionSemestres, []);
+  const exoneradasBase = leerJsonLocalStorage(LocalStorageNombres.planificacionExoneradasBase, []);
   planificacionSemestres = Array.isArray(planificacion) ? planificacion : [];
+  planificacionUsaEstadoActual = leerJsonLocalStorage(LocalStorageNombres.planificacionUsaEstadoActual, true) !== false;
+  planificacionExoneradasBase = new Set(Array.isArray(exoneradasBase) ? exoneradasBase : []);
+}
+
+function esPeriodoExamenesPlanificado(periodo) {
+  return periodo === PeriodoPlanificado.EXAMENES;
 }
 
 function normalizarSemestrePlanificado(semestre) {
+  if (esPeriodoExamenesPlanificado(semestre)) return PeriodoPlanificado.EXAMENES;
   return semestre === Semestre.SEGUNDO ? Semestre.SEGUNDO : Semestre.PRIMERO;
 }
 
 function textoSemestrePlanificado(semestre) {
+  if (esPeriodoExamenesPlanificado(semestre)) return "Período de exámenes";
   return semestre === Semestre.SEGUNDO ? "2do semestre" : "1er semestre";
+}
+
+function tituloPeriodoPlanificado(semestre) {
+  if (esPeriodoExamenesPlanificado(semestre)) return "Período de exámenes";
+  return "Semestre";
 }
 
 function materiaSeDictaEnSemestrePlanificado(materia, semestre) {
   if (!materia || materia.se_da === false) return false;
+  if (esPeriodoExamenesPlanificado(semestre)) return true;
   return materia.semestre === Semestre.AMBOS || materia.semestre === semestre;
 }
 
-function ejecutarConEstadoTemporal(aprobadas, exoneradas, callback) {
+function obtenerNombreMateriaPlanificada(materiaPlanificada) {
+  return typeof materiaPlanificada === "string" ? materiaPlanificada : materiaPlanificada?.nombre;
+}
+
+function obtenerResultadoMateriaPlanificada(materiaPlanificada, semestre) {
+  if (typeof materiaPlanificada === "string") return ResultadoPlanificado.EXONERADA;
+  if (materiaPlanificada?.resultado === ResultadoPlanificado.EXONERADA) return ResultadoPlanificado.EXONERADA;
+  if (esPeriodoExamenesPlanificado(semestre)) return ResultadoPlanificado.HABILITADA;
+  return materiaPlanificada?.resultado === ResultadoPlanificado.CURSO
+    ? ResultadoPlanificado.CURSO
+    : ResultadoPlanificado.HABILITADA;
+}
+
+function crearMateriaPlanificada(nombreMateria, semestre, resultado = ResultadoPlanificado.HABILITADA) {
+  return {
+    nombre: nombreMateria,
+    resultado: obtenerResultadoMateriaPlanificada({ resultado }, semestre)
+  };
+}
+
+function normalizarMateriaPlanificada(materiaPlanificada, semestre) {
+  const nombre = obtenerNombreMateriaPlanificada(materiaPlanificada);
+  if (!nombre) return null;
+  return crearMateriaPlanificada(nombre, semestre, obtenerResultadoMateriaPlanificada(materiaPlanificada, semestre));
+}
+
+function obtenerNombresMateriasPlanificadas(materias = []) {
+  return materias.map(obtenerNombreMateriaPlanificada).filter(Boolean);
+}
+
+function obtenerNombresExoneradasPlanificadas(materias = [], semestre) {
+  return materias
+    .filter((materiaPlanificada) => obtenerResultadoMateriaPlanificada(materiaPlanificada, semestre) === ResultadoPlanificado.EXONERADA)
+    .map(obtenerNombreMateriaPlanificada)
+    .filter(Boolean);
+}
+
+function aplicarMateriaAlContextoPlanificacion(materiaPlanificada, semestre, aprobadas, exoneradas, yaConsideradas) {
+  const nombreMateria = obtenerNombreMateriaPlanificada(materiaPlanificada);
+  if (!nombreMateria) return;
+  const resultado = obtenerResultadoMateriaPlanificada(materiaPlanificada, semestre);
+  if (resultado === ResultadoPlanificado.CURSO || resultado === ResultadoPlanificado.EXONERADA) {
+    aprobadas.add(nombreMateria);
+  }
+  if (resultado === ResultadoPlanificado.EXONERADA) {
+    exoneradas.add(nombreMateria);
+  }
+  yaConsideradas?.add(nombreMateria);
+}
+
+function ejecutarConEstadoTemporal(aprobadas, exoneradas, incluirCreditosActuales, callback) {
   const historialAprobadasAnterior = historialAprobadas;
   const historialExoneradasAnterior = historialExoneradas;
   const creditosBloqueAnterior = { ...creditosBloque };
   historialAprobadas = new Set(aprobadas);
   historialExoneradas = new Set(exoneradas);
-  calcularCreditos();
+  if (incluirCreditosActuales) {
+    calcularCreditos();
+  } else {
+    calcularCreditosSinCreditosManuales();
+  }
   try {
     return callback();
   } finally {
@@ -815,21 +918,66 @@ function ejecutarConEstadoTemporal(aprobadas, exoneradas, callback) {
   }
 }
 
-function materiaHabilitadaParaPlan(materia, aprobadas, exoneradas) {
-  return ejecutarConEstadoTemporal(aprobadas, exoneradas, () => evaluarRegla(materia.reglaHabilitacion).cumple);
+function materiaHabilitadaParaPlan(materia, aprobadas, exoneradas, incluirCreditosActuales = true) {
+  if (!materia) return false;
+  return ejecutarConEstadoTemporal(aprobadas, exoneradas, incluirCreditosActuales, () => evaluarRegla(materia.reglaHabilitacion).cumple);
+}
+
+function materiaHabilitadaParaExamen(materia, aprobadas, exoneradas, incluirCreditosActuales = true) {
+  if (!materia) return false;
+  const tieneCurso = aprobadas.has(materia.nombre) || exoneradas.has(materia.nombre);
+  if (!materia.esLibre && !tieneCurso) return false;
+  return materiaHabilitadaParaPlan(materia, aprobadas, exoneradas, incluirCreditosActuales);
+}
+
+function obtenerAprobadasBasePlanificacion() {
+  if (planificacionUsaEstadoActual) return new Set(historialAprobadas);
+  return new Set(planificacionExoneradasBase);
+}
+
+function obtenerExoneradasBasePlanificacion() {
+  if (planificacionUsaEstadoActual) return new Set(historialExoneradas);
+  return new Set(planificacionExoneradasBase);
+}
+
+function normalizarExoneradasBasePlanificacion() {
+  if (planificacionUsaEstadoActual) return;
+  const pendientes = new Set(planificacionExoneradasBase);
+  const aprobadas = new Set();
+  const exoneradas = new Set();
+  let huboCambio = true;
+
+  while (huboCambio) {
+    huboCambio = false;
+    Array.from(pendientes.values()).forEach((nombreMateria) => {
+      const materia = encontrarMateriaPorNombre(nombreMateria);
+      if (!materia) {
+        pendientes.delete(nombreMateria);
+        huboCambio = true;
+        return;
+      }
+      if (materiaHabilitadaParaPlan(materia, aprobadas, exoneradas, false)) {
+        aprobadas.add(nombreMateria);
+        exoneradas.add(nombreMateria);
+        pendientes.delete(nombreMateria);
+        huboCambio = true;
+      }
+    });
+  }
+
+  planificacionExoneradasBase = exoneradas;
 }
 
 function obtenerContextoPlanificacion(indiceSemestre) {
-  const aprobadas = new Set(historialAprobadas);
-  const exoneradas = new Set(historialExoneradas);
-  historialExoneradas.forEach((nombreMateria) => aprobadas.add(nombreMateria));
+  const aprobadas = obtenerAprobadasBasePlanificacion();
+  const exoneradas = obtenerExoneradasBasePlanificacion();
+  exoneradas.forEach((nombreMateria) => aprobadas.add(nombreMateria));
   const yaConsideradas = new Set([...aprobadas, ...exoneradas]);
 
   for (let i = 0; i < indiceSemestre; i++) {
-    (planificacionSemestres[i]?.materias ?? []).forEach((nombreMateria) => {
-      aprobadas.add(nombreMateria);
-      exoneradas.add(nombreMateria);
-      yaConsideradas.add(nombreMateria);
+    const semestrePlanificado = planificacionSemestres[i];
+    (semestrePlanificado?.materias ?? []).forEach((materiaPlanificada) => {
+      aplicarMateriaAlContextoPlanificacion(materiaPlanificada, semestrePlanificado?.semestre, aprobadas, exoneradas, yaConsideradas);
     });
   }
 
@@ -838,33 +986,38 @@ function obtenerContextoPlanificacion(indiceSemestre) {
 
 function normalizarPlanificacion() {
   const planificacionNormalizada = [];
-  const aprobadas = new Set(historialAprobadas);
-  const exoneradas = new Set(historialExoneradas);
-  historialExoneradas.forEach((nombreMateria) => aprobadas.add(nombreMateria));
+  const aprobadas = obtenerAprobadasBasePlanificacion();
+  const exoneradas = obtenerExoneradasBasePlanificacion();
+  exoneradas.forEach((nombreMateria) => aprobadas.add(nombreMateria));
   const yaConsideradas = new Set([...aprobadas, ...exoneradas]);
+  const incluirCreditosActuales = planificacionUsaEstadoActual;
 
   planificacionSemestres.forEach((semestrePlanificado) => {
     const semestre = normalizarSemestrePlanificado(semestrePlanificado?.semestre);
     const materias = Array.isArray(semestrePlanificado?.materias) ? semestrePlanificado.materias : [];
     const materiasValidas = [];
+    const nombresValidos = new Set();
 
-    materias.forEach((nombreMateria) => {
+    materias.forEach((materiaPlanificada) => {
+      const materiaNormalizada = normalizarMateriaPlanificada(materiaPlanificada, semestre);
+      const nombreMateria = materiaNormalizada?.nombre;
       const materia = encontrarMateriaPorNombre(nombreMateria);
-      if (
-        !materia ||
-        materiasValidas.includes(nombreMateria) ||
-        yaConsideradas.has(nombreMateria) ||
-        !materiaHabilitadaParaPlan(materia, aprobadas, exoneradas)
-      ) {
+      if (!materia || nombresValidos.has(nombreMateria)) {
         return;
       }
-      materiasValidas.push(nombreMateria);
+      const esExamen = esPeriodoExamenesPlanificado(semestre);
+      const materiaValidaParaPeriodo = esExamen
+        ? !exoneradas.has(nombreMateria) && materiaHabilitadaParaExamen(materia, aprobadas, exoneradas, incluirCreditosActuales)
+        : !yaConsideradas.has(nombreMateria) && materiaHabilitadaParaPlan(materia, aprobadas, exoneradas, incluirCreditosActuales);
+      if (!materiaValidaParaPeriodo) {
+        return;
+      }
+      materiasValidas.push(materiaNormalizada);
+      nombresValidos.add(nombreMateria);
     });
 
-    materiasValidas.forEach((nombreMateria) => {
-      aprobadas.add(nombreMateria);
-      exoneradas.add(nombreMateria);
-      yaConsideradas.add(nombreMateria);
+    materiasValidas.forEach((materiaPlanificada) => {
+      aplicarMateriaAlContextoPlanificacion(materiaPlanificada, semestre, aprobadas, exoneradas, yaConsideradas);
     });
 
     planificacionNormalizada.push({
@@ -879,13 +1032,18 @@ function normalizarPlanificacion() {
 
 function obtenerMateriasDisponiblesParaPlan(indiceSemestre) {
   const semestrePlanificado = planificacionSemestres[indiceSemestre];
-  const seleccionadasActuales = new Set(semestrePlanificado?.materias ?? []);
+  const seleccionadasActuales = new Set(obtenerNombresMateriasPlanificadas(semestrePlanificado?.materias ?? []));
   const { aprobadas, exoneradas, yaConsideradas } = obtenerContextoPlanificacion(indiceSemestre);
+  const esExamen = esPeriodoExamenesPlanificado(semestrePlanificado?.semestre);
+  const incluirCreditosActuales = planificacionUsaEstadoActual;
 
   return Materias.filter((materia) => (
     !seleccionadasActuales.has(materia.nombre) &&
-    !yaConsideradas.has(materia.nombre) &&
-    materiaHabilitadaParaPlan(materia, aprobadas, exoneradas)
+    (
+      esExamen
+        ? !exoneradas.has(materia.nombre) && materiaHabilitadaParaExamen(materia, aprobadas, exoneradas, incluirCreditosActuales)
+        : !yaConsideradas.has(materia.nombre) && materiaHabilitadaParaPlan(materia, aprobadas, exoneradas, incluirCreditosActuales)
+    )
   )).sort((materia1, materia2) => materia1.nombreCompleto.localeCompare(materia2.nombreCompleto));
 }
 
@@ -899,24 +1057,62 @@ function crearBotonPlanificador(texto, color, onClick) {
   return button;
 }
 
+function cambiarUsoEstadoActualPlanificacion(usarEstadoActual) {
+  planificacionUsaEstadoActual = usarEstadoActual;
+  renderizarPlanificacion();
+}
+
+function renderizarToggleEstadoPlanificador() {
+  const container = document.createElement("div");
+  container.classList.add("planificador-bloque", "container-item-config", "planificador-toggle-estado");
+
+  const label = document.createElement("label");
+  label.htmlFor = "toggle-estado-actual-planificador";
+  label.textContent = "Usar estado actual";
+
+  const switchLabel = document.createElement("label");
+  switchLabel.classList.add("switch");
+
+  const input = document.createElement("input");
+  input.type = "checkbox";
+  input.id = "toggle-estado-actual-planificador";
+  input.classList.add("switch-input");
+  input.checked = planificacionUsaEstadoActual;
+  input.onchange = () => cambiarUsoEstadoActualPlanificacion(input.checked);
+
+  const slider = document.createElement("span");
+  slider.classList.add("switch-slider");
+  slider.setAttribute("aria-hidden", "true");
+
+  switchLabel.append(input);
+  switchLabel.append(slider);
+  container.append(label);
+  container.append(switchLabel);
+
+  return container;
+}
+
 function renderizarExoneradasPlanificador() {
   const detalles = document.createElement("details");
   detalles.classList.add("planificador-bloque");
+  const aprobadasBase = obtenerAprobadasBasePlanificacion();
+  const exoneradasBase = obtenerExoneradasBasePlanificacion();
+  const incluirCreditosActuales = planificacionUsaEstadoActual;
 
   const resumen = document.createElement("summary");
-  resumen.textContent = `Materias exoneradas (${historialExoneradas.size})`;
+  resumen.textContent = `Materias exoneradas (${exoneradasBase.size})`;
   detalles.append(resumen);
 
   const lista = document.createElement("div");
   lista.classList.add("planificador-lista-botones");
 
   Materias.forEach((materia) => {
-    const estaExonerada = historialExoneradas.has(materia.nombre);
-    const estaAprobada = historialAprobadas.has(materia.nombre);
-    const habilitada = materia.estado === Estado.HABILITADA || materia.estado === Estado.APROBADA || materia.estado === Estado.EXONERADA;
+    const estaExonerada = exoneradasBase.has(materia.nombre);
+    const estaAprobada = aprobadasBase.has(materia.nombre);
+    const habilitada = estaAprobada || materiaHabilitadaParaPlan(materia, aprobadasBase, exoneradasBase, incluirCreditosActuales);
     const color = estaExonerada ? colorExonerada : (estaAprobada ? colorAprobada : (habilitada ? colorHabilitada : colorDeshabilitada));
     const button = crearBotonPlanificador(materia.nombreCompleto, color, () => toggleExoneradaPlanificador(materia.nombre));
-    button.disabled = !habilitada;
+    button.disabled = !habilitada && !estaExonerada && !estaAprobada;
     lista.append(button);
   });
 
@@ -928,7 +1124,7 @@ function crearSelectorSemestrePlanificado(indiceSemestre, semestreActual) {
   const select = document.createElement("select");
   select.classList.add("selector-planificador");
 
-  [Semestre.PRIMERO, Semestre.SEGUNDO].forEach((semestre) => {
+  [Semestre.PRIMERO, Semestre.SEGUNDO, PeriodoPlanificado.EXAMENES].forEach((semestre) => {
     const option = document.createElement("option");
     option.value = semestre;
     option.textContent = textoSemestrePlanificado(semestre);
@@ -938,6 +1134,24 @@ function crearSelectorSemestrePlanificado(indiceSemestre, semestreActual) {
 
   select.onchange = () => cambiarSemestrePlanificado(indiceSemestre, select.value);
   return select;
+}
+
+function obtenerColorResultadoPlanificado(resultado) {
+  if (resultado === ResultadoPlanificado.CURSO) return colorAprobada;
+  if (resultado === ResultadoPlanificado.EXONERADA) return colorExonerada;
+  return colorHabilitada;
+}
+
+function obtenerSiguienteResultadoPlanificado(resultado, semestre) {
+  if (esPeriodoExamenesPlanificado(semestre)) {
+    return resultado === ResultadoPlanificado.EXONERADA
+      ? ResultadoPlanificado.HABILITADA
+      : ResultadoPlanificado.EXONERADA;
+  }
+
+  if (resultado === ResultadoPlanificado.HABILITADA) return ResultadoPlanificado.CURSO;
+  if (resultado === ResultadoPlanificado.CURSO) return ResultadoPlanificado.EXONERADA;
+  return ResultadoPlanificado.HABILITADA;
 }
 
 function renderizarSemestrePlanificado(semestrePlanificado, indiceSemestre) {
@@ -953,10 +1167,11 @@ function renderizarSemestrePlanificado(semestrePlanificado, indiceSemestre) {
 
   const summary = document.createElement("summary");
   summary.classList.add("planificador-summary");
-  const cantidadMaterias = semestrePlanificado.materias.length;
-  const cantidadCreditos = calcularCreditosMaterias(semestrePlanificado.materias);
+  const materiasPlanificadas = Array.isArray(semestrePlanificado.materias) ? semestrePlanificado.materias : [];
+  const cantidadMaterias = materiasPlanificadas.length;
+  const cantidadCreditos = calcularCreditosMaterias(obtenerNombresExoneradasPlanificadas(materiasPlanificadas, semestrePlanificado.semestre));
   const totalCreditos = calcularCreditosPlanHastaSemestre(indiceSemestre);
-  summary.textContent = `Semestre ${indiceSemestre + 1} (${cantidadMaterias} materias, ${cantidadCreditos} créditos, total ${totalCreditos})`;
+  summary.textContent = `${tituloPeriodoPlanificado(semestrePlanificado.semestre)} (${cantidadMaterias} materias, ${cantidadCreditos} créditos, total ${totalCreditos})`;
   container.append(summary);
 
   const encabezado = document.createElement("div");
@@ -970,19 +1185,30 @@ function renderizarSemestrePlanificado(semestrePlanificado, indiceSemestre) {
   container.append(crearLineaAreaSubrayada("Seleccionadas"));
   const seleccionadas = document.createElement("div");
   seleccionadas.classList.add("planificador-lista-botones");
-  if (semestrePlanificado.materias.length === 0) {
+  if (materiasPlanificadas.length === 0) {
     seleccionadas.append(crearLinea("Sin materias seleccionadas."));
   } else {
-    semestrePlanificado.materias.forEach((nombreMateria) => {
+    materiasPlanificadas.forEach((materiaPlanificada) => {
+      const nombreMateria = obtenerNombreMateriaPlanificada(materiaPlanificada);
       const materia = encontrarMateriaPorNombre(nombreMateria);
+      if (!materia) return;
+      const resultado = obtenerResultadoMateriaPlanificada(materiaPlanificada, semestrePlanificado.semestre);
       const seDicta = materiaSeDictaEnSemestrePlanificado(materia, semestrePlanificado.semestre);
       const textoBoton = seDicta ? materia.nombreCompleto : `${materia.nombreCompleto} (no se dicta)`;
-      const button = crearBotonPlanificador(textoBoton, colorAprobada, () => quitarMateriaPlanificada(indiceSemestre, nombreMateria));
+      const color = obtenerColorResultadoPlanificado(resultado);
+      const fila = document.createElement("div");
+      fila.classList.add("planificador-materia-seleccionada");
+      const button = crearBotonPlanificador(textoBoton, color, () => avanzarResultadoMateriaPlanificada(indiceSemestre, nombreMateria));
+      const botonEliminar = crearBotonPlanificador("X", colorDeshabilitada, () => quitarMateriaPlanificada(indiceSemestre, nombreMateria));
+      botonEliminar.classList.add("boton-planificador-eliminar");
+      botonEliminar.title = "Eliminar de la planificación";
       if (!seDicta) {
         button.classList.add("materia-fuera-semestre");
         button.title = "Esta materia no se dicta en el semestre seleccionado o no aparece en Bedelías.";
       }
-      seleccionadas.append(button);
+      fila.append(button);
+      fila.append(botonEliminar);
+      seleccionadas.append(fila);
     });
   }
   container.append(seleccionadas);
@@ -1028,6 +1254,7 @@ function renderizarSemestrePlanificado(semestrePlanificado, indiceSemestre) {
 }
 
 function renderizarPlanificacion() {
+  normalizarExoneradasBasePlanificacion();
   normalizarPlanificacion();
   guardarPlanificacion();
 
@@ -1038,9 +1265,10 @@ function renderizarPlanificacion() {
   titulo.classList.add("titulo-popup");
   titulo.textContent = "Planificación de semestres";
   contenedor.append(titulo);
+  contenedor.append(renderizarToggleEstadoPlanificador());
   contenedor.append(renderizarExoneradasPlanificador());
 
-  const botonAgregarSemestre = crearBotonPlanificador("Agregar semestre", "lightgray", agregarSemestrePlanificado);
+  const botonAgregarSemestre = crearBotonPlanificador("Agregar período", "lightgray", agregarSemestrePlanificado);
   contenedor.append(botonAgregarSemestre);
 
   const contenedorSemestres = document.createElement("div");
@@ -1080,17 +1308,49 @@ function cambiarSemestrePlanificado(indiceSemestre, semestre) {
   renderizarPlanificacion();
 }
 
+function avanzarResultadoMateriaPlanificada(indiceSemestre, nombreMateria) {
+  const semestrePlanificado = planificacionSemestres[indiceSemestre];
+  if (!semestrePlanificado) return;
+
+  semestrePlanificado.materias = semestrePlanificado.materias.map((materiaPlanificada) => (
+    obtenerNombreMateriaPlanificada(materiaPlanificada) === nombreMateria
+      ? crearMateriaPlanificada(
+        nombreMateria,
+        semestrePlanificado.semestre,
+        obtenerSiguienteResultadoPlanificado(
+          obtenerResultadoMateriaPlanificada(materiaPlanificada, semestrePlanificado.semestre),
+          semestrePlanificado.semestre
+        )
+      )
+      : materiaPlanificada
+  ));
+  renderizarPlanificacion();
+}
+
 function agregarMateriaPlanificada(indiceSemestre, nombreMateria) {
-  planificacionSemestres[indiceSemestre].materias.push(nombreMateria);
+  const semestre = planificacionSemestres[indiceSemestre]?.semestre;
+  planificacionSemestres[indiceSemestre].materias.push(crearMateriaPlanificada(nombreMateria, semestre));
   renderizarPlanificacion();
 }
 
 function quitarMateriaPlanificada(indiceSemestre, nombreMateria) {
-  planificacionSemestres[indiceSemestre].materias = planificacionSemestres[indiceSemestre].materias.filter((materia) => materia !== nombreMateria);
+  planificacionSemestres[indiceSemestre].materias = planificacionSemestres[indiceSemestre].materias.filter((materia) => (
+    obtenerNombreMateriaPlanificada(materia) !== nombreMateria
+  ));
   renderizarPlanificacion();
 }
 
 function toggleExoneradaPlanificador(nombreMateria) {
+  if (!planificacionUsaEstadoActual) {
+    if (planificacionExoneradasBase.has(nombreMateria)) {
+      planificacionExoneradasBase.delete(nombreMateria);
+    } else {
+      planificacionExoneradasBase.add(nombreMateria);
+    }
+    renderizarPlanificacion();
+    return;
+  }
+
   if (historialExoneradas.has(nombreMateria)) {
     historialExoneradas.delete(nombreMateria);
     historialAprobadas.delete(nombreMateria);

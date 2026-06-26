@@ -3084,7 +3084,7 @@
     "reglaHabilitacion": null,
     "semestre": "ambos",
     "esOpcional": false,
-    "esLibre": false,
+    "esLibre": true,
     "seDa": true,
     "informacion": [
       {
@@ -3097,7 +3097,7 @@
       },
       {
         "nombre": "Programa",
-        "valor": "https://eva.fing.edu.uy/pluginfile.php/499136/mod_resource/content/1/Programa_UC_Matematica_Inicial_modificado.pdf"
+        "valor": "https://eva.fing.edu.uy/pluginfile.php/38952/mod_resource/content/1/Programa_UC_Matematica_Inicial_modificado.pdf"
       }
     ]
   },

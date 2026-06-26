@@ -510,6 +510,10 @@ main {
     margin-bottom: 10px;
 }
 
+.planificador-toggle-estado {
+    justify-content: space-between;
+}
+
 .planificador-encabezado {
     display: flex;
     align-items: center;
@@ -554,6 +558,31 @@ main {
 .selector-planificador {
     padding: 6px;
     min-width: 130px;
+}
+
+.planificador-materia-seleccionada {
+    display: flex;
+    align-items: stretch;
+    justify-content: center;
+    flex-wrap: nowrap;
+    gap: 0;
+    max-width: 100%;
+    min-width: 0;
+}
+
+.planificador-materia-seleccionada .boton-planificador:first-child {
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+    min-width: 0;
+    overflow-wrap: anywhere;
+}
+
+.boton-planificador-eliminar {
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+    min-width: 34px;
+    padding-left: 10px;
+    padding-right: 10px;
 }
 
 .planificador-agregar {
@@ -810,6 +839,16 @@ main {
     .selector-planificador,
     .boton-planificador {
         width: 100%;
+    }
+
+    .planificador-materia-seleccionada .boton-planificador:first-child {
+        flex: 1 1 auto;
+        width: auto;
+    }
+
+    .boton-planificador-eliminar {
+        flex: 0 0 34px;
+        width: 34px;
     }
 
     .planificador-agregar {
