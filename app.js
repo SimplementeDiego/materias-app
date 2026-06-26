@@ -4,6 +4,7 @@ const LocalStorageNombres = Object.freeze({
   materiasAprobadas: "materiasAprobadas",
   materiasExoneradas: "materiasExoneradas",
   semestre : "semestre",
+  vistaSeleccionada: "vistaSeleccionada",
   planificacionSemestres: "planificacionSemestres"
 });
 
@@ -95,6 +96,7 @@ let planificacionSemestres = [];
 let seleccionOpcionales = true;
 let seleccionMenu = false;
 let seleccionSemestre = Semestre.AMBOS;
+let seleccionNavbar = Semestre.AMBOS;
 let vistaPlanificacionActiva = false;
 let valorBarra = BarraPopup.Previas;
 let popUpActual = idPopupMateria;
@@ -450,9 +452,9 @@ function obtenerIdSemestreValido(idBoton) {
 
 function cambiarClaseActivaEnNav(idBoton) {
   const idBotonValido = obtenerIdNavbarValido(idBoton);
-  document.getElementById(seleccionSemestre)?.classList.remove(claseResaltarBotonEnNav);
-  seleccionSemestre = idBotonValido;
-  document.getElementById(seleccionSemestre).classList.add(claseResaltarBotonEnNav);
+  document.getElementById(seleccionNavbar)?.classList.remove(claseResaltarBotonEnNav);
+  seleccionNavbar = idBotonValido;
+  document.getElementById(seleccionNavbar).classList.add(claseResaltarBotonEnNav);
 }
 
 function mostrarVistaPlanificacion(activar) {
@@ -470,10 +472,12 @@ function mostrarVistaPlanificacion(activar) {
 }
 
 function toggleBotones(idBoton) {
-  cambiarClaseActivaEnNav(obtenerIdSemestreValido(idBoton));
+  seleccionSemestre = obtenerIdSemestreValido(idBoton);
+  cambiarClaseActivaEnNav(seleccionSemestre);
   mostrarBotonesDeMateriasQueCorresponda();
   mostrarVistaPlanificacion(false);
   localStorage.setItem(LocalStorageNombres.semestre, seleccionSemestre);
+  localStorage.setItem(LocalStorageNombres.vistaSeleccionada, seleccionSemestre);
 }
 
 function normalizarTexto(texto) {
@@ -1055,6 +1059,7 @@ function verPlanificacion() {
   cambiarClaseActivaEnNav(idBotonPlanificacion);
   mostrarVistaPlanificacion(true);
   renderizarPlanificacion();
+  localStorage.setItem(LocalStorageNombres.vistaSeleccionada, idBotonPlanificacion);
   closeNavIfMobile();
 }
 
@@ -1621,8 +1626,14 @@ async function firstLoad() {
   reconstruirEstadoPagina();
   normalizarPlanificacion();
   guardarPlanificacion();
-  if (localStorage.getItem(LocalStorageNombres.semestre)) {
-    toggleBotones(localStorage.getItem(LocalStorageNombres.semestre));
+  const semestreGuardado = localStorage.getItem(LocalStorageNombres.semestre);
+  const vistaGuardadaRaw = localStorage.getItem(LocalStorageNombres.vistaSeleccionada);
+  const vistaGuardada = obtenerIdNavbarValido(vistaGuardadaRaw ?? semestreGuardado);
+  if (vistaGuardadaRaw === idBotonPlanificacion) {
+    seleccionSemestre = obtenerIdSemestreValido(semestreGuardado);
+    verPlanificacion();
+  } else if (semestreGuardado || vistaGuardadaRaw) {
+    toggleBotones(vistaGuardada);
   }
   checkWidth();
 }
