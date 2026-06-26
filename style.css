@@ -523,10 +523,32 @@ main {
     justify-content: space-between;
 }
 
+.planificador-toggle-no-dictadas {
+    flex: 1 1 220px;
+    gap: 8px;
+    justify-content: space-between;
+    margin-top: 0;
+    max-width: 320px;
+    min-width: 0;
+    border: 1px solid rgb(224, 224, 224);
+    padding: 10px;
+    border-radius: 5px;
+}
+
+.planificador-toggle-no-dictadas label:first-child {
+    min-width: 0;
+    overflow-wrap: anywhere;
+}
+
+.planificador-toggle-no-dictadas .switch {
+    flex: 0 0 46px;
+}
+
 .planificador-encabezado {
     display: flex;
     align-items: center;
-    justify-content: space-between;
+    flex-wrap: wrap;
+    justify-content: space-around;
     gap: 8px;
     margin-bottom: 10px;
 }
@@ -810,6 +832,12 @@ main {
     .planificador-encabezado {
         align-items: stretch;
         flex-direction: column;
+    }
+
+    .planificador-toggle-no-dictadas {
+        flex: 0 0 auto;
+        max-width: 100%;
+        width: 100%;
     }
 
     .selector-planificador,

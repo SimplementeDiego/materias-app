@@ -1033,6 +1033,7 @@ function normalizarPlanificacion() {
       materias: materiasValidas,
       abierto: semestrePlanificado?.abierto !== false,
       elegirMateriasAbierto: semestrePlanificado?.elegirMateriasAbierto === true,
+      mostrarMateriasNoDictadas: semestrePlanificado?.mostrarMateriasNoDictadas === true,
     });
   });
 
@@ -1091,6 +1092,42 @@ function renderizarToggleEstadoPlanificador() {
   input.classList.add("switch-input");
   input.checked = planificacionUsaEstadoActual;
   input.onchange = () => cambiarUsoEstadoActualPlanificacion(input.checked);
+
+  const slider = document.createElement("span");
+  slider.classList.add("switch-slider");
+  slider.setAttribute("aria-hidden", "true");
+
+  switchLabel.append(input);
+  switchLabel.append(slider);
+  container.append(label);
+  container.append(switchLabel);
+
+  return container;
+}
+
+function renderizarToggleMateriasNoDictadasPlanificador(indiceSemestre, mostrarMateriasNoDictadas) {
+  const container = document.createElement("div");
+  container.classList.add("container-item-config", "planificador-toggle-no-dictadas");
+
+  const idToggle = `toggle-no-dictadas-planificador-${indiceSemestre}`;
+  const label = document.createElement("label");
+  label.htmlFor = idToggle;
+  label.textContent = "Mostrar materias fuera del período o sin inscripción";
+
+  const switchLabel = document.createElement("label");
+  switchLabel.classList.add("switch");
+
+  const input = document.createElement("input");
+  input.type = "checkbox";
+  input.id = idToggle;
+  input.classList.add("switch-input");
+  input.checked = mostrarMateriasNoDictadas;
+  input.onchange = () => {
+    if (planificacionSemestres[indiceSemestre]) {
+      planificacionSemestres[indiceSemestre].mostrarMateriasNoDictadas = input.checked;
+      renderizarPlanificacion();
+    }
+  };
 
   const slider = document.createElement("span");
   slider.classList.add("switch-slider");
@@ -1195,6 +1232,10 @@ function renderizarSemestrePlanificado(semestrePlanificado, indiceSemestre) {
   if (indiceSemestre === 0 && planificacionUsaEstadoActual) {
     encabezado.append(crearBotonPlanificador("Aplicar al estado actual", colorAprobada, aplicarPrimerPeriodoPlanificadoAlEstadoActual));
   }
+  encabezado.append(renderizarToggleMateriasNoDictadasPlanificador(
+    indiceSemestre,
+    semestrePlanificado.mostrarMateriasNoDictadas === true
+  ));
   encabezado.append(botonEliminar);
   container.append(encabezado);
 
@@ -1211,18 +1252,17 @@ function renderizarSemestrePlanificado(semestrePlanificado, indiceSemestre) {
       const resultado = obtenerResultadoMateriaPlanificada(materiaPlanificada, semestrePlanificado.semestre);
       const seDicta = materiaSeDictaEnSemestrePlanificado(materia, semestrePlanificado.semestre);
       const textoMateria = textoBotonMateria(materia);
-      const textoBoton = seDicta ? textoMateria : `${textoMateria} (no se dicta)`;
       const color = obtenerColorResultadoPlanificado(resultado);
       const fila = document.createElement("div");
       fila.classList.add("planificador-materia-seleccionada");
-      const button = crearBotonPlanificador(textoBoton, color, () => avanzarResultadoMateriaPlanificada(indiceSemestre, nombreMateria));
+      const button = crearBotonPlanificador(textoMateria, color, () => avanzarResultadoMateriaPlanificada(indiceSemestre, nombreMateria));
       const textoEliminar = `Eliminar ${materia.nombreCompleto} de la planificación`;
       const botonEliminar = crearBotonPlanificador("X", colorDeshabilitada, () => quitarMateriaPlanificada(indiceSemestre, nombreMateria), textoEliminar);
       botonEliminar.classList.add("boton-planificador-eliminar");
       botonEliminar.title = textoEliminar;
       if (!seDicta) {
         button.classList.add("materia-fuera-semestre");
-        button.title = "Esta materia no se dicta en el semestre seleccionado o no aparece en Bedelías.";
+        button.title = "Fuera del período seleccionado o sin inscripción en Bedelías.";
       }
       fila.append(button);
       fila.append(botonEliminar);
@@ -1249,23 +1289,25 @@ function renderizarSemestrePlanificado(semestrePlanificado, indiceSemestre) {
 
   const listaElegirMaterias = document.createElement("div");
   listaElegirMaterias.classList.add("planificador-lista-botones");
-  const materiasDisponibles = obtenerMateriasDisponiblesParaPlan(indiceSemestre);
+  const mostrarMateriasNoDictadas = semestrePlanificado.mostrarMateriasNoDictadas === true;
+  const materiasDisponibles = obtenerMateriasDisponiblesParaPlan(indiceSemestre).filter((materia) => (
+    mostrarMateriasNoDictadas || materiaSeDictaEnSemestrePlanificado(materia, semestrePlanificado.semestre)
+  ));
   if (materiasDisponibles.length === 0) {
     listaElegirMaterias.append(crearLinea("No hay materias habilitadas para agregar."));
   } else {
     materiasDisponibles.forEach((materia) => {
       const seDicta = materiaSeDictaEnSemestrePlanificado(materia, semestrePlanificado.semestre);
       const textoMateria = textoBotonMateria(materia);
-      const textoBoton = seDicta ? textoMateria : `${textoMateria} (no se dicta)`;
       const button = crearBotonPlanificador(
-        textoBoton,
+        textoMateria,
         colorHabilitada,
         () => agregarMateriaPlanificada(indiceSemestre, materia.nombre),
         `Agregar ${textoMateria} a la planificación`
       );
       if (!seDicta) {
         button.classList.add("materia-fuera-semestre");
-        button.title = "Esta materia no se dicta en el semestre seleccionado o no aparece en Bedelías.";
+        button.title = "Fuera del período seleccionado o sin inscripción en Bedelías.";
       }
       listaElegirMaterias.append(button);
     });
