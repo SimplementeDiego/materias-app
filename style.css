@@ -559,11 +559,6 @@ main {
     transform: scale(0.95);
 }
 
-.boton-planificador-mas {
-    font-size: 1.2rem;
-    min-width: 40px;
-}
-
 .selector-planificador {
     padding: 6px;
     min-width: 130px;
@@ -594,42 +589,15 @@ main {
     padding-right: 10px;
 }
 
-.planificador-agregar {
-    display: flex;
-    align-items: center;
-    gap: 8px;
+.planificador-elegir-materias {
     margin-top: 10px;
     width: 100%;
     max-width: 100%;
     min-width: 0;
 }
 
-.planificador-selector-container {
-    display: grid;
-    grid-template-columns: minmax(0, 1fr) auto;
-    flex: 1 1 auto;
-    gap: 8px;
-    max-width: 100%;
-    min-width: 0;
-}
-
-.selector-planificador-materia {
-    width: 100%;
-    max-width: 100%;
-    min-width: 0;
-    padding: 6px;
-}
-
-.oculto {
-    display: none;
-}
-
 .materia-fuera-semestre {
     border: 2px solid #b00020;
-}
-
-.materia-fuera-semestre-option {
-    background-color: #fff3cd;
 }
 
 /* Aca terminan las clases estaticas que aparecen en el HTML */
@@ -857,24 +825,5 @@ main {
     .boton-planificador-eliminar {
         flex: 0 0 34px;
         width: 34px;
-    }
-
-    .planificador-agregar {
-        align-items: stretch;
-        flex-direction: column;
-    }
-
-    .planificador-selector-container {
-        align-items: stretch;
-        display: flex;
-        flex-direction: column;
-    }
-
-    .planificador-selector-container.oculto {
-        display: none;
-    }
-
-    .selector-planificador-materia {
-        width: 100%;
     }
 }

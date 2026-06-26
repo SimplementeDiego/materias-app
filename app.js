@@ -734,6 +734,14 @@ function calcularCreditosMateria(materia) {
   return obtenerAportesMateria(materia).reduce((total, { creditos }) => total + creditos, 0);
 }
 
+function textoBotonMateria(materia) {
+  let texto = `${materia.nombreCompleto} (${calcularCreditosMateria(materia)})`;
+  if (materia.esOpcional) {
+    texto += "*";
+  }
+  return texto;
+}
+
 function calcularCreditosMaterias(nombresMaterias) {
   return nombresMaterias.reduce((total, nombreMateria) => {
     const materia = encontrarMateriaPorNombre(nombreMateria);
@@ -1024,6 +1032,7 @@ function normalizarPlanificacion() {
       semestre,
       materias: materiasValidas,
       abierto: semestrePlanificado?.abierto !== false,
+      elegirMateriasAbierto: semestrePlanificado?.elegirMateriasAbierto === true,
     });
   });
 
@@ -1114,7 +1123,7 @@ function renderizarExoneradasPlanificador() {
     const estaAprobada = aprobadasBase.has(materia.nombre);
     const habilitada = estaAprobada || materiaHabilitadaParaPlan(materia, aprobadasBase, exoneradasBase, incluirCreditosActuales);
     const color = estaExonerada ? colorExonerada : (estaAprobada ? colorAprobada : (habilitada ? colorHabilitada : colorDeshabilitada));
-    const button = crearBotonPlanificador(materia.nombreCompleto, color, () => toggleExoneradaPlanificador(materia.nombre));
+    const button = crearBotonPlanificador(textoBotonMateria(materia), color, () => toggleExoneradaPlanificador(materia.nombre));
     button.disabled = !habilitada && !estaExonerada && !estaAprobada;
     lista.append(button);
   });
@@ -1201,7 +1210,8 @@ function renderizarSemestrePlanificado(semestrePlanificado, indiceSemestre) {
       if (!materia) return;
       const resultado = obtenerResultadoMateriaPlanificada(materiaPlanificada, semestrePlanificado.semestre);
       const seDicta = materiaSeDictaEnSemestrePlanificado(materia, semestrePlanificado.semestre);
-      const textoBoton = seDicta ? materia.nombreCompleto : `${materia.nombreCompleto} (no se dicta)`;
+      const textoMateria = textoBotonMateria(materia);
+      const textoBoton = seDicta ? textoMateria : `${textoMateria} (no se dicta)`;
       const color = obtenerColorResultadoPlanificado(resultado);
       const fila = document.createElement("div");
       fila.classList.add("planificador-materia-seleccionada");
@@ -1221,48 +1231,47 @@ function renderizarSemestrePlanificado(semestrePlanificado, indiceSemestre) {
   }
   container.append(seleccionadas);
 
-  const agregarContainer = document.createElement("div");
-  agregarContainer.classList.add("planificador-agregar");
+  const elegirMaterias = document.createElement("details");
+  elegirMaterias.classList.add("planificador-elegir-materias");
+  elegirMaterias.open = semestrePlanificado.elegirMateriasAbierto === true;
+  elegirMaterias.ontoggle = (event) => {
+    event.stopPropagation();
+    if (planificacionSemestres[indiceSemestre]) {
+      planificacionSemestres[indiceSemestre].elegirMateriasAbierto = elegirMaterias.open;
+      guardarPlanificacion();
+    }
+  };
+
+  const resumenElegirMaterias = document.createElement("summary");
+  resumenElegirMaterias.classList.add("planificador-summary");
+  resumenElegirMaterias.textContent = "Elegir materias";
+  elegirMaterias.append(resumenElegirMaterias);
+
+  const listaElegirMaterias = document.createElement("div");
+  listaElegirMaterias.classList.add("planificador-lista-botones");
   const materiasDisponibles = obtenerMateriasDisponiblesParaPlan(indiceSemestre);
   if (materiasDisponibles.length === 0) {
-    agregarContainer.append(crearLinea("No hay materias habilitadas para agregar."));
+    listaElegirMaterias.append(crearLinea("No hay materias habilitadas para agregar."));
   } else {
-    const botonMostrarSelector = crearBotonPlanificador("+", colorHabilitada, () => {
-      const selectorOculto = selectorContainer.classList.toggle("oculto");
-      botonMostrarSelector.setAttribute("aria-expanded", String(!selectorOculto));
-    }, "Mostrar materias para agregar");
-    botonMostrarSelector.classList.add("boton-planificador-mas");
-    botonMostrarSelector.title = "Mostrar materias para agregar";
-    botonMostrarSelector.setAttribute("aria-expanded", "false");
-
-    const selectorContainer = document.createElement("div");
-    selectorContainer.id = `selector-planificador-materia-${indiceSemestre}`;
-    selectorContainer.classList.add("planificador-selector-container");
-    selectorContainer.classList.add("oculto");
-    botonMostrarSelector.setAttribute("aria-controls", selectorContainer.id);
-
-    const select = document.createElement("select");
-    select.classList.add("selector-planificador-materia");
-    select.setAttribute("aria-label", "Materia para agregar a la planificación");
     materiasDisponibles.forEach((materia) => {
       const seDicta = materiaSeDictaEnSemestrePlanificado(materia, semestrePlanificado.semestre);
-      const option = document.createElement("option");
-      option.value = materia.nombre;
-      option.textContent = seDicta ? materia.nombreCompleto : `${materia.nombreCompleto} (no se dicta)`;
+      const textoMateria = textoBotonMateria(materia);
+      const textoBoton = seDicta ? textoMateria : `${textoMateria} (no se dicta)`;
+      const button = crearBotonPlanificador(
+        textoBoton,
+        colorHabilitada,
+        () => agregarMateriaPlanificada(indiceSemestre, materia.nombre),
+        `Agregar ${textoMateria} a la planificación`
+      );
       if (!seDicta) {
-        option.classList.add("materia-fuera-semestre-option");
-        option.title = "Esta materia no se dicta en el semestre seleccionado o no aparece en Bedelías.";
+        button.classList.add("materia-fuera-semestre");
+        button.title = "Esta materia no se dicta en el semestre seleccionado o no aparece en Bedelías.";
       }
-      select.append(option);
+      listaElegirMaterias.append(button);
     });
-
-    const botonAgregar = crearBotonPlanificador("Agregar", colorHabilitada, () => agregarMateriaPlanificada(indiceSemestre, select.value));
-    selectorContainer.append(select);
-    selectorContainer.append(botonAgregar);
-    agregarContainer.append(botonMostrarSelector);
-    agregarContainer.append(selectorContainer);
   }
-  container.append(agregarContainer);
+  elegirMaterias.append(listaElegirMaterias);
+  container.append(elegirMaterias);
 
   return container;
 }
@@ -1680,10 +1689,7 @@ function crearBotonesMaterias(){
 
     var button = document.createElement("button");
     button.classList.add("boton-materia")
-    button.textContent = `${materia.nombreCompleto} (${materia.creditos})` ;
-    if (materia.esOpcional) {
-      button.textContent += "*";
-    }
+    button.textContent = textoBotonMateria(materia);
     button.id = materia.nombre;
 
     if (!materia.se_da) {
