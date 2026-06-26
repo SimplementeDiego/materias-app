@@ -461,7 +461,16 @@ main {
 .icono-basura {
     height: 15px;
     width: 13px;
+}
+
+.boton-eliminar-registro {
+    align-items: center;
+    background: transparent;
+    border: none;
     cursor: pointer;
+    display: flex;
+    justify-content: center;
+    padding: 4px;
 }
 
 #select-agregar-creditos, #input-agregar-creditos, #boton-agregar-creditos {

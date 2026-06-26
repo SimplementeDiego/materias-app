@@ -1126,6 +1126,7 @@ function renderizarExoneradasPlanificador() {
 function crearSelectorSemestrePlanificado(indiceSemestre, semestreActual) {
   const select = document.createElement("select");
   select.classList.add("selector-planificador");
+  select.setAttribute("aria-label", "Tipo de período planificado");
 
   [Semestre.PRIMERO, Semestre.SEGUNDO, PeriodoPlanificado.EXAMENES].forEach((semestre) => {
     const option = document.createElement("option");
@@ -1182,6 +1183,9 @@ function renderizarSemestrePlanificado(semestrePlanificado, indiceSemestre) {
 
   const botonEliminar = crearBotonPlanificador("Eliminar", colorDeshabilitada, () => eliminarSemestrePlanificado(indiceSemestre));
   encabezado.append(crearSelectorSemestrePlanificado(indiceSemestre, semestrePlanificado.semestre));
+  if (indiceSemestre === 0 && planificacionUsaEstadoActual) {
+    encabezado.append(crearBotonPlanificador("Aplicar al estado actual", colorAprobada, aplicarPrimerPeriodoPlanificadoAlEstadoActual));
+  }
   encabezado.append(botonEliminar);
   container.append(encabezado);
 
@@ -1239,6 +1243,7 @@ function renderizarSemestrePlanificado(semestrePlanificado, indiceSemestre) {
 
     const select = document.createElement("select");
     select.classList.add("selector-planificador-materia");
+    select.setAttribute("aria-label", "Materia para agregar a la planificación");
     materiasDisponibles.forEach((materia) => {
       const seDicta = materiaSeDictaEnSemestrePlanificado(materia, semestrePlanificado.semestre);
       const option = document.createElement("option");
@@ -1309,6 +1314,26 @@ function agregarSemestrePlanificado() {
 
 function eliminarSemestrePlanificado(indiceSemestre) {
   planificacionSemestres.splice(indiceSemestre, 1);
+  renderizarPlanificacion();
+}
+
+function aplicarPrimerPeriodoPlanificadoAlEstadoActual() {
+  const primerPeriodo = planificacionSemestres[0];
+  if (!primerPeriodo) return;
+
+  (primerPeriodo.materias ?? []).forEach((materiaPlanificada) => {
+    const nombreMateria = obtenerNombreMateriaPlanificada(materiaPlanificada);
+    const resultado = obtenerResultadoMateriaPlanificada(materiaPlanificada, primerPeriodo.semestre);
+    if (!nombreMateria || resultado === ResultadoPlanificado.HABILITADA) return;
+
+    historialAprobadas.add(nombreMateria);
+    if (resultado === ResultadoPlanificado.EXONERADA) {
+      historialExoneradas.add(nombreMateria);
+    }
+  });
+
+  planificacionSemestres.shift();
+  reconstruirEstadoPagina();
   renderizarPlanificacion();
 }
 
@@ -1788,20 +1813,25 @@ function actualizarRegistros() {
     divCreditos.textContent = String(creditos);
     const divEliminar = document.createElement("div");
     divEliminar.classList.add("entrada-eliminar");
-    const iconoBasura = document.createElement("img");
-    iconoBasura.onclick = () => {
+    const botonEliminar = document.createElement("button");
+    botonEliminar.type = "button";
+    botonEliminar.classList.add("boton-eliminar-registro");
+    botonEliminar.setAttribute("aria-label", `Eliminar ajuste de ${creditos} créditos en ${TraduccionBloqueCreditos[area]}`);
+    botonEliminar.onclick = () => {
       registros.splice(index, 1);
       creditosPorArea.set(area, (creditosPorArea.get(area) ?? 0) - creditos);
       actualizarRegistros();
       reconstruirEstadoPagina();
       renderizarPlanificacionSiActiva();
     }
+    const iconoBasura = document.createElement("img");
     iconoBasura.width = 15;
     iconoBasura.height = 15;
     iconoBasura.src = "icons/basura-resized.webp";
     iconoBasura.alt = "Eliminar registro";
     iconoBasura.className = "icono-basura";
-    divEliminar.append(iconoBasura);
+    botonEliminar.append(iconoBasura);
+    divEliminar.append(botonEliminar);
     columnaArea.appendChild(divArea);
     columnaCreditos.appendChild(divCreditos);
     columnaFecha.appendChild(divEliminar);
