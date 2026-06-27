@@ -11,6 +11,10 @@ button {
     -webkit-tap-highlight-color: transparent;
 }
 
+body {
+    overflow: hidden;
+}
+
 /* HEADER */
 header {
     height: 60px;
@@ -103,6 +107,14 @@ header {
     background-color: lightsalmon;
 }
 
+#copiar-datos {
+    background-color: rgb(218, 240, 255);
+}
+
+#importar-datos {
+    background-color: rgb(228, 255, 218);
+}
+
 #planificacion {
     background-color: lightyellow;
 }
@@ -138,7 +150,7 @@ header {
 
 /* MAIN */
 main {
-    min-height: calc(100vh - 60px);
+    height: calc(100vh - 60px);
     width: 100%;
     display: flex;
 }
@@ -146,6 +158,7 @@ main {
 #secciones {
     display: flex;
     flex-direction: column;
+    overflow-x: hidden;
     overflow-y: auto;
     height: calc(100vh - 60px);
     background-color: rgb(236, 247, 255);
@@ -258,6 +271,8 @@ main {
 }
 
 .titulo-seccion {
+    cursor: pointer;
+    font-weight: bold;
     text-decoration: underline;
 }
 
@@ -391,7 +406,7 @@ main {
     outline-offset: 3px;
 }
 
-#popup-materia, #popup-respuestas, #popup-areas, #popup-lista-materias, #popup-ajustar-creditos, #popup-reset {
+#popup-materia, #popup-respuestas, #popup-areas, #popup-lista-materias, #popup-ajustar-creditos, #popup-importar-datos, #popup-reset {
     display: none;
     overflow-y: auto;
     flex: 1 1 auto;
@@ -488,12 +503,53 @@ main {
     flex-direction: column;
 }
 
+#popup-importar-datos {
+    gap: 10px;
+}
+
+#textarea-importar-datos {
+    min-height: 180px;
+    padding: 8px;
+    resize: vertical;
+    width: 100%;
+}
+
+#boton-cargar-datos {
+    cursor: pointer;
+    padding: 8px;
+    width: 100%;
+}
+
+.mensaje-usuario {
+    background-color: rgb(40, 40, 40);
+    border-radius: 5px;
+    bottom: 16px;
+    color: white;
+    left: 50%;
+    max-width: calc(100% - 32px);
+    opacity: 0;
+    padding: 10px 14px;
+    pointer-events: none;
+    position: fixed;
+    text-align: center;
+    transform: translate(-50%, 12px);
+    transition: opacity 150ms ease, transform 150ms ease;
+    z-index: 1000;
+}
+
+.mensaje-usuario.visible {
+    opacity: 1;
+    transform: translate(-50%, 0);
+}
+
 #vista-planificacion {
     align-items: stretch;
     display: none;
+    flex: 1 0 auto;
     gap: 12px;
+    height: auto;
     justify-content: flex-start;
-    min-height: calc(100vh - 80px);
+    min-height: 0;
     overflow-x: hidden;
     text-align: left;
 }
@@ -523,7 +579,8 @@ main {
     justify-content: space-between;
 }
 
-.planificador-toggle-no-dictadas {
+.planificador-toggle-no-dictadas,
+.planificador-toggle-opcionales {
     flex: 1 1 220px;
     gap: 8px;
     justify-content: space-between;
@@ -535,12 +592,14 @@ main {
     border-radius: 5px;
 }
 
-.planificador-toggle-no-dictadas label:first-child {
+.planificador-toggle-no-dictadas label:first-child,
+.planificador-toggle-opcionales label:first-child {
     min-width: 0;
     overflow-wrap: anywhere;
 }
 
-.planificador-toggle-no-dictadas .switch {
+.planificador-toggle-no-dictadas .switch,
+.planificador-toggle-opcionales .switch {
     flex: 0 0 46px;
 }
 
@@ -696,6 +755,7 @@ main {
 }
 
 #input-buscar-materia,
+#select-filtrar-semestre,
 #select-filtrar-area {
     max-width: 100%;
     min-width: 0;
@@ -741,9 +801,10 @@ main {
 
     #secciones {
         width: 100%;
-        height: fit-content;
+        height: calc(100vh - 60px);
         margin-left: 0;
-        overflow: hidden;
+        overflow-x: hidden;
+        overflow-y: auto;
     }
 
     #popup-container {
@@ -825,6 +886,7 @@ main {
     }
 
     #input-buscar-materia,
+    #select-filtrar-semestre,
     #select-filtrar-area {
         width: 100%;
     }
@@ -834,7 +896,8 @@ main {
         flex-direction: column;
     }
 
-    .planificador-toggle-no-dictadas {
+    .planificador-toggle-no-dictadas,
+    .planificador-toggle-opcionales {
         flex: 0 0 auto;
         max-width: 100%;
         width: 100%;

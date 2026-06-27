@@ -6,7 +6,7 @@
     <meta name="description" content="Materias Computación">
     <title>Materias</title>
     <link rel="icon" type="image/x-icon" href="/icons/bookmark.ico">
-    <link rel="stylesheet" href="style.css?v=3">
+    <link rel="stylesheet" href="style.css?v=6">
 </head>
 <body>
     
@@ -25,16 +25,15 @@
     <main>
 
         <nav id="navbar">
-            <button onclick="toggleBotones('primero')" id="primero" class="navbar-boton">1er Semestre</button>
-            <button onclick="toggleBotones('segundo')" id="segundo" class="navbar-boton">2do Semestre</button>
-            <button onclick="toggleBotones('ambos')" id="ambos" class="navbar-boton activo">Ambos</button>
-            <button onclick="toggleBotones('libre')" id="libre" class="navbar-boton">Calidad Libre</button>
+            <button onclick="verMaterias()" id="materias" class="navbar-boton activo">Materias</button>
             <button onclick="verPlanificacion()" id="planificacion" class="navbar-boton">Planificar</button>
             <button onclick="verAreas()" id="areas" class="navbar-boton">Ver áreas</button>
             <a class="navbar-boton link-boton" id="sugerencia" href="https://forms.gle/jN9WEGE2hGvLxeNKA">Hacer sugerencia</a>
             <button onclick="verRespuestas()" id="respuestas" class="navbar-boton">Respuestas</button>
             <button onclick="reset()" id="reset" class="navbar-boton">Reset</button>
             <button onclick="agregarCreditos()" id="ajustar-creditos" class="navbar-boton">Ajustar créditos</button>
+            <button onclick="copiarDatosAlClipboard()" id="copiar-datos" class="navbar-boton">Copiar datos</button>
+            <button onclick="abrirImportarDatos()" id="importar-datos" class="navbar-boton">Cargar datos</button>
         </nav>
 
         <div id="secciones">
@@ -117,6 +116,12 @@
                             </div>
                         </div>
                     </div>
+
+                    <div id="popup-importar-datos">
+                        <label for="textarea-importar-datos" class="titulo-popup">JSON copiado</label>
+                        <textarea id="textarea-importar-datos" aria-label="JSON de datos para cargar"></textarea>
+                        <button type="button" onclick="cargarDatosDesdeJson()" id="boton-cargar-datos">Cargar</button>
+                    </div>
                     
                     <button onclick="closePopup()" id="cerrar-popup">Cerrar</button>
                 </div>
@@ -124,11 +129,8 @@
                 
             </div>
 
-            <div id="vista-planificacion" class="container-seccion-estatico">
-            </div>
-
-            <div class="container-seccion-estatico">
-                <p class="titulo-seccion">Información</p>
+            <details id="seccion-informacion" class="container-seccion-estatico" open>
+                <summary class="titulo-seccion">Información</summary>
                 <div class="seccion-contenido">
                     <div class="info">
                         <div class="bloque-gris"></div>
@@ -155,10 +157,10 @@
                         <span>No aparece inscripción en Bedelías</span>
                     </div>
                 </div>
-            </div>
+            </details>
 
-            <div class="container-seccion-estatico">
-                <p class="titulo-seccion">Configuración</p>
+            <details id="seccion-configuracion" class="container-seccion-estatico" open>
+                <summary class="titulo-seccion">Configuración</summary>
                 <div class="seccion-contenido">
                     <div class="container-item-config infoToggles">
                         <label for="mi-toggle-MI">Matemática Inicial</label>
@@ -185,11 +187,23 @@
                         </label>
                     </div>
                 </div>
+            </details>
+
+            <div id="vista-planificacion" class="container-seccion-estatico">
             </div>
 
-            <div class="container-seccion-estatico">
-                <p class="titulo-seccion">Buscar o filtrar</p>
+            <details id="seccion-filtros" class="container-seccion-estatico" open>
+                <summary class="titulo-seccion">Buscar o filtrar</summary>
                 <div class="seccion-contenido">
+                    <div class="container-item-config info filtros">
+                        <label for="select-filtrar-semestre">Semestre</label>
+                        <select id="select-filtrar-semestre" onchange="actualizarFiltroSemestre()">
+                            <option value="primero">1er Semestre</option>
+                            <option value="segundo">2do Semestre</option>
+                            <option value="ambos" selected>Ambos</option>
+                            <option value="libre">Calidad Libre</option>
+                        </select>
+                    </div>
                     <div class="container-item-config info filtros">
                         <label for="input-buscar-materia">Materia</label>
                         <input type="search" id="input-buscar-materia" placeholder="Nombre o sigla" oninput="actualizarFiltroMaterias()">
@@ -201,13 +215,13 @@
                         </select>
                     </div>
                 </div>
-            </div>
+            </details>
 
         </div>
         
     </main>
 
-    <script src="./app.js?v=3"></script>
+    <script src="./app.js?v=6"></script>
 
 </body>
 </html>

@@ -94,11 +94,18 @@ const idPopupRespuestas = "popup-respuestas"
 const idPopupAreas = "popup-areas";
 const idPopupListaMaterias = "popup-lista-materias";
 const idPopupAjustarCreditos = "popup-ajustar-creditos";
+const idPopupImportarDatos = "popup-importar-datos";
 const idPopupReset = "popup-reset";
 const idVistaPlanificacion = "vista-planificacion";
+const idSeccionInformacion = "seccion-informacion";
+const idSeccionConfiguracion = "seccion-configuracion";
+const idSeccionFiltros = "seccion-filtros";
+const idBotonMaterias = "materias";
 const idBotonPlanificacion = "planificacion";
 const idInputBuscarMateria = "input-buscar-materia";
+const idSelectFiltrarSemestre = "select-filtrar-semestre";
 const idSelectFiltrarArea = "select-filtrar-area";
+const idTextareaImportarDatos = "textarea-importar-datos";
 
 const registros = [];
 const creditosPorArea = new Map();
@@ -110,12 +117,13 @@ let planificacionUsaEstadoActual = true;
 let seleccionOpcionales = true;
 let seleccionMenu = false;
 let seleccionSemestre = Semestre.AMBOS;
-let seleccionNavbar = Semestre.AMBOS;
+let seleccionNavbar = idBotonMaterias;
 let vistaPlanificacionActiva = false;
 let valorBarra = BarraPopup.Previas;
 let popUpActual = idPopupMateria;
 let filtroTextoMateria = "";
 let filtroAreaMateria = "";
+let timeoutMensajeUsuario;
 
 let creditosBloque = {
   creditosEnM: 0,
@@ -398,6 +406,7 @@ function toggleMI() {
   mostrarSeccionesQueCorrespondan();
   localStorage.setItem(MI.nombre, Materias.includes(MI));
   reconstruirEstadoPagina();
+  renderizarPlanificacionSiActiva();
 }
 
 function togglePlan() {
@@ -421,6 +430,7 @@ function togglePlan() {
   mostrarSeccionesQueCorrespondan();
   localStorage.setItem(FC.nombre, Materias.includes(FC));
   reconstruirEstadoPagina();
+  renderizarPlanificacionSiActiva();
 }
 
 function toggleOpcionales() {
@@ -456,8 +466,9 @@ function toggleMateria(nombre) {
 }
 
 function obtenerIdNavbarValido(idBoton) {
-  const idsValidos = [...Object.values(Semestre), idBotonPlanificacion];
-  return idsValidos.includes(idBoton) ? idBoton : Semestre.AMBOS;
+  if (Object.values(Semestre).includes(idBoton)) return idBotonMaterias;
+  const idsValidos = [idBotonMaterias, idBotonPlanificacion];
+  return idsValidos.includes(idBoton) ? idBoton : idBotonMaterias;
 }
 
 function obtenerIdSemestreValido(idBoton) {
@@ -474,9 +485,14 @@ function cambiarClaseActivaEnNav(idBoton) {
 function mostrarVistaPlanificacion(activar) {
   vistaPlanificacionActiva = activar;
   const vistaPlanificacion = document.getElementById(idVistaPlanificacion);
+  const toggleOpcionales = document.getElementById("mi-toggle-opcionales")?.closest(".container-item-config");
+  const seccionesVisiblesEnPlanificacion = new Set([idVistaPlanificacion, idSeccionInformacion, idSeccionConfiguracion]);
   vistaPlanificacion.style.display = activar ? "flex" : "none";
+  if (toggleOpcionales) {
+    toggleOpcionales.style.display = activar ? "none" : "";
+  }
   document.querySelectorAll(`#${idSecciones} > .container-seccion, #${idSecciones} > .container-seccion-estatico`).forEach((seccion) => {
-    if (seccion.id !== idVistaPlanificacion) {
+    if (!seccionesVisiblesEnPlanificacion.has(seccion.id)) {
       seccion.style.display = activar ? "none" : "";
     }
   });
@@ -485,13 +501,27 @@ function mostrarVistaPlanificacion(activar) {
   }
 }
 
-function toggleBotones(idBoton) {
-  seleccionSemestre = obtenerIdSemestreValido(idBoton);
-  cambiarClaseActivaEnNav(seleccionSemestre);
+function seleccionarSemestre(idSemestre) {
+  seleccionSemestre = obtenerIdSemestreValido(idSemestre);
+  const selectSemestre = document.getElementById(idSelectFiltrarSemestre);
+  if (selectSemestre) {
+    selectSemestre.value = seleccionSemestre;
+  }
+  mostrarBotonesDeMateriasQueCorresponda();
+  mostrarSeccionesQueCorrespondan();
+  localStorage.setItem(LocalStorageNombres.semestre, seleccionSemestre);
+}
+
+function actualizarFiltroSemestre() {
+  seleccionarSemestre(document.getElementById(idSelectFiltrarSemestre).value);
+}
+
+function verMaterias() {
+  cambiarClaseActivaEnNav(idBotonMaterias);
   mostrarBotonesDeMateriasQueCorresponda();
   mostrarVistaPlanificacion(false);
-  localStorage.setItem(LocalStorageNombres.semestre, seleccionSemestre);
-  localStorage.setItem(LocalStorageNombres.vistaSeleccionada, seleccionSemestre);
+  localStorage.setItem(LocalStorageNombres.vistaSeleccionada, idBotonMaterias);
+  closeNavIfMobile();
 }
 
 function normalizarTexto(texto) {
@@ -604,6 +634,206 @@ function leerJsonLocalStorage(nombre, valorPorDefecto) {
     return JSON.parse(guardado);
   } catch (error) {
     return valorPorDefecto;
+  }
+}
+
+function obtenerClavesLocalStorageRelevantes() {
+  return [
+    ...Object.values(LocalStorageNombres),
+    "registros",
+    "creditosPorArea",
+    MI?.nombre ?? "MI",
+    FC?.nombre ?? "FC",
+  ];
+}
+
+function crearBackupLocalStorage() {
+  const datos = {};
+  obtenerClavesLocalStorageRelevantes().forEach((clave) => {
+    const valor = localStorage.getItem(clave);
+    if (valor !== null) {
+      datos[clave] = valor;
+    }
+  });
+  return {
+    aplicacion: "materias-app",
+    version: 1,
+    exportadoEn: new Date().toISOString(),
+    datos,
+  };
+}
+
+function copiarTextoAlClipboard(texto) {
+  const copiarConTextarea = () => {
+    const textarea = document.createElement("textarea");
+    textarea.value = texto;
+    textarea.setAttribute("readonly", "");
+    textarea.style.position = "fixed";
+    textarea.style.left = "-9999px";
+    document.body.append(textarea);
+    textarea.select();
+    const copiado = document.execCommand("copy");
+    textarea.remove();
+    return copiado ? Promise.resolve() : Promise.reject(new Error("No se pudo copiar."));
+  };
+
+  if (navigator.clipboard?.writeText) {
+    return navigator.clipboard.writeText(texto).catch(copiarConTextarea);
+  }
+
+  return copiarConTextarea();
+}
+
+function mostrarMensajeUsuario(texto) {
+  let mensaje = document.getElementById("mensaje-usuario");
+  if (!mensaje) {
+    mensaje = document.createElement("div");
+    mensaje.id = "mensaje-usuario";
+    mensaje.classList.add("mensaje-usuario");
+    mensaje.setAttribute("role", "status");
+    mensaje.setAttribute("aria-live", "polite");
+    document.body.append(mensaje);
+  }
+
+  mensaje.textContent = texto;
+  mensaje.classList.add("visible");
+  clearTimeout(timeoutMensajeUsuario);
+  timeoutMensajeUsuario = setTimeout(() => {
+    mensaje.classList.remove("visible");
+  }, 3000);
+}
+
+function copiarDatosAlClipboard() {
+  const texto = JSON.stringify(crearBackupLocalStorage(), null, 2);
+  copiarTextoAlClipboard(texto)
+    .then(() => {
+      closeNavIfMobile();
+      mostrarMensajeUsuario("Datos copiados.");
+    })
+    .catch(() => {
+      mostrarMensajeUsuario("No se pudieron copiar los datos.");
+    });
+}
+
+function abrirImportarDatos() {
+  document.getElementById(idTextareaImportarDatos).value = "";
+  openPopup(idPopupImportarDatos);
+}
+
+function obtenerDatosImportados(jsonImportado) {
+  if (!jsonImportado || typeof jsonImportado !== "object" || Array.isArray(jsonImportado)) {
+    return null;
+  }
+  const datos = jsonImportado.datos ?? jsonImportado.localStorage ?? jsonImportado;
+  return datos && typeof datos === "object" && !Array.isArray(datos) ? datos : null;
+}
+
+function ocultarPopupActual() {
+  [
+    idPopupMateria,
+    idPopupRespuestas,
+    idPopupAreas,
+    idPopupListaMaterias,
+    idPopupAjustarCreditos,
+    idPopupImportarDatos,
+    idPopupReset
+  ].forEach((idPopup) => {
+    const popup = document.getElementById(idPopup);
+    if (popup) popup.style.display = "none";
+  });
+  closePopup();
+  popUpActual = idPopupMateria;
+}
+
+function reiniciarEstadoEnMemoria() {
+  registros.splice(0, registros.length);
+  creditosPorArea.clear();
+  historialAprobadas = new Set();
+  historialExoneradas = new Set();
+  planificacionSemestres = [];
+  planificacionExoneradasBase = new Set();
+  planificacionUsaEstadoActual = true;
+  seleccionOpcionales = true;
+  seleccionMenu = false;
+  seleccionSemestre = Semestre.AMBOS;
+  seleccionNavbar = idBotonMaterias;
+  vistaPlanificacionActiva = false;
+  valorBarra = BarraPopup.Previas;
+  filtroTextoMateria = "";
+  filtroAreaMateria = "";
+
+  document.getElementById(idCheckbox).checked = false;
+  document.getElementById(idHam).classList.remove("abierto");
+  document.getElementById("mi-toggle-MI").checked = false;
+  document.getElementById("mi-toggle-plan").checked = false;
+  document.getElementById("mi-toggle-opcionales").checked = true;
+  document.getElementById(idInputBuscarMateria).value = "";
+  document.getElementById(idSelectFiltrarArea).value = "";
+  document.getElementById(idTextareaImportarDatos).value = "";
+  document.getElementById(idBotonMaterias).classList.remove(claseResaltarBotonEnNav);
+  document.getElementById(idBotonPlanificacion).classList.remove(claseResaltarBotonEnNav);
+  document.getElementById(BarraPopup.Previas).classList.remove(claseResaltarBotonEnNav);
+  document.getElementById(BarraPopup.PreviaDe).classList.remove(claseResaltarBotonEnNav);
+  document.getElementById(BarraPopup.Informacion).classList.remove(claseResaltarBotonEnNav);
+  document.getElementById(idSeccionInformacion).open = true;
+  document.getElementById(idSeccionConfiguracion).open = true;
+  document.getElementById(idSeccionFiltros).open = true;
+}
+
+async function recargarEstadoDesdeStorage() {
+  ocultarPopupActual();
+  reiniciarEstadoEnMemoria();
+  await firstLoad();
+}
+
+async function cargarDatosDesdeJson() {
+  const texto = document.getElementById(idTextareaImportarDatos).value.trim();
+  if (!texto) {
+    mostrarMensajeUsuario("Ingresá el JSON a cargar.");
+    return;
+  }
+
+  let datosImportados;
+  try {
+    datosImportados = obtenerDatosImportados(JSON.parse(texto));
+  } catch (error) {
+    mostrarMensajeUsuario("El JSON ingresado no es válido.");
+    return;
+  }
+
+  if (!datosImportados) {
+    mostrarMensajeUsuario("El JSON ingresado no tiene el formato esperado.");
+    return;
+  }
+
+  const clavesRelevantes = obtenerClavesLocalStorageRelevantes();
+  const tieneClavesReconocidas = clavesRelevantes.some((clave) => (
+    Object.prototype.hasOwnProperty.call(datosImportados, clave)
+  ));
+
+  if (!tieneClavesReconocidas) {
+    mostrarMensajeUsuario("El JSON no contiene datos reconocidos para cargar.");
+    return;
+  }
+
+  clavesRelevantes.forEach((clave) => {
+    if (Object.prototype.hasOwnProperty.call(datosImportados, clave)) {
+      const valor = datosImportados[clave];
+      if (valor === null) {
+        localStorage.removeItem(clave);
+      } else {
+        localStorage.setItem(clave, typeof valor === "string" ? valor : JSON.stringify(valor));
+      }
+    } else {
+      localStorage.removeItem(clave);
+    }
+  });
+
+  try {
+    await recargarEstadoDesdeStorage();
+    mostrarMensajeUsuario("Datos cargados.");
+  } catch (error) {
+    mostrarMensajeUsuario("No se pudieron cargar los datos.");
   }
 }
 
@@ -1034,6 +1264,7 @@ function normalizarPlanificacion() {
       abierto: semestrePlanificado?.abierto !== false,
       elegirMateriasAbierto: semestrePlanificado?.elegirMateriasAbierto === true,
       mostrarMateriasNoDictadas: semestrePlanificado?.mostrarMateriasNoDictadas === true,
+      mostrarOpcionales: semestrePlanificado?.mostrarOpcionales !== false,
     });
   });
 
@@ -1141,6 +1372,42 @@ function renderizarToggleMateriasNoDictadasPlanificador(indiceSemestre, mostrarM
   return container;
 }
 
+function renderizarToggleOpcionalesPlanificador(indiceSemestre, mostrarOpcionales) {
+  const container = document.createElement("div");
+  container.classList.add("container-item-config", "planificador-toggle-opcionales");
+
+  const idToggle = `toggle-opcionales-planificador-${indiceSemestre}`;
+  const label = document.createElement("label");
+  label.htmlFor = idToggle;
+  label.textContent = "Mostrar opcionales";
+
+  const switchLabel = document.createElement("label");
+  switchLabel.classList.add("switch");
+
+  const input = document.createElement("input");
+  input.type = "checkbox";
+  input.id = idToggle;
+  input.classList.add("switch-input");
+  input.checked = mostrarOpcionales;
+  input.onchange = () => {
+    if (planificacionSemestres[indiceSemestre]) {
+      planificacionSemestres[indiceSemestre].mostrarOpcionales = input.checked;
+      renderizarPlanificacion();
+    }
+  };
+
+  const slider = document.createElement("span");
+  slider.classList.add("switch-slider");
+  slider.setAttribute("aria-hidden", "true");
+
+  switchLabel.append(input);
+  switchLabel.append(slider);
+  container.append(label);
+  container.append(switchLabel);
+
+  return container;
+}
+
 function renderizarExoneradasPlanificador() {
   const detalles = document.createElement("details");
   detalles.classList.add("planificador-bloque");
@@ -1232,6 +1499,10 @@ function renderizarSemestrePlanificado(semestrePlanificado, indiceSemestre) {
   if (indiceSemestre === 0 && planificacionUsaEstadoActual) {
     encabezado.append(crearBotonPlanificador("Aplicar al estado actual", colorAprobada, aplicarPrimerPeriodoPlanificadoAlEstadoActual));
   }
+  encabezado.append(renderizarToggleOpcionalesPlanificador(
+    indiceSemestre,
+    semestrePlanificado.mostrarOpcionales !== false
+  ));
   encabezado.append(renderizarToggleMateriasNoDictadasPlanificador(
     indiceSemestre,
     semestrePlanificado.mostrarMateriasNoDictadas === true
@@ -1290,8 +1561,10 @@ function renderizarSemestrePlanificado(semestrePlanificado, indiceSemestre) {
   const listaElegirMaterias = document.createElement("div");
   listaElegirMaterias.classList.add("planificador-lista-botones");
   const mostrarMateriasNoDictadas = semestrePlanificado.mostrarMateriasNoDictadas === true;
+  const mostrarOpcionales = semestrePlanificado.mostrarOpcionales !== false;
   const materiasDisponibles = obtenerMateriasDisponiblesParaPlan(indiceSemestre).filter((materia) => (
-    mostrarMateriasNoDictadas || materiaSeDictaEnSemestrePlanificado(materia, semestrePlanificado.semestre)
+    (mostrarOpcionales || !materia.esOpcional) &&
+    (mostrarMateriasNoDictadas || materiaSeDictaEnSemestrePlanificado(materia, semestrePlanificado.semestre))
   ));
   if (materiasDisponibles.length === 0) {
     listaElegirMaterias.append(crearLinea("No hay materias habilitadas para agregar."));
@@ -1359,7 +1632,7 @@ function verPlanificacion() {
 function agregarSemestrePlanificado() {
   const ultimoSemestre = planificacionSemestres[planificacionSemestres.length - 1]?.semestre;
   const proximoSemestre = ultimoSemestre === Semestre.PRIMERO ? Semestre.SEGUNDO : Semestre.PRIMERO;
-  planificacionSemestres.push({ semestre: proximoSemestre, materias: [], abierto: true });
+  planificacionSemestres.push({ semestre: proximoSemestre, materias: [], abierto: true, mostrarOpcionales: true });
   renderizarPlanificacion();
 }
 
@@ -1792,7 +2065,7 @@ function crearBotonesMaterias(){
 
 document.addEventListener("scroll", function() {
   seScrolleo = true;
-});
+}, true);
 
 // Funciones y eventos de manejo de tamaño de ventana
 
@@ -1893,7 +2166,7 @@ function eventoAjustarCreditos() {
   const creditos = Number(document.getElementById("input-agregar-creditos").value);
   if (creditos!=0) {
     if (!Number.isInteger(creditos)) {
-      alert("Créditos debe ser un entero");
+      mostrarMensajeUsuario("Créditos debe ser un entero.");
       return;
     }
     creditosPorArea.set(area, (creditosPorArea.get(area) ?? 0) + creditos);
@@ -1924,7 +2197,11 @@ function rehacerPaginaSinEstado(){
   asignarPesos();
   crearSeccionesParaMaterias();
   crearBotonesMaterias();
-  mostrarSeccionesQueCorrespondan();
+  if (vistaPlanificacionActiva) {
+    mostrarVistaPlanificacion(true);
+  } else {
+    mostrarSeccionesQueCorrespondan();
+  }
 }
 
 async function firstLoad() {
@@ -1975,12 +2252,12 @@ async function firstLoad() {
   guardarPlanificacion();
   const semestreGuardado = localStorage.getItem(LocalStorageNombres.semestre);
   const vistaGuardadaRaw = localStorage.getItem(LocalStorageNombres.vistaSeleccionada);
-  const vistaGuardada = obtenerIdNavbarValido(vistaGuardadaRaw ?? semestreGuardado);
+  const semestreDesdeVistaAnterior = Object.values(Semestre).includes(vistaGuardadaRaw) ? vistaGuardadaRaw : null;
+  seleccionarSemestre(semestreGuardado ?? semestreDesdeVistaAnterior ?? Semestre.AMBOS);
   if (vistaGuardadaRaw === idBotonPlanificacion) {
-    seleccionSemestre = obtenerIdSemestreValido(semestreGuardado);
     verPlanificacion();
-  } else if (semestreGuardado || vistaGuardadaRaw) {
-    toggleBotones(vistaGuardada);
+  } else {
+    verMaterias();
   }
   checkWidth();
 }
