@@ -796,15 +796,18 @@ main {
 
     main {
         flex-direction: column;
+        height: auto;
+        min-height: calc(100vh - 60px);
         background-color: beige;
     } 
 
     #secciones {
         width: 100%;
-        height: calc(100vh - 60px);
+        height: auto;
         margin-left: 0;
+        min-height: calc(100vh - 60px);
         overflow-x: hidden;
-        overflow-y: auto;
+        overflow-y: visible;
     }
 
     #popup-container {
