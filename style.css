@@ -12,7 +12,7 @@ button {
 }
 
 body {
-    overflow: hidden;
+    overflow-x: hidden;
 }
 
 /* HEADER */
@@ -805,8 +805,8 @@ main {
         margin-left: 0;
         overflow-x: hidden;
         overflow-y: auto;
-        padding-bottom: calc(80px + env(safe-area-inset-bottom));
-        scroll-padding-bottom: calc(80px + env(safe-area-inset-bottom));
+        padding-bottom: calc(24px + env(safe-area-inset-bottom));
+        scroll-padding-bottom: calc(24px + env(safe-area-inset-bottom));
     }
 
     @supports (height: 100dvh) {
