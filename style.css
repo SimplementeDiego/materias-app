@@ -805,6 +805,14 @@ main {
         margin-left: 0;
         overflow-x: hidden;
         overflow-y: auto;
+        padding-bottom: calc(80px + env(safe-area-inset-bottom));
+        scroll-padding-bottom: calc(80px + env(safe-area-inset-bottom));
+    }
+
+    @supports (height: 100dvh) {
+        #secciones {
+            height: calc(100dvh - 60px);
+        }
     }
 
     #popup-container {
