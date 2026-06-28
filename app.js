@@ -817,6 +817,19 @@ function obtenerMensajeErrorFirebase(error, accion) {
   return mensajes[error?.code] ?? `No se pudo ${accion}.`;
 }
 
+function obtenerDetalleError(error) {
+  if (!error) return "Sin detalle.";
+  const partes = [];
+  if (error.code) partes.push(`Código: ${error.code}`);
+  if (error.name) partes.push(`Nombre: ${error.name}`);
+  if (error.message) partes.push(`Mensaje: ${error.message}`);
+  return partes.length ? partes.join(" | ") : String(error);
+}
+
+function obtenerMensajeErrorConDetalle(mensaje, error) {
+  return `${mensaje} ${obtenerDetalleError(error)}`;
+}
+
 async function inicializarFirebase() {
   if (!firebaseConfigEsValida()) {
     actualizarVistaCuentaFirebase();
@@ -851,7 +864,7 @@ async function inicializarFirebase() {
   }).catch((error) => {
     firebaseInicializacionPromesa = null;
     console.error("No se pudo inicializar Firebase", error);
-    actualizarVistaCuentaFirebase("No se pudo inicializar Firebase.", true);
+    actualizarVistaCuentaFirebase(obtenerMensajeErrorConDetalle("No se pudo inicializar Firebase.", error), true);
     return false;
   });
 
@@ -887,7 +900,7 @@ async function manejarCambioSesionFirebase(usuario) {
     }
   } catch (error) {
     console.error("No se pudieron sincronizar los datos de Firebase", error);
-    actualizarVistaCuentaFirebase("No se pudieron sincronizar los datos de Firebase.", true);
+    actualizarVistaCuentaFirebase(obtenerMensajeErrorConDetalle("No se pudieron sincronizar los datos de Firebase.", error), true);
   } finally {
     firebaseCargandoDatosRemotos = false;
   }
@@ -984,7 +997,7 @@ async function usarDatosLocalesFirebase() {
     firebaseDatosRemotosPendientes = datosRemotosPendientes;
     firebaseResolucionDatosPendiente = true;
     console.error("No se pudieron guardar los datos locales en Firebase", error);
-    actualizarVistaCuentaFirebase("No se pudieron guardar los datos locales en Firebase.", true);
+    actualizarVistaCuentaFirebase(obtenerMensajeErrorConDetalle("No se pudieron guardar los datos locales en Firebase.", error), true);
   }
 }
 
@@ -1004,7 +1017,7 @@ async function usarDatosRemotosFirebase() {
     firebaseDatosRemotosPendientes = datosRemotos;
     firebaseResolucionDatosPendiente = true;
     console.error("No se pudieron cargar los datos de Firebase", error);
-    actualizarVistaCuentaFirebase("No se pudieron cargar los datos de la base.", true);
+    actualizarVistaCuentaFirebase(obtenerMensajeErrorConDetalle("No se pudieron cargar los datos de la base.", error), true);
   } finally {
     firebaseCargandoDatosRemotos = false;
   }
@@ -1033,6 +1046,7 @@ function programarGuardadoFirebase() {
   firebaseGuardadoProgramado = setTimeout(() => {
     guardarDatosFirebase().catch((error) => {
       console.error("No se pudieron guardar los datos en Firebase", error);
+      actualizarVistaCuentaFirebase(obtenerMensajeErrorConDetalle("No se pudieron guardar los datos en Firebase.", error), true);
       mostrarMensajeUsuario("No se pudieron guardar los datos en Firebase.");
     });
   }, 600);
