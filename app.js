@@ -1489,7 +1489,7 @@ function normalizarSemestrePlanificado(semestre) {
 
 function textoSemestrePlanificado(semestre) {
   if (esPeriodoExamenesPlanificado(semestre)) return "Período de exámenes";
-  return semestre === Semestre.SEGUNDO ? "2do semestre" : "1er semestre";
+  return semestre === Semestre.SEGUNDO ? "Semestre Par" : "Semestre Impar";
 }
 
 function tituloPeriodoPlanificado(semestre) {
