@@ -10,6 +10,11 @@ const LocalStorageNombres = Object.freeze({
   planificacionExoneradasBase: "planificacionExoneradasBase"
 });
 
+const FirebaseConfig = Object.freeze({
+  versionCdn: "12.15.0",
+  coleccionUsuarios: "usuarios",
+});
+
 const Semestre = Object.freeze({
   PRIMERO: "primero",
   SEGUNDO: "segundo",
@@ -95,6 +100,7 @@ const idPopupAreas = "popup-areas";
 const idPopupListaMaterias = "popup-lista-materias";
 const idPopupAjustarCreditos = "popup-ajustar-creditos";
 const idPopupImportarDatos = "popup-importar-datos";
+const idPopupCuentaFirebase = "popup-cuenta-firebase";
 const idPopupReset = "popup-reset";
 const idVistaPlanificacion = "vista-planificacion";
 const idSeccionInformacion = "seccion-informacion";
@@ -106,6 +112,12 @@ const idInputBuscarMateria = "input-buscar-materia";
 const idSelectFiltrarSemestre = "select-filtrar-semestre";
 const idSelectFiltrarArea = "select-filtrar-area";
 const idTextareaImportarDatos = "textarea-importar-datos";
+const idFirebaseEstado = "firebase-estado";
+const idFirebaseEmail = "firebase-email";
+const idFirebasePassword = "firebase-password";
+const idBotonFirebaseLogout = "boton-firebase-logout";
+const idFirebaseAuthForm = "firebase-auth-form";
+const idFirebaseDecisionDatos = "firebase-decision-datos";
 
 const registros = [];
 const creditosPorArea = new Map();
@@ -124,6 +136,15 @@ let popUpActual = idPopupMateria;
 let filtroTextoMateria = "";
 let filtroAreaMateria = "";
 let timeoutMensajeUsuario;
+let firebaseInicializacionPromesa = null;
+let firebaseAuth = null;
+let firebaseDb = null;
+let firebaseUsuario = null;
+let firebaseApi = {};
+let firebaseCargandoDatosRemotos = false;
+let firebaseGuardadoProgramado = null;
+let firebaseDatosRemotosPendientes = null;
+let firebaseResolucionDatosPendiente = false;
 
 let creditosBloque = {
   creditosEnM: 0,
@@ -510,6 +531,7 @@ function seleccionarSemestre(idSemestre) {
   mostrarBotonesDeMateriasQueCorresponda();
   mostrarSeccionesQueCorrespondan();
   localStorage.setItem(LocalStorageNombres.semestre, seleccionSemestre);
+  programarGuardadoFirebase();
 }
 
 function actualizarFiltroSemestre() {
@@ -521,6 +543,7 @@ function verMaterias() {
   mostrarBotonesDeMateriasQueCorresponda();
   mostrarVistaPlanificacion(false);
   localStorage.setItem(LocalStorageNombres.vistaSeleccionada, idBotonMaterias);
+  programarGuardadoFirebase();
   closeNavIfMobile();
 }
 
@@ -703,6 +726,318 @@ function mostrarMensajeUsuario(texto) {
   }, 3000);
 }
 
+function firebaseConfigEsValida() {
+  const config = window.firebaseConfig;
+  return Boolean(
+    config &&
+    typeof config === "object" &&
+    config.apiKey &&
+    config.authDomain &&
+    config.projectId &&
+    !config.apiKey.includes("TU_")
+  );
+}
+
+function actualizarVistaCuentaFirebase(textoEstado = "", esError = false) {
+  const estado = document.getElementById(idFirebaseEstado);
+  const form = document.getElementById(idFirebaseAuthForm);
+  const botonLogout = document.getElementById(idBotonFirebaseLogout);
+  const decisionDatos = document.getElementById(idFirebaseDecisionDatos);
+
+  if (!estado || !form || !botonLogout) return;
+
+  estado.classList.toggle("error", esError);
+  if (decisionDatos) {
+    decisionDatos.style.display = firebaseResolucionDatosPendiente ? "flex" : "none";
+  }
+
+  if (!firebaseConfigEsValida()) {
+    estado.textContent = "Firebase no configurado. Completá firebase-config.js para habilitar cuentas.";
+    estado.classList.add("error");
+    form.style.display = "none";
+    botonLogout.style.display = "none";
+    if (decisionDatos) decisionDatos.style.display = "none";
+    return;
+  }
+
+  if (firebaseUsuario) {
+    estado.textContent = textoEstado || `Sesión iniciada como ${firebaseUsuario.email}.`;
+    form.style.display = "none";
+    botonLogout.style.display = "block";
+    return;
+  }
+
+  estado.textContent = textoEstado || "Ingresá con tu email para sincronizar el avance entre dispositivos.";
+  form.style.display = "flex";
+  botonLogout.style.display = "none";
+}
+
+function normalizarDatosStorage(datos) {
+  const datosNormalizados = {};
+  obtenerClavesLocalStorageRelevantes().forEach((clave) => {
+    if (!Object.prototype.hasOwnProperty.call(datos, clave)) {
+      datosNormalizados[clave] = null;
+      return;
+    }
+
+    const valor = datos[clave];
+    datosNormalizados[clave] = valor === null || typeof valor === "string"
+      ? valor
+      : JSON.stringify(valor);
+  });
+  return datosNormalizados;
+}
+
+function datosStorageSonIguales(datosA, datosB) {
+  return JSON.stringify(normalizarDatosStorage(datosA)) === JSON.stringify(normalizarDatosStorage(datosB));
+}
+
+function mostrarDecisionDatosFirebase(datosRemotos) {
+  firebaseDatosRemotosPendientes = datosRemotos;
+  firebaseResolucionDatosPendiente = true;
+  actualizarVistaCuentaFirebase("Hay datos guardados en la base de datos. Elegí con cuáles querés continuar.");
+  openPopup(idPopupCuentaFirebase);
+}
+
+function obtenerMensajeErrorFirebase(error, accion) {
+  const mensajes = {
+    "auth/email-already-in-use": "Ese email ya tiene una cuenta. Probá ingresar en vez de crearla.",
+    "auth/invalid-credential": "Email o contraseña incorrectos.",
+    "auth/invalid-email": "El email ingresado no es válido.",
+    "auth/missing-password": "Ingresá la contraseña.",
+    "auth/network-request-failed": "No se pudo conectar con Firebase. Revisá tu conexión.",
+    "auth/operation-not-allowed": "El ingreso con email y contraseña no está habilitado en Firebase.",
+    "auth/too-many-requests": "Demasiados intentos. Esperá un momento y probá de nuevo.",
+    "auth/user-disabled": "Esta cuenta está deshabilitada.",
+    "auth/user-not-found": "No existe una cuenta con ese email.",
+    "auth/weak-password": "La contraseña debe tener al menos 6 caracteres.",
+    "auth/wrong-password": "La contraseña es incorrecta.",
+  };
+
+  return mensajes[error?.code] ?? `No se pudo ${accion}.`;
+}
+
+async function inicializarFirebase() {
+  if (!firebaseConfigEsValida()) {
+    actualizarVistaCuentaFirebase();
+    return false;
+  }
+
+  if (firebaseInicializacionPromesa) {
+    return firebaseInicializacionPromesa;
+  }
+
+  firebaseInicializacionPromesa = Promise.all([
+    import(`https://www.gstatic.com/firebasejs/${FirebaseConfig.versionCdn}/firebase-app.js`),
+    import(`https://www.gstatic.com/firebasejs/${FirebaseConfig.versionCdn}/firebase-auth.js`),
+    import(`https://www.gstatic.com/firebasejs/${FirebaseConfig.versionCdn}/firebase-firestore.js`),
+  ]).then(([appModule, authModule, firestoreModule]) => {
+    const app = appModule.initializeApp(window.firebaseConfig);
+    firebaseAuth = authModule.getAuth(app);
+    firebaseDb = firestoreModule.getFirestore(app);
+    firebaseApi = {
+      createUserWithEmailAndPassword: authModule.createUserWithEmailAndPassword,
+      doc: firestoreModule.doc,
+      getDoc: firestoreModule.getDoc,
+      onAuthStateChanged: authModule.onAuthStateChanged,
+      serverTimestamp: firestoreModule.serverTimestamp,
+      setDoc: firestoreModule.setDoc,
+      signInWithEmailAndPassword: authModule.signInWithEmailAndPassword,
+      signOut: authModule.signOut,
+    };
+    firebaseApi.onAuthStateChanged(firebaseAuth, manejarCambioSesionFirebase);
+    actualizarVistaCuentaFirebase();
+    return true;
+  }).catch((error) => {
+    firebaseInicializacionPromesa = null;
+    console.error("No se pudo inicializar Firebase", error);
+    actualizarVistaCuentaFirebase("No se pudo inicializar Firebase.", true);
+    return false;
+  });
+
+  return firebaseInicializacionPromesa;
+}
+
+async function manejarCambioSesionFirebase(usuario) {
+  firebaseUsuario = usuario;
+  actualizarVistaCuentaFirebase();
+
+  if (!usuario) {
+    firebaseDatosRemotosPendientes = null;
+    firebaseResolucionDatosPendiente = false;
+    actualizarVistaCuentaFirebase();
+    return;
+  }
+  if (!firebaseDb || !firebaseApi.getDoc) return;
+
+  try {
+    const referencia = firebaseApi.doc(firebaseDb, FirebaseConfig.coleccionUsuarios, usuario.uid);
+    const snapshot = await firebaseApi.getDoc(referencia);
+    const datosRemotos = snapshot.exists() ? obtenerDatosImportados(snapshot.data()?.datos) : null;
+
+    if (datosRemotos && datosImportadosTieneClavesReconocidas(datosRemotos)) {
+      if (datosStorageSonIguales(datosRemotos, crearBackupLocalStorage().datos)) {
+        actualizarVistaCuentaFirebase(`Sesión iniciada como ${usuario.email}. Datos sincronizados.`);
+      } else {
+        mostrarDecisionDatosFirebase(datosRemotos);
+      }
+    } else {
+      await guardarDatosFirebase();
+      actualizarVistaCuentaFirebase(`Sesión iniciada como ${usuario.email}. Datos locales guardados.`);
+    }
+  } catch (error) {
+    console.error("No se pudieron sincronizar los datos de Firebase", error);
+    actualizarVistaCuentaFirebase("No se pudieron sincronizar los datos de Firebase.", true);
+  } finally {
+    firebaseCargandoDatosRemotos = false;
+  }
+}
+
+function abrirCuentaFirebase() {
+  actualizarVistaCuentaFirebase();
+  openPopup(idPopupCuentaFirebase);
+  inicializarFirebase();
+}
+
+function obtenerEmailFirebase() {
+  const email = document.getElementById(idFirebaseEmail).value.trim();
+
+  if (!email) {
+    actualizarVistaCuentaFirebase("Ingresá el email.", true);
+    return "";
+  }
+
+  return email;
+}
+
+function obtenerCredencialesFirebase() {
+  const email = obtenerEmailFirebase();
+  const password = document.getElementById(idFirebasePassword).value;
+
+  if (!email) return null;
+
+  if (!password) {
+    actualizarVistaCuentaFirebase("Ingresá la contraseña.", true);
+    return null;
+  }
+
+  return { email, password };
+}
+
+async function iniciarSesionFirebase(event) {
+  event?.preventDefault();
+  const inicializado = await inicializarFirebase();
+  if (!inicializado) return;
+
+  const credenciales = obtenerCredencialesFirebase();
+  if (!credenciales) return;
+
+  try {
+    await firebaseApi.signInWithEmailAndPassword(firebaseAuth, credenciales.email, credenciales.password);
+  } catch (error) {
+    console.error("No se pudo iniciar sesión", error);
+    actualizarVistaCuentaFirebase(obtenerMensajeErrorFirebase(error, "iniciar sesión"), true);
+  }
+}
+
+async function crearCuentaFirebase() {
+  const inicializado = await inicializarFirebase();
+  if (!inicializado) return;
+
+  const credenciales = obtenerCredencialesFirebase();
+  if (!credenciales) return;
+
+  try {
+    await firebaseApi.createUserWithEmailAndPassword(firebaseAuth, credenciales.email, credenciales.password);
+  } catch (error) {
+    console.error("No se pudo crear la cuenta", error);
+    actualizarVistaCuentaFirebase(obtenerMensajeErrorFirebase(error, "crear la cuenta"), true);
+  }
+}
+
+async function cerrarSesionFirebase() {
+  const inicializado = await inicializarFirebase();
+  if (!inicializado || !firebaseAuth) return;
+
+  try {
+    firebaseDatosRemotosPendientes = null;
+    firebaseResolucionDatosPendiente = false;
+    await firebaseApi.signOut(firebaseAuth);
+    firebaseUsuario = null;
+    actualizarVistaCuentaFirebase("Sesión cerrada.");
+  } catch (error) {
+    console.error("No se pudo cerrar sesión", error);
+    actualizarVistaCuentaFirebase("No se pudo cerrar sesión.", true);
+  }
+}
+
+async function usarDatosLocalesFirebase() {
+  const datosRemotosPendientes = firebaseDatosRemotosPendientes;
+  firebaseDatosRemotosPendientes = null;
+  firebaseResolucionDatosPendiente = false;
+  actualizarVistaCuentaFirebase(`Sesión iniciada como ${firebaseUsuario.email}. Guardando datos locales...`);
+
+  try {
+    await guardarDatosFirebase(true);
+    actualizarVistaCuentaFirebase(`Sesión iniciada como ${firebaseUsuario.email}. Datos locales guardados.`);
+  } catch (error) {
+    firebaseDatosRemotosPendientes = datosRemotosPendientes;
+    firebaseResolucionDatosPendiente = true;
+    console.error("No se pudieron guardar los datos locales en Firebase", error);
+    actualizarVistaCuentaFirebase("No se pudieron guardar los datos locales en Firebase.", true);
+  }
+}
+
+async function usarDatosRemotosFirebase() {
+  const datosRemotos = firebaseDatosRemotosPendientes;
+  if (!datosRemotos) return;
+
+  firebaseDatosRemotosPendientes = null;
+  firebaseResolucionDatosPendiente = false;
+  firebaseCargandoDatosRemotos = true;
+
+  try {
+    aplicarDatosImportadosEnLocalStorage(datosRemotos);
+    await recargarEstadoDesdeStorage();
+    actualizarVistaCuentaFirebase(`Sesión iniciada como ${firebaseUsuario.email}. Datos de la base cargados.`);
+  } catch (error) {
+    firebaseDatosRemotosPendientes = datosRemotos;
+    firebaseResolucionDatosPendiente = true;
+    console.error("No se pudieron cargar los datos de Firebase", error);
+    actualizarVistaCuentaFirebase("No se pudieron cargar los datos de la base.", true);
+  } finally {
+    firebaseCargandoDatosRemotos = false;
+  }
+}
+
+async function guardarDatosFirebase(forzar = false) {
+  if ((firebaseCargandoDatosRemotos || firebaseResolucionDatosPendiente) && !forzar) return;
+  if (!firebaseUsuario || !firebaseDb || !firebaseApi.setDoc) return;
+
+  const backup = crearBackupLocalStorage();
+  const referencia = firebaseApi.doc(firebaseDb, FirebaseConfig.coleccionUsuarios, firebaseUsuario.uid);
+  await firebaseApi.setDoc(referencia, {
+    aplicacion: backup.aplicacion,
+    version: backup.version,
+    datos: backup.datos,
+    actualizadoEn: firebaseApi.serverTimestamp(),
+  }, { merge: true });
+  actualizarVistaCuentaFirebase(`Sesión iniciada como ${firebaseUsuario.email}. Datos sincronizados.`);
+}
+
+function programarGuardadoFirebase() {
+  if (firebaseResolucionDatosPendiente) return;
+  if (firebaseCargandoDatosRemotos || !firebaseUsuario || !firebaseDb || !firebaseApi.setDoc) return;
+
+  clearTimeout(firebaseGuardadoProgramado);
+  firebaseGuardadoProgramado = setTimeout(() => {
+    guardarDatosFirebase().catch((error) => {
+      console.error("No se pudieron guardar los datos en Firebase", error);
+      mostrarMensajeUsuario("No se pudieron guardar los datos en Firebase.");
+    });
+  }, 600);
+}
+
 function copiarDatosAlClipboard() {
   const texto = JSON.stringify(crearBackupLocalStorage(), null, 2);
   copiarTextoAlClipboard(texto)
@@ -728,6 +1063,28 @@ function obtenerDatosImportados(jsonImportado) {
   return datos && typeof datos === "object" && !Array.isArray(datos) ? datos : null;
 }
 
+function datosImportadosTieneClavesReconocidas(datosImportados) {
+  const clavesRelevantes = obtenerClavesLocalStorageRelevantes();
+  return clavesRelevantes.some((clave) => (
+    Object.prototype.hasOwnProperty.call(datosImportados, clave)
+  ));
+}
+
+function aplicarDatosImportadosEnLocalStorage(datosImportados) {
+  obtenerClavesLocalStorageRelevantes().forEach((clave) => {
+    if (Object.prototype.hasOwnProperty.call(datosImportados, clave)) {
+      const valor = datosImportados[clave];
+      if (valor === null) {
+        localStorage.removeItem(clave);
+      } else {
+        localStorage.setItem(clave, typeof valor === "string" ? valor : JSON.stringify(valor));
+      }
+    } else {
+      localStorage.removeItem(clave);
+    }
+  });
+}
+
 function ocultarPopupActual() {
   [
     idPopupMateria,
@@ -736,6 +1093,7 @@ function ocultarPopupActual() {
     idPopupListaMaterias,
     idPopupAjustarCreditos,
     idPopupImportarDatos,
+    idPopupCuentaFirebase,
     idPopupReset
   ].forEach((idPopup) => {
     const popup = document.getElementById(idPopup);
@@ -806,31 +1164,16 @@ async function cargarDatosDesdeJson() {
     return;
   }
 
-  const clavesRelevantes = obtenerClavesLocalStorageRelevantes();
-  const tieneClavesReconocidas = clavesRelevantes.some((clave) => (
-    Object.prototype.hasOwnProperty.call(datosImportados, clave)
-  ));
-
-  if (!tieneClavesReconocidas) {
+  if (!datosImportadosTieneClavesReconocidas(datosImportados)) {
     mostrarMensajeUsuario("El JSON no contiene datos reconocidos para cargar.");
     return;
   }
 
-  clavesRelevantes.forEach((clave) => {
-    if (Object.prototype.hasOwnProperty.call(datosImportados, clave)) {
-      const valor = datosImportados[clave];
-      if (valor === null) {
-        localStorage.removeItem(clave);
-      } else {
-        localStorage.setItem(clave, typeof valor === "string" ? valor : JSON.stringify(valor));
-      }
-    } else {
-      localStorage.removeItem(clave);
-    }
-  });
+  aplicarDatosImportadosEnLocalStorage(datosImportados);
 
   try {
     await recargarEstadoDesdeStorage();
+    programarGuardadoFirebase();
     mostrarMensajeUsuario("Datos cargados.");
   } catch (error) {
     mostrarMensajeUsuario("No se pudieron cargar los datos.");
@@ -919,6 +1262,7 @@ function reconstruirEstadoPagina() {
   actualizarCreditosTitulo();
   localStorage.setItem(LocalStorageNombres.materiasExoneradas, JSON.stringify(Array.from(historialExoneradas.values())));
   localStorage.setItem(LocalStorageNombres.materiasAprobadas, JSON.stringify(Array.from(historialAprobadas.values())));
+  programarGuardadoFirebase();
 }
 
 function renderizarPlanificacionSiActiva() {
@@ -1051,6 +1395,7 @@ function guardarPlanificacion() {
   localStorage.setItem(LocalStorageNombres.planificacionSemestres, JSON.stringify(planificacionSemestres));
   localStorage.setItem(LocalStorageNombres.planificacionUsaEstadoActual, JSON.stringify(planificacionUsaEstadoActual));
   localStorage.setItem(LocalStorageNombres.planificacionExoneradasBase, JSON.stringify(Array.from(planificacionExoneradasBase.values())));
+  programarGuardadoFirebase();
 }
 
 function cargarPlanificacionDesdeStorage() {
@@ -1626,6 +1971,7 @@ function verPlanificacion() {
   mostrarVistaPlanificacion(true);
   renderizarPlanificacion();
   localStorage.setItem(LocalStorageNombres.vistaSeleccionada, idBotonPlanificacion);
+  programarGuardadoFirebase();
   closeNavIfMobile();
 }
 
@@ -2159,6 +2505,7 @@ function actualizarRegistros() {
   }
   localStorage.setItem("registros", JSON.stringify(registros));
   localStorage.setItem("creditosPorArea", JSON.stringify(Array.from(creditosPorArea.entries())));
+  programarGuardadoFirebase();
 }
 
 function eventoAjustarCreditos() {
@@ -2260,6 +2607,7 @@ async function firstLoad() {
     verMaterias();
   }
   checkWidth();
+  inicializarFirebase();
 }
 
 firstLoad().catch((error) => {

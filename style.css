@@ -115,6 +115,10 @@ header {
     background-color: rgb(228, 255, 218);
 }
 
+#cuenta-firebase {
+    background-color: rgb(224, 231, 255);
+}
+
 #planificacion {
     background-color: lightyellow;
 }
@@ -406,7 +410,7 @@ main {
     outline-offset: 3px;
 }
 
-#popup-materia, #popup-respuestas, #popup-areas, #popup-lista-materias, #popup-ajustar-creditos, #popup-importar-datos, #popup-reset {
+#popup-materia, #popup-respuestas, #popup-areas, #popup-lista-materias, #popup-ajustar-creditos, #popup-importar-datos, #popup-cuenta-firebase, #popup-reset {
     display: none;
     overflow-y: auto;
     flex: 1 1 auto;
@@ -518,6 +522,55 @@ main {
     cursor: pointer;
     padding: 8px;
     width: 100%;
+}
+
+.info-cuenta-firebase {
+    background-color: rgb(236, 247, 255);
+    border: 1px solid rgb(224, 224, 224);
+    border-radius: 5px;
+    margin: 8px 0;
+    overflow-wrap: anywhere;
+    padding: 10px;
+    width: 100%;
+}
+
+.info-cuenta-firebase.error {
+    background-color: rgb(255, 235, 235);
+    border-color: rgb(176, 0, 32);
+    color: rgb(176, 0, 32);
+    font-weight: bold;
+}
+
+.form-cuenta-firebase {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    text-align: left;
+    width: 100%;
+}
+
+.decision-cuenta-firebase {
+    display: none;
+    flex-direction: column;
+    gap: 8px;
+    width: 100%;
+}
+
+.form-cuenta-firebase input {
+    padding: 8px;
+    width: 100%;
+}
+
+.form-cuenta-firebase button,
+.decision-cuenta-firebase button,
+#boton-firebase-logout {
+    cursor: pointer;
+    padding: 8px;
+    width: 100%;
+}
+
+#boton-firebase-logout {
+    margin-top: 8px;
 }
 
 .mensaje-usuario {

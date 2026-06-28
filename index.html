@@ -6,7 +6,7 @@
     <meta name="description" content="Materias Computación">
     <title>Materias</title>
     <link rel="icon" type="image/x-icon" href="/icons/bookmark.ico">
-    <link rel="stylesheet" href="style.css?v=6">
+    <link rel="stylesheet" href="style.css?v=10">
 </head>
 <body>
     
@@ -34,6 +34,7 @@
             <button onclick="agregarCreditos()" id="ajustar-creditos" class="navbar-boton">Ajustar créditos</button>
             <button onclick="copiarDatosAlClipboard()" id="copiar-datos" class="navbar-boton">Copiar datos</button>
             <button onclick="abrirImportarDatos()" id="importar-datos" class="navbar-boton">Cargar datos</button>
+            <button onclick="abrirCuentaFirebase()" id="cuenta-firebase" class="navbar-boton">Cuenta</button>
         </nav>
 
         <div id="secciones">
@@ -121,6 +122,24 @@
                         <label for="textarea-importar-datos" class="titulo-popup">JSON copiado</label>
                         <textarea id="textarea-importar-datos" aria-label="JSON de datos para cargar"></textarea>
                         <button type="button" onclick="cargarDatosDesdeJson()" id="boton-cargar-datos">Cargar</button>
+                    </div>
+
+                    <div id="popup-cuenta-firebase">
+                        <div class="titulo-popup">Cuenta</div>
+                        <div id="firebase-estado" class="info-cuenta-firebase" role="status" aria-live="polite">Firebase no configurado.</div>
+                        <form id="firebase-auth-form" class="form-cuenta-firebase" onsubmit="iniciarSesionFirebase(event)">
+                            <label for="firebase-email">Email</label>
+                            <input type="email" id="firebase-email" autocomplete="email">
+                            <label for="firebase-password">Contraseña</label>
+                            <input type="password" id="firebase-password" autocomplete="current-password">
+                            <button type="submit" id="boton-firebase-login">Ingresar</button>
+                            <button type="button" onclick="crearCuentaFirebase()" id="boton-firebase-crear">Crear cuenta</button>
+                        </form>
+                        <div id="firebase-decision-datos" class="decision-cuenta-firebase">
+                            <button type="button" onclick="usarDatosLocalesFirebase()" id="boton-firebase-usar-local">Usar datos locales</button>
+                            <button type="button" onclick="usarDatosRemotosFirebase()" id="boton-firebase-usar-remoto">Usar base de datos</button>
+                        </div>
+                        <button type="button" onclick="cerrarSesionFirebase()" id="boton-firebase-logout">Cerrar sesión</button>
                     </div>
                     
                     <button onclick="closePopup()" id="cerrar-popup">Cerrar</button>
@@ -221,7 +240,8 @@
         
     </main>
 
-    <script src="./app.js?v=6"></script>
+    <script src="./firebase-config.js?v=2"></script>
+    <script src="./app.js?v=11"></script>
 
 </body>
 </html>
