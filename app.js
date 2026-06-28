@@ -5,6 +5,7 @@ const LocalStorageNombres = Object.freeze({
   materiasExoneradas: "materiasExoneradas",
   semestre : "semestre",
   vistaSeleccionada: "vistaSeleccionada",
+  seleccionOpcionales: "seleccionOpcionales",
   planificacionSemestres: "planificacionSemestres",
   planificacionUsaEstadoActual: "planificacionUsaEstadoActual",
   planificacionExoneradasBase: "planificacionExoneradasBase"
@@ -145,6 +146,8 @@ let firebaseCargandoDatosRemotos = false;
 let firebaseGuardadoProgramado = null;
 let firebaseDatosRemotosPendientes = null;
 let firebaseResolucionDatosPendiente = false;
+let localStorageBloqueado = false;
+let avisoLocalStorageMostrado = false;
 
 let creditosBloque = {
   creditosEnM: 0,
@@ -425,7 +428,7 @@ function toggleMI() {
   rehacerPaginaSinEstado();
   mostrarBotonesDeMateriasQueCorresponda();
   mostrarSeccionesQueCorrespondan();
-  localStorage.setItem(MI.nombre, Materias.includes(MI));
+  guardarLocalStorage(MI.nombre, Materias.includes(MI));
   reconstruirEstadoPagina();
   renderizarPlanificacionSiActiva();
 }
@@ -449,15 +452,17 @@ function togglePlan() {
   rehacerPaginaSinEstado();
   mostrarBotonesDeMateriasQueCorresponda();
   mostrarSeccionesQueCorrespondan();
-  localStorage.setItem(FC.nombre, Materias.includes(FC));
+  guardarLocalStorage(FC.nombre, Materias.includes(FC));
   reconstruirEstadoPagina();
   renderizarPlanificacionSiActiva();
 }
 
 function toggleOpcionales() {
-  seleccionOpcionales = !seleccionOpcionales;
+  seleccionOpcionales = document.getElementById("mi-toggle-opcionales").checked;
   mostrarBotonesDeMateriasQueCorresponda();
   mostrarSeccionesQueCorrespondan();
+  guardarLocalStorage(LocalStorageNombres.seleccionOpcionales, JSON.stringify(seleccionOpcionales));
+  programarGuardadoFirebase();
 }
 
 function encontrarMateriaPorNombre(nombre) {
@@ -530,7 +535,7 @@ function seleccionarSemestre(idSemestre) {
   }
   mostrarBotonesDeMateriasQueCorresponda();
   mostrarSeccionesQueCorrespondan();
-  localStorage.setItem(LocalStorageNombres.semestre, seleccionSemestre);
+  guardarLocalStorage(LocalStorageNombres.semestre, seleccionSemestre);
   programarGuardadoFirebase();
 }
 
@@ -542,7 +547,7 @@ function verMaterias() {
   cambiarClaseActivaEnNav(idBotonMaterias);
   mostrarBotonesDeMateriasQueCorresponda();
   mostrarVistaPlanificacion(false);
-  localStorage.setItem(LocalStorageNombres.vistaSeleccionada, idBotonMaterias);
+  guardarLocalStorage(LocalStorageNombres.vistaSeleccionada, idBotonMaterias);
   programarGuardadoFirebase();
   closeNavIfMobile();
 }
@@ -650,8 +655,51 @@ function actualizarCreditosTitulo() {
   document.getElementById(idTitulo).textContent = `Materias | Créditos: ${creditosBloque.Total}`;
 }
 
+function mostrarErrorLocalStorage(error) {
+  localStorageBloqueado = true;
+  console.error("No se pudo acceder a localStorage", error);
+  if (avisoLocalStorageMostrado) return;
+  avisoLocalStorageMostrado = true;
+  mostrarMensajeUsuario("Tu navegador está bloqueando el almacenamiento local. Permití datos del sitio o abrí la página en otro navegador.");
+}
+
+function crearErrorLocalStorageBloqueado() {
+  const error = new Error("El navegador está bloqueando el almacenamiento local. No se puede guardar el estado local en Firebase.");
+  error.code = "localStorage/bloqueado";
+  return error;
+}
+
+function leerLocalStorage(clave) {
+  try {
+    return window.localStorage.getItem(clave);
+  } catch (error) {
+    mostrarErrorLocalStorage(error);
+    return null;
+  }
+}
+
+function guardarLocalStorage(clave, valor) {
+  try {
+    window.localStorage.setItem(clave, String(valor));
+    return true;
+  } catch (error) {
+    mostrarErrorLocalStorage(error);
+    return false;
+  }
+}
+
+function eliminarLocalStorage(clave) {
+  try {
+    window.localStorage.removeItem(clave);
+    return true;
+  } catch (error) {
+    mostrarErrorLocalStorage(error);
+    return false;
+  }
+}
+
 function leerJsonLocalStorage(nombre, valorPorDefecto) {
-  const guardado = localStorage.getItem(nombre);
+  const guardado = leerLocalStorage(nombre);
   if (!guardado) return valorPorDefecto;
   try {
     return JSON.parse(guardado);
@@ -673,7 +721,7 @@ function obtenerClavesLocalStorageRelevantes() {
 function crearBackupLocalStorage() {
   const datos = {};
   obtenerClavesLocalStorageRelevantes().forEach((clave) => {
-    const valor = localStorage.getItem(clave);
+    const valor = leerLocalStorage(clave);
     if (valor !== null) {
       datos[clave] = valor;
     }
@@ -883,6 +931,7 @@ async function manejarCambioSesionFirebase(usuario) {
   }
   if (!firebaseDb || !firebaseApi.getDoc) return;
 
+  firebaseCargandoDatosRemotos = true;
   try {
     const referencia = firebaseApi.doc(firebaseDb, FirebaseConfig.coleccionUsuarios, usuario.uid);
     const snapshot = await firebaseApi.getDoc(referencia);
@@ -895,7 +944,7 @@ async function manejarCambioSesionFirebase(usuario) {
         mostrarDecisionDatosFirebase(datosRemotos);
       }
     } else {
-      await guardarDatosFirebase();
+      await guardarDatosFirebase(true);
       actualizarVistaCuentaFirebase(`Sesión iniciada como ${usuario.email}. Datos locales guardados.`);
     }
   } catch (error) {
@@ -1028,6 +1077,9 @@ async function guardarDatosFirebase(forzar = false) {
   if (!firebaseUsuario || !firebaseDb || !firebaseApi.setDoc) return;
 
   const backup = crearBackupLocalStorage();
+  if (localStorageBloqueado) {
+    throw crearErrorLocalStorageBloqueado();
+  }
   const referencia = firebaseApi.doc(firebaseDb, FirebaseConfig.coleccionUsuarios, firebaseUsuario.uid);
   await firebaseApi.setDoc(referencia, {
     aplicacion: backup.aplicacion,
@@ -1085,18 +1137,22 @@ function datosImportadosTieneClavesReconocidas(datosImportados) {
 }
 
 function aplicarDatosImportadosEnLocalStorage(datosImportados) {
+  let datosAplicados = true;
   obtenerClavesLocalStorageRelevantes().forEach((clave) => {
     if (Object.prototype.hasOwnProperty.call(datosImportados, clave)) {
       const valor = datosImportados[clave];
       if (valor === null) {
-        localStorage.removeItem(clave);
+        datosAplicados = eliminarLocalStorage(clave) && datosAplicados;
       } else {
-        localStorage.setItem(clave, typeof valor === "string" ? valor : JSON.stringify(valor));
+        datosAplicados = guardarLocalStorage(clave, typeof valor === "string" ? valor : JSON.stringify(valor)) && datosAplicados;
       }
     } else {
-      localStorage.removeItem(clave);
+      datosAplicados = eliminarLocalStorage(clave) && datosAplicados;
     }
   });
+  if (!datosAplicados) {
+    throw new Error("No se pudo escribir en el almacenamiento local.");
+  }
 }
 
 function ocultarPopupActual() {
@@ -1183,13 +1239,13 @@ async function cargarDatosDesdeJson() {
     return;
   }
 
-  aplicarDatosImportadosEnLocalStorage(datosImportados);
-
   try {
+    aplicarDatosImportadosEnLocalStorage(datosImportados);
     await recargarEstadoDesdeStorage();
     programarGuardadoFirebase();
     mostrarMensajeUsuario("Datos cargados.");
   } catch (error) {
+    console.error("No se pudieron cargar los datos", error);
     mostrarMensajeUsuario("No se pudieron cargar los datos.");
   }
 }
@@ -1274,8 +1330,8 @@ function reconstruirEstadoPagina() {
   calcularCreditos();
   Materias.forEach((materia) => { establecerEstadoBotonMateria(materia); });
   actualizarCreditosTitulo();
-  localStorage.setItem(LocalStorageNombres.materiasExoneradas, JSON.stringify(Array.from(historialExoneradas.values())));
-  localStorage.setItem(LocalStorageNombres.materiasAprobadas, JSON.stringify(Array.from(historialAprobadas.values())));
+  guardarLocalStorage(LocalStorageNombres.materiasExoneradas, JSON.stringify(Array.from(historialExoneradas.values())));
+  guardarLocalStorage(LocalStorageNombres.materiasAprobadas, JSON.stringify(Array.from(historialAprobadas.values())));
   programarGuardadoFirebase();
 }
 
@@ -1293,7 +1349,9 @@ function borrarProgreso() {
   planificacionSemestres = [];
   planificacionExoneradasBase.clear();
   planificacionUsaEstadoActual = true;
+  seleccionOpcionales = true;
   guardarPlanificacion();
+  guardarLocalStorage(LocalStorageNombres.seleccionOpcionales, JSON.stringify(seleccionOpcionales));
   actualizarRegistros();
   reconstruirEstadoPagina();
   renderizarPlanificacionSiActiva();
@@ -1406,9 +1464,9 @@ function verRespuestas() {
 }
 
 function guardarPlanificacion() {
-  localStorage.setItem(LocalStorageNombres.planificacionSemestres, JSON.stringify(planificacionSemestres));
-  localStorage.setItem(LocalStorageNombres.planificacionUsaEstadoActual, JSON.stringify(planificacionUsaEstadoActual));
-  localStorage.setItem(LocalStorageNombres.planificacionExoneradasBase, JSON.stringify(Array.from(planificacionExoneradasBase.values())));
+  guardarLocalStorage(LocalStorageNombres.planificacionSemestres, JSON.stringify(planificacionSemestres));
+  guardarLocalStorage(LocalStorageNombres.planificacionUsaEstadoActual, JSON.stringify(planificacionUsaEstadoActual));
+  guardarLocalStorage(LocalStorageNombres.planificacionExoneradasBase, JSON.stringify(Array.from(planificacionExoneradasBase.values())));
   programarGuardadoFirebase();
 }
 
@@ -1984,7 +2042,7 @@ function verPlanificacion() {
   cambiarClaseActivaEnNav(idBotonPlanificacion);
   mostrarVistaPlanificacion(true);
   renderizarPlanificacion();
-  localStorage.setItem(LocalStorageNombres.vistaSeleccionada, idBotonPlanificacion);
+  guardarLocalStorage(LocalStorageNombres.vistaSeleccionada, idBotonPlanificacion);
   programarGuardadoFirebase();
   closeNavIfMobile();
 }
@@ -2517,8 +2575,8 @@ function actualizarRegistros() {
     columnaCreditos.appendChild(divCreditos);
     columnaFecha.appendChild(divEliminar);
   }
-  localStorage.setItem("registros", JSON.stringify(registros));
-  localStorage.setItem("creditosPorArea", JSON.stringify(Array.from(creditosPorArea.entries())));
+  guardarLocalStorage("registros", JSON.stringify(registros));
+  guardarLocalStorage("creditosPorArea", JSON.stringify(Array.from(creditosPorArea.entries())));
   programarGuardadoFirebase();
 }
 
@@ -2571,9 +2629,11 @@ async function firstLoad() {
   cargarPlanificacionDesdeStorage();
   const materiasExoneradasGuardadas = leerJsonLocalStorage(LocalStorageNombres.materiasExoneradas, []);
   const materiasAprobadasGuardadas = leerJsonLocalStorage(LocalStorageNombres.materiasAprobadas, []);
+  seleccionOpcionales = leerJsonLocalStorage(LocalStorageNombres.seleccionOpcionales, true) !== false;
+  document.getElementById("mi-toggle-opcionales").checked = seleccionOpcionales;
   historialExoneradas = new Set(Array.isArray(materiasExoneradasGuardadas) ? materiasExoneradasGuardadas : []);
   historialAprobadas = new Set(Array.isArray(materiasAprobadasGuardadas) ? materiasAprobadasGuardadas : []);
-  if (localStorage.getItem(MI.nombre) == "true") {
+  if (leerLocalStorage(MI.nombre) == "true") {
     document.getElementById("mi-toggle-MI").checked = true;
     if (Materias.includes(MI)) {
       Materias = Materias.filter(materia => materia !== MI)
@@ -2583,7 +2643,7 @@ async function firstLoad() {
       CDIV.reglaHabilitacion = materiaExonerada(MI);
     }
   }
-  if (localStorage.getItem(FC.nombre) == "true") {
+  if (leerLocalStorage(FC.nombre) == "true") {
     document.getElementById("mi-toggle-plan").checked = true;
     if (Materias.includes(FC)) {
       Materias = Materias.filter(materia => materia !== FC)
@@ -2611,8 +2671,8 @@ async function firstLoad() {
   reconstruirEstadoPagina();
   normalizarPlanificacion();
   guardarPlanificacion();
-  const semestreGuardado = localStorage.getItem(LocalStorageNombres.semestre);
-  const vistaGuardadaRaw = localStorage.getItem(LocalStorageNombres.vistaSeleccionada);
+  const semestreGuardado = leerLocalStorage(LocalStorageNombres.semestre);
+  const vistaGuardadaRaw = leerLocalStorage(LocalStorageNombres.vistaSeleccionada);
   const semestreDesdeVistaAnterior = Object.values(Semestre).includes(vistaGuardadaRaw) ? vistaGuardadaRaw : null;
   seleccionarSemestre(semestreGuardado ?? semestreDesdeVistaAnterior ?? Semestre.AMBOS);
   if (vistaGuardadaRaw === idBotonPlanificacion) {

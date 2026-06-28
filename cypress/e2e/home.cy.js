@@ -265,6 +265,11 @@ describe("Configuracion y filtros", () => {
         cy.get("#mi-toggle-opcionales").should("not.be.checked");
         cy.get("#CTS").should("not.be.visible");
 
+        cy.reload();
+
+        cy.get("#mi-toggle-opcionales").should("not.be.checked");
+        cy.get("#CTS").should("not.be.visible");
+
         cy.get('label[for="mi-toggle-opcionales"]').click();
         cy.get("#mi-toggle-opcionales").should("be.checked");
         cy.get("#CTS").scrollIntoView().should("be.visible");
@@ -360,6 +365,7 @@ describe("Popups y datos guardados", () => {
 
     it("copia un backup con los datos relevantes", () => {
         exonerarMateria("GAL1");
+        cy.get('label[for="mi-toggle-opcionales"]').click();
 
         cy.window().then((win) => {
             Object.defineProperty(win.navigator, "clipboard", {
@@ -379,6 +385,7 @@ describe("Popups y datos guardados", () => {
             expect(backup.aplicacion).to.equal("materias-app");
             expect(backup.version).to.equal(1);
             expect(JSON.parse(backup.datos.materiasExoneradas)).to.include("GAL1");
+            expect(JSON.parse(backup.datos.seleccionOpcionales)).to.equal(false);
         });
         cy.get("#mensaje-usuario").should("contain", "Datos copiados");
     });
