@@ -11,6 +11,8 @@
     ],
     "reglaHabilitacion": null,
     "semestre": "primero",
+    "obligatoriaIngenieria1997": false,
+    "obligatoriaAnalista1997": false,
     "esOpcional": false,
     "esLibre": false,
     "seDa": true,
@@ -37,6 +39,8 @@
     ],
     "reglaHabilitacion": null,
     "semestre": "ambos",
+    "obligatoriaIngenieria1997": true,
+    "obligatoriaAnalista1997": true,
     "esOpcional": false,
     "esLibre": true,
     "seDa": true,
@@ -70,6 +74,8 @@
       "materia": "CDIV"
     },
     "semestre": "ambos",
+    "obligatoriaIngenieria1997": true,
+    "obligatoriaAnalista1997": true,
     "esOpcional": false,
     "esLibre": true,
     "seDa": true,
@@ -106,6 +112,8 @@
       }
     },
     "semestre": "ambos",
+    "obligatoriaIngenieria1997": true,
+    "obligatoriaAnalista1997": true,
     "esOpcional": false,
     "esLibre": true,
     "seDa": false,
@@ -142,6 +150,8 @@
       }
     },
     "semestre": "primero",
+    "obligatoriaIngenieria1997": false,
+    "obligatoriaAnalista1997": false,
     "esOpcional": false,
     "esLibre": true,
     "seDa": true,
@@ -168,6 +178,8 @@
     ],
     "reglaHabilitacion": null,
     "semestre": "ambos",
+    "obligatoriaIngenieria1997": true,
+    "obligatoriaAnalista1997": true,
     "esOpcional": false,
     "esLibre": false,
     "seDa": true,
@@ -198,6 +210,8 @@
     ],
     "reglaHabilitacion": null,
     "semestre": "ambos",
+    "obligatoriaIngenieria1997": true,
+    "obligatoriaAnalista1997": true,
     "esOpcional": false,
     "esLibre": true,
     "seDa": true,
@@ -231,6 +245,8 @@
       "materia": "P1"
     },
     "semestre": "ambos",
+    "obligatoriaIngenieria1997": true,
+    "obligatoriaAnalista1997": true,
     "esOpcional": false,
     "esLibre": false,
     "seDa": true,
@@ -273,6 +289,8 @@
       ]
     },
     "semestre": "primero",
+    "obligatoriaIngenieria1997": false,
+    "obligatoriaAnalista1997": false,
     "esOpcional": true,
     "esLibre": false,
     "seDa": true,
@@ -311,6 +329,8 @@
       ]
     },
     "semestre": "primero",
+    "obligatoriaIngenieria1997": false,
+    "obligatoriaAnalista1997": false,
     "esOpcional": true,
     "esLibre": false,
     "seDa": true,
@@ -337,6 +357,8 @@
     ],
     "reglaHabilitacion": null,
     "semestre": "segundo",
+    "obligatoriaIngenieria1997": false,
+    "obligatoriaAnalista1997": false,
     "esOpcional": true,
     "esLibre": true,
     "seDa": true,
@@ -363,6 +385,8 @@
     ],
     "reglaHabilitacion": null,
     "semestre": "ambos",
+    "obligatoriaIngenieria1997": false,
+    "obligatoriaAnalista1997": false,
     "esOpcional": true,
     "esLibre": true,
     "seDa": true,
@@ -396,6 +420,8 @@
       "materia": "GAL1"
     },
     "semestre": "ambos",
+    "obligatoriaIngenieria1997": true,
+    "obligatoriaAnalista1997": true,
     "esOpcional": false,
     "esLibre": true,
     "seDa": true,
@@ -438,6 +464,8 @@
       ]
     },
     "semestre": "segundo",
+    "obligatoriaIngenieria1997": false,
+    "obligatoriaAnalista1997": false,
     "esOpcional": true,
     "esLibre": false,
     "seDa": true,
@@ -480,6 +508,8 @@
       ]
     },
     "semestre": "ambos",
+    "obligatoriaIngenieria1997": true,
+    "obligatoriaAnalista1997": false,
     "esOpcional": false,
     "esLibre": true,
     "seDa": true,
@@ -526,6 +556,8 @@
       ]
     },
     "semestre": "primero",
+    "obligatoriaIngenieria1997": false,
+    "obligatoriaAnalista1997": false,
     "esOpcional": true,
     "esLibre": false,
     "seDa": false,
@@ -555,6 +587,8 @@
       "materia": "PYE"
     },
     "semestre": "primero",
+    "obligatoriaIngenieria1997": false,
+    "obligatoriaAnalista1997": false,
     "esOpcional": true,
     "esLibre": false,
     "seDa": true,
@@ -602,6 +636,8 @@
       ]
     },
     "semestre": "ambos",
+    "obligatoriaIngenieria1997": true,
+    "obligatoriaAnalista1997": true,
     "esOpcional": false,
     "esLibre": true,
     "seDa": true,
@@ -644,6 +680,8 @@
       ]
     },
     "semestre": "primero",
+    "obligatoriaIngenieria1997": true,
+    "obligatoriaAnalista1997": true,
     "esOpcional": false,
     "esLibre": false,
     "seDa": true,
@@ -694,6 +732,8 @@
       ]
     },
     "semestre": "segundo",
+    "obligatoriaIngenieria1997": true,
+    "obligatoriaAnalista1997": false,
     "esOpcional": false,
     "esLibre": false,
     "seDa": true,
@@ -749,6 +789,8 @@
       ]
     },
     "semestre": "primero",
+    "obligatoriaIngenieria1997": true,
+    "obligatoriaAnalista1997": true,
     "esOpcional": false,
     "esLibre": false,
     "seDa": true,
@@ -778,6 +820,8 @@
       "materia": "P4"
     },
     "semestre": "primero",
+    "obligatoriaIngenieria1997": false,
+    "obligatoriaAnalista1997": false,
     "esOpcional": true,
     "esLibre": false,
     "seDa": true,
@@ -828,6 +872,8 @@
       ]
     },
     "semestre": "primero",
+    "obligatoriaIngenieria1997": true,
+    "obligatoriaAnalista1997": false,
     "esOpcional": false,
     "esLibre": false,
     "seDa": true,
@@ -857,6 +903,8 @@
       "materia": "IIO"
     },
     "semestre": "segundo",
+    "obligatoriaIngenieria1997": false,
+    "obligatoriaAnalista1997": false,
     "esOpcional": true,
     "esLibre": false,
     "seDa": true,
@@ -895,6 +943,8 @@
       ]
     },
     "semestre": "primero",
+    "obligatoriaIngenieria1997": false,
+    "obligatoriaAnalista1997": false,
     "esOpcional": true,
     "esLibre": false,
     "seDa": true,
@@ -924,6 +974,8 @@
       "materia": "IIO"
     },
     "semestre": "primero",
+    "obligatoriaIngenieria1997": false,
+    "obligatoriaAnalista1997": false,
     "esOpcional": true,
     "esLibre": false,
     "seDa": false,
@@ -953,6 +1005,8 @@
       "materia": "IIO"
     },
     "semestre": "segundo",
+    "obligatoriaIngenieria1997": false,
+    "obligatoriaAnalista1997": false,
     "esOpcional": true,
     "esLibre": false,
     "seDa": true,
@@ -982,6 +1036,8 @@
       "materia": "IIO"
     },
     "semestre": "primero",
+    "obligatoriaIngenieria1997": false,
+    "obligatoriaAnalista1997": false,
     "esOpcional": true,
     "esLibre": false,
     "seDa": true,
@@ -1011,6 +1067,8 @@
       "materia": "IIO"
     },
     "semestre": "segundo",
+    "obligatoriaIngenieria1997": false,
+    "obligatoriaAnalista1997": false,
     "esOpcional": true,
     "esLibre": false,
     "seDa": true,
@@ -1062,6 +1120,8 @@
       ]
     },
     "semestre": "segundo",
+    "obligatoriaIngenieria1997": true,
+    "obligatoriaAnalista1997": true,
     "esOpcional": false,
     "esLibre": true,
     "seDa": true,
@@ -1114,6 +1174,8 @@
       ]
     },
     "semestre": "primero",
+    "obligatoriaIngenieria1997": false,
+    "obligatoriaAnalista1997": false,
     "esOpcional": true,
     "esLibre": false,
     "seDa": true,
@@ -1152,6 +1214,8 @@
       ]
     },
     "semestre": "segundo",
+    "obligatoriaIngenieria1997": false,
+    "obligatoriaAnalista1997": false,
     "esOpcional": true,
     "esLibre": false,
     "seDa": true,
@@ -1207,6 +1271,8 @@
       ]
     },
     "semestre": "segundo",
+    "obligatoriaIngenieria1997": true,
+    "obligatoriaAnalista1997": true,
     "esOpcional": false,
     "esLibre": true,
     "seDa": true,
@@ -1249,6 +1315,8 @@
       ]
     },
     "semestre": "ambos",
+    "obligatoriaIngenieria1997": false,
+    "obligatoriaAnalista1997": false,
     "esOpcional": true,
     "esLibre": true,
     "seDa": true,
@@ -1299,6 +1367,8 @@
       ]
     },
     "semestre": "segundo",
+    "obligatoriaIngenieria1997": false,
+    "obligatoriaAnalista1997": false,
     "esOpcional": true,
     "esLibre": true,
     "seDa": true,
@@ -1358,6 +1428,8 @@
       ]
     },
     "semestre": "primero",
+    "obligatoriaIngenieria1997": true,
+    "obligatoriaAnalista1997": true,
     "esOpcional": false,
     "esLibre": false,
     "seDa": true,
@@ -1396,6 +1468,8 @@
       ]
     },
     "semestre": "primero",
+    "obligatoriaIngenieria1997": false,
+    "obligatoriaAnalista1997": false,
     "esOpcional": true,
     "esLibre": true,
     "seDa": true,
@@ -1455,6 +1529,8 @@
       ]
     },
     "semestre": "primero",
+    "obligatoriaIngenieria1997": true,
+    "obligatoriaAnalista1997": true,
     "esOpcional": false,
     "esLibre": false,
     "seDa": true,
@@ -1518,6 +1594,8 @@
       ]
     },
     "semestre": "primero",
+    "obligatoriaIngenieria1997": false,
+    "obligatoriaAnalista1997": false,
     "esOpcional": true,
     "esLibre": false,
     "seDa": false,
@@ -1547,6 +1625,8 @@
       "materia": "CCE"
     },
     "semestre": "segundo",
+    "obligatoriaIngenieria1997": false,
+    "obligatoriaAnalista1997": false,
     "esOpcional": true,
     "esLibre": false,
     "seDa": true,
@@ -1607,6 +1687,8 @@
       ]
     },
     "semestre": "primero",
+    "obligatoriaIngenieria1997": false,
+    "obligatoriaAnalista1997": false,
     "esOpcional": true,
     "esLibre": false,
     "seDa": true,
@@ -1677,6 +1759,8 @@
       ]
     },
     "semestre": "ambos",
+    "obligatoriaIngenieria1997": false,
+    "obligatoriaAnalista1997": false,
     "esOpcional": true,
     "esLibre": false,
     "seDa": true,
@@ -1723,6 +1807,8 @@
       ]
     },
     "semestre": "primero",
+    "obligatoriaIngenieria1997": false,
+    "obligatoriaAnalista1997": false,
     "esOpcional": true,
     "esLibre": false,
     "seDa": true,
@@ -1752,6 +1838,8 @@
       "materia": "IIO"
     },
     "semestre": "segundo",
+    "obligatoriaIngenieria1997": false,
+    "obligatoriaAnalista1997": false,
     "esOpcional": true,
     "esLibre": false,
     "seDa": true,
@@ -1794,6 +1882,8 @@
       ]
     },
     "semestre": "segundo",
+    "obligatoriaIngenieria1997": true,
+    "obligatoriaAnalista1997": true,
     "esOpcional": false,
     "esLibre": false,
     "seDa": true,
@@ -1823,6 +1913,8 @@
       "materia": "FBD"
     },
     "semestre": "primero",
+    "obligatoriaIngenieria1997": false,
+    "obligatoriaAnalista1997": false,
     "esOpcional": true,
     "esLibre": false,
     "seDa": false,
@@ -1852,6 +1944,8 @@
       "materia": "FBD"
     },
     "semestre": "primero",
+    "obligatoriaIngenieria1997": false,
+    "obligatoriaAnalista1997": false,
     "esOpcional": true,
     "esLibre": false,
     "seDa": true,
@@ -1898,6 +1992,8 @@
       ]
     },
     "semestre": "segundo",
+    "obligatoriaIngenieria1997": true,
+    "obligatoriaAnalista1997": true,
     "esOpcional": false,
     "esLibre": false,
     "seDa": true,
@@ -1936,6 +2032,8 @@
       ]
     },
     "semestre": "primero",
+    "obligatoriaIngenieria1997": false,
+    "obligatoriaAnalista1997": false,
     "esOpcional": true,
     "esLibre": false,
     "seDa": true,
@@ -1965,6 +2063,8 @@
       "materia": "RC"
     },
     "semestre": "segundo",
+    "obligatoriaIngenieria1997": false,
+    "obligatoriaAnalista1997": false,
     "esOpcional": true,
     "esLibre": false,
     "seDa": true,
@@ -2007,6 +2107,8 @@
       ]
     },
     "semestre": "segundo",
+    "obligatoriaIngenieria1997": false,
+    "obligatoriaAnalista1997": false,
     "esOpcional": true,
     "esLibre": false,
     "seDa": true,
@@ -2045,6 +2147,8 @@
       ]
     },
     "semestre": "segundo",
+    "obligatoriaIngenieria1997": false,
+    "obligatoriaAnalista1997": false,
     "esOpcional": true,
     "esLibre": false,
     "seDa": true,
@@ -2091,6 +2195,8 @@
       ]
     },
     "semestre": "primero",
+    "obligatoriaIngenieria1997": false,
+    "obligatoriaAnalista1997": false,
     "esOpcional": true,
     "esLibre": false,
     "seDa": true,
@@ -2138,6 +2244,8 @@
       ]
     },
     "semestre": "segundo",
+    "obligatoriaIngenieria1997": true,
+    "obligatoriaAnalista1997": true,
     "esOpcional": false,
     "esLibre": false,
     "seDa": true,
@@ -2176,6 +2284,8 @@
       ]
     },
     "semestre": "primero",
+    "obligatoriaIngenieria1997": false,
+    "obligatoriaAnalista1997": false,
     "esOpcional": true,
     "esLibre": false,
     "seDa": true,
@@ -2214,6 +2324,8 @@
       ]
     },
     "semestre": "primero",
+    "obligatoriaIngenieria1997": false,
+    "obligatoriaAnalista1997": false,
     "esOpcional": true,
     "esLibre": false,
     "seDa": true,
@@ -2265,6 +2377,8 @@
       ]
     },
     "semestre": "primero",
+    "obligatoriaIngenieria1997": false,
+    "obligatoriaAnalista1997": false,
     "esOpcional": true,
     "esLibre": false,
     "seDa": true,
@@ -2307,6 +2421,8 @@
       ]
     },
     "semestre": "primero",
+    "obligatoriaIngenieria1997": false,
+    "obligatoriaAnalista1997": false,
     "esOpcional": true,
     "esLibre": false,
     "seDa": true,
@@ -2345,6 +2461,8 @@
       ]
     },
     "semestre": "primero",
+    "obligatoriaIngenieria1997": false,
+    "obligatoriaAnalista1997": false,
     "esOpcional": true,
     "esLibre": false,
     "seDa": true,
@@ -2374,6 +2492,8 @@
       "materia": "IIS"
     },
     "semestre": "primero",
+    "obligatoriaIngenieria1997": false,
+    "obligatoriaAnalista1997": false,
     "esOpcional": true,
     "esLibre": false,
     "seDa": true,
@@ -2416,6 +2536,8 @@
       ]
     },
     "semestre": "segundo",
+    "obligatoriaIngenieria1997": false,
+    "obligatoriaAnalista1997": false,
     "esOpcional": true,
     "esLibre": false,
     "seDa": true,
@@ -2470,6 +2592,8 @@
       ]
     },
     "semestre": "segundo",
+    "obligatoriaIngenieria1997": false,
+    "obligatoriaAnalista1997": false,
     "esOpcional": true,
     "esLibre": false,
     "seDa": true,
@@ -2512,6 +2636,8 @@
       ]
     },
     "semestre": "primero",
+    "obligatoriaIngenieria1997": true,
+    "obligatoriaAnalista1997": false,
     "esOpcional": false,
     "esLibre": false,
     "seDa": true,
@@ -2550,6 +2676,8 @@
       ]
     },
     "semestre": "primero",
+    "obligatoriaIngenieria1997": false,
+    "obligatoriaAnalista1997": false,
     "esOpcional": true,
     "esLibre": false,
     "seDa": false,
@@ -2605,6 +2733,8 @@
       ]
     },
     "semestre": "primero",
+    "obligatoriaIngenieria1997": false,
+    "obligatoriaAnalista1997": false,
     "esOpcional": false,
     "esLibre": false,
     "seDa": true,
@@ -2634,6 +2764,8 @@
       "materia": "PF"
     },
     "semestre": "segundo",
+    "obligatoriaIngenieria1997": false,
+    "obligatoriaAnalista1997": false,
     "esOpcional": true,
     "esLibre": false,
     "seDa": true,
@@ -2680,6 +2812,8 @@
       ]
     },
     "semestre": "primero",
+    "obligatoriaIngenieria1997": false,
+    "obligatoriaAnalista1997": false,
     "esOpcional": false,
     "esLibre": false,
     "seDa": true,
@@ -2727,6 +2861,8 @@
       ]
     },
     "semestre": "segundo",
+    "obligatoriaIngenieria1997": false,
+    "obligatoriaAnalista1997": false,
     "esOpcional": true,
     "esLibre": false,
     "seDa": true,
@@ -2765,6 +2901,8 @@
       ]
     },
     "semestre": "segundo",
+    "obligatoriaIngenieria1997": true,
+    "obligatoriaAnalista1997": false,
     "esOpcional": false,
     "esLibre": false,
     "seDa": true,
@@ -2819,6 +2957,8 @@
       ]
     },
     "semestre": "segundo",
+    "obligatoriaIngenieria1997": false,
+    "obligatoriaAnalista1997": false,
     "esOpcional": true,
     "esLibre": false,
     "seDa": true,
@@ -2848,6 +2988,8 @@
       "materia": "AA"
     },
     "semestre": "primero",
+    "obligatoriaIngenieria1997": false,
+    "obligatoriaAnalista1997": false,
     "esOpcional": true,
     "esLibre": false,
     "seDa": true,
@@ -2890,6 +3032,8 @@
       ]
     },
     "semestre": "segundo",
+    "obligatoriaIngenieria1997": false,
+    "obligatoriaAnalista1997": false,
     "esOpcional": true,
     "esLibre": false,
     "seDa": true,
@@ -2932,6 +3076,8 @@
       ]
     },
     "semestre": "segundo",
+    "obligatoriaIngenieria1997": false,
+    "obligatoriaAnalista1997": false,
     "esOpcional": true,
     "esLibre": false,
     "seDa": true,
@@ -2978,6 +3124,8 @@
       ]
     },
     "semestre": "primero",
+    "obligatoriaIngenieria1997": false,
+    "obligatoriaAnalista1997": false,
     "esOpcional": true,
     "esLibre": false,
     "seDa": true,
@@ -3007,6 +3155,8 @@
       "materia": "ICG"
     },
     "semestre": "segundo",
+    "obligatoriaIngenieria1997": false,
+    "obligatoriaAnalista1997": false,
     "esOpcional": true,
     "esLibre": false,
     "seDa": true,
@@ -3057,6 +3207,8 @@
       ]
     },
     "semestre": "primero",
+    "obligatoriaIngenieria1997": false,
+    "obligatoriaAnalista1997": false,
     "esOpcional": true,
     "esLibre": false,
     "seDa": true,
@@ -3083,6 +3235,8 @@
     ],
     "reglaHabilitacion": null,
     "semestre": "ambos",
+    "obligatoriaIngenieria1997": false,
+    "obligatoriaAnalista1997": false,
     "esOpcional": false,
     "esLibre": true,
     "seDa": true,
@@ -3113,6 +3267,8 @@
     ],
     "reglaHabilitacion": null,
     "semestre": "primero",
+    "obligatoriaIngenieria1997": false,
+    "obligatoriaAnalista1997": false,
     "esOpcional": true,
     "esLibre": false,
     "seDa": true,
@@ -3143,6 +3299,8 @@
       "cantidad": 10
     },
     "semestre": "primero",
+    "obligatoriaIngenieria1997": false,
+    "obligatoriaAnalista1997": false,
     "esOpcional": true,
     "esLibre": false,
     "seDa": true,
@@ -3181,6 +3339,8 @@
       ]
     },
     "semestre": "ambos",
+    "obligatoriaIngenieria1997": false,
+    "obligatoriaAnalista1997": false,
     "esOpcional": true,
     "esLibre": true,
     "seDa": true,
@@ -3241,6 +3401,8 @@
       ]
     },
     "semestre": "ambos",
+    "obligatoriaIngenieria1997": false,
+    "obligatoriaAnalista1997": false,
     "esOpcional": true,
     "esLibre": true,
     "seDa": true,
@@ -3275,6 +3437,8 @@
       "cantidad": 140
     },
     "semestre": "primero",
+    "obligatoriaIngenieria1997": false,
+    "obligatoriaAnalista1997": false,
     "esOpcional": true,
     "esLibre": true,
     "seDa": true,
@@ -3314,6 +3478,8 @@
       ]
     },
     "semestre": "segundo",
+    "obligatoriaIngenieria1997": false,
+    "obligatoriaAnalista1997": false,
     "esOpcional": true,
     "esLibre": true,
     "seDa": true,
@@ -3343,6 +3509,8 @@
       "materia": "AGI"
     },
     "semestre": "segundo",
+    "obligatoriaIngenieria1997": false,
+    "obligatoriaAnalista1997": false,
     "esOpcional": true,
     "esLibre": true,
     "seDa": true,
@@ -3369,6 +3537,8 @@
     ],
     "reglaHabilitacion": null,
     "semestre": "segundo",
+    "obligatoriaIngenieria1997": false,
+    "obligatoriaAnalista1997": false,
     "esOpcional": true,
     "esLibre": false,
     "seDa": true,
@@ -3424,6 +3594,8 @@
       ]
     },
     "semestre": "primero",
+    "obligatoriaIngenieria1997": false,
+    "obligatoriaAnalista1997": false,
     "esOpcional": true,
     "esLibre": false,
     "seDa": true,
@@ -3454,6 +3626,8 @@
       "cantidad": 200
     },
     "semestre": "ambos",
+    "obligatoriaIngenieria1997": false,
+    "obligatoriaAnalista1997": false,
     "esOpcional": true,
     "esLibre": false,
     "seDa": true,
@@ -3603,6 +3777,8 @@
       ]
     },
     "semestre": "ambos",
+    "obligatoriaIngenieria1997": true,
+    "obligatoriaAnalista1997": false,
     "esOpcional": false,
     "esLibre": false,
     "seDa": true,

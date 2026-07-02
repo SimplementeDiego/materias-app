@@ -59,6 +59,10 @@ const colorMateria = (id, color) => {
     cy.get(`#${id}`).should("have.css", "background-color", color);
 };
 
+const materiaVisible = (id) => {
+    cy.get(`#${id}`).scrollIntoView().should("be.visible");
+};
+
 const aprobarMateria = (id) => {
     cy.get(`#${id}`).click();
 };
@@ -266,13 +270,13 @@ describe("Configuracion y filtros", () => {
     it("activa y desactiva plan 2025", () => {
         cy.get('label[for="mi-toggle-plan"]').click();
         cy.get("#mi-toggle-plan").should("be.checked");
-        cy.get("#FC").should("be.visible");
-        cy.get("#IC").should("be.visible");
+        materiaVisible("FC");
+        materiaVisible("IC");
         cy.get("#MD1").should("not.exist");
 
         cy.get('label[for="mi-toggle-plan"]').click();
         cy.get("#mi-toggle-plan").should("not.be.checked");
-        cy.get("#MD1").should("be.visible");
+        materiaVisible("MD1");
         cy.get("#FC").should("not.exist");
         cy.get("#IC").should("not.exist");
     });
@@ -308,6 +312,16 @@ describe("Configuracion y filtros", () => {
         cy.get('label[for="mi-toggle-opcionales"]').click();
         cy.get("#mi-toggle-opcionales").should("be.checked");
         cy.get("#CTS").scrollIntoView().should("be.visible");
+    });
+
+    it("cambia asteriscos de opcionales segun titulo", () => {
+        cy.get("#config-titulo-avance").should("be.visible");
+        cy.get("#PYE").invoke("text").should("match", /\(10\)$/);
+
+        cy.get("#toggle-titulo-avance").check({ force: true });
+
+        cy.get("#PYE").invoke("text").should("match", /\(10\)\*$/);
+        cy.get("#CDIV").invoke("text").should("match", /\(13\)$/);
     });
 
     it("filtra por semestre y calidad libre", () => {
@@ -498,6 +512,7 @@ describe("Planificacion", () => {
         cy.get("#vista-planificacion").should("contain", "Planificaci");
         cy.get("#seccion-informacion").should("be.visible");
         cy.get("#seccion-configuracion").should("be.visible");
+        cy.get("#config-titulo-avance").should("be.visible");
         cy.get("#seccion-filtros").should("not.be.visible");
         cy.get("#mi-toggle-opcionales").should("not.be.visible");
 
@@ -507,6 +522,7 @@ describe("Planificacion", () => {
         cy.get("#vista-planificacion").should("be.visible");
         cy.get("#seccion-informacion").should("be.visible");
         cy.get("#seccion-configuracion").should("be.visible");
+        cy.get("#config-titulo-avance").should("be.visible");
         cy.get("#seccion-filtros").should("not.be.visible");
         cy.get("#mi-toggle-opcionales").should("not.be.visible");
     });
@@ -749,10 +765,12 @@ describe("Avance", () => {
         cy.get("#vista-avance").should("contain", "Faltan 450 créditos");
         cy.get("#vista-avance").should("contain", "Grupo de materias básicas");
         cy.get("#vista-avance").should("contain", "Unidades curriculares necesarias");
+        cy.get("#config-titulo-avance").should("be.visible");
         cy.get("#config-avance-faltantes").should("be.visible");
         cy.get("#config-matematica-inicial").should("not.be.visible");
         cy.get("#config-plan-2025").should("not.be.visible");
         cy.get("#config-opcionales").should("not.be.visible");
+        cy.get("#vista-avance #toggle-titulo-avance").should("not.exist");
 
         cy.reload();
 

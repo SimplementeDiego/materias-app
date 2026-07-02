@@ -6,7 +6,7 @@
     <meta name="description" content="Materias Computación">
     <title>Materias</title>
     <link rel="icon" type="image/x-icon" href="/icons/bookmark.ico">
-    <link rel="stylesheet" href="style.css?v=1">
+    <link rel="stylesheet" href="style.css?v=2">
 </head>
 <body>
     
@@ -201,6 +201,14 @@
                             <span class="switch-slider" aria-hidden="true"></span>
                         </label>
                     </div>
+                    <div id="config-titulo-avance" class="container-item-config infoToggles">
+                        <label for="toggle-titulo-avance">Analista</label>
+
+                        <label class="switch">
+                            <input type="checkbox" id="toggle-titulo-avance" class="switch-input" onclick="toggleTituloAvance()" aria-label="Cambiar entre Ingeniería y Analista en Computación">
+                            <span class="switch-slider" aria-hidden="true"></span>
+                        </label>
+                    </div>
                     <div id="config-avance-faltantes" class="container-item-config infoToggles">
                         <label for="mi-toggle-avance-faltantes">Mostrar solo faltantes</label>
 
@@ -252,7 +260,7 @@
     </main>
 
     <script src="./firebase-config.js?v=2"></script>
-    <script src="./app.js?v=1"></script>
+    <script src="./app.js?v=2"></script>
 
 </body>
 </html>

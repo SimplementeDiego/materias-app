@@ -318,10 +318,16 @@ main {
     background-color: rgb(236, 247, 255);
 }
 
+#config-titulo-avance,
 #config-avance-faltantes {
     display: none;
     max-width: 100%;
     min-width: 0;
+}
+
+#config-titulo-avance .switch,
+#config-avance-faltantes .switch {
+    flex: 0 0 46px;
 }
 
 #config-avance-faltantes label:first-child {
@@ -643,15 +649,6 @@ main {
     margin-bottom: 10px;
     text-align: center;
     text-decoration: underline;
-}
-
-.avance-toggle-titulo {
-    justify-content: center;
-    font-weight: bold;
-}
-
-.avance-toggle-titulo .switch {
-    flex: 0 0 46px;
 }
 
 .aviso-avance {

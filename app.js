@@ -206,10 +206,12 @@ const idBotonAvance = "avance";
 const idConfigMatematicaInicial = "config-matematica-inicial";
 const idConfigPlan2025 = "config-plan-2025";
 const idConfigOpcionales = "config-opcionales";
+const idConfigTituloAvance = "config-titulo-avance";
 const idConfigAvanceFaltantes = "config-avance-faltantes";
 const idInputBuscarMateria = "input-buscar-materia";
 const idSelectFiltrarSemestre = "select-filtrar-semestre";
 const idSelectFiltrarArea = "select-filtrar-area";
+const idToggleTituloAvance = "toggle-titulo-avance";
 const idToggleAvanceFaltantes = "mi-toggle-avance-faltantes";
 const idTextareaImportarDatos = "textarea-importar-datos";
 const idFirebaseEstado = "firebase-estado";
@@ -395,6 +397,8 @@ function actualizarMateriaDesdeJson(materia, datos) {
   materia.nombreCompleto = datos.nombreCompleto;
   materia.creditos = datos.creditos;
   materia.semestre = datos.semestre;
+  materia.obligatoriaIngenieria1997 = datos.obligatoriaIngenieria1997;
+  materia.obligatoriaAnalista1997 = datos.obligatoriaAnalista1997;
   materia.esOpcional = datos.esOpcional;
   materia.esLibre = datos.esLibre;
   materia.se_da = datos.seDa;
@@ -621,6 +625,7 @@ function configurarTogglesConfiguracion({ planificacionActiva = false, avanceAct
   mostrarItemConfiguracion(idConfigMatematicaInicial, !avanceActiva);
   mostrarItemConfiguracion(idConfigPlan2025, !avanceActiva);
   mostrarItemConfiguracion(idConfigOpcionales, !avanceActiva && !planificacionActiva);
+  mostrarItemConfiguracion(idConfigTituloAvance, true);
   mostrarItemConfiguracion(idConfigAvanceFaltantes, avanceActiva);
 }
 
@@ -734,7 +739,7 @@ function isMateriaValid(materia) {
   let semestreAmbos = (seleccionSemestre==Semestre.AMBOS);
   let semestrePrimero = (seleccionSemestre==Semestre.PRIMERO && (materia.semestre==Semestre.PRIMERO || materia.semestre==Semestre.AMBOS))
   let semestreSegundo = (seleccionSemestre==Semestre.SEGUNDO && (materia.semestre==Semestre.SEGUNDO || materia.semestre==Semestre.AMBOS))
-  let opcionales = (seleccionOpcionales || !materia.esOpcional);
+  let opcionales = (seleccionOpcionales || !materiaEsOpcional(materia));
   return (semestreLibre || semestreAmbos || semestrePrimero || semestreSegundo) && opcionales && materiaCumpleFiltroTexto(materia) && materiaCumpleFiltroArea(materia);
 }
 
@@ -1201,7 +1206,14 @@ async function usarDatosRemotosFirebase() {
   try {
     aplicarDatosImportadosEnLocalStorage(datosRemotos);
     await recargarEstadoDesdeStorage();
-    actualizarVistaCuentaFirebase(`Sesión iniciada como ${firebaseUsuario.email}. Datos de la base cargados.`);
+    firebaseCargandoDatosRemotos = false;
+    try {
+      await guardarDatosFirebase(true);
+      actualizarVistaCuentaFirebase(`Sesión iniciada como ${firebaseUsuario.email}. Datos de la base cargados y sincronizados.`);
+    } catch (error) {
+      console.error("No se pudieron sincronizar los datos normalizados de Firebase", error);
+      actualizarVistaCuentaFirebase(obtenerMensajeErrorConDetalle("Datos de la base cargados, pero no se pudieron sincronizar los datos normalizados.", error), true);
+    }
   } catch (error) {
     firebaseDatosRemotosPendientes = datosRemotos;
     firebaseResolucionDatosPendiente = true;
@@ -1337,6 +1349,7 @@ function reiniciarEstadoEnMemoria() {
   document.getElementById("mi-toggle-MI").checked = false;
   document.getElementById("mi-toggle-plan").checked = false;
   document.getElementById("mi-toggle-opcionales").checked = true;
+  document.getElementById(idToggleTituloAvance).checked = false;
   document.getElementById(idToggleAvanceFaltantes).checked = false;
   document.getElementById(idInputBuscarMateria).value = "";
   document.getElementById(idSelectFiltrarArea).value = "";
@@ -1528,9 +1541,16 @@ function calcularCreditosMateria(materia) {
   return obtenerAportesMateria(materia).reduce((total, { creditos }) => total + creditos, 0);
 }
 
+function materiaEsOpcional(materia) {
+  const obligatoria = tituloAvanceSeleccionado === TituloAvance.ANALISTA
+    ? materia.obligatoriaAnalista1997
+    : materia.obligatoriaIngenieria1997;
+  return typeof obligatoria === "boolean" ? !obligatoria : materia.esOpcional;
+}
+
 function textoBotonMateria(materia) {
   let texto = `${materia.nombreCompleto} (${calcularCreditosMateria(materia)})`;
-  if (materia.esOpcional) {
+  if (materiaEsOpcional(materia)) {
     texto += "*";
   }
   return texto;
@@ -1633,9 +1653,28 @@ function obtenerConfiguracionAvance() {
 
 function cambiarTituloAvance(titulo) {
   tituloAvanceSeleccionado = obtenerTituloAvanceValido(titulo);
+  const toggleTituloAvance = document.getElementById(idToggleTituloAvance);
+  if (toggleTituloAvance) {
+    toggleTituloAvance.checked = tituloAvanceSeleccionado === TituloAvance.ANALISTA;
+  }
   guardarLocalStorage(LocalStorageNombres.tituloAvance, tituloAvanceSeleccionado);
   programarGuardadoFirebase();
-  renderizarAvance();
+  if (vistaAvanceActiva) {
+    rehacerPaginaSinEstado();
+    reconstruirEstadoPagina();
+  } else if (vistaPlanificacionActiva) {
+    renderizarPlanificacion();
+  } else {
+    rehacerPaginaSinEstado();
+    reconstruirEstadoPagina();
+    mostrarBotonesDeMateriasQueCorresponda();
+    mostrarSeccionesQueCorrespondan();
+  }
+}
+
+function toggleTituloAvance() {
+  const toggle = document.getElementById(idToggleTituloAvance);
+  cambiarTituloAvance(toggle?.checked ? TituloAvance.ANALISTA : TituloAvance.INGENIERIA);
 }
 
 function toggleAvanceSoloFaltantes() {
@@ -1643,40 +1682,6 @@ function toggleAvanceSoloFaltantes() {
   guardarLocalStorage(LocalStorageNombres.avanceSoloFaltantes, JSON.stringify(avanceSoloFaltantes));
   programarGuardadoFirebase();
   renderizarAvanceSiActivo();
-}
-
-function renderizarToggleTituloAvance() {
-  const container = document.createElement("div");
-  container.classList.add("avance-resumen", "container-item-config", "avance-toggle-titulo");
-
-  const labelIngenieria = document.createElement("span");
-  labelIngenieria.textContent = "Ingeniería";
-
-  const switchLabel = document.createElement("label");
-  switchLabel.classList.add("switch");
-
-  const input = document.createElement("input");
-  input.type = "checkbox";
-  input.id = "toggle-titulo-avance";
-  input.classList.add("switch-input");
-  input.checked = tituloAvanceSeleccionado === TituloAvance.ANALISTA;
-  input.setAttribute("aria-label", "Cambiar entre avance de Ingeniería y Analista en Computación");
-  input.onchange = () => cambiarTituloAvance(input.checked ? TituloAvance.ANALISTA : TituloAvance.INGENIERIA);
-
-  const slider = document.createElement("span");
-  slider.classList.add("switch-slider");
-  slider.setAttribute("aria-hidden", "true");
-
-  const labelAnalista = document.createElement("span");
-  labelAnalista.textContent = "Analista";
-
-  switchLabel.append(input);
-  switchLabel.append(slider);
-  container.append(labelIngenieria);
-  container.append(switchLabel);
-  container.append(labelAnalista);
-
-  return container;
 }
 
 function limitarPorcentajeAvance(actual, requerido) {
@@ -1875,7 +1880,6 @@ function renderizarAvance() {
   titulo.classList.add("titulo-popup");
   titulo.textContent = `Avance para ${configuracion.nombre}`;
   contenedor.append(titulo);
-  contenedor.append(renderizarToggleTituloAvance());
 
   const resumen = document.createElement("section");
   resumen.classList.add("avance-resumen");
@@ -2574,7 +2578,7 @@ function renderizarSemestrePlanificado(semestrePlanificado, indiceSemestre) {
   const mostrarMateriasNoDictadas = semestrePlanificado.mostrarMateriasNoDictadas === true;
   const mostrarOpcionales = semestrePlanificado.mostrarOpcionales !== false;
   const materiasDisponibles = obtenerMateriasDisponiblesParaPlan(indiceSemestre).filter((materia) => (
-    (mostrarOpcionales || !materia.esOpcional) &&
+    (mostrarOpcionales || !materiaEsOpcional(materia)) &&
     (mostrarMateriasNoDictadas || materiaSeDictaEnSemestrePlanificado(materia, semestrePlanificado.semestre))
   ));
   if (materiasDisponibles.length === 0) {
@@ -2958,8 +2962,10 @@ function crearBotonesMaterias(){
     if (materia1.peso !== materia2.peso) {
         return materia1.peso - materia2.peso;
     }
-    if (materia1.esOpcional !== materia2.esOpcional) {
-        return (!materia1.esOpcional ? -1 : 1) - (!materia2.esOpcional ? -1 : 1);
+    const materia1Opcional = materiaEsOpcional(materia1);
+    const materia2Opcional = materiaEsOpcional(materia2);
+    if (materia1Opcional !== materia2Opcional) {
+        return (!materia1Opcional ? -1 : 1) - (!materia2Opcional ? -1 : 1);
     }
     return materia1.nombreCompleto.localeCompare(materia2.nombreCompleto);
   });
@@ -3181,6 +3187,7 @@ async function firstLoad() {
   tituloAvanceSeleccionado = obtenerTituloAvanceValido(leerLocalStorage(LocalStorageNombres.tituloAvance));
   avanceSoloFaltantes = leerJsonLocalStorage(LocalStorageNombres.avanceSoloFaltantes, false) === true;
   document.getElementById("mi-toggle-opcionales").checked = seleccionOpcionales;
+  document.getElementById(idToggleTituloAvance).checked = tituloAvanceSeleccionado === TituloAvance.ANALISTA;
   document.getElementById(idToggleAvanceFaltantes).checked = avanceSoloFaltantes;
   configurarTogglesConfiguracion();
   historialExoneradas = new Set(Array.isArray(materiasExoneradasGuardadas) ? materiasExoneradasGuardadas : []);
