@@ -93,6 +93,23 @@ const materiasSeleccionadas = () => {
     return primerPeriodo().contains("Seleccionadas").next(".planificador-lista-botones");
 };
 
+const abrirMateriasExoneradasPlanificador = () => {
+    cy.contains("#vista-planificacion summary", "Materias exoneradas").click();
+};
+
+const materiasExoneradasPlanificador = () => {
+    return cy.contains("#vista-planificacion summary", "Materias exoneradas")
+        .parent()
+        .find(".planificador-lista-botones");
+};
+
+const requisitoCurriculo = (patron) => {
+    return cy.get(".avance-curriculo-item").filter((_, item) => {
+        const texto = item.querySelector(".avance-curriculo-contenido")?.textContent.trim() ?? "";
+        return typeof patron === "string" ? texto === patron : patron.test(texto);
+    });
+};
+
 describe("Materias", () => {
     beforeEach(() => {
         estadoInicial();
@@ -106,6 +123,24 @@ describe("Materias", () => {
         cy.get("#seccion-configuracion").should("be.visible");
         cy.get("#seccion-filtros").should("be.visible");
         cy.get("#titulo-principal-texto").should("contain", "0");
+    });
+
+    it("vuelve desde avance a materias y restaura filtros y configuracion", () => {
+        cy.get("#avance").click();
+        cy.get("#vista-avance").should("be.visible");
+        cy.get("#seccion-aviso-avance").should("be.visible");
+
+        cy.get("#materias").click();
+
+        cy.get("#materias").should("have.class", "activo");
+        cy.get("#avance").should("not.have.class", "activo");
+        cy.get("#vista-avance").should("not.be.visible");
+        cy.get("#seccion-aviso-avance").should("not.be.visible");
+        cy.get("#seccion-informacion").should("be.visible");
+        cy.get("#seccion-configuracion").should("be.visible");
+        cy.get("#seccion-filtros").should("be.visible");
+        cy.get("#config-opcionales").should("be.visible");
+        cy.get("#config-matematica-inicial").should("be.visible");
     });
 
     it("permite minimizar informacion, configuracion y filtros", () => {
@@ -309,19 +344,14 @@ describe("Popups y datos guardados", () => {
         estadoInicial();
     });
 
-    it("abre y cierra el popup de areas", () => {
-        cy.get("#popup-container").should("not.be.visible");
-
-        cy.get("#areas").click();
-
-        cy.get("#popup-container").should("be.visible");
-        cy.get("#popup-container").should("contain", "Materias B");
-        cy.get("#cerrar-popup").click();
-        cy.get("#popup-container").should("not.be.visible");
+    it("no muestra el acceso ni el popup de ver areas", () => {
+        cy.get("#areas").should("not.exist");
+        cy.get("#popup-areas").should("not.exist");
     });
 
     it("resetea progreso, creditos y planificacion", () => {
         exonerarMateria("CDIV");
+        cy.get('label[for="mi-toggle-opcionales"]').click();
         cy.get("#titulo-principal-texto").should("contain", "13");
         irAPlanificacion();
         agregarPeriodo();
@@ -332,6 +362,7 @@ describe("Popups y datos guardados", () => {
 
         cy.get("#vista-planificacion").should("contain", "No hay semestres planificados");
         cy.get("#materias").click();
+        cy.get("#mi-toggle-opcionales").should("be.checked");
         colorMateria("CDIV", COLOR.habilitada);
         cy.get("#titulo-principal-texto").should("contain", "0");
     });
@@ -366,6 +397,8 @@ describe("Popups y datos guardados", () => {
     it("copia un backup con los datos relevantes", () => {
         exonerarMateria("GAL1");
         cy.get('label[for="mi-toggle-opcionales"]').click();
+        cy.get("#avance").click();
+        cy.get("#mi-toggle-avance-faltantes").check({ force: true });
 
         cy.window().then((win) => {
             Object.defineProperty(win.navigator, "clipboard", {
@@ -386,6 +419,8 @@ describe("Popups y datos guardados", () => {
             expect(backup.version).to.equal(1);
             expect(JSON.parse(backup.datos.materiasExoneradas)).to.include("GAL1");
             expect(JSON.parse(backup.datos.seleccionOpcionales)).to.equal(false);
+            expect(JSON.parse(backup.datos.avanceSoloFaltantes)).to.equal(true);
+            expect(backup.datos.vistaSeleccionada).to.equal("avance");
         });
         cy.get("#mensaje-usuario").should("contain", "Datos copiados");
     });
@@ -427,6 +462,28 @@ describe("Popups y datos guardados", () => {
         colorMateria("GAL1", COLOR.exonerada);
         cy.get("#select-filtrar-semestre").should("have.value", "segundo");
     });
+
+    it("carga un JSON desde avance sin dejar la vista vieja activa", () => {
+        const backup = {
+            aplicacion: "materias-app",
+            version: 1,
+            datos: {
+                materiasAprobadas: JSON.stringify(["GAL1"]),
+                materiasExoneradas: JSON.stringify(["GAL1"]),
+                vistaSeleccionada: "materias",
+            },
+        };
+
+        cy.get("#avance").click();
+        cy.get("#importar-datos").click();
+        cy.get("#textarea-importar-datos").invoke("val", JSON.stringify(backup)).trigger("input");
+        cy.get("#boton-cargar-datos").click();
+
+        cy.get("#materias").should("have.class", "activo");
+        cy.get("#avance").should("not.have.class", "activo");
+        cy.get("#seccion-aviso-avance").should("not.be.visible");
+        colorMateria("GAL1", COLOR.exonerada);
+    });
 });
 
 describe("Planificacion", () => {
@@ -452,6 +509,18 @@ describe("Planificacion", () => {
         cy.get("#seccion-configuracion").should("be.visible");
         cy.get("#seccion-filtros").should("not.be.visible");
         cy.get("#mi-toggle-opcionales").should("not.be.visible");
+    });
+
+    it("muestra informacion al ir desde avance a planificacion", () => {
+        cy.get("#avance").click();
+        cy.get("#seccion-informacion").should("not.be.visible");
+
+        cy.get("#planificacion").click();
+
+        cy.get("#planificacion").should("have.class", "activo");
+        cy.get("#vista-planificacion").should("be.visible");
+        cy.get("#seccion-informacion").should("be.visible");
+        cy.get("#seccion-configuracion").should("be.visible");
     });
 
     it("vuelve desde planificacion a materias", () => {
@@ -491,6 +560,19 @@ describe("Planificacion", () => {
 
         materiasSeleccionadas().contains("button", /^X$/).click();
         materiasSeleccionadas().should("contain", "Sin materias seleccionadas");
+    });
+
+    it("permite cambiar el nombre de un periodo y persistirlo", () => {
+        irAPlanificacion();
+        agregarPeriodo();
+
+        primerPeriodo().find(".input-nombre-planificador").clear().type("Segundo año");
+        primerPeriodo().contains("summary", /Segundo a.o \(0 materias/).should("exist");
+
+        cy.reload();
+
+        primerPeriodo().find(".input-nombre-planificador").should("have.value", "Segundo año");
+        primerPeriodo().contains("summary", /Segundo a.o \(0 materias/).should("exist");
     });
 
     it("muestra creditos y asterisco de opcionales al elegir materias", () => {
@@ -587,6 +669,53 @@ describe("Planificacion", () => {
         primerPeriodo().contains("button", "Aplicar al estado actual").should("not.exist");
     });
 
+    it("permite planificar desde cero con materias base sin cambiar el estado real", () => {
+        irAPlanificacion();
+        cy.get("#toggle-estado-actual-planificador").uncheck({ force: true });
+        abrirMateriasExoneradasPlanificador();
+        materiasExoneradasPlanificador().contains("button", /C.lculo DIV \(13\)/).click();
+
+        abrirMateriasExoneradasPlanificador();
+        materiasExoneradasPlanificador().contains("button", /C.lculo DIV \(13\)/)
+            .should("have.css", "background-color", COLOR.exonerada);
+
+        agregarPeriodo();
+        abrirElegirMaterias();
+        materiasParaElegir().contains("button", /C.lculo DIVV \(13\)/).should("be.visible");
+
+        cy.get("#materias").click();
+        colorMateria("CDIV", COLOR.habilitada);
+    });
+
+    it("aplica cursos aprobados del primer periodo sin sumarlos como creditos", () => {
+        irAPlanificacion();
+        agregarPeriodo();
+        abrirElegirMaterias();
+        materiasParaElegir().contains("button", /C.lculo DIV \(13\)/).click();
+        materiasSeleccionadas().contains("button", /C.lculo DIV \(13\)/).click();
+
+        primerPeriodo().contains("button", "Aplicar al estado actual").click();
+
+        cy.get("#materias").click();
+        colorMateria("CDIV", COLOR.aprobada);
+        cy.get("#titulo-principal-texto").should("contain", "0");
+    });
+
+    it("permite minimizar y eliminar periodos planificados", () => {
+        irAPlanificacion();
+        agregarPeriodo();
+
+        primerPeriodo().find("> summary").click();
+        primerPeriodo().should("not.have.attr", "open");
+
+        cy.reload();
+
+        primerPeriodo().should("not.have.attr", "open");
+        primerPeriodo().find("> summary").click();
+        primerPeriodo().contains("button", "Eliminar").click();
+        cy.get("#vista-planificacion").should("contain", "No hay semestres planificados");
+    });
+
     it("persiste periodos, tipo y materias al recargar", () => {
         irAPlanificacion();
         agregarPeriodo();
@@ -601,6 +730,90 @@ describe("Planificacion", () => {
         primerPeriodo().find("select.selector-planificador").should("have.value", "examenes");
         materiasSeleccionadas().contains("button", /Geometr.a y .lgebra Lineal 1 \(9\)/)
             .should("have.css", "background-color", COLOR.exonerada);
+    });
+});
+
+describe("Avance", () => {
+    beforeEach(() => {
+        estadoInicial();
+    });
+
+    it("muestra el avance de ingenieria y lo mantiene al recargar", () => {
+        cy.get("#avance").click();
+
+        cy.get("#avance").should("have.class", "activo");
+        cy.get("#vista-avance").should("be.visible");
+        cy.get("#seccion-aviso-avance").should("be.visible").and("contain", "Puede contener errores");
+        cy.get("#seccion-informacion").should("not.be.visible");
+        cy.get("#vista-avance").should("contain", "Créditos totales: 0/450");
+        cy.get("#vista-avance").should("contain", "Faltan 450 créditos");
+        cy.get("#vista-avance").should("contain", "Grupo de materias básicas");
+        cy.get("#vista-avance").should("contain", "Unidades curriculares necesarias");
+        cy.get("#config-avance-faltantes").should("be.visible");
+        cy.get("#config-matematica-inicial").should("not.be.visible");
+        cy.get("#config-plan-2025").should("not.be.visible");
+        cy.get("#config-opcionales").should("not.be.visible");
+
+        cy.reload();
+
+        cy.get("#avance").should("have.class", "activo");
+        cy.get("#vista-avance").should("be.visible");
+        cy.get("#seccion-informacion").should("not.be.visible");
+    });
+
+    it("marca requisitos curriculares cumplidos con materias exoneradas", () => {
+        estadoInicial({ exoneradas: ["CDIV"] });
+
+        cy.get("#avance").click();
+
+        cy.get("#vista-avance").should("contain", "Créditos totales: 13/450");
+        requisitoCurriculo(/^C.lculo DIV$/).should("have.class", "cumplido");
+
+        cy.get("#mi-toggle-avance-faltantes").check({ force: true });
+
+        requisitoCurriculo(/^C.lculo DIV$/).should("not.exist");
+        cy.contains(".avance-requisito", /Matem.tica/).within(() => {
+            cy.contains("summary", /Materias de/).click();
+            cy.contains("Materias ya hechas").should("not.exist");
+            cy.contains("Materias disponibles");
+        });
+
+        cy.reload();
+
+        cy.get("#mi-toggle-avance-faltantes").should("be.checked");
+        requisitoCurriculo(/^C.lculo DIV$/).should("not.exist");
+    });
+
+    it("permite expandir las materias asociadas a un area", () => {
+        estadoInicial({ exoneradas: ["CDIV"] });
+
+        cy.get("#avance").click();
+        cy.contains(".avance-requisito", /Matem.tica/).within(() => {
+            cy.contains("summary", /Materias de Matem.tica/).click();
+            cy.contains("Materias ya hechas");
+            cy.contains(/C.lculo DIV/);
+            cy.contains("Materias disponibles");
+        });
+    });
+
+    it("permite ver y persistir el avance de analista", () => {
+        cy.get("#avance").click();
+        cy.get("#toggle-titulo-avance").check({ force: true });
+
+        cy.get("#vista-avance").should("contain", "Avance para Analista en Computación");
+        cy.get("#vista-avance").should("contain", "Créditos totales: 0/270");
+        cy.get("#vista-avance").should("contain", "Faltan 270 créditos");
+        cy.get("#vista-avance").should("not.contain", "Grupo optativas");
+        cy.contains(".avance-requisito", /Matem.tica/).within(() => {
+            cy.contains(".avance-requisito-creditos", "0/0");
+            cy.contains("summary", /Materias de Matem.tica/).click();
+            cy.contains("Materias disponibles");
+        });
+
+        cy.reload();
+
+        cy.get("#toggle-titulo-avance").should("be.checked");
+        cy.get("#vista-avance").should("contain", "Créditos totales: 0/270");
     });
 });
 

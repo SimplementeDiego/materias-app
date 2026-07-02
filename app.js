@@ -6,6 +6,8 @@ const LocalStorageNombres = Object.freeze({
   semestre : "semestre",
   vistaSeleccionada: "vistaSeleccionada",
   seleccionOpcionales: "seleccionOpcionales",
+  tituloAvance: "tituloAvance",
+  avanceSoloFaltantes: "avanceSoloFaltantes",
   planificacionSemestres: "planificacionSemestres",
   planificacionUsaEstadoActual: "planificacionUsaEstadoActual",
   planificacionExoneradasBase: "planificacionExoneradasBase"
@@ -31,6 +33,11 @@ const ResultadoPlanificado = Object.freeze({
   HABILITADA: "habilitada",
   CURSO: "curso",
   EXONERADA: "exonerada"
+});
+
+const TituloAvance = Object.freeze({
+  INGENIERIA: "ingenieria",
+  ANALISTA: "analista"
 });
 
 const BarraPopup = Object.freeze({
@@ -80,6 +87,91 @@ const BloqueCreditos = Object.freeze({
   Total: "Total",
 });
 
+const RequisitosCreditosIngenieria = Object.freeze({
+  total: 450,
+  basicas: 80,
+  matematica: 70,
+  cienciasExperimentales: 10,
+  basicoTecnologicas: 220,
+  programacion: 60,
+  arquitecturaSistemasRedes: 30,
+  inteligenciaRobotica: 0,
+  basesDatos: 10,
+  calculoNumerico: 8,
+  investigacionOperativa: 10,
+  ingenieriaSoftware: 10,
+  gestionOrganizaciones: 10,
+  actividadesIntegradoras: 45,
+  adicionalesBasicoTecnologicas: 37,
+  complementarias: 10,
+  humanasSociales: 10,
+  optativas: 140,
+});
+
+const RequisitosCurriculoIngenieria = Object.freeze([
+  { nombre: "Cálculo DIV", opciones: [["CDIV"]] },
+  { nombre: "Cálculo DIVV", opciones: [["CDIVV"]] },
+  { nombre: "Geometría y Álgebra Lineal 1", opciones: [["GAL1"]] },
+  { nombre: "Geometría y Álgebra Lineal 2", opciones: [["GAL2"]] },
+  { nombre: "Matemática Discreta 1", opciones: [["MD1"]] },
+  { nombre: "Matemática Discreta 2", opciones: [["MD2"]] },
+  { nombre: "Lógica", opciones: [["LG"]] },
+  { nombre: "Probabilidad y Estadística", opciones: [["PYE"]] },
+  { nombre: "Taller de Programación", opciones: [["TP"]] },
+  { nombre: "Proyecto de Ingeniería de Software", opciones: [["PIS"]] },
+  { nombre: "Proyecto de Grado", opciones: [["PG"]] },
+  { nombre: "Arquitectura de Computadoras", opciones: [["AC"]] },
+  { nombre: "Sistemas Operativos", opciones: [["SO"]] },
+  { nombre: "Redes de Computadoras", opciones: [["RC"]] },
+  { nombre: "Fundamentos de Bases de Datos", opciones: [["FBD"]] },
+  { nombre: "Métodos Numéricos", opciones: [["MN"]] },
+  { nombre: "Taller Introductorio de Ingeniería de Software", opciones: [["IIS"]] },
+  { nombre: "Introducción a la Investigación de Operaciones", opciones: [["IIO"]] },
+  { nombre: "Programación 1", opciones: [["P1"]] },
+  { nombre: "Programación 2", opciones: [["P2"]] },
+  { nombre: "Programación 3", opciones: [["P3"]] },
+  { nombre: "Programación 4", opciones: [["P4"]] },
+  { nombre: "Teoría de Lenguajes", opciones: [["TL"]] },
+  { nombre: "Agregado de otros paradigmas de programación", opciones: [["PF"], ["PL"]] },
+]);
+
+const RequisitosCreditosAnalista = Object.freeze({
+  total: 270,
+  basicas: 80,
+  matematica: 0,
+  cienciasExperimentales: 0,
+  basicoTecnologicas: 125,
+  programacion: 60,
+  arquitecturaSistemasRedes: 30,
+  inteligenciaRobotica: 0,
+  basesDatos: 10,
+  calculoNumerico: 0,
+  investigacionOperativa: 0,
+  ingenieriaSoftware: 0,
+  gestionOrganizaciones: 10,
+  actividadesIntegradoras: 15,
+});
+
+const RequisitosCurriculoAnalista = Object.freeze([
+  { nombre: "Cálculo DIV", opciones: [["CDIV"]] },
+  { nombre: "Cálculo DIVV", opciones: [["CDIVV"]] },
+  { nombre: "Geometría y Álgebra Lineal 1", opciones: [["GAL1"]] },
+  { nombre: "Geometría y Álgebra Lineal 2", opciones: [["GAL2"]] },
+  { nombre: "Matemática Discreta 1", opciones: [["MD1"]] },
+  { nombre: "Matemática Discreta 2", opciones: [["MD2"]] },
+  { nombre: "Lógica", opciones: [["LG"]] },
+  { nombre: "Taller de Programación", opciones: [["TP"]] },
+  { nombre: "Arquitectura de Computadoras", opciones: [["AC"]] },
+  { nombre: "Redes de Computadoras", opciones: [["RC"]] },
+  { nombre: "Sistemas Operativos", opciones: [["SO"]] },
+  { nombre: "Fundamentos de Bases de Datos", opciones: [["FBD"]] },
+  { nombre: "Programación 1", opciones: [["P1"]] },
+  { nombre: "Programación 2", opciones: [["P2"]] },
+  { nombre: "Programación 3", opciones: [["P3"]] },
+  { nombre: "Programación 4", opciones: [["P4"]] },
+  { nombre: "Teoría de Lenguajes", opciones: [["TL"]] },
+]);
+
 const claseResaltarBotonEnNav = "activo";
 const colorAprobada = "lightblue";
 const colorExonerada = "lightgreen";
@@ -97,21 +189,28 @@ const idHamContainer = "titulo-principal-checkbox-container";
 const idHam = "img-ham";
 const idPopupMateria = "popup-materia";
 const idPopupRespuestas = "popup-respuestas"
-const idPopupAreas = "popup-areas";
 const idPopupListaMaterias = "popup-lista-materias";
 const idPopupAjustarCreditos = "popup-ajustar-creditos";
 const idPopupImportarDatos = "popup-importar-datos";
 const idPopupCuentaFirebase = "popup-cuenta-firebase";
 const idPopupReset = "popup-reset";
 const idVistaPlanificacion = "vista-planificacion";
+const idVistaAvance = "vista-avance";
+const idSeccionAvisoAvance = "seccion-aviso-avance";
 const idSeccionInformacion = "seccion-informacion";
 const idSeccionConfiguracion = "seccion-configuracion";
 const idSeccionFiltros = "seccion-filtros";
 const idBotonMaterias = "materias";
 const idBotonPlanificacion = "planificacion";
+const idBotonAvance = "avance";
+const idConfigMatematicaInicial = "config-matematica-inicial";
+const idConfigPlan2025 = "config-plan-2025";
+const idConfigOpcionales = "config-opcionales";
+const idConfigAvanceFaltantes = "config-avance-faltantes";
 const idInputBuscarMateria = "input-buscar-materia";
 const idSelectFiltrarSemestre = "select-filtrar-semestre";
 const idSelectFiltrarArea = "select-filtrar-area";
+const idToggleAvanceFaltantes = "mi-toggle-avance-faltantes";
 const idTextareaImportarDatos = "textarea-importar-datos";
 const idFirebaseEstado = "firebase-estado";
 const idFirebaseEmail = "firebase-email";
@@ -132,6 +231,9 @@ let seleccionMenu = false;
 let seleccionSemestre = Semestre.AMBOS;
 let seleccionNavbar = idBotonMaterias;
 let vistaPlanificacionActiva = false;
+let vistaAvanceActiva = false;
+let tituloAvanceSeleccionado = TituloAvance.INGENIERIA;
+let avanceSoloFaltantes = false;
 let valorBarra = BarraPopup.Previas;
 let popUpActual = idPopupMateria;
 let filtroTextoMateria = "";
@@ -493,7 +595,7 @@ function toggleMateria(nombre) {
 
 function obtenerIdNavbarValido(idBoton) {
   if (Object.values(Semestre).includes(idBoton)) return idBotonMaterias;
-  const idsValidos = [idBotonMaterias, idBotonPlanificacion];
+  const idsValidos = [idBotonMaterias, idBotonPlanificacion, idBotonAvance];
   return idsValidos.includes(idBoton) ? idBoton : idBotonMaterias;
 }
 
@@ -508,17 +610,54 @@ function cambiarClaseActivaEnNav(idBoton) {
   document.getElementById(seleccionNavbar).classList.add(claseResaltarBotonEnNav);
 }
 
+function mostrarItemConfiguracion(id, mostrar) {
+  const item = document.getElementById(id);
+  if (item) {
+    item.style.display = mostrar ? "flex" : "none";
+  }
+}
+
+function configurarTogglesConfiguracion({ planificacionActiva = false, avanceActiva = false } = {}) {
+  mostrarItemConfiguracion(idConfigMatematicaInicial, !avanceActiva);
+  mostrarItemConfiguracion(idConfigPlan2025, !avanceActiva);
+  mostrarItemConfiguracion(idConfigOpcionales, !avanceActiva && !planificacionActiva);
+  mostrarItemConfiguracion(idConfigAvanceFaltantes, avanceActiva);
+}
+
 function mostrarVistaPlanificacion(activar) {
   vistaPlanificacionActiva = activar;
+  if (activar) vistaAvanceActiva = false;
   const vistaPlanificacion = document.getElementById(idVistaPlanificacion);
-  const toggleOpcionales = document.getElementById("mi-toggle-opcionales")?.closest(".container-item-config");
+  const vistaAvance = document.getElementById(idVistaAvance);
   const seccionesVisiblesEnPlanificacion = new Set([idVistaPlanificacion, idSeccionInformacion, idSeccionConfiguracion]);
   vistaPlanificacion.style.display = activar ? "flex" : "none";
-  if (toggleOpcionales) {
-    toggleOpcionales.style.display = activar ? "none" : "";
-  }
+  if (vistaAvance) vistaAvance.style.display = "none";
+  configurarTogglesConfiguracion({ planificacionActiva: activar });
   document.querySelectorAll(`#${idSecciones} > .container-seccion, #${idSecciones} > .container-seccion-estatico`).forEach((seccion) => {
-    if (!seccionesVisiblesEnPlanificacion.has(seccion.id)) {
+    if (seccionesVisiblesEnPlanificacion.has(seccion.id)) {
+      seccion.style.display = activar ? "flex" : "";
+    } else {
+      seccion.style.display = activar ? "none" : "";
+    }
+  });
+  if (!activar) {
+    mostrarSeccionesQueCorrespondan();
+  }
+}
+
+function mostrarVistaAvance(activar) {
+  vistaAvanceActiva = activar;
+  if (activar) vistaPlanificacionActiva = false;
+  const vistaAvance = document.getElementById(idVistaAvance);
+  const vistaPlanificacion = document.getElementById(idVistaPlanificacion);
+  const seccionAvisoAvance = document.getElementById(idSeccionAvisoAvance);
+  const seccionesVisiblesEnAvance = new Set([idSeccionAvisoAvance, idVistaAvance, idSeccionConfiguracion]);
+  vistaAvance.style.display = activar ? "flex" : "none";
+  if (seccionAvisoAvance) seccionAvisoAvance.style.display = activar ? "flex" : "none";
+  if (vistaPlanificacion) vistaPlanificacion.style.display = "none";
+  configurarTogglesConfiguracion({ avanceActiva: activar });
+  document.querySelectorAll(`#${idSecciones} > .container-seccion, #${idSecciones} > .container-seccion-estatico`).forEach((seccion) => {
+    if (!seccionesVisiblesEnAvance.has(seccion.id)) {
       seccion.style.display = activar ? "none" : "";
     }
   });
@@ -547,6 +686,7 @@ function verMaterias() {
   cambiarClaseActivaEnNav(idBotonMaterias);
   mostrarBotonesDeMateriasQueCorresponda();
   mostrarVistaPlanificacion(false);
+  mostrarVistaAvance(false);
   guardarLocalStorage(LocalStorageNombres.vistaSeleccionada, idBotonMaterias);
   programarGuardadoFirebase();
   closeNavIfMobile();
@@ -1159,7 +1299,6 @@ function ocultarPopupActual() {
   [
     idPopupMateria,
     idPopupRespuestas,
-    idPopupAreas,
     idPopupListaMaterias,
     idPopupAjustarCreditos,
     idPopupImportarDatos,
@@ -1186,6 +1325,9 @@ function reiniciarEstadoEnMemoria() {
   seleccionSemestre = Semestre.AMBOS;
   seleccionNavbar = idBotonMaterias;
   vistaPlanificacionActiva = false;
+  vistaAvanceActiva = false;
+  tituloAvanceSeleccionado = TituloAvance.INGENIERIA;
+  avanceSoloFaltantes = false;
   valorBarra = BarraPopup.Previas;
   filtroTextoMateria = "";
   filtroAreaMateria = "";
@@ -1195,11 +1337,13 @@ function reiniciarEstadoEnMemoria() {
   document.getElementById("mi-toggle-MI").checked = false;
   document.getElementById("mi-toggle-plan").checked = false;
   document.getElementById("mi-toggle-opcionales").checked = true;
+  document.getElementById(idToggleAvanceFaltantes).checked = false;
   document.getElementById(idInputBuscarMateria).value = "";
   document.getElementById(idSelectFiltrarArea).value = "";
   document.getElementById(idTextareaImportarDatos).value = "";
   document.getElementById(idBotonMaterias).classList.remove(claseResaltarBotonEnNav);
   document.getElementById(idBotonPlanificacion).classList.remove(claseResaltarBotonEnNav);
+  document.getElementById(idBotonAvance).classList.remove(claseResaltarBotonEnNav);
   document.getElementById(BarraPopup.Previas).classList.remove(claseResaltarBotonEnNav);
   document.getElementById(BarraPopup.PreviaDe).classList.remove(claseResaltarBotonEnNav);
   document.getElementById(BarraPopup.Informacion).classList.remove(claseResaltarBotonEnNav);
@@ -1333,6 +1477,7 @@ function reconstruirEstadoPagina() {
   guardarLocalStorage(LocalStorageNombres.materiasExoneradas, JSON.stringify(Array.from(historialExoneradas.values())));
   guardarLocalStorage(LocalStorageNombres.materiasAprobadas, JSON.stringify(Array.from(historialAprobadas.values())));
   programarGuardadoFirebase();
+  renderizarAvanceSiActivo();
 }
 
 function renderizarPlanificacionSiActiva() {
@@ -1350,10 +1495,13 @@ function borrarProgreso() {
   planificacionExoneradasBase.clear();
   planificacionUsaEstadoActual = true;
   seleccionOpcionales = true;
+  document.getElementById("mi-toggle-opcionales").checked = true;
   guardarPlanificacion();
   guardarLocalStorage(LocalStorageNombres.seleccionOpcionales, JSON.stringify(seleccionOpcionales));
   actualizarRegistros();
   reconstruirEstadoPagina();
+  mostrarBotonesDeMateriasQueCorresponda();
+  mostrarSeccionesQueCorrespondan();
   renderizarPlanificacionSiActiva();
   closePopup();
 }
@@ -1409,6 +1557,417 @@ function calcularCreditosPlanHastaSemestre(indiceSemestre) {
     );
   }
   return total;
+}
+
+function calcularCreditosBasicas() {
+  return creditosBloque.creditosEnM + creditosBloque.creditosEnCE;
+}
+
+function calcularCreditosBasicoTecnologicas() {
+  return creditosBloque.creditosEnProg +
+    creditosBloque.creditosEnAC_SO_RC +
+    creditosBloque.creditosEnIAYR +
+    creditosBloque.creditosEnBD_SI +
+    creditosBloque.creditosEnMN +
+    creditosBloque.creditosEnIO +
+    creditosBloque.creditosEnIS +
+    creditosBloque.creditosEnGO +
+    creditosBloque.creditosEnTall_Pasa_Proy;
+}
+
+function agregarMinimoAreaBasicoTecnologica(requisitos, lista, nombre, area, claveRequisito) {
+  if (Number.isFinite(requisitos[claveRequisito])) {
+    lista.push({ nombre, area, requerido: requisitos[claveRequisito] });
+  }
+}
+
+function obtenerMinimosAreasBasicoTecnologicas(requisitos) {
+  const minimos = [];
+  agregarMinimoAreaBasicoTecnologica(requisitos, minimos, "Programación", BloqueCreditos.creditosEnProg, "programacion");
+  agregarMinimoAreaBasicoTecnologica(requisitos, minimos, "Arquitectura, Sistemas Operativos y Redes de computadores", BloqueCreditos.creditosEnAC_SO_RC, "arquitecturaSistemasRedes");
+  agregarMinimoAreaBasicoTecnologica(requisitos, minimos, "Inteligencia Artificial y Robótica", BloqueCreditos.creditosEnIAYR, "inteligenciaRobotica");
+  agregarMinimoAreaBasicoTecnologica(requisitos, minimos, "Bases de Datos y Sistemas de Información", BloqueCreditos.creditosEnBD_SI, "basesDatos");
+  agregarMinimoAreaBasicoTecnologica(requisitos, minimos, "Cálculo numérico y Simbólico", BloqueCreditos.creditosEnMN, "calculoNumerico");
+  agregarMinimoAreaBasicoTecnologica(requisitos, minimos, "Investigación Operativa", BloqueCreditos.creditosEnIO, "investigacionOperativa");
+  agregarMinimoAreaBasicoTecnologica(requisitos, minimos, "Ingeniería de Software", BloqueCreditos.creditosEnIS, "ingenieriaSoftware");
+  agregarMinimoAreaBasicoTecnologica(requisitos, minimos, "Gestión de Organizaciones", BloqueCreditos.creditosEnGO, "gestionOrganizaciones");
+  agregarMinimoAreaBasicoTecnologica(requisitos, minimos, "Actividades Integradoras, talleres, pasantías y proyectos", BloqueCreditos.creditosEnTall_Pasa_Proy, "actividadesIntegradoras");
+  return minimos;
+}
+
+function calcularCreditosAdicionalesBasicoTecnologicas(requisitos) {
+  if (!Number.isFinite(requisitos.adicionalesBasicoTecnologicas)) return 0;
+  const creditosUsadosEnMinimos = obtenerMinimosAreasBasicoTecnologicas(requisitos).reduce((total, requisito) => (
+    total + Math.min(creditosBloque[requisito.area], requisito.requerido)
+  ), 0);
+  return Math.max(0, calcularCreditosBasicoTecnologicas() - creditosUsadosEnMinimos);
+}
+
+function calcularCreditosOptativos(requisitos) {
+  if (!Number.isFinite(requisitos.optativas)) return 0;
+  const creditosUsadosEnGrupos = Math.min(calcularCreditosBasicas(), requisitos.basicas) +
+    Math.min(calcularCreditosBasicoTecnologicas(), requisitos.basicoTecnologicas) +
+    Math.min(creditosBloque.creditosEnCHS, requisitos.complementarias ?? 0);
+  return Math.max(0, creditosBloque.Total - creditosUsadosEnGrupos);
+}
+
+function obtenerTituloAvanceValido(titulo) {
+  return titulo === TituloAvance.ANALISTA ? TituloAvance.ANALISTA : TituloAvance.INGENIERIA;
+}
+
+function obtenerConfiguracionAvance() {
+  if (tituloAvanceSeleccionado === TituloAvance.ANALISTA) {
+    return {
+      nombre: "Analista en Computación",
+      requisitos: RequisitosCreditosAnalista,
+      curriculo: RequisitosCurriculoAnalista,
+    };
+  }
+
+  return {
+    nombre: "Ingeniería en Computación",
+    requisitos: RequisitosCreditosIngenieria,
+    curriculo: RequisitosCurriculoIngenieria,
+  };
+}
+
+function cambiarTituloAvance(titulo) {
+  tituloAvanceSeleccionado = obtenerTituloAvanceValido(titulo);
+  guardarLocalStorage(LocalStorageNombres.tituloAvance, tituloAvanceSeleccionado);
+  programarGuardadoFirebase();
+  renderizarAvance();
+}
+
+function toggleAvanceSoloFaltantes() {
+  avanceSoloFaltantes = document.getElementById(idToggleAvanceFaltantes).checked;
+  guardarLocalStorage(LocalStorageNombres.avanceSoloFaltantes, JSON.stringify(avanceSoloFaltantes));
+  programarGuardadoFirebase();
+  renderizarAvanceSiActivo();
+}
+
+function renderizarToggleTituloAvance() {
+  const container = document.createElement("div");
+  container.classList.add("avance-resumen", "container-item-config", "avance-toggle-titulo");
+
+  const labelIngenieria = document.createElement("span");
+  labelIngenieria.textContent = "Ingeniería";
+
+  const switchLabel = document.createElement("label");
+  switchLabel.classList.add("switch");
+
+  const input = document.createElement("input");
+  input.type = "checkbox";
+  input.id = "toggle-titulo-avance";
+  input.classList.add("switch-input");
+  input.checked = tituloAvanceSeleccionado === TituloAvance.ANALISTA;
+  input.setAttribute("aria-label", "Cambiar entre avance de Ingeniería y Analista en Computación");
+  input.onchange = () => cambiarTituloAvance(input.checked ? TituloAvance.ANALISTA : TituloAvance.INGENIERIA);
+
+  const slider = document.createElement("span");
+  slider.classList.add("switch-slider");
+  slider.setAttribute("aria-hidden", "true");
+
+  const labelAnalista = document.createElement("span");
+  labelAnalista.textContent = "Analista";
+
+  switchLabel.append(input);
+  switchLabel.append(slider);
+  container.append(labelIngenieria);
+  container.append(switchLabel);
+  container.append(labelAnalista);
+
+  return container;
+}
+
+function limitarPorcentajeAvance(actual, requerido) {
+  if (requerido <= 0) return 100;
+  return Math.min(100, Math.max(0, (actual / requerido) * 100));
+}
+
+function crearBarraProgresoAvance(actual, requerido) {
+  const barra = document.createElement("div");
+  barra.classList.add("avance-barra");
+  barra.setAttribute("aria-hidden", "true");
+
+  const valor = document.createElement("div");
+  valor.classList.add("avance-barra-valor");
+  valor.style.width = `${limitarPorcentajeAvance(actual, requerido)}%`;
+  barra.append(valor);
+
+  return barra;
+}
+
+function obtenerMateriasDeArea(area, hechas) {
+  return Materias
+    .filter((materia) => materiaAportaEnArea(materia, area) && historialExoneradas.has(materia.nombre) === hechas)
+    .sort((a, b) => a.nombreCompleto.localeCompare(b.nombreCompleto, "es"));
+}
+
+function crearListaMateriasAreaAvance(area, hechas) {
+  const lista = document.createElement("div");
+  lista.classList.add("avance-materias-area-lista");
+
+  const materias = obtenerMateriasDeArea(area, hechas);
+  if (!materias.length) {
+    lista.append(crearLinea("Sin materias."));
+    return lista;
+  }
+
+  materias.forEach((materia) => {
+    const linea = crearLinea(`-${materia.nombreCompleto}`);
+    linea.classList.add("avance-materia-area-linea");
+    lista.append(linea);
+  });
+
+  return lista;
+}
+
+function crearDetalleMateriasAreaAvance(area) {
+  const detalle = document.createElement("details");
+  detalle.classList.add("avance-materias-area");
+
+  const summary = document.createElement("summary");
+  summary.textContent = `Materias de ${TraduccionBloqueCreditos[area] ?? "esta área"}`;
+  detalle.append(summary);
+
+  const contenido = document.createElement("div");
+  contenido.classList.add("avance-materias-area-contenido");
+  if (!avanceSoloFaltantes) {
+    contenido.append(crearLineaAreaSubrayada("Materias ya hechas"));
+    contenido.append(crearListaMateriasAreaAvance(area, true));
+  }
+  contenido.append(crearLineaAreaSubrayada("Materias disponibles"));
+  contenido.append(crearListaMateriasAreaAvance(area, false));
+  detalle.append(contenido);
+
+  return detalle;
+}
+
+function crearFilaRequisitoAvance(nombre, actual, requerido, claseExtra = "", area = null) {
+  const fila = document.createElement("div");
+  fila.classList.add("avance-requisito");
+  if (claseExtra) {
+    fila.classList.add(claseExtra);
+  }
+  if (actual >= requerido) {
+    fila.classList.add("cumplido");
+  }
+
+  const cabecera = document.createElement("div");
+  cabecera.classList.add("avance-requisito-cabecera");
+
+  const titulo = document.createElement("span");
+  titulo.textContent = nombre;
+
+  const creditos = document.createElement("span");
+  creditos.classList.add("avance-requisito-creditos");
+  creditos.textContent = `${actual}/${requerido}`;
+
+  cabecera.append(titulo);
+  cabecera.append(creditos);
+  fila.append(cabecera);
+  fila.append(crearBarraProgresoAvance(actual, requerido));
+
+  const detalle = document.createElement("div");
+  detalle.classList.add("avance-requisito-detalle");
+  detalle.textContent = actual >= requerido ? "Cumplido" : `Faltan ${requerido - actual} créditos`;
+  fila.append(detalle);
+  if (area) {
+    fila.append(crearDetalleMateriasAreaAvance(area));
+  }
+
+  return fila;
+}
+
+function filtrarFilasFaltantesAvance(filas) {
+  return avanceSoloFaltantes ? filas.filter((fila) => !fila.classList.contains("cumplido")) : filas;
+}
+
+function crearBloqueAvance(titulo, filas) {
+  const bloque = document.createElement("section");
+  bloque.classList.add("avance-bloque");
+
+  const encabezado = document.createElement("h3");
+  encabezado.textContent = titulo;
+  bloque.append(encabezado);
+
+  const filasVisibles = filas.filter(Boolean);
+  if (filasVisibles.length) {
+    filasVisibles.forEach((fila) => bloque.append(fila));
+  } else {
+    bloque.append(crearLinea("Sin faltantes."));
+  }
+  return bloque;
+}
+
+function crearGrupoRequisitosAvance(nombre, actual, requerido, filasMateria) {
+  const grupo = document.createElement("div");
+  grupo.classList.add("avance-grupo");
+  const filaGrupo = crearFilaRequisitoAvance(nombre, actual, requerido, "avance-requisito-grupo");
+  const filasMateriaVisibles = filtrarFilasFaltantesAvance(filasMateria);
+
+  if (!avanceSoloFaltantes || !filaGrupo.classList.contains("cumplido") || filasMateriaVisibles.length) {
+    grupo.append(filaGrupo);
+  }
+
+  if (filasMateriaVisibles.length) {
+    const materias = document.createElement("div");
+    materias.classList.add("avance-subrequisitos");
+    filasMateriaVisibles.forEach((fila) => materias.append(fila));
+    grupo.append(materias);
+  }
+
+  return grupo.childElementCount ? grupo : null;
+}
+
+function obtenerNombreMateriaCurriculo(codigoMateria) {
+  return materiasPorNombre.get(codigoMateria)?.nombreCompleto ?? codigoMateria;
+}
+
+function requisitoCurriculoCumplido(requisito) {
+  return requisito.opciones.some((opcion) => (
+    opcion.every((codigoMateria) => historialExoneradas.has(codigoMateria))
+  ));
+}
+
+function describirOpcionCurriculo(opcion) {
+  return opcion.map(obtenerNombreMateriaCurriculo).join(" + ");
+}
+
+function describirRequisitoCurriculo(requisito) {
+  return requisito.opciones.map(describirOpcionCurriculo).join(" o ");
+}
+
+function crearFilaCurriculoAvance(requisito) {
+  const cumplido = requisitoCurriculoCumplido(requisito);
+  const fila = document.createElement("div");
+  fila.classList.add("avance-curriculo-item");
+  if (cumplido) {
+    fila.classList.add("cumplido");
+  }
+
+  const estado = document.createElement("span");
+  estado.classList.add("avance-curriculo-estado");
+  estado.textContent = cumplido ? "OK" : "Pendiente";
+
+  const contenido = document.createElement("div");
+  contenido.classList.add("avance-curriculo-contenido");
+
+  contenido.textContent = describirRequisitoCurriculo(requisito);
+  fila.append(estado);
+  fila.append(contenido);
+  return fila;
+}
+
+function renderizarAvance() {
+  const contenedor = document.getElementById(idVistaAvance);
+  contenedor.innerHTML = "";
+  const configuracion = obtenerConfiguracionAvance();
+  const requisitos = configuracion.requisitos;
+  const curriculo = configuracion.curriculo;
+
+  const totalCreditos = creditosBloque.Total;
+  const totalRequerido = requisitos.total;
+  const requisitosCurriculoCumplidos = curriculo.filter(requisitoCurriculoCumplido).length;
+  const requisitosCurriculoTotales = curriculo.length;
+
+  const titulo = document.createElement("div");
+  titulo.classList.add("titulo-popup");
+  titulo.textContent = `Avance para ${configuracion.nombre}`;
+  contenedor.append(titulo);
+  contenedor.append(renderizarToggleTituloAvance());
+
+  const resumen = document.createElement("section");
+  resumen.classList.add("avance-resumen");
+  const porcentaje = Math.floor(limitarPorcentajeAvance(totalCreditos, totalRequerido));
+  const faltanCreditos = Math.max(0, totalRequerido - totalCreditos);
+  const puedeGraduarsePorCreditos = totalCreditos >= totalRequerido;
+  const barraTotalCreditos = crearBarraProgresoAvance(totalCreditos, totalRequerido);
+  barraTotalCreditos.classList.add("avance-barra-total");
+  resumen.append(crearLinea(`Créditos totales: ${totalCreditos}/${totalRequerido} (${porcentaje}%)`));
+  resumen.append(barraTotalCreditos);
+  resumen.append(crearLinea(puedeGraduarsePorCreditos ? "Ya alcanzaste los créditos totales mínimos." : `Faltan ${faltanCreditos} créditos para el mínimo total.`));
+  resumen.append(crearLinea(`Unidades curriculares necesarias cumplidas: ${requisitosCurriculoCumplidos}/${requisitosCurriculoTotales}`));
+  contenedor.append(resumen);
+
+  const filasBasicas = [];
+  if (Number.isFinite(requisitos.matematica)) {
+    filasBasicas.push(crearFilaRequisitoAvance("Matemática", creditosBloque.creditosEnM, requisitos.matematica, "", BloqueCreditos.creditosEnM));
+  }
+  if (Number.isFinite(requisitos.cienciasExperimentales)) {
+    filasBasicas.push(crearFilaRequisitoAvance("Ciencias Experimentales", creditosBloque.creditosEnCE, requisitos.cienciasExperimentales, "", BloqueCreditos.creditosEnCE));
+  }
+
+  const filasBasicoTecnologicas = obtenerMinimosAreasBasicoTecnologicas(requisitos).map((requisito) => (
+    crearFilaRequisitoAvance(requisito.nombre, creditosBloque[requisito.area], requisito.requerido, "", requisito.area)
+  ));
+  if (Number.isFinite(requisitos.adicionalesBasicoTecnologicas)) {
+    filasBasicoTecnologicas.push(crearFilaRequisitoAvance(
+      "Asignaturas del grupo: optativas o necesarias",
+      calcularCreditosAdicionalesBasicoTecnologicas(requisitos),
+      requisitos.adicionalesBasicoTecnologicas
+    ));
+  }
+
+  const gruposCreditos = [
+    crearGrupoRequisitosAvance(
+      "Grupo de materias básicas",
+      calcularCreditosBasicas(),
+      requisitos.basicas,
+      filasBasicas
+    ),
+    crearGrupoRequisitosAvance(
+      "Grupo básico tecnológicas, técnicas y actividades integradoras",
+      calcularCreditosBasicoTecnologicas(),
+      requisitos.basicoTecnologicas,
+      filasBasicoTecnologicas
+    ),
+  ];
+
+  if (Number.isFinite(requisitos.complementarias)) {
+    gruposCreditos.push(crearGrupoRequisitosAvance(
+      "Grupo de materias complementarias",
+      creditosBloque.creditosEnCHS,
+      requisitos.complementarias,
+      Number.isFinite(requisitos.humanasSociales)
+        ? [crearFilaRequisitoAvance("Ciencias Humanas y Sociales", creditosBloque.creditosEnCHS, requisitos.humanasSociales, "", BloqueCreditos.creditosEnCHS)]
+        : []
+    ));
+  }
+
+  if (Number.isFinite(requisitos.optativas)) {
+    const creditosOptativos = calcularCreditosOptativos(requisitos);
+    gruposCreditos.push(crearGrupoRequisitosAvance(
+      "Grupo optativas",
+      creditosOptativos,
+      requisitos.optativas,
+      [
+        crearFilaRequisitoAvance("Créditos optativos", creditosOptativos, requisitos.optativas),
+      ]
+    ));
+  }
+
+  contenedor.append(crearBloqueAvance("Créditos requeridos", gruposCreditos));
+
+  const bloqueCurriculo = document.createElement("section");
+  bloqueCurriculo.classList.add("avance-bloque");
+  const tituloCurriculo = document.createElement("h3");
+  tituloCurriculo.textContent = "Unidades curriculares necesarias";
+  bloqueCurriculo.append(tituloCurriculo);
+  const filasCurriculo = curriculo.map(crearFilaCurriculoAvance);
+  const filasCurriculoVisibles = filtrarFilasFaltantesAvance(filasCurriculo);
+  if (filasCurriculoVisibles.length) {
+    filasCurriculoVisibles.forEach((fila) => bloqueCurriculo.append(fila));
+  } else {
+    bloqueCurriculo.append(crearLinea("Sin faltantes."));
+  }
+  contenedor.append(bloqueCurriculo);
+}
+
+function renderizarAvanceSiActivo() {
+  if (vistaAvanceActiva) {
+    renderizarAvance();
+  }
 }
 
 function materiaAportaEnArea(materia, areaBuscada) {
@@ -1495,6 +2054,22 @@ function textoSemestrePlanificado(semestre) {
 function tituloPeriodoPlanificado(semestre) {
   if (esPeriodoExamenesPlanificado(semestre)) return "Período de exámenes";
   return "Semestre";
+}
+
+function normalizarNombrePeriodoPlanificado(nombre) {
+  return typeof nombre === "string" ? nombre.trim().slice(0, 80) : "";
+}
+
+function nombrePeriodoPlanificado(semestrePlanificado) {
+  return semestrePlanificado.nombrePersonalizado || tituloPeriodoPlanificado(semestrePlanificado.semestre);
+}
+
+function textoResumenPeriodoPlanificado(semestrePlanificado, indiceSemestre) {
+  const materiasPlanificadas = Array.isArray(semestrePlanificado.materias) ? semestrePlanificado.materias : [];
+  const cantidadMaterias = materiasPlanificadas.length;
+  const cantidadCreditos = calcularCreditosMaterias(obtenerNombresExoneradasPlanificadas(materiasPlanificadas, semestrePlanificado.semestre));
+  const totalCreditos = calcularCreditosPlanHastaSemestre(indiceSemestre);
+  return `${nombrePeriodoPlanificado(semestrePlanificado)} (${cantidadMaterias} materias, ${cantidadCreditos} créditos, total ${totalCreditos})`;
 }
 
 function materiaSeDictaEnSemestrePlanificado(materia, semestre) {
@@ -1677,6 +2252,7 @@ function normalizarPlanificacion() {
 
     planificacionNormalizada.push({
       semestre,
+      nombrePersonalizado: normalizarNombrePeriodoPlanificado(semestrePlanificado?.nombrePersonalizado),
       materias: materiasValidas,
       abierto: semestrePlanificado?.abierto !== false,
       elegirMateriasAbierto: semestrePlanificado?.elegirMateriasAbierto === true,
@@ -1870,6 +2446,23 @@ function crearSelectorSemestrePlanificado(indiceSemestre, semestreActual) {
   return select;
 }
 
+function crearInputNombrePeriodoPlanificado(indiceSemestre, nombreActual, onActualizarResumen) {
+  const input = document.createElement("input");
+  input.type = "text";
+  input.classList.add("input-nombre-planificador");
+  input.maxLength = 80;
+  input.value = nombreActual;
+  input.placeholder = "Nombre del período";
+  input.setAttribute("aria-label", "Nombre del período planificado");
+  input.oninput = () => {
+    if (!planificacionSemestres[indiceSemestre]) return;
+    planificacionSemestres[indiceSemestre].nombrePersonalizado = normalizarNombrePeriodoPlanificado(input.value);
+    onActualizarResumen();
+    guardarPlanificacion();
+  };
+  return input;
+}
+
 function obtenerColorResultadoPlanificado(resultado) {
   if (resultado === ResultadoPlanificado.CURSO) return colorAprobada;
   if (resultado === ResultadoPlanificado.EXONERADA) return colorExonerada;
@@ -1902,16 +2495,17 @@ function renderizarSemestrePlanificado(semestrePlanificado, indiceSemestre) {
   const summary = document.createElement("summary");
   summary.classList.add("planificador-summary");
   const materiasPlanificadas = Array.isArray(semestrePlanificado.materias) ? semestrePlanificado.materias : [];
-  const cantidadMaterias = materiasPlanificadas.length;
-  const cantidadCreditos = calcularCreditosMaterias(obtenerNombresExoneradasPlanificadas(materiasPlanificadas, semestrePlanificado.semestre));
-  const totalCreditos = calcularCreditosPlanHastaSemestre(indiceSemestre);
-  summary.textContent = `${tituloPeriodoPlanificado(semestrePlanificado.semestre)} (${cantidadMaterias} materias, ${cantidadCreditos} créditos, total ${totalCreditos})`;
+  const actualizarResumen = () => {
+    summary.textContent = textoResumenPeriodoPlanificado(semestrePlanificado, indiceSemestre);
+  };
+  actualizarResumen();
   container.append(summary);
 
   const encabezado = document.createElement("div");
   encabezado.classList.add("planificador-encabezado");
 
   const botonEliminar = crearBotonPlanificador("Eliminar", colorDeshabilitada, () => eliminarSemestrePlanificado(indiceSemestre));
+  encabezado.append(crearInputNombrePeriodoPlanificado(indiceSemestre, semestrePlanificado.nombrePersonalizado ?? "", actualizarResumen));
   encabezado.append(crearSelectorSemestrePlanificado(indiceSemestre, semestrePlanificado.semestre));
   if (indiceSemestre === 0 && planificacionUsaEstadoActual) {
     encabezado.append(crearBotonPlanificador("Aplicar al estado actual", colorAprobada, aplicarPrimerPeriodoPlanificadoAlEstadoActual));
@@ -2047,10 +2641,19 @@ function verPlanificacion() {
   closeNavIfMobile();
 }
 
+function verAvance() {
+  cambiarClaseActivaEnNav(idBotonAvance);
+  mostrarVistaAvance(true);
+  renderizarAvance();
+  guardarLocalStorage(LocalStorageNombres.vistaSeleccionada, idBotonAvance);
+  programarGuardadoFirebase();
+  closeNavIfMobile();
+}
+
 function agregarSemestrePlanificado() {
   const ultimoSemestre = planificacionSemestres[planificacionSemestres.length - 1]?.semestre;
   const proximoSemestre = ultimoSemestre === Semestre.PRIMERO ? Semestre.SEGUNDO : Semestre.PRIMERO;
-  planificacionSemestres.push({ semestre: proximoSemestre, materias: [], abierto: true, mostrarOpcionales: true });
+  planificacionSemestres.push({ semestre: proximoSemestre, nombrePersonalizado: "", materias: [], abierto: true, mostrarOpcionales: true });
   renderizarPlanificacion();
 }
 
@@ -2177,14 +2780,6 @@ function indicarPrevias(nombre) {
   return htmlPrevias;
 }
 
-function crearLineaArea(area, creditosEsperados) {
-  const linea = document.createElement("div");
-  linea.innerText = `-${TraduccionBloqueCreditos[area]}: ${creditosBloque[area]} (${creditosEsperados})`;
-  linea.onclick = () => { mostrarMateriasEnPopup(BloqueCreditos[area]) }
-  linea.classList.add("paraClick");
-  return linea;
-}
-
 function crearLineaAreaSubrayada(texto) {
   const linea = document.createElement("div");
   linea.innerText = texto;
@@ -2198,29 +2793,6 @@ function crearLineaAreaSubrayadaConMargenAbajo(texto) {
   linea.classList.add("margen-inferior");
   linea.classList.add("subrayado");
   return linea;
-}
-
-function crearLineaAreaConMargenAbajo(area, creditosEsperados) {
-  const linea = document.createElement("div");
-  linea.innerText = `-${TraduccionBloqueCreditos[area]}: ${creditosBloque[area]} (${creditosEsperados})`;
-  linea.onclick = () => { mostrarMateriasEnPopup(BloqueCreditos[area]) }
-  linea.classList.add("paraClick");
-  linea.classList.add("margen-inferior");
-  return linea;
-}
-
-function crearLineaNegrita(nombre, textoDespues) {
-  const container = document.createElement("div");
-  const texto = document.createElement("span");
-  texto.innerText = nombre;
-  texto.classList.add("subrayado");
-  texto.classList.add("negrita");
-  const creditos = document.createElement("span");
-  creditos.innerText = textoDespues;
-  creditos.classList.add("negrita");
-  container.append(texto);
-  container.append(creditos);
-  return container;
 }
 
 function crearLinea(texto) {
@@ -2240,33 +2812,6 @@ function crearLineaMargenAabajoSubrayadaSeparada(texto, final) {
   linea.append(lineaFinal);
   linea.classList.add("margen-inferior");
   return linea;
-}
-
-function verAreas() {
-  const totBasicas = creditosBloque.creditosEnM + creditosBloque.creditosEnCE;
-  const totBT = creditosBloque.creditosEnProg + creditosBloque.creditosEnAC_SO_RC + creditosBloque.creditosEnBD_SI + creditosBloque.creditosEnMN + creditosBloque.creditosEnIO + creditosBloque.creditosEnIS + creditosBloque.creditosEnTall_Pasa_Proy + creditosBloque.creditosEnGO + creditosBloque.creditosEnIAYR;
-  const elementoPrincipal = document.createElement("div");
-  elementoPrincipal.append(crearLineaAreaSubrayadaConMargenAbajo("Cantidad de créditos por Área"));
-  elementoPrincipal.append(crearLineaNegrita("Materias Básicas", `: ${totBasicas} (${80})`));
-  elementoPrincipal.append(crearLineaArea(BloqueCreditos.creditosEnM, 70));
-  elementoPrincipal.append(crearLineaAreaConMargenAbajo(BloqueCreditos.creditosEnCE, 10));
-  elementoPrincipal.append(crearLineaNegrita("Básico-Tec, Técnicas e Int.", `: ${totBT} (${220})`));
-  elementoPrincipal.append(crearLineaArea(BloqueCreditos.creditosEnProg, 60));
-  elementoPrincipal.append(crearLineaArea(BloqueCreditos.creditosEnAC_SO_RC, 30));
-  elementoPrincipal.append(crearLineaArea(BloqueCreditos.creditosEnBD_SI, 10));
-  elementoPrincipal.append(crearLineaArea(BloqueCreditos.creditosEnMN, 8));
-  elementoPrincipal.append(crearLineaArea(BloqueCreditos.creditosEnIO, 10));
-  elementoPrincipal.append(crearLineaArea(BloqueCreditos.creditosEnIS, 10));
-  elementoPrincipal.append(crearLineaArea(BloqueCreditos.creditosEnTall_Pasa_Proy, 45));
-  elementoPrincipal.append(crearLineaArea(BloqueCreditos.creditosEnGO, 10));
-  elementoPrincipal.append(crearLineaAreaConMargenAbajo(BloqueCreditos.creditosEnIAYR, 0));
-  elementoPrincipal.append(crearLineaNegrita("Materias Complementarias", `: ${creditosBloque.creditosEnCHS} (${10})`));
-  elementoPrincipal.append(crearLineaAreaConMargenAbajo(BloqueCreditos.creditosEnCHS, 10));
-  elementoPrincipal.append(crearLineaNegrita("Materias Opcionales", `: ${creditosBloque.creditosEnOpcionales} (${0})`));
-  elementoPrincipal.append(crearLineaAreaConMargenAbajo(BloqueCreditos.creditosEnOpcionales, 0));
-  document.getElementById(idPopupAreas).innerHTML = "";
-  document.getElementById(idPopupAreas).append(elementoPrincipal);
-  openPopup(idPopupAreas);
 }
 
 function mostrarMateriasEnPopup(nombre){
@@ -2599,7 +3144,7 @@ function eventoAjustarCreditos() {
 // Inicio de pagina
 
 function mostrarSeccionesQueCorrespondan() {
-  if (vistaPlanificacionActiva) return;
+  if (vistaPlanificacionActiva || vistaAvanceActiva) return;
   for (let index = 0; index < PG.peso; index++) {
     const interno = document.getElementById(`seccion-materias-${index+1}`);
     const externo = interno.closest(".container-seccion");
@@ -2618,6 +3163,9 @@ function rehacerPaginaSinEstado(){
   crearBotonesMaterias();
   if (vistaPlanificacionActiva) {
     mostrarVistaPlanificacion(true);
+  } else if (vistaAvanceActiva) {
+    mostrarVistaAvance(true);
+    renderizarAvance();
   } else {
     mostrarSeccionesQueCorrespondan();
   }
@@ -2630,7 +3178,11 @@ async function firstLoad() {
   const materiasExoneradasGuardadas = leerJsonLocalStorage(LocalStorageNombres.materiasExoneradas, []);
   const materiasAprobadasGuardadas = leerJsonLocalStorage(LocalStorageNombres.materiasAprobadas, []);
   seleccionOpcionales = leerJsonLocalStorage(LocalStorageNombres.seleccionOpcionales, true) !== false;
+  tituloAvanceSeleccionado = obtenerTituloAvanceValido(leerLocalStorage(LocalStorageNombres.tituloAvance));
+  avanceSoloFaltantes = leerJsonLocalStorage(LocalStorageNombres.avanceSoloFaltantes, false) === true;
   document.getElementById("mi-toggle-opcionales").checked = seleccionOpcionales;
+  document.getElementById(idToggleAvanceFaltantes).checked = avanceSoloFaltantes;
+  configurarTogglesConfiguracion();
   historialExoneradas = new Set(Array.isArray(materiasExoneradasGuardadas) ? materiasExoneradasGuardadas : []);
   historialAprobadas = new Set(Array.isArray(materiasAprobadasGuardadas) ? materiasAprobadasGuardadas : []);
   if (leerLocalStorage(MI.nombre) == "true") {
@@ -2677,6 +3229,8 @@ async function firstLoad() {
   seleccionarSemestre(semestreGuardado ?? semestreDesdeVistaAnterior ?? Semestre.AMBOS);
   if (vistaGuardadaRaw === idBotonPlanificacion) {
     verPlanificacion();
+  } else if (vistaGuardadaRaw === idBotonAvance) {
+    verAvance();
   } else {
     verMaterias();
   }

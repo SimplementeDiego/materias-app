@@ -6,7 +6,7 @@
     <meta name="description" content="Materias Computación">
     <title>Materias</title>
     <link rel="icon" type="image/x-icon" href="/icons/bookmark.ico">
-    <link rel="stylesheet" href="style.css?v=10">
+    <link rel="stylesheet" href="style.css?v=1">
 </head>
 <body>
     
@@ -27,7 +27,7 @@
         <nav id="navbar">
             <button onclick="verMaterias()" id="materias" class="navbar-boton activo">Materias</button>
             <button onclick="verPlanificacion()" id="planificacion" class="navbar-boton">Planificar</button>
-            <button onclick="verAreas()" id="areas" class="navbar-boton">Ver áreas</button>
+            <button onclick="verAvance()" id="avance" class="navbar-boton">Avance</button>
             <a class="navbar-boton link-boton" id="sugerencia" href="https://forms.gle/jN9WEGE2hGvLxeNKA">Hacer sugerencia</a>
             <button onclick="verRespuestas()" id="respuestas" class="navbar-boton">Respuestas</button>
             <button onclick="reset()" id="reset" class="navbar-boton">Reset</button>
@@ -61,7 +61,7 @@
                         <div>
                             <div class="titulo-respuesta">Sobre lista de materias de cada área</div>
                             <div class="info-respuesta margen-inferior-20">
-                                Entrando a "Ver áreas", al darle clic o tap a un área, como por ejemplo "Matemática", debería aparecer una lista de materias.
+                                Desde la información de una materia, al darle clic o tap al área en la que aporta créditos, debería aparecer una lista de materias.
                             </div>
                         </div>
                         <div>
@@ -82,10 +82,6 @@
                                 Lo tengo pensado implementar. Tengo que arreglar unos temas de funcionamiento interno antes, así que va a estar en un tiempo. De mientras, implementé la posibilidad de agregar y restar créditos manualmente.
                             </div>
                         </div>
-                    </div>
-
-                    <div id="popup-areas">
-                        
                     </div>
 
                     <div id="popup-lista-materias">
@@ -181,7 +177,7 @@
             <details id="seccion-configuracion" class="container-seccion-estatico" open>
                 <summary class="titulo-seccion">Configuración</summary>
                 <div class="seccion-contenido">
-                    <div class="container-item-config infoToggles">
+                    <div id="config-matematica-inicial" class="container-item-config infoToggles">
                         <label for="mi-toggle-MI">Matemática Inicial</label>
 
                         <label class="switch">
@@ -189,7 +185,7 @@
                             <span class="switch-slider" aria-hidden="true"></span>
                         </label>
                     </div>
-                    <div class="container-item-config infoToggles">
+                    <div id="config-plan-2025" class="container-item-config infoToggles">
                         <label for="mi-toggle-plan">Plan 2025</label>
 
                         <label class="switch">
@@ -197,7 +193,7 @@
                             <span class="switch-slider" aria-hidden="true"></span>
                         </label>
                     </div>
-                    <div class="container-item-config infoToggles">
+                    <div id="config-opcionales" class="container-item-config infoToggles">
                         <label for="mi-toggle-opcionales">Opcionales</label>
 
                         <label class="switch">
@@ -205,10 +201,25 @@
                             <span class="switch-slider" aria-hidden="true"></span>
                         </label>
                     </div>
+                    <div id="config-avance-faltantes" class="container-item-config infoToggles">
+                        <label for="mi-toggle-avance-faltantes">Mostrar solo faltantes</label>
+
+                        <label class="switch">
+                            <input type="checkbox" id="mi-toggle-avance-faltantes" class="switch-input" onclick="toggleAvanceSoloFaltantes()">
+                            <span class="switch-slider" aria-hidden="true"></span>
+                        </label>
+                    </div>
                 </div>
             </details>
 
             <div id="vista-planificacion" class="container-seccion-estatico">
+            </div>
+
+            <div id="seccion-aviso-avance" class="container-seccion-estatico aviso-avance">
+                Utilizar como guía. Puede contener errores y está sujeto a cambios. Actualmente solo plan 1997.
+            </div>
+
+            <div id="vista-avance" class="container-seccion-estatico">
             </div>
 
             <details id="seccion-filtros" class="container-seccion-estatico" open>
@@ -241,7 +252,7 @@
     </main>
 
     <script src="./firebase-config.js?v=2"></script>
-    <script src="./app.js?v=15"></script>
+    <script src="./app.js?v=1"></script>
 
 </body>
 </html>
