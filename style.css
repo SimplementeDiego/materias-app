@@ -645,6 +645,44 @@ main {
     background-color: rgb(236, 247, 255);
 }
 
+.avance-selector-planificacion {
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    border: 1px solid rgb(224, 224, 224);
+    border-radius: 5px;
+    padding: 10px;
+    background-color: rgb(236, 247, 255);
+}
+
+.avance-selector-planificacion legend {
+    font-weight: bold;
+    padding: 0 5px;
+}
+
+.avance-radio-opciones {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.avance-radio-opcion {
+    align-items: center;
+    background-color: white;
+    border: 1px solid rgb(224, 224, 224);
+    border-radius: 5px;
+    cursor: pointer;
+    display: flex;
+    gap: 6px;
+    max-width: 100%;
+    min-width: 0;
+    padding: 8px;
+}
+
+.avance-radio-opcion span {
+    overflow-wrap: anywhere;
+}
+
 .avance-bloque h3 {
     margin-bottom: 10px;
     text-align: center;
@@ -1149,6 +1187,14 @@ main {
 
     .avance-curriculo-estado {
         align-self: flex-start;
+    }
+
+    .avance-radio-opciones {
+        flex-direction: column;
+    }
+
+    .avance-radio-opcion {
+        width: 100%;
     }
 
     .planificador-materia-seleccionada .boton-planificador:first-child {

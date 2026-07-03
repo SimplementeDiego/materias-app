@@ -802,6 +802,61 @@ describe("Avance", () => {
         requisitoCurriculo(/^C.lculo DIV$/).should("not.exist");
     });
 
+    it("permite ver avance proyectado hasta un periodo planificado", () => {
+        estadoInicial({
+            exoneradas: ["GAL1"],
+            planificacion: [
+                {
+                    semestre: "primero",
+                    materias: [{ nombre: "CDIV", resultado: "exonerada" }],
+                    abierto: true,
+                },
+            ],
+        });
+
+        cy.get("#avance").click();
+
+        cy.get("#vista-avance").should("contain", "Créditos totales: 9/450");
+        cy.contains(".avance-selector-planificacion", "Ver avance").should("be.visible");
+        cy.contains(".avance-radio-opcion", "Actual").find("input").should("be.checked");
+
+        cy.contains(".avance-radio-opcion", /Hasta .*Semestre/).find("input").check();
+
+        cy.get("#vista-avance").should("contain", "Créditos totales: 22/450");
+        requisitoCurriculo(/^C.lculo DIV$/).should("have.class", "cumplido");
+
+        cy.reload();
+
+        cy.contains(".avance-radio-opcion", /Hasta .*Semestre/).find("input").should("be.checked");
+        cy.get("#vista-avance").should("contain", "Créditos totales: 22/450");
+    });
+
+    it("vuelve a avance actual si se elimina el periodo proyectado seleccionado", () => {
+        estadoInicial({
+            planificacion: [
+                { semestre: "primero", materias: [], abierto: true },
+                { semestre: "segundo", materias: [], abierto: true },
+            ],
+        });
+
+        cy.get("#avance").click();
+        cy.get(".avance-radio-opcion").last().find("input").check();
+
+        cy.window().then((win) => {
+            expect(win.localStorage.getItem("avancePlanificacion")).to.equal("planificacion-1");
+        });
+
+        cy.get("#planificacion").click();
+        cy.get("#vista-planificacion .planificador-semestre").eq(1).contains("button", "Eliminar").click();
+
+        cy.window().then((win) => {
+            expect(win.localStorage.getItem("avancePlanificacion")).to.equal("actual");
+        });
+
+        cy.get("#avance").click();
+        cy.contains(".avance-radio-opcion", "Actual").find("input").should("be.checked");
+    });
+
     it("permite expandir las materias asociadas a un area", () => {
         estadoInicial({ exoneradas: ["CDIV"] });
 

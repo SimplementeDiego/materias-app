@@ -8,6 +8,7 @@ const LocalStorageNombres = Object.freeze({
   seleccionOpcionales: "seleccionOpcionales",
   tituloAvance: "tituloAvance",
   avanceSoloFaltantes: "avanceSoloFaltantes",
+  avancePlanificacion: "avancePlanificacion",
   planificacionSemestres: "planificacionSemestres",
   planificacionUsaEstadoActual: "planificacionUsaEstadoActual",
   planificacionExoneradasBase: "planificacionExoneradasBase"
@@ -38,6 +39,10 @@ const ResultadoPlanificado = Object.freeze({
 const TituloAvance = Object.freeze({
   INGENIERIA: "ingenieria",
   ANALISTA: "analista"
+});
+
+const AvancePlanificacion = Object.freeze({
+  ACTUAL: "actual",
 });
 
 const BarraPopup = Object.freeze({
@@ -236,6 +241,7 @@ let vistaPlanificacionActiva = false;
 let vistaAvanceActiva = false;
 let tituloAvanceSeleccionado = TituloAvance.INGENIERIA;
 let avanceSoloFaltantes = false;
+let avancePlanificacionSeleccionada = AvancePlanificacion.ACTUAL;
 let valorBarra = BarraPopup.Previas;
 let popUpActual = idPopupMateria;
 let filtroTextoMateria = "";
@@ -1340,6 +1346,7 @@ function reiniciarEstadoEnMemoria() {
   vistaAvanceActiva = false;
   tituloAvanceSeleccionado = TituloAvance.INGENIERIA;
   avanceSoloFaltantes = false;
+  avancePlanificacionSeleccionada = AvancePlanificacion.ACTUAL;
   valorBarra = BarraPopup.Previas;
   filtroTextoMateria = "";
   filtroAreaMateria = "";
@@ -1508,9 +1515,11 @@ function borrarProgreso() {
   planificacionExoneradasBase.clear();
   planificacionUsaEstadoActual = true;
   seleccionOpcionales = true;
+  avancePlanificacionSeleccionada = AvancePlanificacion.ACTUAL;
   document.getElementById("mi-toggle-opcionales").checked = true;
   guardarPlanificacion();
   guardarLocalStorage(LocalStorageNombres.seleccionOpcionales, JSON.stringify(seleccionOpcionales));
+  guardarLocalStorage(LocalStorageNombres.avancePlanificacion, avancePlanificacionSeleccionada);
   actualizarRegistros();
   reconstruirEstadoPagina();
   mostrarBotonesDeMateriasQueCorresponda();
@@ -1682,6 +1691,105 @@ function toggleAvanceSoloFaltantes() {
   guardarLocalStorage(LocalStorageNombres.avanceSoloFaltantes, JSON.stringify(avanceSoloFaltantes));
   programarGuardadoFirebase();
   renderizarAvanceSiActivo();
+}
+
+function valorAvancePlanificacionIndice(indiceSemestre) {
+  return `planificacion-${indiceSemestre}`;
+}
+
+function obtenerIndiceAvancePlanificacion(valor) {
+  const match = typeof valor === "string" ? valor.match(/^planificacion-(\d+)$/) : null;
+  if (!match) return null;
+  const indice = Number(match[1]);
+  return Number.isInteger(indice) ? indice : null;
+}
+
+function obtenerAvancePlanificacionValido(valor) {
+  const indice = obtenerIndiceAvancePlanificacion(valor);
+  if (indice !== null && indice >= 0 && indice < planificacionSemestres.length) {
+    return valorAvancePlanificacionIndice(indice);
+  }
+  return AvancePlanificacion.ACTUAL;
+}
+
+function guardarAvancePlanificacionSeleccionada() {
+  guardarLocalStorage(LocalStorageNombres.avancePlanificacion, avancePlanificacionSeleccionada);
+  programarGuardadoFirebase();
+}
+
+function asegurarAvancePlanificacionValida() {
+  const valorValido = obtenerAvancePlanificacionValido(avancePlanificacionSeleccionada);
+  if (valorValido !== avancePlanificacionSeleccionada) {
+    avancePlanificacionSeleccionada = valorValido;
+    guardarAvancePlanificacionSeleccionada();
+  }
+}
+
+function cambiarAvancePlanificacion(valor) {
+  avancePlanificacionSeleccionada = obtenerAvancePlanificacionValido(valor);
+  guardarAvancePlanificacionSeleccionada();
+  renderizarAvanceSiActivo();
+}
+
+function actualizarAvancePlanificacionAlEliminarPeriodo(indiceEliminado) {
+  const indiceSeleccionado = obtenerIndiceAvancePlanificacion(avancePlanificacionSeleccionada);
+  if (indiceSeleccionado === null) return;
+
+  if (indiceSeleccionado === indiceEliminado) {
+    avancePlanificacionSeleccionada = AvancePlanificacion.ACTUAL;
+    guardarAvancePlanificacionSeleccionada();
+    return;
+  }
+
+  if (indiceSeleccionado > indiceEliminado) {
+    avancePlanificacionSeleccionada = valorAvancePlanificacionIndice(indiceSeleccionado - 1);
+    guardarAvancePlanificacionSeleccionada();
+  }
+}
+
+function crearRadioAvancePlanificacion(nombreGrupo, valor, texto) {
+  const label = document.createElement("label");
+  label.classList.add("avance-radio-opcion");
+
+  const input = document.createElement("input");
+  input.type = "radio";
+  input.name = nombreGrupo;
+  input.value = valor;
+  input.checked = avancePlanificacionSeleccionada === valor;
+  input.onchange = () => cambiarAvancePlanificacion(input.value);
+
+  const span = document.createElement("span");
+  span.textContent = texto;
+
+  label.append(input);
+  label.append(span);
+  return label;
+}
+
+function renderizarSelectorAvancePlanificacion() {
+  if (!planificacionSemestres.length) return null;
+
+  const fieldset = document.createElement("fieldset");
+  fieldset.classList.add("avance-selector-planificacion");
+
+  const legend = document.createElement("legend");
+  legend.textContent = "Ver avance";
+  fieldset.append(legend);
+
+  const opciones = document.createElement("div");
+  opciones.classList.add("avance-radio-opciones");
+  const nombreGrupo = "avance-planificacion";
+  opciones.append(crearRadioAvancePlanificacion(nombreGrupo, AvancePlanificacion.ACTUAL, "Actual"));
+  planificacionSemestres.forEach((semestrePlanificado, indiceSemestre) => {
+    opciones.append(crearRadioAvancePlanificacion(
+      nombreGrupo,
+      valorAvancePlanificacionIndice(indiceSemestre),
+      `Hasta "${textoResumenPeriodoPlanificado(semestrePlanificado, indiceSemestre)}"`
+    ));
+  });
+
+  fieldset.append(opciones);
+  return fieldset;
 }
 
 function limitarPorcentajeAvance(actual, requerido) {
@@ -1864,9 +1972,7 @@ function crearFilaCurriculoAvance(requisito) {
   return fila;
 }
 
-function renderizarAvance() {
-  const contenedor = document.getElementById(idVistaAvance);
-  contenedor.innerHTML = "";
+function renderizarContenidoAvance(contenedor) {
   const configuracion = obtenerConfiguracionAvance();
   const requisitos = configuracion.requisitos;
   const curriculo = configuracion.curriculo;
@@ -1966,6 +2072,31 @@ function renderizarAvance() {
     bloqueCurriculo.append(crearLinea("Sin faltantes."));
   }
   contenedor.append(bloqueCurriculo);
+}
+
+function renderizarAvance() {
+  asegurarAvancePlanificacionValida();
+  const contenedor = document.getElementById(idVistaAvance);
+  contenedor.innerHTML = "";
+
+  const selectorPlanificacion = renderizarSelectorAvancePlanificacion();
+  if (selectorPlanificacion) {
+    contenedor.append(selectorPlanificacion);
+  }
+
+  const indicePlanificacion = obtenerIndiceAvancePlanificacion(avancePlanificacionSeleccionada);
+  if (indicePlanificacion === null) {
+    renderizarContenidoAvance(contenedor);
+    return;
+  }
+
+  const contexto = obtenerContextoPlanificacion(indicePlanificacion + 1);
+  ejecutarConEstadoTemporal(
+    contexto.aprobadas,
+    contexto.exoneradas,
+    planificacionUsaEstadoActual,
+    () => renderizarContenidoAvance(contenedor)
+  );
 }
 
 function renderizarAvanceSiActivo() {
@@ -2662,6 +2793,7 @@ function agregarSemestrePlanificado() {
 }
 
 function eliminarSemestrePlanificado(indiceSemestre) {
+  actualizarAvancePlanificacionAlEliminarPeriodo(indiceSemestre);
   planificacionSemestres.splice(indiceSemestre, 1);
   renderizarPlanificacion();
 }
@@ -2681,6 +2813,7 @@ function aplicarPrimerPeriodoPlanificadoAlEstadoActual() {
     }
   });
 
+  actualizarAvancePlanificacionAlEliminarPeriodo(0);
   planificacionSemestres.shift();
   reconstruirEstadoPagina();
   renderizarPlanificacion();
@@ -3186,6 +3319,7 @@ async function firstLoad() {
   seleccionOpcionales = leerJsonLocalStorage(LocalStorageNombres.seleccionOpcionales, true) !== false;
   tituloAvanceSeleccionado = obtenerTituloAvanceValido(leerLocalStorage(LocalStorageNombres.tituloAvance));
   avanceSoloFaltantes = leerJsonLocalStorage(LocalStorageNombres.avanceSoloFaltantes, false) === true;
+  avancePlanificacionSeleccionada = obtenerAvancePlanificacionValido(leerLocalStorage(LocalStorageNombres.avancePlanificacion));
   document.getElementById("mi-toggle-opcionales").checked = seleccionOpcionales;
   document.getElementById(idToggleTituloAvance).checked = tituloAvanceSeleccionado === TituloAvance.ANALISTA;
   document.getElementById(idToggleAvanceFaltantes).checked = avanceSoloFaltantes;
