@@ -1,4 +1,79 @@
 /* COSAS PREVIAS */
+:root {
+    --color-fondo-pagina: rgb(236, 247, 255);
+    --color-superficie: white;
+    --color-panel: rgb(236, 247, 255);
+    --color-panel-suave: rgb(250, 250, 250);
+    --color-borde: rgb(224, 224, 224);
+    --color-texto: black;
+    --color-texto-boton-estado: black;
+    --color-boton-neutro: lightgrey;
+    --color-activo: lightskyblue;
+    --color-ajustar-creditos: lightsalmon;
+    --color-copiar-datos: rgb(218, 240, 255);
+    --color-importar-datos: rgb(228, 255, 218);
+    --color-cuenta-firebase: rgb(224, 231, 255);
+    --color-avance-nav: rgb(220, 245, 235);
+    --color-planificacion-nav: lightyellow;
+    --color-reset: lightcoral;
+    --color-sugerencia: rgb(252, 209, 215);
+    --color-respuestas: rgb(255, 179, 190);
+    --color-cerrar-popup: lightpink;
+    --color-habilitada: lightcoral;
+    --color-aprobada: lightblue;
+    --color-exonerada: lightgreen;
+    --color-deshabilitada: gray;
+    --color-aviso-fondo: rgb(255, 230, 230);
+    --color-aviso-borde: rgb(190, 0, 0);
+    --color-aviso-texto: rgb(160, 0, 0);
+    --color-error-fondo: rgb(255, 235, 235);
+    --color-error-texto: rgb(176, 0, 32);
+    --color-switch-off: #cfd4dc;
+    --color-switch-on: #22c55e;
+    --color-switch-thumb: #fff;
+    --color-focus: #60a5fa;
+    --color-backdrop: rgba(0, 0, 0, 0.4);
+    --color-sombra: rgba(0, 0, 0, 0.5);
+}
+
+body.modo-oscuro {
+    color-scheme: dark;
+    --color-fondo-pagina: #151719;
+    --color-superficie: #202326;
+    --color-panel: #2a2e32;
+    --color-panel-suave: #25292d;
+    --color-borde: #434a51;
+    --color-texto: #f1f3f5;
+    --color-texto-boton-estado: #f8fafc;
+    --color-boton-neutro: #3a4046;
+    --color-activo: #2f80c2;
+    --color-ajustar-creditos: #9f6842;
+    --color-copiar-datos: #285f7a;
+    --color-importar-datos: #3d714a;
+    --color-cuenta-firebase: #4d5d8c;
+    --color-avance-nav: #3b6d5f;
+    --color-planificacion-nav: #756b32;
+    --color-reset: #a94d58;
+    --color-sugerencia: #814050;
+    --color-respuestas: #995165;
+    --color-cerrar-popup: #9b526b;
+    --color-habilitada: #9f4d57;
+    --color-aprobada: #347aa3;
+    --color-exonerada: #3f8f55;
+    --color-deshabilitada: #646d78;
+    --color-aviso-fondo: #3a2426;
+    --color-aviso-borde: #e17b86;
+    --color-aviso-texto: #ffb4bd;
+    --color-error-fondo: #3a2426;
+    --color-error-texto: #ffb4bd;
+    --color-switch-off: #5b626b;
+    --color-switch-on: #48b36a;
+    --color-switch-thumb: #e9eef3;
+    --color-focus: #8fc7ff;
+    --color-backdrop: rgba(0, 0, 0, 0.68);
+    --color-sombra: rgba(0, 0, 0, 0.75);
+}
+
 * {
     box-sizing: border-box;
     padding: 0;
@@ -12,20 +87,35 @@ button {
 }
 
 body {
+    background-color: var(--color-fondo-pagina);
+    color: var(--color-texto);
     overflow-x: hidden;
+}
+
+input:not([type="checkbox"]):not([type="radio"]),
+select,
+textarea {
+    background-color: var(--color-superficie);
+    border: 1px solid var(--color-borde);
+    color: var(--color-texto);
+}
+
+body.modo-oscuro #img-ham,
+body.modo-oscuro .icono-basura {
+    filter: invert(1) brightness(1.1);
 }
 
 /* HEADER */
 header {
     height: 60px;
     width: 100%;
-    background-color: white;
+    background-color: var(--color-superficie);
     display: flex;
     flex-direction: column;
     position: sticky;
     top: 0;
     z-index: 999;
-    border-bottom: 1px solid rgb(224, 224, 224);
+    border-bottom: 1px solid var(--color-borde);
 }
 
 #titulo-principal-container {
@@ -39,6 +129,10 @@ header {
 #titulo-principal-texto {
     margin-left: 10px;
     font-size: 2rem;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 
 #titulo-principal-checkbox-container {
@@ -72,7 +166,7 @@ header {
     display: flex;
     height: calc(100vh - 60px);
     flex-direction: column;
-    background-color: rgb(236, 247, 255);
+    background-color: var(--color-panel);
     z-index: 10;
     align-items: center;
     max-width: 250px;
@@ -83,10 +177,11 @@ header {
     width: 80%;
     height: 40px;
     border: none;
-    background-color: lightgrey;
+    background-color: var(--color-boton-neutro);
+    color: var(--color-texto);
     border-radius: 5px;
     margin-top: 20px;
-    box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.5);
+    box-shadow: 0px 1px 2px var(--color-sombra);
     cursor: pointer;
     font-weight: bold;
 }
@@ -96,54 +191,54 @@ header {
 }
 
 .activo {
-    background-color: lightskyblue;
+    background-color: var(--color-activo);
 }
 
 #ajustar-creditos {
-    background-color: lightsalmon;
+    background-color: var(--color-ajustar-creditos);
 }
 
 #copiar-datos {
-    background-color: rgb(218, 240, 255);
+    background-color: var(--color-copiar-datos);
 }
 
 #importar-datos {
-    background-color: rgb(228, 255, 218);
+    background-color: var(--color-importar-datos);
 }
 
 #cuenta-firebase {
-    background-color: rgb(224, 231, 255);
+    background-color: var(--color-cuenta-firebase);
 }
 
 #avance {
-    background-color: rgb(220, 245, 235);
+    background-color: var(--color-avance-nav);
 }
 
 #avance.activo {
-    background-color: lightskyblue;
+    background-color: var(--color-activo);
 }
 
 #planificacion {
-    background-color: lightyellow;
+    background-color: var(--color-planificacion-nav);
 }
 
 #planificacion.activo {
-    background-color: lightskyblue;
+    background-color: var(--color-activo);
 }
 
 #reset {
-    background-color: lightcoral;
+    background-color: var(--color-reset);
 }
 
 #sugerencia {
-    background-color: rgb(252, 209, 215);
+    background-color: var(--color-sugerencia);
     display: flex;
     justify-content: center;
     align-items: center;
 }
 
 #respuestas {
-    background-color: rgb(255, 179, 190);
+    background-color: var(--color-respuestas);
 }
 
 .link-boton,
@@ -151,7 +246,7 @@ header {
 .link-boton:hover,
 .link-boton:active,
 .link-boton:focus {
-    color: black !important;
+    color: var(--color-texto) !important;
     text-decoration: none;
 }
 
@@ -169,7 +264,7 @@ main {
     overflow-x: hidden;
     overflow-y: auto;
     height: calc(100vh - 60px);
-    background-color: rgb(236, 247, 255);
+    background-color: var(--color-fondo-pagina);
     justify-content: flex-start;
     width: 100%;
 }
@@ -183,8 +278,7 @@ main {
     width: 100%;
     height: 100%;
     overflow: auto;
-    background-color: rgb(0, 0, 0);
-    background-color: rgba(0, 0, 0, 0.4);
+    background-color: var(--color-backdrop);
     justify-content: center;
     align-items: center;
 }
@@ -196,7 +290,8 @@ main {
     height: fit-content;
     width: 500px;
     max-width: 80%;
-    background-color: white;
+    background-color: var(--color-superficie);
+    color: var(--color-texto);
     border-radius: 10px;
     padding: 20px;
     text-align: center;
@@ -214,7 +309,7 @@ main {
     display: flex;
     justify-content: space-around;
     margin-bottom: 10px;
-    border: 1px solid black;
+    border: 1px solid var(--color-borde);
     flex-shrink: 0;
 }
 
@@ -226,7 +321,7 @@ main {
 }
 
 .border-derecho {
-    border-right: 1px solid black;
+    border-right: 1px solid var(--color-borde);
 }
 
 #popup-materia-contenido {
@@ -254,28 +349,29 @@ main {
     padding: 10px;
     border: none;
     margin-top: 15px;
-    background-color: lightpink;
+    background-color: var(--color-cerrar-popup);
+    color: var(--color-texto);
     border-radius: 5px;
     cursor: pointer;
-    border: 2px solid white;
+    border: 2px solid var(--color-superficie);
 }
 
 #cerrar-popup:focus {
-    border: 2px solid black;
+    border: 2px solid var(--color-texto);
 }
 
 .container-seccion-estatico {
     display: flex;
     flex-direction: column;
     align-items: center;
-    background-color: white;
+    background-color: var(--color-superficie);
     text-align: center;
     padding: 10px;
     height: fit-content;
     justify-content: space-around;
     margin: 10px;
     border-radius: 10px;
-    border: 1px solid rgb(224, 224, 224);
+    border: 1px solid var(--color-borde);
 }
 
 .titulo-seccion {
@@ -299,10 +395,10 @@ main {
     text-align: left;
     width: fit-content;
     margin: 10px;
-    border: 1px solid rgb(224, 224, 224);
+    border: 1px solid var(--color-borde);
     padding: 10px;
     border-radius: 5px;
-    background-color: rgb(236, 247, 255);
+    background-color: var(--color-panel);
 }
 
 .infoToggles {
@@ -312,10 +408,10 @@ main {
     text-align: left;
     width: fit-content;
     margin: 10px;
-    border: 1px solid rgb(224, 224, 224);
+    border: 1px solid var(--color-borde);
     padding: 10px;
     border-radius: 5px;
-    background-color: rgb(236, 247, 255);
+    background-color: var(--color-panel);
 }
 
 #config-titulo-avance,
@@ -342,28 +438,28 @@ main {
 .bloque-gris {
     height: 20px;
     width: 20px;
-    background-color: gray;
+    background-color: var(--color-deshabilitada);
     margin: 0px 10px 0 10px;
 }
 
 .bloque-rojo {
     height: 20px;
     width: 20px;
-    background-color: lightcoral;
+    background-color: var(--color-habilitada);
     margin: 0px 10px 0 10px;
 }
 
 .bloque-azul {
     height: 20px;
     width: 20px;
-    background-color: lightblue;
+    background-color: var(--color-aprobada);
     margin: 0px 10px 0 10px;
 }
 
 .bloque-verde {
     height: 20px;
     width: 20px;
-    background-color: lightgreen;
+    background-color: var(--color-exonerada);
     margin: 0px 10px 0 10px;
 }
 
@@ -405,7 +501,7 @@ main {
     position: absolute;
     inset: 0;
     border-radius: 999px;
-    background: #cfd4dc;
+    background: var(--color-switch-off);
     transition: background 150ms ease;
 }
 
@@ -417,14 +513,14 @@ main {
     left: 2px;
     top: 2px;
     border-radius: 50%;
-    background: #fff;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, .25);
+    background: var(--color-switch-thumb);
+    box-shadow: 0 1px 3px var(--color-sombra);
     transform: translateX(0);
     transition: transform 150ms ease;
 }
 
 .switch-input:checked+.switch-slider {
-    background: #22c55e;
+    background: var(--color-switch-on);
 }
 
 .switch-input:checked+.switch-slider::before {
@@ -432,7 +528,7 @@ main {
 }
 
 .switch-input:focus-visible+.switch-slider {
-    outline: 2px solid #60a5fa;
+    outline: 2px solid var(--color-focus);
     outline-offset: 3px;
 }
 
@@ -448,13 +544,14 @@ main {
 }
 
 #boton-confirmar-borrar {
-    background-color: lightcoral;
+    background-color: var(--color-reset);
+    color: var(--color-texto);
     padding: 10px;
     border-radius: 5px;
     margin-top: 15px;
     margin-bottom: 5px;
     border: none;
-    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.5);
+    box-shadow: 0px 2px 4px var(--color-sombra);
     cursor: pointer;
 }
 
@@ -482,16 +579,16 @@ main {
 }
 
 .entrada-area {
-    border-left: 1px solid black;
+    border-left: 1px solid var(--color-borde);
 }
 
 .cabezal {
-    background-color: lightgray;
-    border-top: 1px solid black;
+    background-color: var(--color-boton-neutro);
+    border-top: 1px solid var(--color-borde);
 }
 
 .entrada-area, .entrada-creditos, .entrada-eliminar {
-    border-bottom: 1px solid black;
+    border-bottom: 1px solid var(--color-borde);
     height: 30px;
     flex-shrink: 0;
     display: flex;
@@ -500,7 +597,7 @@ main {
 }
 
 .entrada-eliminar {
-    border-right: 1px solid black;
+    border-right: 1px solid var(--color-borde);
 }
 
 .icono-basura {
@@ -551,8 +648,8 @@ main {
 }
 
 .info-cuenta-firebase {
-    background-color: rgb(236, 247, 255);
-    border: 1px solid rgb(224, 224, 224);
+    background-color: var(--color-panel);
+    border: 1px solid var(--color-borde);
     border-radius: 5px;
     margin: 8px 0;
     overflow-wrap: anywhere;
@@ -561,9 +658,9 @@ main {
 }
 
 .info-cuenta-firebase.error {
-    background-color: rgb(255, 235, 235);
-    border-color: rgb(176, 0, 32);
-    color: rgb(176, 0, 32);
+    background-color: var(--color-error-fondo);
+    border-color: var(--color-error-texto);
+    color: var(--color-error-texto);
     font-weight: bold;
 }
 
@@ -600,10 +697,10 @@ main {
 }
 
 .mensaje-usuario {
-    background-color: rgb(40, 40, 40);
+    background-color: var(--color-texto);
     border-radius: 5px;
     bottom: 16px;
-    color: white;
+    color: var(--color-superficie);
     left: 50%;
     max-width: calc(100% - 32px);
     opacity: 0;
@@ -639,20 +736,20 @@ main {
     width: 100%;
     max-width: 100%;
     min-width: 0;
-    border: 1px solid rgb(224, 224, 224);
+    border: 1px solid var(--color-borde);
     border-radius: 5px;
     padding: 10px;
-    background-color: rgb(236, 247, 255);
+    background-color: var(--color-panel);
 }
 
 .avance-selector-planificacion {
     width: 100%;
     max-width: 100%;
     min-width: 0;
-    border: 1px solid rgb(224, 224, 224);
+    border: 1px solid var(--color-borde);
     border-radius: 5px;
     padding: 10px;
-    background-color: rgb(236, 247, 255);
+    background-color: var(--color-panel);
 }
 
 .avance-selector-planificacion legend {
@@ -668,8 +765,8 @@ main {
 
 .avance-radio-opcion {
     align-items: center;
-    background-color: white;
-    border: 1px solid rgb(224, 224, 224);
+    background-color: var(--color-superficie);
+    border: 1px solid var(--color-borde);
     border-radius: 5px;
     cursor: pointer;
     display: flex;
@@ -690,10 +787,10 @@ main {
 }
 
 .aviso-avance {
-    background-color: rgb(255, 230, 230);
-    border: 1px solid rgb(190, 0, 0);
+    background-color: var(--color-aviso-fondo);
+    border: 1px solid var(--color-aviso-borde);
     border-radius: 5px;
-    color: rgb(160, 0, 0);
+    color: var(--color-aviso-texto);
     font-weight: bold;
     padding: 10px;
     text-align: center;
@@ -701,9 +798,9 @@ main {
 
 .avance-requisito,
 .avance-curriculo-item {
-    background-color: white;
-    border: 1px solid rgb(224, 224, 224);
-    border-left: 5px solid lightcoral;
+    background-color: var(--color-superficie);
+    border: 1px solid var(--color-borde);
+    border-left: 5px solid var(--color-habilitada);
     border-radius: 5px;
     margin-top: 8px;
     padding: 8px;
@@ -711,7 +808,7 @@ main {
 
 .avance-requisito.cumplido,
 .avance-curriculo-item.cumplido {
-    border-left-color: lightgreen;
+    border-left-color: var(--color-exonerada);
 }
 
 .avance-grupo {
@@ -719,11 +816,11 @@ main {
 }
 
 .avance-requisito-grupo {
-    background-color: rgb(250, 250, 250);
+    background-color: var(--color-panel-suave);
 }
 
 .avance-subrequisitos {
-    border-left: 2px solid rgb(224, 224, 224);
+    border-left: 2px solid var(--color-borde);
     margin-left: 14px;
     padding-left: 10px;
 }
@@ -747,7 +844,7 @@ main {
 }
 
 .avance-barra {
-    background-color: rgb(224, 224, 224);
+    background-color: var(--color-borde);
     border-radius: 999px;
     height: 12px;
     margin-top: 8px;
@@ -760,7 +857,7 @@ main {
 }
 
 .avance-barra-valor {
-    background-color: lightskyblue;
+    background-color: var(--color-activo);
     height: 100%;
 }
 
@@ -770,7 +867,7 @@ main {
 }
 
 .avance-materias-area {
-    border-top: 1px solid rgb(224, 224, 224);
+    border-top: 1px solid var(--color-borde);
     margin-top: 8px;
     max-width: 100%;
     min-width: 0;
@@ -801,9 +898,6 @@ main {
 
 .avance-curriculo-contenido {
     min-width: 0;
-}
-
-.avance-curriculo-contenido {
     overflow-wrap: anywhere;
 }
 
@@ -812,10 +906,10 @@ main {
     width: 100%;
     max-width: 100%;
     min-width: 0;
-    border: 1px solid rgb(224, 224, 224);
+    border: 1px solid var(--color-borde);
     border-radius: 5px;
     padding: 10px;
-    background-color: rgb(236, 247, 255);
+    background-color: var(--color-panel);
 }
 
 .planificador-semestre {
@@ -840,7 +934,7 @@ main {
     margin-top: 0;
     max-width: 320px;
     min-width: 0;
-    border: 1px solid rgb(224, 224, 224);
+    border: 1px solid var(--color-borde);
     padding: 10px;
     border-radius: 5px;
 }
@@ -876,8 +970,8 @@ main {
 .boton-planificador {
     border: none;
     border-radius: 5px;
-    box-shadow: 1px 1px 3px rgb(184, 184, 175);
-    color: black;
+    box-shadow: 1px 1px 3px var(--color-sombra);
+    color: var(--color-texto-boton-estado);
     cursor: pointer;
     font-weight: bold;
     padding: 8px;
@@ -938,7 +1032,7 @@ main {
 }
 
 .materia-fuera-semestre {
-    border: 2px solid #b00020;
+    border: 2px solid var(--color-aviso-borde);
 }
 
 /* Aca terminan las clases estaticas que aparecen en el HTML */
@@ -947,27 +1041,27 @@ main {
     display: flex;
     flex-direction: column;
     align-items: center;
-    background-color: white;
+    background-color: var(--color-superficie);
     text-align: center;
     padding: 10px;
     justify-content: space-around;
     margin: 10px;
     border-radius: 10px;
     flex: 1 1 auto;
-    border: 1px solid rgb(224, 224, 224);
+    border: 1px solid var(--color-borde);
 }
 
 .boton-materia {
     padding: 10px 15px 10px 15px;
     width: fit-content;
-    background-color: gray;
+    background-color: var(--color-deshabilitada);
     border-radius: 5px;
     border: none;
-    box-shadow: 3px 3px 5px rgb(184, 184, 175);
+    box-shadow: 3px 3px 5px var(--color-sombra);
     transition: 0.3s;
     cursor: pointer;
     margin: 10px;
-    color: black;
+    color: var(--color-texto-boton-estado);
     display: flex;
     justify-content: center;
     align-items: center;
@@ -981,16 +1075,12 @@ main {
 }
 
 .rectangulo {
-    border: 1px solid black;
+    border: 1px solid var(--color-borde);
     margin: 10px;
 }
 
 .subrayado {
     text-decoration: underline;
-}
-
-.negrita {
-    font-weight: bold;
 }
 
 .margen-inferior {
@@ -999,7 +1089,7 @@ main {
 
 .paraClick {
     cursor: pointer;
-    border: 1px solid rgb(224, 224, 224);
+    border: 1px solid var(--color-borde);
     margin: 5px;
 }
 
@@ -1027,7 +1117,7 @@ main {
     #titulo-principal-texto {
         font-size: 1rem;
     }
-    
+
     #navbar {
         width: 100%;
         max-width: 100%;
@@ -1058,7 +1148,7 @@ main {
         flex-direction: column;
         height: auto;
         min-height: calc(100vh - 60px);
-        background-color: beige;
+        background-color: var(--color-fondo-pagina);
     } 
 
     #secciones {
@@ -1083,7 +1173,7 @@ main {
         height: fit-content;
         width: 95%;
         max-width: 95%;
-        background-color: white;
+        background-color: var(--color-superficie);
         border-radius: 10px;
         padding: 10px;
         text-align: center;
@@ -1102,7 +1192,7 @@ main {
 
     .info {
         width: 95%;
-        border: 1px solid gray;
+        border: 1px solid var(--color-borde);
         padding: 10px;
         border-radius: 10px;
         justify-content: start;
@@ -1111,7 +1201,7 @@ main {
 
     .infoToggles {
         width: 95%;
-        border: 1px solid gray;
+        border: 1px solid var(--color-borde);
         padding: 10px;
         border-radius: 10px;
         justify-content: space-between;

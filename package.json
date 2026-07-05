@@ -5,7 +5,7 @@
   "main": "app.js",
   "scripts": {
     "start": "http-server -p 8080 -c-1 .",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "cypress run"
   },
   "keywords": [],
   "author": "",
@@ -13,8 +13,5 @@
   "devDependencies": {
     "cypress": "^15.10.0",
     "http-server": "^14.1.1"
-  },
-  "dependencies": {
-    "firebase": "^12.15.0"
   }
 }

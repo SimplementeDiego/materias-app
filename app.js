@@ -9,6 +9,7 @@ const LocalStorageNombres = Object.freeze({
   tituloAvance: "tituloAvance",
   avanceSoloFaltantes: "avanceSoloFaltantes",
   avancePlanificacion: "avancePlanificacion",
+  modoOscuro: "modoOscuro",
   planificacionSemestres: "planificacionSemestres",
   planificacionUsaEstadoActual: "planificacionUsaEstadoActual",
   planificacionExoneradasBase: "planificacionExoneradasBase"
@@ -178,10 +179,11 @@ const RequisitosCurriculoAnalista = Object.freeze([
 ]);
 
 const claseResaltarBotonEnNav = "activo";
-const colorAprobada = "lightblue";
-const colorExonerada = "lightgreen";
-const colorHabilitada = "lightcoral";
-const colorDeshabilitada = "gray";
+const colorAprobada = "var(--color-aprobada)";
+const colorExonerada = "var(--color-exonerada)";
+const colorHabilitada = "var(--color-habilitada)";
+const colorDeshabilitada = "var(--color-deshabilitada)";
+const colorBotonNeutro = "var(--color-boton-neutro)";
 
 const idSecciones = "secciones";
 const idPopUp = "popup-container";
@@ -218,6 +220,7 @@ const idSelectFiltrarSemestre = "select-filtrar-semestre";
 const idSelectFiltrarArea = "select-filtrar-area";
 const idToggleTituloAvance = "toggle-titulo-avance";
 const idToggleAvanceFaltantes = "mi-toggle-avance-faltantes";
+const idToggleModoOscuro = "mi-toggle-modo-oscuro";
 const idTextareaImportarDatos = "textarea-importar-datos";
 const idFirebaseEstado = "firebase-estado";
 const idFirebaseEmail = "firebase-email";
@@ -242,6 +245,7 @@ let vistaAvanceActiva = false;
 let tituloAvanceSeleccionado = TituloAvance.INGENIERIA;
 let avanceSoloFaltantes = false;
 let avancePlanificacionSeleccionada = AvancePlanificacion.ACTUAL;
+let modoOscuro = false;
 let valorBarra = BarraPopup.Previas;
 let popUpActual = idPopupMateria;
 let filtroTextoMateria = "";
@@ -518,6 +522,22 @@ function closeNavIfMobile(){
   if (isMobileDevice()&&isNavbarOpen()) {
     document.getElementById(idCheckbox).click();
   }
+}
+
+function aplicarModoOscuro() {
+  document.body.classList.toggle("modo-oscuro", modoOscuro);
+  const toggle = document.getElementById(idToggleModoOscuro);
+  if (toggle) {
+    toggle.checked = modoOscuro;
+  }
+}
+
+function toggleModoOscuro() {
+  const toggle = document.getElementById(idToggleModoOscuro);
+  modoOscuro = toggle ? toggle.checked : !modoOscuro;
+  aplicarModoOscuro();
+  guardarLocalStorage(LocalStorageNombres.modoOscuro, JSON.stringify(modoOscuro));
+  programarGuardadoFirebase();
 }
 
 window.onclick = function (event) {
@@ -1347,6 +1367,7 @@ function reiniciarEstadoEnMemoria() {
   tituloAvanceSeleccionado = TituloAvance.INGENIERIA;
   avanceSoloFaltantes = false;
   avancePlanificacionSeleccionada = AvancePlanificacion.ACTUAL;
+  modoOscuro = false;
   valorBarra = BarraPopup.Previas;
   filtroTextoMateria = "";
   filtroAreaMateria = "";
@@ -1370,6 +1391,7 @@ function reiniciarEstadoEnMemoria() {
   document.getElementById(idSeccionInformacion).open = true;
   document.getElementById(idSeccionConfiguracion).open = true;
   document.getElementById(idSeccionFiltros).open = true;
+  aplicarModoOscuro();
 }
 
 async function recargarEstadoDesdeStorage() {
@@ -2752,7 +2774,7 @@ function renderizarPlanificacion() {
   contenedor.append(renderizarToggleEstadoPlanificador());
   contenedor.append(renderizarExoneradasPlanificador());
 
-  const botonAgregarSemestre = crearBotonPlanificador("Agregar período", "lightgray", agregarSemestrePlanificado);
+  const botonAgregarSemestre = crearBotonPlanificador("Agregar período", colorBotonNeutro, agregarSemestrePlanificado);
   contenedor.append(botonAgregarSemestre);
 
   const contenedorSemestres = document.createElement("div");
@@ -3311,6 +3333,8 @@ function rehacerPaginaSinEstado(){
 }
 
 async function firstLoad() {
+  modoOscuro = leerJsonLocalStorage(LocalStorageNombres.modoOscuro, false) === true;
+  aplicarModoOscuro();
   await cargarMateriasDesdeJson();
   cargarOpcionesFiltroAreas();
   cargarPlanificacionDesdeStorage();

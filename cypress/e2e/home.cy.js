@@ -129,6 +129,30 @@ describe("Materias", () => {
         cy.get("#titulo-principal-texto").should("contain", "0");
     });
 
+    it("activa y persiste el modo oscuro", () => {
+        cy.get("#config-modo-oscuro").should("be.visible");
+        cy.get("#mi-toggle-modo-oscuro").should("not.be.checked");
+
+        cy.get('label[for="mi-toggle-modo-oscuro"]').click();
+
+        cy.get("body").should("have.class", "modo-oscuro");
+        cy.get("#mi-toggle-modo-oscuro").should("be.checked");
+        cy.window().then((win) => {
+            expect(win.localStorage.getItem("modoOscuro")).to.equal("true");
+        });
+
+        cy.reload();
+
+        cy.get("body").should("have.class", "modo-oscuro");
+        cy.get("#mi-toggle-modo-oscuro").should("be.checked");
+
+        cy.get("#planificacion").click();
+        cy.get("#config-modo-oscuro").should("be.visible");
+
+        cy.get("#avance").click();
+        cy.get("#config-modo-oscuro").should("be.visible");
+    });
+
     it("vuelve desde avance a materias y restaura filtros y configuracion", () => {
         cy.get("#avance").click();
         cy.get("#vista-avance").should("be.visible");
