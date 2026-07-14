@@ -1,27 +1,64 @@
 # materias-app
 
-Es una página web para ayudar a estudiantes de Ingeniería en Computación de la UdelaR a decidir que materias cursar.
+Es una página web para ayudar a estudiantes de Ingeniería en Computación de la UdelaR a llevar el registro de las materias, ver los créditos obtenidos y planificar qué cursar.
 
-## funcionalidades
+No es una herramienta oficial de la UdelaR. La información de avance se debe utilizar como guía, ya que puede contener errores o quedar desactualizada.
 
-1. Dar clic al botón de una materia habilitada para cursar (en rojo) para marcar que se aprobó. La materia debería quedar aprobada (en celeste).
-2. Dar clic al botón de una materia aprobada (en celeste) para marcar que se exoneró. La materia debería quedar exonerada (en verde).
-3. Dar clic al botón de una materia exonerada (en verde) para volver al inicio del ciclo. La materia debería quedar habilitada para cursar (en rojo).
-4. Dar clic al botón de una materia deshabilitada (en gris) para abrir una ventana de información de la materia. Debería mostrar la pestaña de las previas necesarias.
-5. Mantener el clic apretado en el botón de una materia para abrir una ventana de información de la materia. Debería mostrar la pestaña de que es previa la materia.
-6. Al exonerar materias o sacar materias exoneradas, los créditos deberían ajustarse correctamente.
-7. Dar clic al botón "1er Semestre" debería mostrar en pantalla únicamente las materias que se dictan en el primer semestre.
-8. Dar clic al botón "2do Semestre" debería mostrar en pantalla únicamente las materias que se dictan en el segundo semestre.
-9. Dar clic al botón "Ambos" debería mostrar en pantalla todas las materias.
-10. Dar clic al botón "Calidad Libre" debería mostrar en pantalla únicamente las materias que tienen calidad de libre.
-11. Dar clic al botón "Reset" debería abrir una venta que pregunta si queremos reiniciar el estado de la página.
-12. Las materias aprobadas y exoneradas, la selección de los toggles y el filtro seleccionado, deberían mantenerse aunque una persona recargue la página. No se utiliza base de datos, ya que sería overkill y enlentecería el uso cuando no es necesario. Utilizamos un estado simple y lo guardamos en localStorage.
-13. El toggle de "Matemática Inicial" es para indicar si quiero que la materia del mismo nombre aparezca o no.
-14. El toggle de "Plan 2025" es para indicar si quiero utilizar el plan del mismo nombre, o el antiguo de 1997.
-15. El toggle de "Opcionales" es para indicar si quiero ver las materias opcionales, o solo las obligatorias.
-16. En la ventana de información de una materia, hay una pestaña "Información" que muestra más información sobre una materia, como el Eva del curso, el programa y a que área da créditos.
-17. Dar clic al botón "Ver áreas" debería abrir una ventana que muestra todas las áreas de la carrera, los créditos obtenidos en cada una y los créditos mínimos necesarios en cada una.
-18. Dar clic en el nombre de un área debería mostrar las materias asociadas a esa área.
-19. Dar clic el botón "Ajustar créditos" debería abrir una ventana que permite agregar o quitar créditos de áreas específicas, permitiendo flexibilidad a los usuarios en caso de materias no contempladas por la página o casos borde como cambios en los créditos de una materia.
-20. Dar clic en el botón "Respuestas" debería mostrar una ventana que muestra las respuestas a sugerencias o dudas que me dejaron usuarios.
-21. Dar clic en el botón "Hacer sugerencia" debería redireccionar a un formulario de Google para dejar la sugerencia.
+## Funcionalidades
+
+### Materias
+
+1. Las materias se muestran con un color según su estado:
+
+   - Gris: no está habilitada.
+   - Rojo: está habilitada para cursar.
+   - Celeste: está aprobada.
+   - Verde: está exonerada.
+
+2. Dar clic a una materia habilitada la marca como aprobada. Darle clic nuevamente la marca como exonerada, y un tercer clic vuelve al estado inicial.
+3. Dar clic a una materia deshabilitada abre sus previas. Mantener el clic o tap apretado en cualquier materia abre toda su información.
+4. La ventana de una materia permite ver sus previas, de qué materias es previa, el EVA, el programa y las áreas a las que aporta créditos.
+5. Dar clic al nombre de un área dentro de esa ventana muestra las materias asociadas a esa área.
+6. Los créditos se actualizan al exonerar materias o cambiar su estado.
+7. Se pueden buscar materias por nombre o sigla, y filtrarlas por semestre, calidad de libre o área de créditos.
+8. Se puede elegir entre el Plan 1997 y el Plan 2025, mostrar u ocultar Matemática Inicial y mostrar u ocultar materias opcionales.
+9. Las materias opcionales y las que no muestran inscripción en Bedelías tienen un indicador propio.
+10. La página tiene modo oscuro.
+
+### Planificación
+
+1. La vista **Planificar** permite armar una planificación por semestres y períodos de exámenes.
+2. Se puede empezar desde el estado actual de las materias o planificar desde cero, eligiendo las materias que se quieren tomar como exoneradas al inicio.
+3. Cada período se puede renombrar, cambiar entre semestre impar, semestre par o período de exámenes, y eliminar cuando ya no sea necesario.
+4. La página muestra qué materias estarían habilitadas en cada período según las previas y los resultados elegidos en períodos anteriores.
+5. Para cada materia planificada se puede indicar si se piensa aprobar el curso o exonerarla. En los períodos de exámenes se puede indicar si se aprueba el examen.
+6. Se pueden mostrar u ocultar materias opcionales y materias que normalmente no se dictan en ese semestre.
+7. Cada período muestra un resumen de las materias, los créditos planificados y el total acumulado.
+8. Si la planificación usa el estado actual, el primer período se puede aplicar al progreso real cuando termine.
+
+### Avance
+
+1. La vista **Avance** muestra los créditos totales, los mínimos por área y las unidades curriculares necesarias.
+2. Se puede consultar el avance para Ingeniería en Computación o para Analista en Computación.
+3. Se puede mostrar todo o únicamente los requisitos que todavía faltan.
+4. También se puede proyectar el avance hasta cualquiera de los períodos agregados en la planificación.
+
+Actualmente esta vista calcula los requisitos del Plan 1997. Se debe utilizar como guía, porque puede contener errores y está sujeta a cambios.
+
+La información del Plan 2025 todavía puede estar incompleta porque se actualiza a medida que se publican los programas, los EVA y las materias del plan.
+
+### Guardado de datos
+
+1. El progreso, la planificación, los créditos ajustados, los filtros y la configuración se guardan en `localStorage`, por lo que se mantienen al recargar la página.
+2. **Copiar datos** genera un respaldo en formato JSON y lo copia al portapapeles.
+3. **Cargar datos** permite restaurar ese respaldo. Antes de cambiar el estado actual, la página valida el JSON completo. Si encuentra un error no carga nada, y también verifica que toda materia exonerada figure como aprobada.
+4. **Cuenta (Opcional)** permite crear una cuenta con email y contraseña para guardar los datos en Firebase y sincronizarlos entre dispositivos.
+5. Si existen datos locales y datos guardados en Firebase, la página permite elegir con cuáles continuar.
+6. También se puede cerrar sesión o pedir un email para cambiar la contraseña.
+
+### Otras opciones
+
+1. **Ajustar créditos** permite agregar o quitar créditos manualmente por área. Sirve para materias que todavía no están contempladas o para casos especiales.
+2. **Reset** pide confirmación antes de borrar el progreso y volver al estado inicial.
+3. **Hacer sugerencia** abre un formulario para enviar dudas, errores o materias que faltan.
+4. **Respuestas** muestra aclaraciones a sugerencias que ya fueron recibidas.
