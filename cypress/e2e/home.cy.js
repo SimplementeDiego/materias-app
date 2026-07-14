@@ -114,6 +114,14 @@ const requisitoCurriculo = (patron) => {
     });
 };
 
+const leerStorageCompleto = (win) => {
+    const claves = Array.from({ length: win.localStorage.length }, (_, indice) => (
+        win.localStorage.key(indice)
+    )).filter(Boolean).sort();
+
+    return Object.fromEntries(claves.map((clave) => [clave, win.localStorage.getItem(clave)]));
+};
+
 describe("Materias", () => {
     beforeEach(() => {
         estadoInicial();
@@ -475,6 +483,109 @@ describe("Popups y datos guardados", () => {
             expect(JSON.parse(win.localStorage.getItem("materiasExoneradas"))).to.include("GAL1");
         });
         colorMateria("GAL1", COLOR.exonerada);
+    });
+
+    it("conserva todo el estado si un dato interno del JSON es invalido", () => {
+        const backup = {
+            aplicacion: "materias-app",
+            version: 1,
+            datos: {
+                materiasAprobadas: JSON.stringify(["MD1"]),
+                materiasExoneradas: JSON.stringify(["MD1"]),
+                semestre: "segundo",
+                planificacionSemestres: '[{"semestre":"primero","materias":',
+            },
+        };
+        let storageAnterior;
+
+        exonerarMateria("GAL1");
+        cy.get('label[for="mi-toggle-opcionales"]').click();
+        cy.window().then((win) => {
+            storageAnterior = leerStorageCompleto(win);
+        });
+
+        cy.get("#importar-datos").click();
+        cy.get("#textarea-importar-datos").invoke("val", JSON.stringify(backup)).trigger("input");
+        cy.get("#boton-cargar-datos").click();
+
+        cy.get("#popup-container").should("be.visible");
+        cy.get("#mensaje-usuario").should("contain", "planificacionSemestres");
+        cy.window().then((win) => {
+            expect(leerStorageCompleto(win)).to.deep.equal(storageAnterior);
+        });
+        colorMateria("GAL1", COLOR.exonerada);
+        colorMateria("MD1", COLOR.habilitada);
+        cy.get("#mi-toggle-opcionales").should("not.be.checked");
+    });
+
+    it("rechaza exoneradas que no figuran tambien como aprobadas sin cambiar el estado", () => {
+        const backup = {
+            aplicacion: "materias-app",
+            version: 1,
+            datos: {
+                materiasAprobadas: JSON.stringify(["MD1"]),
+                materiasExoneradas: JSON.stringify(["MD1", "GAL1"]),
+                semestre: "segundo",
+            },
+        };
+        let storageAnterior;
+
+        exonerarMateria("GAL1");
+        cy.window().then((win) => {
+            storageAnterior = leerStorageCompleto(win);
+        });
+
+        cy.get("#importar-datos").click();
+        cy.get("#textarea-importar-datos").invoke("val", JSON.stringify(backup)).trigger("input");
+        cy.get("#boton-cargar-datos").click();
+
+        cy.get("#popup-container").should("be.visible");
+        cy.get("#mensaje-usuario").should("contain", "no como aprobada");
+        cy.window().then((win) => {
+            expect(leerStorageCompleto(win)).to.deep.equal(storageAnterior);
+        });
+        colorMateria("GAL1", COLOR.exonerada);
+        colorMateria("MD1", COLOR.habilitada);
+    });
+
+    it("restaura el estado anterior si localStorage falla durante la escritura", () => {
+        const backup = {
+            aplicacion: "materias-app",
+            version: 1,
+            datos: {
+                materiasAprobadas: JSON.stringify(["MD1"]),
+                materiasExoneradas: JSON.stringify(["MD1"]),
+                planificacionSemestres: JSON.stringify([]),
+            },
+        };
+        let storageAnterior;
+
+        exonerarMateria("GAL1");
+        cy.window().then((win) => {
+            storageAnterior = leerStorageCompleto(win);
+            const storagePrototype = win.Storage.prototype;
+            const setItemOriginal = storagePrototype.setItem;
+            let escrituraInterrumpida = false;
+
+            cy.stub(storagePrototype, "setItem").callsFake(function (clave, valor) {
+                if (!escrituraInterrumpida && clave === "planificacionSemestres") {
+                    escrituraInterrumpida = true;
+                    throw new Error("Fallo simulado de localStorage");
+                }
+                return setItemOriginal.call(this, clave, valor);
+            });
+        });
+
+        cy.get("#importar-datos").click();
+        cy.get("#textarea-importar-datos").invoke("val", JSON.stringify(backup)).trigger("input");
+        cy.get("#boton-cargar-datos").click();
+
+        cy.get("#mensaje-usuario").should("contain", "estado anterior se conservó");
+        cy.window().then((win) => {
+            expect(leerStorageCompleto(win)).to.deep.equal(storageAnterior);
+        });
+        colorMateria("GAL1", COLOR.exonerada);
+        colorMateria("MD1", COLOR.habilitada);
     });
 
     it("carga un JSON valido y actualiza el estado sin recargar la pagina", () => {
@@ -853,6 +964,33 @@ describe("Avance", () => {
 
         cy.contains(".avance-radio-opcion", /Hasta .*Semestre/).find("input").should("be.checked");
         cy.get("#vista-avance").should("contain", "Créditos totales: 22/450");
+    });
+
+    it("descarta del avance proyectado materias que perdieron sus previas", () => {
+        estadoInicial({
+            aprobadas: ["CDIV"],
+            planificacion: [
+                {
+                    semestre: "primero",
+                    materias: [{ nombre: "CDIVV", resultado: "exonerada" }],
+                    abierto: true,
+                },
+            ],
+        });
+
+        colorMateria("CDIV", COLOR.aprobada);
+        cy.get("#CDIV").click().click();
+        colorMateria("CDIV", COLOR.habilitada);
+
+        cy.get("#avance").click();
+        cy.contains(".avance-radio-opcion", /Hasta .*Semestre/).find("input").check();
+
+        cy.get("#vista-avance").should("contain", "Créditos totales: 0/450");
+        requisitoCurriculo(/^C.lculo DIVV$/).should("not.have.class", "cumplido");
+        cy.window().then((win) => {
+            const planificacion = JSON.parse(win.localStorage.getItem("planificacionSemestres"));
+            expect(planificacion[0].materias).to.deep.equal([]);
+        });
     });
 
     it("vuelve a avance actual si se elimina el periodo proyectado seleccionado", () => {

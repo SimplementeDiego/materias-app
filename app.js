@@ -258,6 +258,7 @@ let firebaseUsuario = null;
 let firebaseApi = {};
 let firebaseCargandoDatosRemotos = false;
 let firebaseGuardadoProgramado = null;
+let importacionDatosEnCurso = false;
 let firebaseDatosRemotosPendientes = null;
 let firebaseResolucionDatosPendiente = false;
 let localStorageBloqueado = false;
@@ -562,7 +563,7 @@ function toggleMI() {
   mostrarSeccionesQueCorrespondan();
   guardarLocalStorage(MI.nombre, Materias.includes(MI));
   reconstruirEstadoPagina();
-  renderizarPlanificacionSiActiva();
+  actualizarPlanificacionTrasCambioConfiguracion();
 }
 
 function togglePlan() {
@@ -586,7 +587,7 @@ function togglePlan() {
   mostrarSeccionesQueCorrespondan();
   guardarLocalStorage(FC.nombre, Materias.includes(FC));
   reconstruirEstadoPagina();
-  renderizarPlanificacionSiActiva();
+  actualizarPlanificacionTrasCambioConfiguracion();
 }
 
 function toggleOpcionales() {
@@ -1158,6 +1159,13 @@ function obtenerCredencialesFirebase() {
   return { email, password };
 }
 
+function limpiarPasswordFirebase() {
+  const inputPassword = document.getElementById(idFirebasePassword);
+  if (inputPassword) {
+    inputPassword.value = "";
+  }
+}
+
 async function iniciarSesionFirebase(event) {
   event?.preventDefault();
   const inicializado = await inicializarFirebase();
@@ -1168,6 +1176,7 @@ async function iniciarSesionFirebase(event) {
 
   try {
     await firebaseApi.signInWithEmailAndPassword(firebaseAuth, credenciales.email, credenciales.password);
+    limpiarPasswordFirebase();
   } catch (error) {
     console.error("No se pudo iniciar sesión", error);
     actualizarVistaCuentaFirebase(obtenerMensajeErrorFirebase(error, "iniciar sesión"), true);
@@ -1183,6 +1192,7 @@ async function crearCuentaFirebase() {
 
   try {
     await firebaseApi.createUserWithEmailAndPassword(firebaseAuth, credenciales.email, credenciales.password);
+    limpiarPasswordFirebase();
   } catch (error) {
     console.error("No se pudo crear la cuenta", error);
     actualizarVistaCuentaFirebase(obtenerMensajeErrorFirebase(error, "crear la cuenta"), true);
@@ -1247,8 +1257,8 @@ async function usarDatosRemotosFirebase() {
   firebaseCargandoDatosRemotos = true;
 
   try {
-    aplicarDatosImportadosEnLocalStorage(datosRemotos);
-    await recargarEstadoDesdeStorage();
+    validarDatosImportados(datosRemotos);
+    await reemplazarEstadoConDatosImportados(datosRemotos);
     firebaseCargandoDatosRemotos = false;
     try {
       await guardarDatosFirebase(true);
@@ -1268,6 +1278,9 @@ async function usarDatosRemotosFirebase() {
 }
 
 async function guardarDatosFirebase(forzar = false) {
+  if (importacionDatosEnCurso) {
+    throw new Error("No se pueden guardar datos en Firebase durante una importación.");
+  }
   if ((firebaseCargandoDatosRemotos || firebaseResolucionDatosPendiente) && !forzar) return;
   if (!firebaseUsuario || !firebaseDb || !firebaseApi.setDoc) return;
 
@@ -1286,7 +1299,7 @@ async function guardarDatosFirebase(forzar = false) {
 }
 
 function programarGuardadoFirebase() {
-  if (firebaseResolucionDatosPendiente) return;
+  if (firebaseResolucionDatosPendiente || importacionDatosEnCurso) return;
   if (firebaseCargandoDatosRemotos || !firebaseUsuario || !firebaseDb || !firebaseApi.setDoc) return;
 
   clearTimeout(firebaseGuardadoProgramado);
@@ -1331,22 +1344,443 @@ function datosImportadosTieneClavesReconocidas(datosImportados) {
   ));
 }
 
+function crearErrorValidacionImportacion(mensaje) {
+  const error = new Error(mensaje);
+  error.esErrorValidacionImportacion = true;
+  return error;
+}
+
+function exigirDatoImportado(condicion, mensaje) {
+  if (!condicion) {
+    throw crearErrorValidacionImportacion(mensaje);
+  }
+}
+
+function esObjetoImportado(valor) {
+  return valor !== null && typeof valor === "object" && !Array.isArray(valor);
+}
+
+function validarContenedorImportado(jsonImportado) {
+  if (!esObjetoImportado(jsonImportado)) return;
+  const tieneDatos = Object.prototype.hasOwnProperty.call(jsonImportado, "datos");
+  const tieneLocalStorage = Object.prototype.hasOwnProperty.call(jsonImportado, "localStorage");
+  if (tieneDatos || tieneLocalStorage) {
+    exigirDatoImportado(
+      !(tieneDatos && tieneLocalStorage),
+      "El archivo no puede contener a la vez los campos \"datos\" y \"localStorage\"."
+    );
+    const clavesContenedorValidas = new Set(["aplicacion", "version", "exportadoEn", "datos", "localStorage"]);
+    Object.keys(jsonImportado).forEach((clave) => {
+      exigirDatoImportado(
+        clavesContenedorValidas.has(clave),
+        `El campo "${clave}" no es válido en el contenedor del archivo.`
+      );
+    });
+  }
+
+  if (Object.prototype.hasOwnProperty.call(jsonImportado, "aplicacion")) {
+    exigirDatoImportado(
+      jsonImportado.aplicacion === "materias-app",
+      "El archivo pertenece a otra aplicación."
+    );
+  }
+  if (Object.prototype.hasOwnProperty.call(jsonImportado, "version")) {
+    exigirDatoImportado(
+      jsonImportado.version === 1,
+      "La versión del archivo no es compatible."
+    );
+  }
+  if (Object.prototype.hasOwnProperty.call(jsonImportado, "exportadoEn")) {
+    exigirDatoImportado(
+      typeof jsonImportado.exportadoEn === "string" && Number.isFinite(Date.parse(jsonImportado.exportadoEn)),
+      "La fecha de exportación no tiene un formato válido."
+    );
+  }
+}
+
+function obtenerCampoJsonImportado(datosImportados, clave, valorPorDefecto) {
+  if (!Object.prototype.hasOwnProperty.call(datosImportados, clave)) {
+    return valorPorDefecto;
+  }
+
+  const valorGuardado = datosImportados[clave];
+  if (valorGuardado === null) return valorPorDefecto;
+  if (typeof valorGuardado !== "string") return valorGuardado;
+
+  try {
+    return JSON.parse(valorGuardado);
+  } catch (error) {
+    throw crearErrorValidacionImportacion(`El campo "${clave}" no contiene JSON válido.`);
+  }
+}
+
+function obtenerCampoTextoImportado(datosImportados, clave, valorPorDefecto, valoresValidos) {
+  if (!Object.prototype.hasOwnProperty.call(datosImportados, clave) || datosImportados[clave] === null) {
+    return valorPorDefecto;
+  }
+
+  const valor = datosImportados[clave];
+  exigirDatoImportado(
+    typeof valor === "string" && valoresValidos.includes(valor),
+    `El campo "${clave}" tiene un valor no reconocido.`
+  );
+  return valor;
+}
+
+function obtenerCampoBooleanoTextoImportado(datosImportados, clave, valorPorDefecto = false) {
+  if (!Object.prototype.hasOwnProperty.call(datosImportados, clave) || datosImportados[clave] === null) {
+    return valorPorDefecto;
+  }
+
+  const valor = datosImportados[clave];
+  exigirDatoImportado(
+    typeof valor === "boolean" || valor === "true" || valor === "false",
+    `El campo "${clave}" debe ser verdadero o falso.`
+  );
+  return valor === true || valor === "true";
+}
+
+function validarListaMateriasImportada(datosImportados, clave) {
+  const materias = obtenerCampoJsonImportado(datosImportados, clave, []);
+  exigirDatoImportado(Array.isArray(materias), `El campo "${clave}" debe ser una lista de materias.`);
+
+  const materiasUnicas = new Set();
+  materias.forEach((nombreMateria) => {
+    exigirDatoImportado(
+      typeof nombreMateria === "string" && nombreMateria.length > 0,
+      `El campo "${clave}" contiene un nombre de materia inválido.`
+    );
+    exigirDatoImportado(
+      materiasPorNombre.has(nombreMateria),
+      `La materia "${nombreMateria}" del campo "${clave}" no existe.`
+    );
+    exigirDatoImportado(
+      !materiasUnicas.has(nombreMateria),
+      `La materia "${nombreMateria}" está repetida en el campo "${clave}".`
+    );
+    materiasUnicas.add(nombreMateria);
+  });
+  return materias;
+}
+
+function validarMateriaPlanificadaImportada(materiaPlanificada, semestre, indicePeriodo, indiceMateria) {
+  const ubicacion = `planificacionSemestres[${indicePeriodo}].materias[${indiceMateria}]`;
+  let nombreMateria;
+
+  if (typeof materiaPlanificada === "string") {
+    nombreMateria = materiaPlanificada;
+  } else {
+    exigirDatoImportado(esObjetoImportado(materiaPlanificada), `El campo "${ubicacion}" no tiene un formato válido.`);
+    const clavesMateriaValidas = new Set(["nombre", "resultado"]);
+    Object.keys(materiaPlanificada).forEach((clave) => {
+      exigirDatoImportado(
+        clavesMateriaValidas.has(clave),
+        `El campo "${ubicacion}.${clave}" no es reconocido.`
+      );
+    });
+    nombreMateria = materiaPlanificada.nombre;
+    if (Object.prototype.hasOwnProperty.call(materiaPlanificada, "resultado")) {
+      const resultadosValidos = Object.values(ResultadoPlanificado);
+      exigirDatoImportado(
+        resultadosValidos.includes(materiaPlanificada.resultado),
+        `El resultado de "${ubicacion}" no es válido.`
+      );
+      exigirDatoImportado(
+        !esPeriodoExamenesPlanificado(semestre) || materiaPlanificada.resultado !== ResultadoPlanificado.CURSO,
+        `El resultado "curso" no es válido para el período de exámenes en "${ubicacion}".`
+      );
+    }
+  }
+
+  exigirDatoImportado(
+    typeof nombreMateria === "string" && nombreMateria.length > 0,
+    `El campo "${ubicacion}" no contiene un nombre de materia válido.`
+  );
+  exigirDatoImportado(
+    materiasPorNombre.has(nombreMateria),
+    `La materia "${nombreMateria}" de "${ubicacion}" no existe.`
+  );
+  return nombreMateria;
+}
+
+function validarPlanificacionImportada(datosImportados) {
+  const planificacion = obtenerCampoJsonImportado(datosImportados, LocalStorageNombres.planificacionSemestres, []);
+  exigirDatoImportado(
+    Array.isArray(planificacion),
+    `El campo "${LocalStorageNombres.planificacionSemestres}" debe ser una lista de períodos.`
+  );
+
+  planificacion.forEach((periodo, indicePeriodo) => {
+    const ubicacion = `${LocalStorageNombres.planificacionSemestres}[${indicePeriodo}]`;
+    exigirDatoImportado(esObjetoImportado(periodo), `El campo "${ubicacion}" no tiene un formato válido.`);
+    const clavesPeriodoValidas = new Set([
+      "semestre",
+      "nombrePersonalizado",
+      "materias",
+      "abierto",
+      "elegirMateriasAbierto",
+      "mostrarMateriasNoDictadas",
+      "mostrarOpcionales",
+    ]);
+    Object.keys(periodo).forEach((clave) => {
+      exigirDatoImportado(
+        clavesPeriodoValidas.has(clave),
+        `El campo "${ubicacion}.${clave}" no es reconocido.`
+      );
+    });
+    exigirDatoImportado(
+      [Semestre.PRIMERO, Semestre.SEGUNDO, PeriodoPlanificado.EXAMENES].includes(periodo.semestre),
+      `El semestre de "${ubicacion}" no es válido.`
+    );
+    exigirDatoImportado(Array.isArray(periodo.materias), `El campo "${ubicacion}.materias" debe ser una lista.`);
+
+    if (Object.prototype.hasOwnProperty.call(periodo, "nombrePersonalizado")) {
+      exigirDatoImportado(
+        typeof periodo.nombrePersonalizado === "string" && periodo.nombrePersonalizado.length <= 80,
+        `El nombre personalizado de "${ubicacion}" no es válido.`
+      );
+    }
+
+    ["abierto", "elegirMateriasAbierto", "mostrarMateriasNoDictadas", "mostrarOpcionales"].forEach((claveBooleana) => {
+      if (Object.prototype.hasOwnProperty.call(periodo, claveBooleana)) {
+        exigirDatoImportado(
+          typeof periodo[claveBooleana] === "boolean",
+          `El campo "${ubicacion}.${claveBooleana}" debe ser verdadero o falso.`
+        );
+      }
+    });
+
+    const nombresPeriodo = new Set();
+    periodo.materias.forEach((materiaPlanificada, indiceMateria) => {
+      const nombreMateria = validarMateriaPlanificadaImportada(
+        materiaPlanificada,
+        periodo.semestre,
+        indicePeriodo,
+        indiceMateria
+      );
+      exigirDatoImportado(
+        !nombresPeriodo.has(nombreMateria),
+        `La materia "${nombreMateria}" está repetida en "${ubicacion}".`
+      );
+      nombresPeriodo.add(nombreMateria);
+    });
+  });
+
+  return planificacion;
+}
+
+function validarRegistrosImportados(datosImportados) {
+  const areasValidas = new Set(Object.values(BloqueCreditos));
+  const registrosImportados = obtenerCampoJsonImportado(datosImportados, "registros", []);
+  exigirDatoImportado(Array.isArray(registrosImportados), "El campo \"registros\" debe ser una lista.");
+  registrosImportados.forEach((registro, indice) => {
+    const clavesRegistroValidas = new Set(["area", "creditos"]);
+    exigirDatoImportado(
+      esObjetoImportado(registro) && areasValidas.has(registro.area) && Number.isFinite(registro.creditos),
+      `El registro de créditos número ${indice + 1} no tiene un formato válido.`
+    );
+    Object.keys(registro).forEach((clave) => {
+      exigirDatoImportado(
+        clavesRegistroValidas.has(clave),
+        `El campo "registros[${indice}].${clave}" no es reconocido.`
+      );
+    });
+  });
+
+  const creditosImportados = obtenerCampoJsonImportado(datosImportados, "creditosPorArea", []);
+  exigirDatoImportado(Array.isArray(creditosImportados), "El campo \"creditosPorArea\" debe ser una lista.");
+  const creditosPorAreaImportados = new Map();
+  creditosImportados.forEach((entrada, indice) => {
+    exigirDatoImportado(
+      Array.isArray(entrada) && entrada.length === 2 && areasValidas.has(entrada[0]) && Number.isFinite(entrada[1]),
+      `La entrada de créditos por área número ${indice + 1} no tiene un formato válido.`
+    );
+    exigirDatoImportado(
+      !creditosPorAreaImportados.has(entrada[0]),
+      `El área "${entrada[0]}" está repetida en "creditosPorArea".`
+    );
+    creditosPorAreaImportados.set(entrada[0], entrada[1]);
+  });
+
+  const sumaRegistros = new Map();
+  registrosImportados.forEach(({ area, creditos }) => {
+    sumaRegistros.set(area, (sumaRegistros.get(area) ?? 0) + creditos);
+  });
+  const areasConCreditos = new Set([...sumaRegistros.keys(), ...creditosPorAreaImportados.keys()]);
+  areasConCreditos.forEach((area) => {
+    exigirDatoImportado(
+      (sumaRegistros.get(area) ?? 0) === (creditosPorAreaImportados.get(area) ?? 0),
+      `Los créditos del área "${area}" no coinciden con los registros importados.`
+    );
+  });
+}
+
+function validarDatosImportados(datosImportados) {
+  validarContenedorImportado(datosImportados);
+  const clavesValidas = new Set([
+    ...obtenerClavesLocalStorageRelevantes(),
+    "aplicacion",
+    "version",
+    "exportadoEn",
+  ]);
+  Object.keys(datosImportados).forEach((clave) => {
+    exigirDatoImportado(
+      clavesValidas.has(clave),
+      `El campo "${clave}" no es reconocido por la aplicación.`
+    );
+  });
+
+  const aprobadas = validarListaMateriasImportada(datosImportados, LocalStorageNombres.materiasAprobadas);
+  const exoneradas = validarListaMateriasImportada(datosImportados, LocalStorageNombres.materiasExoneradas);
+  const aprobadasSet = new Set(aprobadas);
+  exoneradas.forEach((nombreMateria) => {
+    exigirDatoImportado(
+      aprobadasSet.has(nombreMateria),
+      `La materia "${nombreMateria}" figura como exonerada, pero no como aprobada.`
+    );
+  });
+
+  const exoneradasBase = validarListaMateriasImportada(datosImportados, LocalStorageNombres.planificacionExoneradasBase);
+  const planificacion = validarPlanificacionImportada(datosImportados);
+
+  [
+    LocalStorageNombres.seleccionOpcionales,
+    LocalStorageNombres.avanceSoloFaltantes,
+    LocalStorageNombres.modoOscuro,
+    LocalStorageNombres.planificacionUsaEstadoActual,
+  ].forEach((clave) => {
+    const valor = obtenerCampoJsonImportado(datosImportados, clave, false);
+    exigirDatoImportado(typeof valor === "boolean", `El campo "${clave}" debe ser verdadero o falso.`);
+  });
+
+  obtenerCampoTextoImportado(datosImportados, LocalStorageNombres.semestre, Semestre.AMBOS, Object.values(Semestre));
+  obtenerCampoTextoImportado(
+    datosImportados,
+    LocalStorageNombres.vistaSeleccionada,
+    idBotonMaterias,
+    [idBotonMaterias, idBotonPlanificacion, idBotonAvance, ...Object.values(Semestre)]
+  );
+  obtenerCampoTextoImportado(
+    datosImportados,
+    LocalStorageNombres.tituloAvance,
+    TituloAvance.INGENIERIA,
+    Object.values(TituloAvance)
+  );
+
+  const avancePlanificacion = obtenerCampoTextoImportado(
+    datosImportados,
+    LocalStorageNombres.avancePlanificacion,
+    AvancePlanificacion.ACTUAL,
+    [
+      AvancePlanificacion.ACTUAL,
+      ...planificacion.map((_, indice) => valorAvancePlanificacionIndice(indice)),
+    ]
+  );
+  exigirDatoImportado(
+    avancePlanificacion === AvancePlanificacion.ACTUAL || obtenerIndiceAvancePlanificacion(avancePlanificacion) !== null,
+    `El campo "${LocalStorageNombres.avancePlanificacion}" no corresponde a un período importado.`
+  );
+
+  const usarMatematicaInicial = obtenerCampoBooleanoTextoImportado(datosImportados, MI?.nombre ?? "MI");
+  const usarPlanAlternativo = obtenerCampoBooleanoTextoImportado(datosImportados, FC?.nombre ?? "FC");
+  const materiasEnEstadoImportado = new Set([...aprobadas, ...exoneradas, ...exoneradasBase]);
+  planificacion.forEach((periodo) => {
+    periodo.materias.forEach((materiaPlanificada) => {
+      materiasEnEstadoImportado.add(obtenerNombreMateriaPlanificada(materiaPlanificada));
+    });
+  });
+
+  exigirDatoImportado(
+    usarMatematicaInicial || !materiasEnEstadoImportado.has(MI.nombre),
+    `La materia "${MI.nombre}" requiere que su configuración esté activada.`
+  );
+  exigirDatoImportado(
+    usarPlanAlternativo || (!materiasEnEstadoImportado.has(FC.nombre) && !materiasEnEstadoImportado.has(IC.nombre)),
+    `Las materias "${FC.nombre}" e "${IC.nombre}" requieren que el plan alternativo esté activado.`
+  );
+  exigirDatoImportado(
+    !usarPlanAlternativo || !materiasEnEstadoImportado.has(MD1.nombre),
+    `La materia "${MD1.nombre}" no pertenece al plan alternativo seleccionado.`
+  );
+
+  validarRegistrosImportados(datosImportados);
+}
+
 function aplicarDatosImportadosEnLocalStorage(datosImportados) {
-  let datosAplicados = true;
-  obtenerClavesLocalStorageRelevantes().forEach((clave) => {
+  const operaciones = obtenerClavesLocalStorageRelevantes().map((clave) => {
     if (Object.prototype.hasOwnProperty.call(datosImportados, clave)) {
       const valor = datosImportados[clave];
-      if (valor === null) {
-        datosAplicados = eliminarLocalStorage(clave) && datosAplicados;
-      } else {
-        datosAplicados = guardarLocalStorage(clave, typeof valor === "string" ? valor : JSON.stringify(valor)) && datosAplicados;
+      if (valor === null) return { clave, valor: null };
+      const valorSerializado = typeof valor === "string" ? valor : JSON.stringify(valor);
+      if (valorSerializado === undefined) {
+        throw new Error(`No se pudo preparar el campo "${clave}" para guardar.`);
       }
-    } else {
-      datosAplicados = eliminarLocalStorage(clave) && datosAplicados;
+      return { clave, valor: valorSerializado };
+    }
+    return { clave, valor: null };
+  });
+
+  operaciones.filter(({ valor }) => valor !== null).forEach(({ clave, valor }) => {
+    if (!guardarLocalStorage(clave, valor)) {
+      throw new Error(`No se pudo guardar el campo "${clave}" en el almacenamiento local.`);
     }
   });
-  if (!datosAplicados) {
-    throw new Error("No se pudo escribir en el almacenamiento local.");
+  operaciones.filter(({ valor }) => valor === null).forEach(({ clave }) => {
+    if (!eliminarLocalStorage(clave)) {
+      throw new Error(`No se pudo borrar el campo "${clave}" del almacenamiento local.`);
+    }
+  });
+}
+
+async function reemplazarEstadoConDatosImportados(datosImportados) {
+  if (importacionDatosEnCurso) {
+    const error = new Error("Ya hay una importación de datos en curso.");
+    error.importacionEnCurso = true;
+    throw error;
+  }
+
+  importacionDatosEnCurso = true;
+
+  try {
+    const localStorageBloqueadoAnterior = localStorageBloqueado;
+    const avisoLocalStorageMostradoAnterior = avisoLocalStorageMostrado;
+    const datosAnteriores = crearBackupLocalStorage().datos;
+    if (localStorageBloqueado) {
+      throw crearErrorLocalStorageBloqueado();
+    }
+
+    clearTimeout(firebaseGuardadoProgramado);
+    firebaseGuardadoProgramado = null;
+
+    try {
+      aplicarDatosImportadosEnLocalStorage(datosImportados);
+      await recargarEstadoDesdeStorage();
+      if (localStorageBloqueado) {
+        throw crearErrorLocalStorageBloqueado();
+      }
+    } catch (errorCarga) {
+      try {
+        aplicarDatosImportadosEnLocalStorage(datosAnteriores);
+        await recargarEstadoDesdeStorage();
+        const datosRestaurados = crearBackupLocalStorage().datos;
+        if (!datosStorageSonIguales(datosRestaurados, datosAnteriores)) {
+          throw new Error("El estado restaurado no coincide con el estado anterior.");
+        }
+        localStorageBloqueado = localStorageBloqueadoAnterior;
+        avisoLocalStorageMostrado = avisoLocalStorageMostradoAnterior;
+      } catch (errorRestauracion) {
+        const error = new Error("La importación falló y no se pudo restaurar completamente el estado anterior.");
+        error.cause = errorRestauracion;
+        error.restauracionEstadoFallida = true;
+        throw error;
+      }
+      if (errorCarga && typeof errorCarga === "object") {
+        errorCarga.estadoAnteriorRestaurado = true;
+      }
+      throw errorCarga;
+    }
+  } finally {
+    importacionDatosEnCurso = false;
   }
 }
 
@@ -1418,20 +1852,26 @@ async function recargarEstadoDesdeStorage() {
 }
 
 async function cargarDatosDesdeJson() {
+  if (importacionDatosEnCurso) {
+    mostrarMensajeUsuario("Ya se están cargando datos. Esperá a que termine la importación actual.");
+    return;
+  }
+
   const texto = document.getElementById(idTextareaImportarDatos).value.trim();
   if (!texto) {
     mostrarMensajeUsuario("Ingresá el JSON a cargar.");
     return;
   }
 
-  let datosImportados;
+  let jsonImportado;
   try {
-    datosImportados = obtenerDatosImportados(JSON.parse(texto));
+    jsonImportado = JSON.parse(texto);
   } catch (error) {
     mostrarMensajeUsuario("El JSON ingresado no es válido.");
     return;
   }
 
+  const datosImportados = obtenerDatosImportados(jsonImportado);
   if (!datosImportados) {
     mostrarMensajeUsuario("El JSON ingresado no tiene el formato esperado.");
     return;
@@ -1443,13 +1883,32 @@ async function cargarDatosDesdeJson() {
   }
 
   try {
-    aplicarDatosImportadosEnLocalStorage(datosImportados);
-    await recargarEstadoDesdeStorage();
+    validarContenedorImportado(jsonImportado);
+    validarDatosImportados(datosImportados);
+  } catch (error) {
+    if (error?.esErrorValidacionImportacion) {
+      mostrarMensajeUsuario(error.message);
+      return;
+    }
+    console.error("No se pudieron validar los datos importados", error);
+    mostrarMensajeUsuario("No se pudo validar el JSON ingresado.");
+    return;
+  }
+
+  try {
+    await reemplazarEstadoConDatosImportados(datosImportados);
     programarGuardadoFirebase();
     mostrarMensajeUsuario("Datos cargados.");
   } catch (error) {
     console.error("No se pudieron cargar los datos", error);
-    mostrarMensajeUsuario("No se pudieron cargar los datos.");
+    if (error?.estadoAnteriorRestaurado && !localStorageBloqueado) {
+      programarGuardadoFirebase();
+    }
+    mostrarMensajeUsuario(
+      error?.restauracionEstadoFallida
+        ? "La carga falló y no se pudo restaurar completamente el estado anterior. Recargá la página antes de continuar."
+        : "No se pudieron cargar los datos. El estado anterior se conservó."
+    );
   }
 }
 
@@ -1543,6 +2002,14 @@ function renderizarPlanificacionSiActiva() {
   if (vistaPlanificacionActiva) {
     renderizarPlanificacion();
   }
+}
+
+function actualizarPlanificacionTrasCambioConfiguracion() {
+  if (vistaPlanificacionActiva) {
+    renderizarPlanificacion();
+    return;
+  }
+  normalizarYGuardarPlanificacion();
 }
 
 function borrarProgreso() {
@@ -2114,6 +2581,7 @@ function renderizarContenidoAvance(contenedor) {
 }
 
 function renderizarAvance() {
+  normalizarYGuardarPlanificacion();
   asegurarAvancePlanificacionValida();
   const contenedor = document.getElementById(idVistaAvance);
   contenedor.innerHTML = "";
@@ -2436,6 +2904,12 @@ function normalizarPlanificacion() {
   });
 
   planificacionSemestres = planificacionNormalizada;
+}
+
+function normalizarYGuardarPlanificacion() {
+  normalizarExoneradasBasePlanificacion();
+  normalizarPlanificacion();
+  guardarPlanificacion();
 }
 
 function obtenerMateriasDisponiblesParaPlan(indiceSemestre) {
@@ -2777,9 +3251,7 @@ function renderizarSemestrePlanificado(semestrePlanificado, indiceSemestre) {
 }
 
 function renderizarPlanificacion() {
-  normalizarExoneradasBasePlanificacion();
-  normalizarPlanificacion();
-  guardarPlanificacion();
+  normalizarYGuardarPlanificacion();
 
   const contenedor = document.getElementById(idVistaPlanificacion);
   contenedor.innerHTML = "";
@@ -3403,8 +3875,7 @@ async function firstLoad() {
   }
   rehacerPaginaSinEstado();
   reconstruirEstadoPagina();
-  normalizarPlanificacion();
-  guardarPlanificacion();
+  normalizarYGuardarPlanificacion();
   const semestreGuardado = leerLocalStorage(LocalStorageNombres.semestre);
   const vistaGuardadaRaw = leerLocalStorage(LocalStorageNombres.vistaSeleccionada);
   const semestreDesdeVistaAnterior = Object.values(Semestre).includes(vistaGuardadaRaw) ? vistaGuardadaRaw : null;
