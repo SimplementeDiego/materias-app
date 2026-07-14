@@ -1072,6 +1072,7 @@ async function inicializarFirebase() {
       doc: firestoreModule.doc,
       getDoc: firestoreModule.getDoc,
       onAuthStateChanged: authModule.onAuthStateChanged,
+      sendPasswordResetEmail: authModule.sendPasswordResetEmail,
       serverTimestamp: firestoreModule.serverTimestamp,
       setDoc: firestoreModule.setDoc,
       signInWithEmailAndPassword: authModule.signInWithEmailAndPassword,
@@ -1185,6 +1186,22 @@ async function crearCuentaFirebase() {
   } catch (error) {
     console.error("No se pudo crear la cuenta", error);
     actualizarVistaCuentaFirebase(obtenerMensajeErrorFirebase(error, "crear la cuenta"), true);
+  }
+}
+
+async function enviarCambioContrasenaFirebase() {
+  const inicializado = await inicializarFirebase();
+  if (!inicializado) return;
+
+  const email = obtenerEmailFirebase();
+  if (!email) return;
+
+  try {
+    await firebaseApi.sendPasswordResetEmail(firebaseAuth, email);
+    actualizarVistaCuentaFirebase("Te enviamos un email para cambiar la contraseña. Revisar la carpeta de spam.");
+  } catch (error) {
+    console.error("No se pudo enviar el email para cambiar la contraseña", error);
+    actualizarVistaCuentaFirebase(obtenerMensajeErrorFirebase(error, "enviar el email para cambiar la contraseña"), true);
   }
 }
 
