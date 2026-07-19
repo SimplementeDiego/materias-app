@@ -36,9 +36,11 @@ const ejemploMaterias = [
 ];
 
 const estadoInicial = (datos = {}) => {
+    const exoneradas = datos.exoneradas ?? [];
+    const aprobadas = datos.aprobadas ?? exoneradas;
     const storage = {
-        materiasAprobadas: JSON.stringify(datos.aprobadas ?? []),
-        materiasExoneradas: JSON.stringify(datos.exoneradas ?? []),
+        materiasAprobadas: JSON.stringify(aprobadas),
+        materiasExoneradas: JSON.stringify(exoneradas),
         planificacionSemestres: JSON.stringify(datos.planificacion ?? []),
         planificacionUsaEstadoActual: JSON.stringify(datos.usaEstadoActual ?? true),
         planificacionExoneradasBase: JSON.stringify(datos.exoneradasBase ?? []),
@@ -87,6 +89,8 @@ const agregarPeriodo = () => {
 
 const primerPeriodo = () => cy.get("#vista-planificacion .planificador-semestre").first();
 
+const periodo = (indice) => cy.get("#vista-planificacion .planificador-semestre").eq(indice);
+
 const abrirElegirMaterias = () => {
     primerPeriodo().contains("summary", "Elegir materias").click();
 };
@@ -95,6 +99,10 @@ const materiasParaElegir = () => primerPeriodo().find(".planificador-elegir-mate
 
 const materiasSeleccionadas = () => {
     return primerPeriodo().contains("Seleccionadas").next(".planificador-lista-botones");
+};
+
+const materiasSeleccionadasPeriodo = (indice) => {
+    return periodo(indice).contains("Seleccionadas").next(".planificador-lista-botones");
 };
 
 const abrirMateriasExoneradasPlanificador = () => {
@@ -135,6 +143,14 @@ describe("Materias", () => {
         cy.get("#seccion-configuracion").should("be.visible");
         cy.get("#seccion-filtros").should("be.visible");
         cy.get("#titulo-principal-texto").should("contain", "0");
+    });
+
+    it("muestra Proyecto de Grado solo en la ultima seccion", () => {
+        materiaVisible("PG");
+        cy.get("#secciones > .container-seccion").last().within(() => {
+            cy.get(".boton-materia").should("have.length", 1).and("have.id", "PG");
+        });
+        cy.get("#secciones > .container-seccion").not(":last").find("#PG").should("not.exist");
     });
 
     it("activa y persiste el modo oscuro", () => {
@@ -224,6 +240,26 @@ describe("Materias", () => {
         cy.get("#titulo-principal-texto").should("contain", "9");
     });
 
+    it("elimina estados anteriores que dejan de cumplir una regla negativa", () => {
+        exonerarMateria("HMA");
+        aprobarMateria("MD1");
+        exonerarMateria("LG");
+
+        colorMateria("HMA", COLOR.deshabilitada);
+        colorMateria("MD1", COLOR.aprobada);
+        colorMateria("LG", COLOR.exonerada);
+        cy.get("#titulo-principal-texto").should("contain", "12");
+        cy.window().then((win) => {
+            expect(JSON.parse(win.localStorage.getItem("materiasAprobadas"))).to.have.members(["MD1", "LG"]);
+            expect(JSON.parse(win.localStorage.getItem("materiasExoneradas"))).to.have.members(["LG"]);
+        });
+
+        cy.reload();
+
+        colorMateria("HMA", COLOR.deshabilitada);
+        cy.get("#titulo-principal-texto").should("contain", "12");
+    });
+
     it("mantiene el caso de AGI y PAI al perder creditos", () => {
         exonerarMaterias([
             "CDIV",
@@ -285,14 +321,14 @@ describe("Configuracion y filtros", () => {
         cy.get("#mi-toggle-plan").should("not.be.checked");
         cy.get("#mi-toggle-MI").should("not.be.checked");
         cy.get("#MI").should("not.exist");
-        cy.get("#FC").should("not.exist");
+        cy.get("#FC").should("exist");
         cy.get("#MD1").should("exist");
     });
 
     it("activa y desactiva matematica inicial", () => {
         cy.get('label[for="mi-toggle-MI"]').click();
         cy.get("#mi-toggle-MI").should("be.checked");
-        cy.get("#MI").should("be.visible");
+        materiaVisible("MI");
 
         cy.get('label[for="mi-toggle-MI"]').click();
         cy.get("#mi-toggle-MI").should("not.be.checked");
@@ -309,8 +345,105 @@ describe("Configuracion y filtros", () => {
         cy.get('label[for="mi-toggle-plan"]').click();
         cy.get("#mi-toggle-plan").should("not.be.checked");
         materiaVisible("MD1");
-        cy.get("#FC").should("not.exist");
+        materiaVisible("FC");
         cy.get("#IC").should("not.exist");
+    });
+
+    it("usa la obligatoriedad de Ingenieria 2025 para mostrar y filtrar materias", () => {
+        cy.get('label[for="mi-toggle-plan"]').click();
+
+        cy.get("#FC").invoke("text").should("match", /\(9\)$/);
+        cy.get("#IC").invoke("text").should("match", /\(5\)$/);
+        cy.get("#PI").invoke("text").should("match", /\(10\)$/);
+        cy.get("#CTS").invoke("text").should("match", /\*$/);
+
+        cy.get('label[for="mi-toggle-opcionales"]').click();
+
+        materiaVisible("FC");
+        materiaVisible("IC");
+        materiaVisible("PI");
+        cy.get("#CTS").should("not.be.visible");
+    });
+
+    it("mantiene mutuamente excluyentes FC y MD1 en el Plan 1997", () => {
+        exonerarMateria("FC");
+        colorMateria("FC", COLOR.exonerada);
+        colorMateria("MD1", COLOR.deshabilitada);
+
+        aprobarMateria("FC");
+        colorMateria("FC", COLOR.habilitada);
+        colorMateria("MD1", COLOR.habilitada);
+
+        exonerarMateria("MD1");
+        colorMateria("MD1", COLOR.exonerada);
+        colorMateria("FC", COLOR.deshabilitada);
+    });
+
+    it("acepta PI como previa equivalente a P1 y las mantiene mutuamente excluyentes", () => {
+        colorMateria("P2", COLOR.deshabilitada);
+
+        aprobarMateria("PI");
+        colorMateria("PI", COLOR.aprobada);
+        colorMateria("P2", COLOR.habilitada);
+
+        aprobarMateria("PI");
+        colorMateria("PI", COLOR.exonerada);
+        colorMateria("P1", COLOR.deshabilitada);
+        colorMateria("P2", COLOR.habilitada);
+
+        aprobarMateria("PI");
+        colorMateria("PI", COLOR.habilitada);
+        colorMateria("P1", COLOR.habilitada);
+        colorMateria("P2", COLOR.deshabilitada);
+
+        exonerarMateria("P1");
+        colorMateria("P1", COLOR.exonerada);
+        colorMateria("PI", COLOR.deshabilitada);
+        colorMateria("P2", COLOR.habilitada);
+    });
+
+    it("acepta PI exonerada en previas que exigian exonerar P1", () => {
+        estadoInicial({
+            aprobadas: ["PI", "MD1", "P2"],
+            exoneradas: ["PI", "MD1"],
+        });
+
+        colorMateria("P3", COLOR.habilitada);
+    });
+
+    it("al exonerar una equivalente elimina la aprobacion de la otra", () => {
+        aprobarMateria("PI");
+        exonerarMateria("P1");
+
+        colorMateria("P1", COLOR.exonerada);
+        colorMateria("PI", COLOR.deshabilitada);
+        cy.window().then((win) => {
+            expect(JSON.parse(win.localStorage.getItem("materiasAprobadas"))).to.have.members(["P1"]);
+            expect(JSON.parse(win.localStorage.getItem("materiasExoneradas"))).to.have.members(["P1"]);
+        });
+
+        estadoInicial();
+        aprobarMateria("P1");
+        exonerarMateria("PI");
+
+        colorMateria("PI", COLOR.exonerada);
+        colorMateria("P1", COLOR.deshabilitada);
+        cy.window().then((win) => {
+            expect(JSON.parse(win.localStorage.getItem("materiasAprobadas"))).to.have.members(["PI"]);
+            expect(JSON.parse(win.localStorage.getItem("materiasExoneradas"))).to.have.members(["PI"]);
+        });
+    });
+
+    it("conserva el estado de FC al cambiar entre planes", () => {
+        exonerarMateria("FC");
+
+        cy.get('label[for="mi-toggle-plan"]').click();
+        colorMateria("FC", COLOR.exonerada);
+        cy.get("#MD1").should("not.exist");
+
+        cy.get('label[for="mi-toggle-plan"]').click();
+        colorMateria("FC", COLOR.exonerada);
+        colorMateria("MD1", COLOR.deshabilitada);
     });
 
     it("persiste plan 2025 y matematica inicial al recargar", () => {
@@ -425,6 +558,52 @@ describe("Popups y datos guardados", () => {
         cy.get("#titulo-principal-texto").should("contain", "0");
     });
 
+    it("reconstruye los creditos por area desde los registros guardados", () => {
+        estadoInicial({
+            storage: {
+                registros: JSON.stringify([{ area: "Total", creditos: 5 }]),
+                creditosPorArea: JSON.stringify([["Total", 99]]),
+            },
+        });
+
+        cy.get("#titulo-principal-texto").should("contain", "5");
+        cy.window().then((win) => {
+            expect(JSON.parse(win.localStorage.getItem("registros"))).to.deep.equal([
+                { area: "Total", creditos: 5 },
+            ]);
+            expect(JSON.parse(win.localStorage.getItem("creditosPorArea"))).to.deep.equal([
+                ["Total", 5],
+            ]);
+        });
+    });
+
+    it("descarta registros de creditos locales invalidos y persiste el estado limpio", () => {
+        estadoInicial({
+            storage: {
+                registros: JSON.stringify([
+                    { area: "Total", creditos: 1.5 },
+                    { area: "areaDesconocida", creditos: 7 },
+                    { area: "creditosEnProg", creditos: 3 },
+                ]),
+                creditosPorArea: JSON.stringify([
+                    ["Total", 1.5],
+                    ["areaDesconocida", 7],
+                    ["creditosEnProg", 100],
+                ]),
+            },
+        });
+
+        cy.get("#titulo-principal-texto").should("contain", "3");
+        cy.window().then((win) => {
+            expect(JSON.parse(win.localStorage.getItem("registros"))).to.deep.equal([
+                { area: "creditosEnProg", creditos: 3 },
+            ]);
+            expect(JSON.parse(win.localStorage.getItem("creditosPorArea"))).to.deep.equal([
+                ["creditosEnProg", 3],
+            ]);
+        });
+    });
+
     it("avisa sin alerts si los creditos manuales no son enteros", () => {
         cy.window().then((win) => {
             cy.stub(win, "alert").as("alert");
@@ -518,6 +697,33 @@ describe("Popups y datos guardados", () => {
         cy.get("#mi-toggle-opcionales").should("not.be.checked");
     });
 
+    it("rechaza creditos importados fraccionarios sin cambiar el estado", () => {
+        const backup = {
+            aplicacion: "materias-app",
+            version: 1,
+            datos: {
+                registros: JSON.stringify([{ area: "Total", creditos: 1.5 }]),
+                creditosPorArea: JSON.stringify([["Total", 1.5]]),
+            },
+        };
+        let storageAnterior;
+
+        exonerarMateria("GAL1");
+        cy.window().then((win) => {
+            storageAnterior = leerStorageCompleto(win);
+        });
+
+        cy.get("#importar-datos").click();
+        cy.get("#textarea-importar-datos").invoke("val", JSON.stringify(backup)).trigger("input");
+        cy.get("#boton-cargar-datos").click();
+
+        cy.get("#mensaje-usuario").invoke("text").should("match", /enter[oa]/);
+        cy.window().then((win) => {
+            expect(leerStorageCompleto(win)).to.deep.equal(storageAnterior);
+        });
+        colorMateria("GAL1", COLOR.exonerada);
+    });
+
     it("rechaza exoneradas que no figuran tambien como aprobadas sin cambiar el estado", () => {
         const backup = {
             aplicacion: "materias-app",
@@ -546,6 +752,136 @@ describe("Popups y datos guardados", () => {
         });
         colorMateria("GAL1", COLOR.exonerada);
         colorMateria("MD1", COLOR.habilitada);
+    });
+
+    it("rechaza un estado importado con FC y MD1 exoneradas", () => {
+        const backup = {
+            aplicacion: "materias-app",
+            version: 1,
+            datos: {
+                materiasAprobadas: JSON.stringify(["FC", "MD1"]),
+                materiasExoneradas: JSON.stringify(["FC", "MD1"]),
+            },
+        };
+        let storageAnterior;
+
+        exonerarMateria("GAL1");
+        cy.window().then((win) => {
+            storageAnterior = leerStorageCompleto(win);
+        });
+
+        cy.get("#importar-datos").click();
+        cy.get("#textarea-importar-datos").invoke("val", JSON.stringify(backup)).trigger("input");
+        cy.get("#boton-cargar-datos").click();
+
+        cy.get("#mensaje-usuario").should("contain", "no pueden figurar juntas");
+        cy.window().then((win) => {
+            expect(leerStorageCompleto(win)).to.deep.equal(storageAnterior);
+        });
+        colorMateria("GAL1", COLOR.exonerada);
+    });
+
+    it("rechaza un estado importado con P1 y PI exoneradas", () => {
+        const backup = {
+            aplicacion: "materias-app",
+            version: 1,
+            datos: {
+                materiasAprobadas: JSON.stringify(["P1", "PI"]),
+                materiasExoneradas: JSON.stringify(["P1", "PI"]),
+            },
+        };
+        let storageAnterior;
+
+        exonerarMateria("GAL1");
+        cy.window().then((win) => {
+            storageAnterior = leerStorageCompleto(win);
+        });
+
+        cy.get("#importar-datos").click();
+        cy.get("#textarea-importar-datos").invoke("val", JSON.stringify(backup)).trigger("input");
+        cy.get("#boton-cargar-datos").click();
+
+        cy.get("#mensaje-usuario").should("contain", "no pueden figurar juntas");
+        cy.window().then((win) => {
+            expect(leerStorageCompleto(win)).to.deep.equal(storageAnterior);
+        });
+        colorMateria("GAL1", COLOR.exonerada);
+    });
+
+    it("permite equivalentes exoneradas en estados independientes al planificar desde cero", () => {
+        const backup = {
+            aplicacion: "materias-app",
+            version: 1,
+            datos: {
+                materiasAprobadas: JSON.stringify(["P1", "MD1"]),
+                materiasExoneradas: JSON.stringify(["P1", "MD1"]),
+                planificacionUsaEstadoActual: JSON.stringify(false),
+                planificacionExoneradasBase: JSON.stringify(["PI", "FC"]),
+            },
+        };
+
+        cy.get("#importar-datos").click();
+        cy.get("#textarea-importar-datos").invoke("val", JSON.stringify(backup)).trigger("input");
+        cy.get("#boton-cargar-datos").click();
+
+        cy.get("#popup-container").should("not.be.visible");
+        cy.get("#mensaje-usuario").should("contain", "Datos cargados");
+        colorMateria("P1", COLOR.exonerada);
+        colorMateria("MD1", COLOR.exonerada);
+        cy.window().then((win) => {
+            expect(JSON.parse(win.localStorage.getItem("planificacionUsaEstadoActual"))).to.equal(false);
+            expect(JSON.parse(win.localStorage.getItem("planificacionExoneradasBase")))
+                .to.have.members(["PI", "FC"]);
+        });
+    });
+
+    it("rechaza equivalentes exoneradas dentro de la misma base independiente", () => {
+        const backup = {
+            aplicacion: "materias-app",
+            version: 1,
+            datos: {
+                planificacionUsaEstadoActual: JSON.stringify(false),
+                planificacionExoneradasBase: JSON.stringify(["P1", "PI"]),
+            },
+        };
+        let storageAnterior;
+
+        exonerarMateria("GAL1");
+        cy.window().then((win) => {
+            storageAnterior = leerStorageCompleto(win);
+        });
+
+        cy.get("#importar-datos").click();
+        cy.get("#textarea-importar-datos").invoke("val", JSON.stringify(backup)).trigger("input");
+        cy.get("#boton-cargar-datos").click();
+
+        cy.get("#mensaje-usuario").should("contain", "no pueden figurar juntas");
+        cy.window().then((win) => {
+            expect(leerStorageCompleto(win)).to.deep.equal(storageAnterior);
+        });
+        colorMateria("GAL1", COLOR.exonerada);
+    });
+
+    it("permite importar pares equivalentes si estan solamente aprobados", () => {
+        const backup = {
+            aplicacion: "materias-app",
+            version: 1,
+            datos: {
+                materiasAprobadas: JSON.stringify(["P1", "PI", "MD1", "FC"]),
+                materiasExoneradas: JSON.stringify([]),
+            },
+        };
+
+        cy.get("#importar-datos").click();
+        cy.get("#textarea-importar-datos").invoke("val", JSON.stringify(backup)).trigger("input");
+        cy.get("#boton-cargar-datos").click();
+
+        cy.get("#popup-container").should("not.be.visible");
+        cy.get("#mensaje-usuario").should("contain", "Datos cargados");
+        colorMateria("P1", COLOR.aprobada);
+        colorMateria("PI", COLOR.aprobada);
+        colorMateria("MD1", COLOR.aprobada);
+        colorMateria("FC", COLOR.aprobada);
     });
 
     it("restaura el estado anterior si localStorage falla durante la escritura", () => {
@@ -662,6 +998,381 @@ describe("Planificacion", () => {
         cy.get("#mi-toggle-opcionales").should("not.be.visible");
     });
 
+    it("usa PI aprobada como previa equivalente para ofrecer P2", () => {
+        estadoInicial({ aprobadas: ["PI"] });
+        irAPlanificacion();
+        agregarPeriodo();
+        primerPeriodo().contains("label", "Mostrar materias fuera").click();
+        abrirElegirMaterias();
+
+        materiasParaElegir().contains("button", /Programaci.n 2 \(12\)/)
+            .scrollIntoView()
+            .should("be.visible")
+            .and("have.class", "materia-fuera-semestre");
+    });
+
+    it("normaliza la planificacion al cambiar el estado actual con la pestaña cerrada", () => {
+        estadoInicial({
+            aprobadas: ["P1"],
+            planificacion: [
+                {
+                    semestre: "primero",
+                    materias: [{ nombre: "P2", resultado: "curso" }],
+                    abierto: true,
+                },
+            ],
+        });
+
+        cy.get("#materias").should("have.class", "activo");
+        cy.get("#P1").click().click();
+
+        cy.get("#materias").should("have.class", "activo");
+        cy.window().then((win) => {
+            const planificacion = JSON.parse(win.localStorage.getItem("planificacionSemestres"));
+            expect(planificacion[0].materias).to.deep.equal([]);
+        });
+    });
+
+    it("elimina la equivalente exonerada y recalcula los periodos posteriores", () => {
+        estadoInicial({
+            planificacion: [
+                {
+                    semestre: "segundo",
+                    materias: [
+                        { nombre: "P1", resultado: "curso" },
+                        { nombre: "PI", resultado: "curso" },
+                    ],
+                    abierto: true,
+                    mostrarMateriasNoDictadas: true,
+                },
+                {
+                    semestre: "primero",
+                    materias: [{ nombre: "P2", resultado: "habilitada" }],
+                    abierto: true,
+                },
+            ],
+        });
+        irAPlanificacion();
+
+        materiasSeleccionadasPeriodo(0).should("contain", "Programación 1");
+        materiasSeleccionadasPeriodo(0).should("contain", "Programación Imperativa");
+        materiasSeleccionadasPeriodo(1).should("contain", "Programación 2");
+
+        materiasSeleccionadasPeriodo(0).contains("button", /Programaci.n Imperativa \(10\)/).click();
+
+        materiasSeleccionadasPeriodo(0).should("not.contain", "Programación 1");
+        materiasSeleccionadasPeriodo(0).contains("button", /Programaci.n Imperativa \(10\)/)
+            .should("have.css", "background-color", COLOR.exonerada);
+        materiasSeleccionadasPeriodo(1).should("contain", "Programación 2");
+        periodo(0).contains("summary", "Elegir materias").click();
+        periodo(0).find(".planificador-elegir-materias").should("not.contain", "Programación 1");
+
+        materiasSeleccionadasPeriodo(0).contains("button", /Programaci.n Imperativa \(10\)/).click();
+
+        materiasSeleccionadasPeriodo(1).should("contain", "Sin materias seleccionadas");
+        cy.window().then((win) => {
+            const planificacion = JSON.parse(win.localStorage.getItem("planificacionSemestres"));
+            expect(planificacion[0].materias).to.deep.equal([
+                { nombre: "PI", resultado: "habilitada" },
+            ]);
+            expect(planificacion[1].materias).to.deep.equal([]);
+        });
+    });
+
+    it("al exonerar PI despues elimina solo el curso de P1 y conserva el de P2", () => {
+        estadoInicial({
+            planificacion: [
+                {
+                    semestre: "segundo",
+                    materias: [{ nombre: "P1", resultado: "curso" }],
+                    abierto: true,
+                    mostrarMateriasNoDictadas: true,
+                },
+                {
+                    semestre: "primero",
+                    materias: [{ nombre: "P2", resultado: "curso" }],
+                    abierto: true,
+                    mostrarMateriasNoDictadas: true,
+                },
+                {
+                    semestre: "segundo",
+                    materias: [{ nombre: "PI", resultado: "curso" }],
+                    abierto: true,
+                    mostrarMateriasNoDictadas: true,
+                },
+            ],
+        });
+        irAPlanificacion();
+
+        materiasSeleccionadasPeriodo(2).contains("button", /Programaci.n Imperativa \(10\)/).click();
+
+        materiasSeleccionadasPeriodo(0).should("contain", "Sin materias seleccionadas");
+        materiasSeleccionadasPeriodo(1).should("contain", "Programación 2");
+        materiasSeleccionadasPeriodo(2).contains("button", /Programaci.n Imperativa \(10\)/)
+            .should("have.css", "background-color", COLOR.exonerada);
+        cy.window().then((win) => {
+            const planificacion = JSON.parse(win.localStorage.getItem("planificacionSemestres"));
+            expect(planificacion[0].materias).to.deep.equal([]);
+            expect(planificacion[1].materias).to.deep.equal([
+                { nombre: "P2", resultado: "curso" },
+            ]);
+            expect(planificacion[2].materias).to.deep.equal([
+                { nombre: "PI", resultado: "exonerada" },
+            ]);
+        });
+
+        cy.reload();
+
+        cy.get("#planificacion").should("have.class", "activo");
+        materiasSeleccionadasPeriodo(0).should("contain", "Sin materias seleccionadas");
+        materiasSeleccionadasPeriodo(1).should("contain", "Programación 2");
+        materiasSeleccionadasPeriodo(2).contains("button", /Programaci.n Imperativa \(10\)/)
+            .should("have.css", "background-color", COLOR.exonerada);
+        cy.window().then((win) => {
+            const planificacion = JSON.parse(win.localStorage.getItem("planificacionSemestres"));
+            expect(planificacion[0].materias).to.deep.equal([]);
+            expect(planificacion[1].materias).to.deep.equal([
+                { nombre: "P2", resultado: "curso" },
+            ]);
+            expect(planificacion[2].materias).to.deep.equal([
+                { nombre: "PI", resultado: "exonerada" },
+            ]);
+        });
+
+        materiasSeleccionadasPeriodo(2).contains("button", /Programaci.n Imperativa \(10\)/).click();
+
+        materiasSeleccionadasPeriodo(1).should("contain", "Sin materias seleccionadas");
+    });
+
+    it("ofrece P2 en un periodo intermedio si PI queda exonerada despues", () => {
+        estadoInicial({
+            planificacion: [
+                {
+                    semestre: "segundo",
+                    materias: [{ nombre: "P1", resultado: "curso" }],
+                    abierto: true,
+                },
+                {
+                    semestre: "primero",
+                    materias: [],
+                    abierto: true,
+                    mostrarMateriasNoDictadas: true,
+                },
+                {
+                    semestre: "segundo",
+                    materias: [{ nombre: "PI", resultado: "exonerada" }],
+                    abierto: true,
+                },
+            ],
+        });
+        irAPlanificacion();
+
+        periodo(1).contains("summary", "Elegir materias").click();
+
+        periodo(1).find(".planificador-elegir-materias")
+            .contains("button", /Programaci.n 2 \(12\)/)
+            .should("be.visible");
+    });
+
+    it("reemplaza una exoneracion equivalente sin perder materias que siguen habilitadas", () => {
+        estadoInicial({
+            planificacion: [
+                {
+                    semestre: "segundo",
+                    materias: [{ nombre: "P1", resultado: "exonerada" }],
+                    abierto: true,
+                },
+                {
+                    semestre: "primero",
+                    materias: [{ nombre: "P2", resultado: "exonerada" }],
+                    abierto: true,
+                },
+                {
+                    semestre: "primero",
+                    materias: [{ nombre: "DAED", resultado: "curso" }],
+                    abierto: true,
+                },
+                {
+                    semestre: "segundo",
+                    materias: [{ nombre: "PI", resultado: "exonerada" }],
+                    abierto: true,
+                },
+            ],
+        });
+        irAPlanificacion();
+
+        materiasSeleccionadasPeriodo(0).should("contain", "Sin materias seleccionadas");
+        materiasSeleccionadasPeriodo(1).contains("button", /Programaci.n 2 \(12\)/)
+            .should("have.css", "background-color", COLOR.exonerada);
+        materiasSeleccionadasPeriodo(2).contains("button", /Did.ctica de Algoritmos/)
+            .should("have.css", "background-color", COLOR.aprobada);
+        materiasSeleccionadasPeriodo(3).contains("button", /Programaci.n Imperativa \(10\)/)
+            .should("have.css", "background-color", COLOR.exonerada);
+        cy.window().then((win) => {
+            const planificacion = JSON.parse(win.localStorage.getItem("planificacionSemestres"));
+            expect(planificacion[0].materias).to.deep.equal([]);
+            expect(planificacion[1].materias).to.deep.equal([
+                { nombre: "P2", resultado: "exonerada" },
+            ]);
+            expect(planificacion[2].materias).to.deep.equal([
+                { nombre: "DAED", resultado: "curso" },
+            ]);
+            expect(planificacion[3].materias).to.deep.equal([
+                { nombre: "PI", resultado: "exonerada" },
+            ]);
+        });
+
+        cy.reload();
+
+        materiasSeleccionadasPeriodo(0).should("contain", "Sin materias seleccionadas");
+        materiasSeleccionadasPeriodo(1).should("contain", "Programación 2");
+        materiasSeleccionadasPeriodo(2).should("contain", "Didáctica de Algoritmos");
+        materiasSeleccionadasPeriodo(3).should("contain", "Programación Imperativa");
+    });
+
+    it("descarta un examen invalido de P1 sin eliminar el curso planificado de PI", () => {
+        estadoInicial({
+            planificacion: [
+                {
+                    semestre: "segundo",
+                    materias: [{ nombre: "PI", resultado: "curso" }],
+                    abierto: true,
+                },
+                {
+                    semestre: "examenes",
+                    materias: [{ nombre: "P1", resultado: "exonerada" }],
+                    abierto: true,
+                },
+            ],
+        });
+        irAPlanificacion();
+
+        materiasSeleccionadasPeriodo(0).contains("button", /Programaci.n Imperativa \(10\)/)
+            .should("have.css", "background-color", COLOR.aprobada);
+        materiasSeleccionadasPeriodo(1).should("contain", "Sin materias seleccionadas");
+        cy.window().then((win) => {
+            const planificacion = JSON.parse(win.localStorage.getItem("planificacionSemestres"));
+            expect(planificacion[0].materias).to.deep.equal([
+                { nombre: "PI", resultado: "curso" },
+            ]);
+            expect(planificacion[1].materias).to.deep.equal([]);
+        });
+
+        cy.reload();
+
+        materiasSeleccionadasPeriodo(0).should("contain", "Programación Imperativa");
+        materiasSeleccionadasPeriodo(1).should("contain", "Sin materias seleccionadas");
+    });
+
+    it("conserva una exoneracion valida de PI en examen al normalizar y recargar", () => {
+        estadoInicial({
+            planificacion: [
+                {
+                    semestre: "segundo",
+                    materias: [{ nombre: "PI", resultado: "curso" }],
+                    abierto: true,
+                },
+                {
+                    semestre: "examenes",
+                    materias: [{ nombre: "PI", resultado: "habilitada" }],
+                    abierto: true,
+                },
+            ],
+        });
+        irAPlanificacion();
+
+        materiasSeleccionadasPeriodo(1).contains("button", /Programaci.n Imperativa \(10\)/).click();
+
+        materiasSeleccionadasPeriodo(0).should("contain", "Programación Imperativa");
+        materiasSeleccionadasPeriodo(1).contains("button", /Programaci.n Imperativa \(10\)/)
+            .should("have.css", "background-color", COLOR.exonerada);
+        cy.window().then((win) => {
+            const planificacion = JSON.parse(win.localStorage.getItem("planificacionSemestres"));
+            expect(planificacion[0].materias).to.deep.equal([
+                { nombre: "PI", resultado: "curso" },
+            ]);
+            expect(planificacion[1].materias).to.deep.equal([
+                { nombre: "PI", resultado: "exonerada" },
+            ]);
+        });
+
+        cy.reload();
+
+        materiasSeleccionadasPeriodo(0).should("contain", "Programación Imperativa");
+        materiasSeleccionadasPeriodo(1).contains("button", /Programaci.n Imperativa \(10\)/)
+            .should("have.css", "background-color", COLOR.exonerada);
+    });
+
+    it("elimina de la planificacion una materia que deja de cumplir una regla negativa", () => {
+        estadoInicial({
+            planificacion: [
+                {
+                    semestre: "segundo",
+                    materias: [{ nombre: "HMA", resultado: "exonerada" }],
+                    abierto: true,
+                },
+                {
+                    semestre: "primero",
+                    materias: [{ nombre: "MD1", resultado: "curso" }],
+                    abierto: true,
+                },
+                {
+                    semestre: "primero",
+                    materias: [{ nombre: "LG", resultado: "exonerada" }],
+                    abierto: true,
+                },
+            ],
+        });
+        irAPlanificacion();
+
+        materiasSeleccionadasPeriodo(0).should("contain", "Sin materias seleccionadas");
+        materiasSeleccionadasPeriodo(1).should("contain", "Matemática Discreta 1");
+        materiasSeleccionadasPeriodo(2).should("contain", "Lógica");
+        periodo(2).find("> summary").should("contain", "total 12");
+
+        cy.reload();
+
+        materiasSeleccionadasPeriodo(0).should("contain", "Sin materias seleccionadas");
+        materiasSeleccionadasPeriodo(1).should("contain", "Matemática Discreta 1");
+        materiasSeleccionadasPeriodo(2).should("contain", "Lógica");
+    });
+
+    it("depura reglas negativas en la base independiente de la planificacion", () => {
+        estadoInicial({
+            usaEstadoActual: false,
+            exoneradasBase: ["HMA", "MD1", "LG"],
+        });
+        irAPlanificacion();
+
+        cy.window().then((win) => {
+            expect(JSON.parse(win.localStorage.getItem("planificacionExoneradasBase")))
+                .to.have.members(["MD1", "LG"]);
+        });
+        cy.contains("#vista-planificacion summary", "Materias exoneradas (2)").should("be.visible");
+    });
+
+    it("mantiene coherente la proyeccion sin modificar el estado actual", () => {
+        estadoInicial({
+            aprobadas: ["HMA", "MD1"],
+            exoneradas: ["HMA", "MD1"],
+            planificacion: [
+                {
+                    semestre: "primero",
+                    materias: [{ nombre: "LG", resultado: "exonerada" }],
+                    abierto: true,
+                },
+            ],
+        });
+        irAPlanificacion();
+
+        materiasSeleccionadasPeriodo(0).should("contain", "Lógica");
+        periodo(0).find("> summary").should("contain", "total 21");
+        cy.window().then((win) => {
+            expect(JSON.parse(win.localStorage.getItem("materiasExoneradas")))
+                .to.have.members(["HMA", "MD1"]);
+        });
+    });
+
     it("muestra informacion al ir desde avance a planificacion", () => {
         cy.get("#avance").click();
         cy.get("#seccion-informacion").should("not.be.visible");
@@ -771,6 +1482,7 @@ describe("Planificacion", () => {
         primerPeriodo().contains("label", "Mostrar materias fuera").click();
 
         materiasParaElegir().contains("button", /Matem.tica Discreta 1 \(9\)/)
+            .scrollIntoView()
             .should("be.visible")
             .and("have.class", "materia-fuera-semestre");
     });
@@ -779,10 +1491,15 @@ describe("Planificacion", () => {
         irAPlanificacion();
         agregarPeriodo();
         primerPeriodo().find("select.selector-planificador").select("examenes");
+        primerPeriodo().contains("label", "Mostrar materias fuera").click();
         abrirElegirMaterias();
 
+        materiasParaElegir().contains("button", /Programaci.n Imperativa \(10\)\*/)
+            .scrollIntoView()
+            .should("be.visible");
+        materiasParaElegir().contains("button", /^Programaci.n 1 \(10\)$/).should("not.exist");
+        materiasParaElegir().contains("button", /^Programaci.n 2 \(12\)$/).should("not.exist");
         materiasParaElegir().contains("button", /Geometr.a y .lgebra Lineal 1 \(9\)/).click();
-        materiasParaElegir().should("not.contain", "Programaci");
 
         materiasSeleccionadas().contains("button", /Geometr.a y .lgebra Lineal 1 \(9\)/)
             .should("have.css", "background-color", COLOR.habilitada);

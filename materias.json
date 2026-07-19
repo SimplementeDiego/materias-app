@@ -13,7 +13,7 @@
     "semestre": "primero",
     "obligatoriaIngenieria1997": false,
     "obligatoriaAnalista1997": false,
-    "esOpcional": false,
+    "obligatoriaIngenieria2025": true,
     "esLibre": false,
     "seDa": true,
     "informacion": [
@@ -41,7 +41,7 @@
     "semestre": "ambos",
     "obligatoriaIngenieria1997": true,
     "obligatoriaAnalista1997": true,
-    "esOpcional": false,
+    "obligatoriaIngenieria2025": true,
     "esLibre": true,
     "seDa": true,
     "informacion": [
@@ -76,7 +76,7 @@
     "semestre": "ambos",
     "obligatoriaIngenieria1997": true,
     "obligatoriaAnalista1997": true,
-    "esOpcional": false,
+    "obligatoriaIngenieria2025": true,
     "esLibre": true,
     "seDa": true,
     "informacion": [
@@ -114,7 +114,7 @@
     "semestre": "ambos",
     "obligatoriaIngenieria1997": true,
     "obligatoriaAnalista1997": true,
-    "esOpcional": false,
+    "obligatoriaIngenieria2025": true,
     "esLibre": true,
     "seDa": false,
     "informacion": [
@@ -149,10 +149,10 @@
         "materia": "MD1"
       }
     },
-    "semestre": "primero",
+    "semestre": "ambos",
     "obligatoriaIngenieria1997": false,
     "obligatoriaAnalista1997": false,
-    "esOpcional": false,
+    "obligatoriaIngenieria2025": true,
     "esLibre": true,
     "seDa": true,
     "informacion": [
@@ -176,13 +176,19 @@
         "creditos": 10
       }
     ],
-    "reglaHabilitacion": null,
+    "reglaHabilitacion": {
+      "tipo": "negar",
+      "regla": {
+        "tipo": "materiaExonerada",
+        "materia": "PI"
+      }
+    },
     "semestre": "ambos",
     "obligatoriaIngenieria1997": true,
     "obligatoriaAnalista1997": true,
-    "esOpcional": false,
+    "obligatoriaIngenieria2025": true,
     "esLibre": false,
-    "seDa": true,
+    "seDa": false,
     "informacion": [
       {
         "nombre": "Eva primer semestre",
@@ -195,6 +201,34 @@
       {
         "nombre": "Programa",
         "valor": "https://eva.fing.edu.uy/pluginfile.php/49951/mod_resource/content/2/ProgramaP12024.pdf"
+      }
+    ]
+  },
+  {
+    "id": "DL",
+    "nombreCompleto": "Diseño Lógico",
+    "creditos": 12,
+    "creditosPorArea": [
+      {
+        "area": "creditosEnAC_SO_RC",
+        "creditos": 12
+      }
+    ],
+    "reglaHabilitacion": null,
+    "semestre": "segundo",
+    "obligatoriaIngenieria1997": false,
+    "obligatoriaAnalista1997": false,
+    "obligatoriaIngenieria2025": false,
+    "esLibre": false,
+    "seDa": true,
+    "informacion": [
+      {
+        "nombre": "Eva",
+        "valor": "https://eva.fing.edu.uy/course/view.php?id=508"
+      },
+      {
+        "nombre": "Programa",
+        "valor": "https://www.fing.edu.uy/sites/default/files/cursos/2020/anexos/38598/Dise%C3%B1o%20L%C3%B3gico%2019.pdf"
       }
     ]
   },
@@ -212,7 +246,7 @@
     "semestre": "ambos",
     "obligatoriaIngenieria1997": true,
     "obligatoriaAnalista1997": true,
-    "esOpcional": false,
+    "obligatoriaIngenieria2025": true,
     "esLibre": true,
     "seDa": true,
     "informacion": [
@@ -241,15 +275,24 @@
       }
     ],
     "reglaHabilitacion": {
-      "tipo": "materiaAprobada",
-      "materia": "P1"
+      "tipo": "alguna",
+      "reglas": [
+        {
+          "tipo": "materiaAprobada",
+          "materia": "P1"
+        },
+        {
+          "tipo": "materiaAprobada",
+          "materia": "PI"
+        }
+      ]
     },
     "semestre": "ambos",
     "obligatoriaIngenieria1997": true,
     "obligatoriaAnalista1997": true,
-    "esOpcional": false,
+    "obligatoriaIngenieria2025": true,
     "esLibre": false,
-    "seDa": true,
+    "seDa": false,
     "informacion": [
       {
         "nombre": "Eva",
@@ -291,7 +334,7 @@
     "semestre": "primero",
     "obligatoriaIngenieria1997": false,
     "obligatoriaAnalista1997": false,
-    "esOpcional": true,
+    "obligatoriaIngenieria2025": false,
     "esLibre": false,
     "seDa": true,
     "informacion": [
@@ -319,8 +362,17 @@
       "tipo": "todas",
       "reglas": [
         {
-          "tipo": "materiaExonerada",
-          "materia": "P1"
+          "tipo": "alguna",
+          "reglas": [
+            {
+              "tipo": "materiaExonerada",
+              "materia": "P1"
+            },
+            {
+              "tipo": "materiaExonerada",
+              "materia": "PI"
+            }
+          ]
         },
         {
           "tipo": "materiaExonerada",
@@ -331,7 +383,7 @@
     "semestre": "primero",
     "obligatoriaIngenieria1997": false,
     "obligatoriaAnalista1997": false,
-    "esOpcional": true,
+    "obligatoriaIngenieria2025": false,
     "esLibre": false,
     "seDa": true,
     "informacion": [
@@ -359,9 +411,9 @@
     "semestre": "segundo",
     "obligatoriaIngenieria1997": false,
     "obligatoriaAnalista1997": false,
-    "esOpcional": true,
+    "obligatoriaIngenieria2025": false,
     "esLibre": true,
-    "seDa": true,
+    "seDa": false,
     "informacion": [
       {
         "nombre": "Eva",
@@ -387,7 +439,7 @@
     "semestre": "ambos",
     "obligatoriaIngenieria1997": false,
     "obligatoriaAnalista1997": false,
-    "esOpcional": true,
+    "obligatoriaIngenieria2025": false,
     "esLibre": true,
     "seDa": true,
     "informacion": [
@@ -402,6 +454,55 @@
       {
         "nombre": "Programa",
         "valor": "https://eva.fing.edu.uy/pluginfile.php/73445/mod_resource/content/2/f1_1151.pdf"
+      }
+    ]
+  },
+  {
+    "id": "FCAC",
+    "nombreCompleto": "Física con Apoyo Computacional",
+    "creditos": 10,
+    "creditosPorArea": [
+      {
+        "area": "creditosEnCE",
+        "creditos": 10
+      }
+    ],
+    "reglaHabilitacion": {
+      "tipo": "todas",
+      "reglas": [
+        {
+          "tipo": "materiaExonerada",
+          "materia": "CDIV"
+        },
+        {
+          "tipo": "materiaExonerada",
+          "materia": "GAL1"
+        },
+        {
+          "tipo": "alguna",
+          "reglas": [
+            {
+              "tipo": "materiaExonerada",
+              "materia": "P1"
+            },
+            {
+              "tipo": "materiaExonerada",
+              "materia": "PI"
+            }
+          ]
+        }
+      ]
+    },
+    "semestre": "segundo",
+    "obligatoriaIngenieria1997": false,
+    "obligatoriaAnalista1997": false,
+    "obligatoriaIngenieria2025": false,
+    "esLibre": false,
+    "seDa": true,
+    "informacion": [
+      {
+        "nombre": "Eva",
+        "valor": "https://eva.fing.edu.uy/course/view.php?id=2066"
       }
     ]
   },
@@ -422,7 +523,7 @@
     "semestre": "ambos",
     "obligatoriaIngenieria1997": true,
     "obligatoriaAnalista1997": true,
-    "esOpcional": false,
+    "obligatoriaIngenieria2025": true,
     "esLibre": true,
     "seDa": true,
     "informacion": [
@@ -466,7 +567,7 @@
     "semestre": "segundo",
     "obligatoriaIngenieria1997": false,
     "obligatoriaAnalista1997": false,
-    "esOpcional": true,
+    "obligatoriaIngenieria2025": false,
     "esLibre": false,
     "seDa": true,
     "informacion": [
@@ -510,7 +611,7 @@
     "semestre": "ambos",
     "obligatoriaIngenieria1997": true,
     "obligatoriaAnalista1997": false,
-    "esOpcional": false,
+    "obligatoriaIngenieria2025": true,
     "esLibre": true,
     "seDa": true,
     "informacion": [
@@ -525,6 +626,47 @@
       {
         "nombre": "Programa",
         "valor": "https://eva.fing.edu.uy/pluginfile.php/40052/mod_resource/content/1/programa_PyE.pdf"
+      }
+    ]
+  },
+  {
+    "id": "FAARP",
+    "nombreCompleto": "Fundamentos de Aprendizaje Automático y Reconocimiento de Patrones",
+    "creditos": 8,
+    "creditosPorArea": [
+      {
+        "area": "creditosEnIAYR",
+        "creditos": 8
+      }
+    ],
+    "reglaHabilitacion": {
+      "tipo": "todas",
+      "reglas": [
+        {
+          "tipo": "creditosMinimos",
+          "area": "creditosEnM",
+          "cantidad": 60
+        },
+        {
+          "tipo": "materiaExonerada",
+          "materia": "P2"
+        },
+        {
+          "tipo": "materiaExonerada",
+          "materia": "PYE"
+        }
+      ]
+    },
+    "semestre": "segundo",
+    "obligatoriaIngenieria1997": false,
+    "obligatoriaAnalista1997": false,
+    "obligatoriaIngenieria2025": false,
+    "esLibre": false,
+    "seDa": true,
+    "informacion": [
+      {
+        "nombre": "Programa",
+        "valor": "https://www.fing.edu.uy/sites/default/files/2025-06/fundamentos-de-aprendizaje-automatico-y-reconocimiento-de-patrones_2024.pdf"
       }
     ]
   },
@@ -558,7 +700,7 @@
     "semestre": "primero",
     "obligatoriaIngenieria1997": false,
     "obligatoriaAnalista1997": false,
-    "esOpcional": true,
+    "obligatoriaIngenieria2025": false,
     "esLibre": false,
     "seDa": false,
     "informacion": [
@@ -589,7 +731,7 @@
     "semestre": "primero",
     "obligatoriaIngenieria1997": false,
     "obligatoriaAnalista1997": false,
-    "esOpcional": true,
+    "obligatoriaIngenieria2025": false,
     "esLibre": false,
     "seDa": true,
     "informacion": [
@@ -638,7 +780,7 @@
     "semestre": "ambos",
     "obligatoriaIngenieria1997": true,
     "obligatoriaAnalista1997": true,
-    "esOpcional": false,
+    "obligatoriaIngenieria2025": true,
     "esLibre": true,
     "seDa": true,
     "informacion": [
@@ -682,7 +824,7 @@
     "semestre": "primero",
     "obligatoriaIngenieria1997": true,
     "obligatoriaAnalista1997": true,
-    "esOpcional": false,
+    "obligatoriaIngenieria2025": true,
     "esLibre": false,
     "seDa": true,
     "informacion": [
@@ -695,6 +837,56 @@
         "valor": "https://eva.fing.edu.uy/pluginfile.php/48291/mod_resource/content/2/Programa%20de%20Unidad%20Curricular%20Logica.pdf"
       }
     ]
+  },
+  {
+    "id": "HMA",
+    "nombreCompleto": "Herramientas de Modelización y Análisis",
+    "creditos": 6,
+    "creditosPorArea": [
+      {
+        "area": "creditosEnM",
+        "creditos": 6
+      }
+    ],
+    "reglaHabilitacion": {
+      "tipo": "negar",
+      "regla": {
+        "tipo": "materiaExonerada",
+        "materia": "LG"
+      }
+    },
+    "semestre": "segundo",
+    "obligatoriaIngenieria1997": false,
+    "obligatoriaAnalista1997": false,
+    "obligatoriaIngenieria2025": false,
+    "esLibre": false,
+    "seDa": true,
+    "informacion": []
+  },
+  {
+    "id": "PI",
+    "nombreCompleto": "Programación Imperativa",
+    "creditos": 10,
+    "creditosPorArea": [
+      {
+        "area": "creditosEnProg",
+        "creditos": 10
+      }
+    ],
+    "reglaHabilitacion": {
+      "tipo": "negar",
+      "regla": {
+        "tipo": "materiaExonerada",
+        "materia": "P1"
+      }
+    },
+    "semestre": "segundo",
+    "obligatoriaIngenieria1997": false,
+    "obligatoriaAnalista1997": false,
+    "obligatoriaIngenieria2025": true,
+    "esLibre": true,
+    "seDa": true,
+    "informacion": []
   },
   {
     "id": "MN",
@@ -714,8 +906,17 @@
           "materia": "CDIVV"
         },
         {
-          "tipo": "materiaExonerada",
-          "materia": "P1"
+          "tipo": "alguna",
+          "reglas": [
+            {
+              "tipo": "materiaExonerada",
+              "materia": "P1"
+            },
+            {
+              "tipo": "materiaExonerada",
+              "materia": "PI"
+            }
+          ]
         },
         {
           "tipo": "materiaExonerada",
@@ -734,7 +935,7 @@
     "semestre": "segundo",
     "obligatoriaIngenieria1997": true,
     "obligatoriaAnalista1997": false,
-    "esOpcional": false,
+    "obligatoriaIngenieria2025": true,
     "esLibre": false,
     "seDa": true,
     "informacion": [
@@ -791,7 +992,7 @@
     "semestre": "primero",
     "obligatoriaIngenieria1997": true,
     "obligatoriaAnalista1997": true,
-    "esOpcional": false,
+    "obligatoriaIngenieria2025": true,
     "esLibre": false,
     "seDa": true,
     "informacion": [
@@ -802,6 +1003,54 @@
       {
         "nombre": "Programa",
         "valor": "https://eva.fing.edu.uy/pluginfile.php/50913/mod_resource/content/2/programa_curso.pdf"
+      }
+    ]
+  },
+  {
+    "id": "SED",
+    "nombreCompleto": "Simulación a Eventos Discretos",
+    "creditos": 10,
+    "creditosPorArea": [
+      {
+        "area": "creditosEnIO",
+        "creditos": 10
+      }
+    ],
+    "reglaHabilitacion": {
+      "tipo": "todas",
+      "reglas": [
+        {
+          "tipo": "materiaAprobada",
+          "materia": "P4"
+        },
+        {
+          "tipo": "materiaExonerada",
+          "materia": "P3"
+        },
+        {
+          "tipo": "materiaExonerada",
+          "materia": "PYE"
+        },
+        {
+          "tipo": "materiaExonerada",
+          "materia": "IIO"
+        }
+      ]
+    },
+    "semestre": "segundo",
+    "obligatoriaIngenieria1997": false,
+    "obligatoriaAnalista1997": false,
+    "obligatoriaIngenieria2025": false,
+    "esLibre": false,
+    "seDa": true,
+    "informacion": [
+      {
+        "nombre": "Eva",
+        "valor": "https://eva.fing.edu.uy/course/view.php?id=191"
+      },
+      {
+        "nombre": "Programa",
+        "valor": "https://eva.fing.edu.uy/pluginfile.php/381/course/section/947/SED_grado.pdf?time=1689979296068"
       }
     ]
   },
@@ -822,7 +1071,7 @@
     "semestre": "primero",
     "obligatoriaIngenieria1997": false,
     "obligatoriaAnalista1997": false,
-    "esOpcional": true,
+    "obligatoriaIngenieria2025": false,
     "esLibre": false,
     "seDa": true,
     "informacion": [
@@ -874,7 +1123,7 @@
     "semestre": "primero",
     "obligatoriaIngenieria1997": true,
     "obligatoriaAnalista1997": false,
-    "esOpcional": false,
+    "obligatoriaIngenieria2025": true,
     "esLibre": false,
     "seDa": true,
     "informacion": [
@@ -885,6 +1134,59 @@
       {
         "nombre": "Programa",
         "valor": "https://eva.fing.edu.uy/pluginfile.php/47534/mod_resource/content/2/Programa%20IIO%202018.pdf"
+      }
+    ]
+  },
+  {
+    "id": "OCM",
+    "nombreCompleto": "Optimización Combinatoria con Metaheurísticas",
+    "creditos": 10,
+    "creditosPorArea": [
+      {
+        "area": "creditosEnIO",
+        "creditos": 8
+      },
+      {
+        "area": "creditosEnProg",
+        "creditos": 2
+      }
+    ],
+    "reglaHabilitacion": {
+      "tipo": "todas",
+      "reglas": [
+        {
+          "tipo": "materiaExonerada",
+          "materia": "PYE"
+        },
+        {
+          "tipo": "materiaExonerada",
+          "materia": "IIO"
+        },
+        {
+          "tipo": "alguna",
+          "reglas": [
+            {
+              "tipo": "materiaExonerada",
+              "materia": "P1"
+            },
+            {
+              "tipo": "materiaExonerada",
+              "materia": "PI"
+            }
+          ]
+        }
+      ]
+    },
+    "semestre": "segundo",
+    "obligatoriaIngenieria1997": false,
+    "obligatoriaAnalista1997": false,
+    "obligatoriaIngenieria2025": false,
+    "esLibre": false,
+    "seDa": true,
+    "informacion": [
+      {
+        "nombre": "Eva",
+        "valor": "https://eva.fing.edu.uy/course/view.php?id=2074"
       }
     ]
   },
@@ -905,9 +1207,9 @@
     "semestre": "segundo",
     "obligatoriaIngenieria1997": false,
     "obligatoriaAnalista1997": false,
-    "esOpcional": true,
+    "obligatoriaIngenieria2025": false,
     "esLibre": false,
-    "seDa": true,
+    "seDa": false,
     "informacion": [
       {
         "nombre": "Eva",
@@ -945,7 +1247,7 @@
     "semestre": "primero",
     "obligatoriaIngenieria1997": false,
     "obligatoriaAnalista1997": false,
-    "esOpcional": true,
+    "obligatoriaIngenieria2025": false,
     "esLibre": false,
     "seDa": true,
     "informacion": [
@@ -976,7 +1278,7 @@
     "semestre": "primero",
     "obligatoriaIngenieria1997": false,
     "obligatoriaAnalista1997": false,
-    "esOpcional": true,
+    "obligatoriaIngenieria2025": false,
     "esLibre": false,
     "seDa": false,
     "informacion": [
@@ -1007,7 +1309,7 @@
     "semestre": "segundo",
     "obligatoriaIngenieria1997": false,
     "obligatoriaAnalista1997": false,
-    "esOpcional": true,
+    "obligatoriaIngenieria2025": false,
     "esLibre": false,
     "seDa": true,
     "informacion": [
@@ -1038,7 +1340,7 @@
     "semestre": "primero",
     "obligatoriaIngenieria1997": false,
     "obligatoriaAnalista1997": false,
-    "esOpcional": true,
+    "obligatoriaIngenieria2025": false,
     "esLibre": false,
     "seDa": true,
     "informacion": [
@@ -1049,6 +1351,94 @@
       {
         "nombre": "Programa",
         "valor": "https://eva.fing.edu.uy/pluginfile.php/57177/mod_resource/content/7/PUC_Optimizacion-bajo-Incertidumbre_2018.pdf"
+      }
+    ]
+  },
+  {
+    "id": "TDPM",
+    "nombreCompleto": "Técnicas de Descomposición en Programación Matemática",
+    "creditos": 4,
+    "creditosPorArea": [
+      {
+        "area": "creditosEnIO",
+        "creditos": 4
+      }
+    ],
+    "reglaHabilitacion": {
+      "tipo": "alguna",
+      "reglas": [
+        {
+          "tipo": "materiaAprobada",
+          "materia": "FDPE"
+        },
+        {
+          "tipo": "materiaAprobada",
+          "materia": "MO"
+        },
+        {
+          "tipo": "materiaAprobada",
+          "materia": "OBI"
+        }
+      ]
+    },
+    "semestre": "segundo",
+    "obligatoriaIngenieria1997": false,
+    "obligatoriaAnalista1997": false,
+    "obligatoriaIngenieria2025": false,
+    "esLibre": false,
+    "seDa": true,
+    "informacion": [
+      {
+        "nombre": "Eva",
+        "valor": "https://eva.fing.edu.uy/course/view.php?id=1050"
+      },
+      {
+        "nombre": "Programa",
+        "valor": "https://www.fing.edu.uy/sites/default/files/cursos/2019/anexos/37083/doc00381820191113133931.pdf"
+      }
+    ]
+  },
+  {
+    "id": "TAAGL",
+    "nombreCompleto": "Teoría, Algoritmos y Aplicaciones de Gestión Logística",
+    "creditos": 8,
+    "creditosPorArea": [
+      {
+        "area": "creditosEnIO",
+        "creditos": 8
+      }
+    ],
+    "reglaHabilitacion": {
+      "tipo": "alguna",
+      "reglas": [
+        {
+          "tipo": "materiaAprobada",
+          "materia": "FDPE"
+        },
+        {
+          "tipo": "materiaAprobada",
+          "materia": "MO"
+        },
+        {
+          "tipo": "materiaAprobada",
+          "materia": "OBI"
+        }
+      ]
+    },
+    "semestre": "segundo",
+    "obligatoriaIngenieria1997": false,
+    "obligatoriaAnalista1997": false,
+    "obligatoriaIngenieria2025": false,
+    "esLibre": false,
+    "seDa": true,
+    "informacion": [
+      {
+        "nombre": "Eva",
+        "valor": "https://eva.fing.edu.uy/course/view.php?id=934"
+      },
+      {
+        "nombre": "Programa",
+        "valor": "https://www.fing.edu.uy/sites/default/files/ProgramaTeoriaAlgoritmoGestionLogistica-2016.pdf"
       }
     ]
   },
@@ -1069,7 +1459,7 @@
     "semestre": "segundo",
     "obligatoriaIngenieria1997": false,
     "obligatoriaAnalista1997": false,
-    "esOpcional": true,
+    "obligatoriaIngenieria2025": false,
     "esLibre": false,
     "seDa": true,
     "informacion": [
@@ -1101,8 +1491,17 @@
           "materia": "P2"
         },
         {
-          "tipo": "materiaExonerada",
-          "materia": "P1"
+          "tipo": "alguna",
+          "reglas": [
+            {
+              "tipo": "materiaExonerada",
+              "materia": "P1"
+            },
+            {
+              "tipo": "materiaExonerada",
+              "materia": "PI"
+            }
+          ]
         },
         {
           "tipo": "alguna",
@@ -1122,7 +1521,7 @@
     "semestre": "segundo",
     "obligatoriaIngenieria1997": true,
     "obligatoriaAnalista1997": true,
-    "esOpcional": false,
+    "obligatoriaIngenieria2025": true,
     "esLibre": true,
     "seDa": true,
     "informacion": [
@@ -1176,7 +1575,7 @@
     "semestre": "primero",
     "obligatoriaIngenieria1997": false,
     "obligatoriaAnalista1997": false,
-    "esOpcional": true,
+    "obligatoriaIngenieria2025": false,
     "esLibre": false,
     "seDa": true,
     "informacion": [
@@ -1216,7 +1615,7 @@
     "semestre": "segundo",
     "obligatoriaIngenieria1997": false,
     "obligatoriaAnalista1997": false,
-    "esOpcional": true,
+    "obligatoriaIngenieria2025": false,
     "esLibre": false,
     "seDa": true,
     "informacion": [
@@ -1252,8 +1651,17 @@
           "materia": "P2"
         },
         {
-          "tipo": "materiaExonerada",
-          "materia": "P1"
+          "tipo": "alguna",
+          "reglas": [
+            {
+              "tipo": "materiaExonerada",
+              "materia": "P1"
+            },
+            {
+              "tipo": "materiaExonerada",
+              "materia": "PI"
+            }
+          ]
         },
         {
           "tipo": "alguna",
@@ -1273,7 +1681,7 @@
     "semestre": "segundo",
     "obligatoriaIngenieria1997": true,
     "obligatoriaAnalista1997": true,
-    "esOpcional": false,
+    "obligatoriaIngenieria2025": true,
     "esLibre": true,
     "seDa": true,
     "informacion": [
@@ -1317,7 +1725,7 @@
     "semestre": "ambos",
     "obligatoriaIngenieria1997": false,
     "obligatoriaAnalista1997": false,
-    "esOpcional": true,
+    "obligatoriaIngenieria2025": false,
     "esLibre": true,
     "seDa": true,
     "informacion": [
@@ -1369,7 +1777,7 @@
     "semestre": "segundo",
     "obligatoriaIngenieria1997": false,
     "obligatoriaAnalista1997": false,
-    "esOpcional": true,
+    "obligatoriaIngenieria2025": false,
     "esLibre": true,
     "seDa": true,
     "informacion": [
@@ -1430,7 +1838,7 @@
     "semestre": "primero",
     "obligatoriaIngenieria1997": true,
     "obligatoriaAnalista1997": true,
-    "esOpcional": false,
+    "obligatoriaIngenieria2025": true,
     "esLibre": false,
     "seDa": true,
     "informacion": [
@@ -1470,7 +1878,7 @@
     "semestre": "primero",
     "obligatoriaIngenieria1997": false,
     "obligatoriaAnalista1997": false,
-    "esOpcional": true,
+    "obligatoriaIngenieria2025": false,
     "esLibre": true,
     "seDa": true,
     "informacion": [
@@ -1531,7 +1939,7 @@
     "semestre": "primero",
     "obligatoriaIngenieria1997": true,
     "obligatoriaAnalista1997": true,
-    "esOpcional": false,
+    "obligatoriaIngenieria2025": true,
     "esLibre": false,
     "seDa": true,
     "informacion": [
@@ -1596,7 +2004,7 @@
     "semestre": "primero",
     "obligatoriaIngenieria1997": false,
     "obligatoriaAnalista1997": false,
-    "esOpcional": true,
+    "obligatoriaIngenieria2025": false,
     "esLibre": false,
     "seDa": false,
     "informacion": [
@@ -1627,9 +2035,9 @@
     "semestre": "segundo",
     "obligatoriaIngenieria1997": false,
     "obligatoriaAnalista1997": false,
-    "esOpcional": true,
+    "obligatoriaIngenieria2025": false,
     "esLibre": false,
-    "seDa": true,
+    "seDa": false,
     "informacion": [
       {
         "nombre": "Eva",
@@ -1689,7 +2097,7 @@
     "semestre": "primero",
     "obligatoriaIngenieria1997": false,
     "obligatoriaAnalista1997": false,
-    "esOpcional": true,
+    "obligatoriaIngenieria2025": false,
     "esLibre": false,
     "seDa": true,
     "informacion": [
@@ -1761,7 +2169,7 @@
     "semestre": "ambos",
     "obligatoriaIngenieria1997": false,
     "obligatoriaAnalista1997": false,
-    "esOpcional": true,
+    "obligatoriaIngenieria2025": false,
     "esLibre": false,
     "seDa": true,
     "informacion": [
@@ -1797,8 +2205,17 @@
           "materia": "CDIVV"
         },
         {
-          "tipo": "materiaAprobada",
-          "materia": "P1"
+          "tipo": "alguna",
+          "reglas": [
+            {
+              "tipo": "materiaAprobada",
+              "materia": "P1"
+            },
+            {
+              "tipo": "materiaAprobada",
+              "materia": "PI"
+            }
+          ]
         },
         {
           "tipo": "materiaExonerada",
@@ -1809,7 +2226,7 @@
     "semestre": "primero",
     "obligatoriaIngenieria1997": false,
     "obligatoriaAnalista1997": false,
-    "esOpcional": true,
+    "obligatoriaIngenieria2025": false,
     "esLibre": false,
     "seDa": true,
     "informacion": [
@@ -1840,9 +2257,9 @@
     "semestre": "segundo",
     "obligatoriaIngenieria1997": false,
     "obligatoriaAnalista1997": false,
-    "esOpcional": true,
+    "obligatoriaIngenieria2025": false,
     "esLibre": false,
-    "seDa": true,
+    "seDa": false,
     "informacion": [
       {
         "nombre": "Eva",
@@ -1884,7 +2301,7 @@
     "semestre": "segundo",
     "obligatoriaIngenieria1997": true,
     "obligatoriaAnalista1997": true,
-    "esOpcional": false,
+    "obligatoriaIngenieria2025": true,
     "esLibre": false,
     "seDa": true,
     "informacion": [
@@ -1895,6 +2312,168 @@
       {
         "nombre": "Programa",
         "valor": "https://eva.fing.edu.uy/pluginfile.php/545/course/section/1643/Programa-FBD.pdf?time=1627317936142"
+      }
+    ]
+  },
+  {
+    "id": "TMPN",
+    "nombreCompleto": "Taller de Minería de Procesos de Negocio",
+    "creditos": 8,
+    "creditosPorArea": [
+      {
+        "area": "creditosEnTall_Pasa_Proy",
+        "creditos": 8
+      }
+    ],
+    "reglaHabilitacion": {
+      "tipo": "todas",
+      "reglas": [
+        {
+          "tipo": "materiaAprobada",
+          "materia": "TP"
+        },
+        {
+          "tipo": "materiaAprobada",
+          "materia": "FBD"
+        }
+      ]
+    },
+    "semestre": "segundo",
+    "obligatoriaIngenieria1997": false,
+    "obligatoriaAnalista1997": false,
+    "obligatoriaIngenieria2025": false,
+    "esLibre": false,
+    "seDa": true,
+    "informacion": [
+      {
+        "nombre": "Eva",
+        "valor": "https://eva.fing.edu.uy/course/view.php?id=1572"
+      },
+      {
+        "nombre": "Programa",
+        "valor": "https://eva.fing.edu.uy/pluginfile.php/53308/mod_resource/content/1/Programa%20de%20Unidad%20CurricularTPM.pdf"
+      }
+    ]
+  },
+  {
+    "id": "RIRW",
+    "nombreCompleto": "Recuperación de Información y Recomendaciones en la Web",
+    "creditos": 10,
+    "creditosPorArea": [
+      {
+        "area": "creditosEnBD_SI",
+        "creditos": 10
+      }
+    ],
+    "reglaHabilitacion": {
+      "tipo": "todas",
+      "reglas": [
+        {
+          "tipo": "materiaExonerada",
+          "materia": "P3"
+        },
+        {
+          "tipo": "materiaExonerada",
+          "materia": "FBD"
+        }
+      ]
+    },
+    "semestre": "segundo",
+    "obligatoriaIngenieria1997": false,
+    "obligatoriaAnalista1997": false,
+    "obligatoriaIngenieria2025": false,
+    "esLibre": false,
+    "seDa": true,
+    "informacion": [
+      {
+        "nombre": "Eva",
+        "valor": "https://eva.fing.edu.uy/course/view.php?id=821"
+      },
+      {
+        "nombre": "Programa",
+        "valor": "https://www.fing.edu.uy/sites/default/files/2019/35128/Programa%20de%20Unidad%20Curricular%20-%20webir%20-%202017.pdf"
+      }
+    ]
+  },
+  {
+    "id": "IO",
+    "nombreCompleto": "Ingeniería de Ontologías",
+    "creditos": 6,
+    "creditosPorArea": [
+      {
+        "area": "creditosEnBD_SI",
+        "creditos": 6
+      }
+    ],
+    "reglaHabilitacion": {
+      "tipo": "todas",
+      "reglas": [
+        {
+          "tipo": "creditosMinimos",
+          "area": "Total",
+          "cantidad": 250
+        },
+        {
+          "tipo": "materiaExonerada",
+          "materia": "LG"
+        },
+        {
+          "tipo": "materiaExonerada",
+          "materia": "FBD"
+        }
+      ]
+    },
+    "semestre": "segundo",
+    "obligatoriaIngenieria1997": false,
+    "obligatoriaAnalista1997": false,
+    "obligatoriaIngenieria2025": false,
+    "esLibre": false,
+    "seDa": true,
+    "informacion": [
+      {
+        "nombre": "Programa",
+        "valor": "https://www.fing.edu.uy/static/programas/Grado/2021/INGENIERIA%20DE%20ONTOLOGIAS/INGENIERIA%20DE%20ONTOLOGIAS_0.pdf"
+      }
+    ]
+  },
+  {
+    "id": "ID",
+    "nombreCompleto": "Integración de Datos",
+    "creditos": 8,
+    "creditosPorArea": [
+      {
+        "area": "creditosEnBD_SI",
+        "creditos": 8
+      }
+    ],
+    "reglaHabilitacion": {
+      "tipo": "todas",
+      "reglas": [
+        {
+          "tipo": "creditosMinimos",
+          "area": "Total",
+          "cantidad": 250
+        },
+        {
+          "tipo": "materiaExonerada",
+          "materia": "FBD"
+        }
+      ]
+    },
+    "semestre": "segundo",
+    "obligatoriaIngenieria1997": false,
+    "obligatoriaAnalista1997": false,
+    "obligatoriaIngenieria2025": false,
+    "esLibre": false,
+    "seDa": true,
+    "informacion": [
+      {
+        "nombre": "Eva",
+        "valor": "https://eva.fing.edu.uy/course/view.php?id=664"
+      },
+      {
+        "nombre": "Programa",
+        "valor": "https://eva.fing.edu.uy/pluginfile.php/47372/mod_resource/content/1/Programa%20de%20Unidad%20Curricular-ID.pdf"
       }
     ]
   },
@@ -1915,7 +2494,7 @@
     "semestre": "segundo",
     "obligatoriaIngenieria1997": false,
     "obligatoriaAnalista1997": false,
-    "esOpcional": true,
+    "obligatoriaIngenieria2025": false,
     "esLibre": false,
     "seDa": true,
     "informacion": [
@@ -1946,7 +2525,7 @@
     "semestre": "primero",
     "obligatoriaIngenieria1997": false,
     "obligatoriaAnalista1997": false,
-    "esOpcional": true,
+    "obligatoriaIngenieria2025": false,
     "esLibre": false,
     "seDa": true,
     "informacion": [
@@ -1994,7 +2573,7 @@
     "semestre": "segundo",
     "obligatoriaIngenieria1997": true,
     "obligatoriaAnalista1997": true,
-    "esOpcional": false,
+    "obligatoriaIngenieria2025": true,
     "esLibre": false,
     "seDa": true,
     "informacion": [
@@ -2034,7 +2613,7 @@
     "semestre": "primero",
     "obligatoriaIngenieria1997": false,
     "obligatoriaAnalista1997": false,
-    "esOpcional": true,
+    "obligatoriaIngenieria2025": false,
     "esLibre": false,
     "seDa": true,
     "informacion": [
@@ -2065,7 +2644,7 @@
     "semestre": "segundo",
     "obligatoriaIngenieria1997": false,
     "obligatoriaAnalista1997": false,
-    "esOpcional": true,
+    "obligatoriaIngenieria2025": false,
     "esLibre": false,
     "seDa": true,
     "informacion": [
@@ -2109,7 +2688,7 @@
     "semestre": "segundo",
     "obligatoriaIngenieria1997": false,
     "obligatoriaAnalista1997": false,
-    "esOpcional": true,
+    "obligatoriaIngenieria2025": false,
     "esLibre": false,
     "seDa": true,
     "informacion": [
@@ -2149,7 +2728,7 @@
     "semestre": "segundo",
     "obligatoriaIngenieria1997": false,
     "obligatoriaAnalista1997": false,
-    "esOpcional": true,
+    "obligatoriaIngenieria2025": false,
     "esLibre": false,
     "seDa": true,
     "informacion": [
@@ -2197,7 +2776,7 @@
     "semestre": "primero",
     "obligatoriaIngenieria1997": false,
     "obligatoriaAnalista1997": false,
-    "esOpcional": true,
+    "obligatoriaIngenieria2025": false,
     "esLibre": false,
     "seDa": true,
     "informacion": [
@@ -2246,7 +2825,7 @@
     "semestre": "segundo",
     "obligatoriaIngenieria1997": true,
     "obligatoriaAnalista1997": true,
-    "esOpcional": false,
+    "obligatoriaIngenieria2025": true,
     "esLibre": false,
     "seDa": true,
     "informacion": [
@@ -2257,6 +2836,94 @@
       {
         "nombre": "Programa",
         "valor": "https://eva.fing.edu.uy/pluginfile.php/53463/mod_resource/content/5/programaTProg2017_APROBADO.pdf"
+      }
+    ]
+  },
+  {
+    "id": "TSE",
+    "nombreCompleto": "Taller de Sistemas Empresariales",
+    "creditos": 15,
+    "creditosPorArea": [
+      {
+        "area": "creditosEnTall_Pasa_Proy",
+        "creditos": 15
+      }
+    ],
+    "reglaHabilitacion": {
+      "tipo": "todas",
+      "reglas": [
+        {
+          "tipo": "materiaExonerada",
+          "materia": "P4"
+        },
+        {
+          "tipo": "materiaAprobada",
+          "materia": "TP"
+        },
+        {
+          "tipo": "materiaExonerada",
+          "materia": "FBD"
+        }
+      ]
+    },
+    "semestre": "segundo",
+    "obligatoriaIngenieria1997": false,
+    "obligatoriaAnalista1997": false,
+    "obligatoriaIngenieria2025": false,
+    "esLibre": false,
+    "seDa": true,
+    "informacion": [
+      {
+        "nombre": "Eva",
+        "valor": "https://eva.fing.edu.uy/course/view.php?id=1140"
+      },
+      {
+        "nombre": "Programa",
+        "valor": "https://eva.fing.edu.uy/pluginfile.php/54161/mod_resource/content/2/programa-tse.pdf"
+      }
+    ]
+  },
+  {
+    "id": "ISIG",
+    "nombreCompleto": "Introducción a los Sistemas de Información Geográfica",
+    "creditos": 10,
+    "creditosPorArea": [
+      {
+        "area": "creditosEnBD_SI",
+        "creditos": 10
+      }
+    ],
+    "reglaHabilitacion": {
+      "tipo": "todas",
+      "reglas": [
+        {
+          "tipo": "materiaAprobada",
+          "materia": "TP"
+        },
+        {
+          "tipo": "materiaExonerada",
+          "materia": "P4"
+        },
+        {
+          "tipo": "materiaExonerada",
+          "materia": "FBD"
+        }
+      ]
+    },
+    "semestre": "segundo",
+    "obligatoriaIngenieria1997": false,
+    "obligatoriaAnalista1997": false,
+    "obligatoriaIngenieria2025": false,
+    "esLibre": false,
+    "seDa": true,
+    "informacion": [
+      {
+        "nombre": "Eva",
+        "valor": "https://eva.fing.edu.uy/course/view.php?id=967"
+      },
+      {
+        "nombre": "Programa",
+        "valor": "https://www.fing.edu.uy/sites/default/files/2023-10/Introducci%C3%B3n%20a%20los%20sistemas%20de%20informaci%C3%B3n%20geogr%C3%A1fica_1926.pdf"
       }
     ]
   },
@@ -2286,7 +2953,7 @@
     "semestre": "primero",
     "obligatoriaIngenieria1997": false,
     "obligatoriaAnalista1997": false,
-    "esOpcional": true,
+    "obligatoriaIngenieria2025": false,
     "esLibre": false,
     "seDa": true,
     "informacion": [
@@ -2326,7 +2993,7 @@
     "semestre": "primero",
     "obligatoriaIngenieria1997": false,
     "obligatoriaAnalista1997": false,
-    "esOpcional": true,
+    "obligatoriaIngenieria2025": false,
     "esLibre": false,
     "seDa": true,
     "informacion": [
@@ -2376,10 +3043,10 @@
         }
       ]
     },
-    "semestre": "primero",
+    "semestre": "ambos",
     "obligatoriaIngenieria1997": false,
     "obligatoriaAnalista1997": false,
-    "esOpcional": true,
+    "obligatoriaIngenieria2025": false,
     "esLibre": false,
     "seDa": true,
     "informacion": [
@@ -2423,7 +3090,7 @@
     "semestre": "primero",
     "obligatoriaIngenieria1997": false,
     "obligatoriaAnalista1997": false,
-    "esOpcional": true,
+    "obligatoriaIngenieria2025": false,
     "esLibre": false,
     "seDa": true,
     "informacion": [
@@ -2463,7 +3130,7 @@
     "semestre": "primero",
     "obligatoriaIngenieria1997": false,
     "obligatoriaAnalista1997": false,
-    "esOpcional": true,
+    "obligatoriaIngenieria2025": false,
     "esLibre": false,
     "seDa": true,
     "informacion": [
@@ -2494,7 +3161,7 @@
     "semestre": "primero",
     "obligatoriaIngenieria1997": false,
     "obligatoriaAnalista1997": false,
-    "esOpcional": true,
+    "obligatoriaIngenieria2025": false,
     "esLibre": false,
     "seDa": true,
     "informacion": [
@@ -2538,7 +3205,7 @@
     "semestre": "segundo",
     "obligatoriaIngenieria1997": false,
     "obligatoriaAnalista1997": false,
-    "esOpcional": true,
+    "obligatoriaIngenieria2025": false,
     "esLibre": false,
     "seDa": true,
     "informacion": [
@@ -2594,7 +3261,7 @@
     "semestre": "segundo",
     "obligatoriaIngenieria1997": false,
     "obligatoriaAnalista1997": false,
-    "esOpcional": true,
+    "obligatoriaIngenieria2025": false,
     "esLibre": false,
     "seDa": true,
     "informacion": [
@@ -2638,7 +3305,7 @@
     "semestre": "primero",
     "obligatoriaIngenieria1997": true,
     "obligatoriaAnalista1997": false,
-    "esOpcional": false,
+    "obligatoriaIngenieria2025": true,
     "esLibre": false,
     "seDa": true,
     "informacion": [
@@ -2649,6 +3316,37 @@
       {
         "nombre": "Programa",
         "valor": "https://eva.fing.edu.uy/pluginfile.php/54380/mod_page/content/7/Programa%20TIIS%20-%202025.pdf"
+      }
+    ]
+  },
+  {
+    "id": "INS",
+    "nombreCompleto": "Introducción al Negocio del Software",
+    "creditos": 6,
+    "creditosPorArea": [
+      {
+        "area": "creditosEnGO",
+        "creditos": 6
+      }
+    ],
+    "reglaHabilitacion": {
+      "tipo": "materiaAprobada",
+      "materia": "IIS"
+    },
+    "semestre": "segundo",
+    "obligatoriaIngenieria1997": false,
+    "obligatoriaAnalista1997": false,
+    "obligatoriaIngenieria2025": false,
+    "esLibre": false,
+    "seDa": true,
+    "informacion": [
+      {
+        "nombre": "Eva",
+        "valor": "https://eva.fing.edu.uy/course/view.php?id=725"
+      },
+      {
+        "nombre": "Programa",
+        "valor": "https://eva.fing.edu.uy/pluginfile.php/45806/mod_resource/content/2/Programa%20de%20Unidad%20Curricular%20-%20Int%20Negocio%20SW.pdf"
       }
     ]
   },
@@ -2678,7 +3376,7 @@
     "semestre": "primero",
     "obligatoriaIngenieria1997": false,
     "obligatoriaAnalista1997": false,
-    "esOpcional": true,
+    "obligatoriaIngenieria2025": false,
     "esLibre": false,
     "seDa": false,
     "informacion": [
@@ -2735,7 +3433,7 @@
     "semestre": "primero",
     "obligatoriaIngenieria1997": false,
     "obligatoriaAnalista1997": false,
-    "esOpcional": false,
+    "obligatoriaIngenieria2025": true,
     "esLibre": false,
     "seDa": true,
     "informacion": [
@@ -2766,9 +3464,9 @@
     "semestre": "segundo",
     "obligatoriaIngenieria1997": false,
     "obligatoriaAnalista1997": false,
-    "esOpcional": true,
+    "obligatoriaIngenieria2025": false,
     "esLibre": false,
-    "seDa": true,
+    "seDa": false,
     "informacion": [
       {
         "nombre": "Eva",
@@ -2814,7 +3512,7 @@
     "semestre": "primero",
     "obligatoriaIngenieria1997": false,
     "obligatoriaAnalista1997": false,
-    "esOpcional": false,
+    "obligatoriaIngenieria2025": true,
     "esLibre": false,
     "seDa": true,
     "informacion": [
@@ -2863,7 +3561,7 @@
     "semestre": "segundo",
     "obligatoriaIngenieria1997": false,
     "obligatoriaAnalista1997": false,
-    "esOpcional": true,
+    "obligatoriaIngenieria2025": false,
     "esLibre": false,
     "seDa": true,
     "informacion": [
@@ -2903,7 +3601,7 @@
     "semestre": "segundo",
     "obligatoriaIngenieria1997": true,
     "obligatoriaAnalista1997": false,
-    "esOpcional": false,
+    "obligatoriaIngenieria2025": true,
     "esLibre": false,
     "seDa": true,
     "informacion": [
@@ -2959,7 +3657,7 @@
     "semestre": "segundo",
     "obligatoriaIngenieria1997": false,
     "obligatoriaAnalista1997": false,
-    "esOpcional": true,
+    "obligatoriaIngenieria2025": false,
     "esLibre": false,
     "seDa": true,
     "informacion": [
@@ -2990,7 +3688,7 @@
     "semestre": "primero",
     "obligatoriaIngenieria1997": false,
     "obligatoriaAnalista1997": false,
-    "esOpcional": true,
+    "obligatoriaIngenieria2025": false,
     "esLibre": false,
     "seDa": true,
     "informacion": [
@@ -3034,7 +3732,7 @@
     "semestre": "segundo",
     "obligatoriaIngenieria1997": false,
     "obligatoriaAnalista1997": false,
-    "esOpcional": true,
+    "obligatoriaIngenieria2025": false,
     "esLibre": false,
     "seDa": true,
     "informacion": [
@@ -3078,7 +3776,7 @@
     "semestre": "segundo",
     "obligatoriaIngenieria1997": false,
     "obligatoriaAnalista1997": false,
-    "esOpcional": true,
+    "obligatoriaIngenieria2025": false,
     "esLibre": false,
     "seDa": true,
     "informacion": [
@@ -3126,7 +3824,7 @@
     "semestre": "primero",
     "obligatoriaIngenieria1997": false,
     "obligatoriaAnalista1997": false,
-    "esOpcional": true,
+    "obligatoriaIngenieria2025": false,
     "esLibre": false,
     "seDa": true,
     "informacion": [
@@ -3157,7 +3855,7 @@
     "semestre": "segundo",
     "obligatoriaIngenieria1997": false,
     "obligatoriaAnalista1997": false,
-    "esOpcional": true,
+    "obligatoriaIngenieria2025": false,
     "esLibre": false,
     "seDa": true,
     "informacion": [
@@ -3209,7 +3907,7 @@
     "semestre": "primero",
     "obligatoriaIngenieria1997": false,
     "obligatoriaAnalista1997": false,
-    "esOpcional": true,
+    "obligatoriaIngenieria2025": false,
     "esLibre": false,
     "seDa": true,
     "informacion": [
@@ -3237,7 +3935,7 @@
     "semestre": "ambos",
     "obligatoriaIngenieria1997": false,
     "obligatoriaAnalista1997": false,
-    "esOpcional": false,
+    "obligatoriaIngenieria2025": true,
     "esLibre": true,
     "seDa": true,
     "informacion": [
@@ -3269,7 +3967,7 @@
     "semestre": "primero",
     "obligatoriaIngenieria1997": false,
     "obligatoriaAnalista1997": false,
-    "esOpcional": true,
+    "obligatoriaIngenieria2025": false,
     "esLibre": false,
     "seDa": true,
     "informacion": [
@@ -3301,7 +3999,7 @@
     "semestre": "primero",
     "obligatoriaIngenieria1997": false,
     "obligatoriaAnalista1997": false,
-    "esOpcional": true,
+    "obligatoriaIngenieria2025": false,
     "esLibre": false,
     "seDa": true,
     "informacion": [
@@ -3341,7 +4039,7 @@
     "semestre": "ambos",
     "obligatoriaIngenieria1997": false,
     "obligatoriaAnalista1997": false,
-    "esOpcional": true,
+    "obligatoriaIngenieria2025": false,
     "esLibre": true,
     "seDa": true,
     "informacion": [
@@ -3403,7 +4101,7 @@
     "semestre": "ambos",
     "obligatoriaIngenieria1997": false,
     "obligatoriaAnalista1997": false,
-    "esOpcional": true,
+    "obligatoriaIngenieria2025": false,
     "esLibre": true,
     "seDa": true,
     "informacion": [
@@ -3439,7 +4137,7 @@
     "semestre": "primero",
     "obligatoriaIngenieria1997": false,
     "obligatoriaAnalista1997": false,
-    "esOpcional": true,
+    "obligatoriaIngenieria2025": false,
     "esLibre": true,
     "seDa": true,
     "informacion": [
@@ -3480,7 +4178,7 @@
     "semestre": "segundo",
     "obligatoriaIngenieria1997": false,
     "obligatoriaAnalista1997": false,
-    "esOpcional": true,
+    "obligatoriaIngenieria2025": false,
     "esLibre": true,
     "seDa": true,
     "informacion": [
@@ -3511,7 +4209,7 @@
     "semestre": "segundo",
     "obligatoriaIngenieria1997": false,
     "obligatoriaAnalista1997": false,
-    "esOpcional": true,
+    "obligatoriaIngenieria2025": false,
     "esLibre": true,
     "seDa": true,
     "informacion": [
@@ -3539,9 +4237,9 @@
     "semestre": "segundo",
     "obligatoriaIngenieria1997": false,
     "obligatoriaAnalista1997": false,
-    "esOpcional": true,
+    "obligatoriaIngenieria2025": false,
     "esLibre": false,
-    "seDa": true,
+    "seDa": false,
     "informacion": [
       {
         "nombre": "Eva",
@@ -3596,7 +4294,7 @@
     "semestre": "primero",
     "obligatoriaIngenieria1997": false,
     "obligatoriaAnalista1997": false,
-    "esOpcional": true,
+    "obligatoriaIngenieria2025": false,
     "esLibre": false,
     "seDa": true,
     "informacion": [
@@ -3628,7 +4326,7 @@
     "semestre": "ambos",
     "obligatoriaIngenieria1997": false,
     "obligatoriaAnalista1997": false,
-    "esOpcional": true,
+    "obligatoriaIngenieria2025": false,
     "esLibre": false,
     "seDa": true,
     "informacion": [
@@ -3779,7 +4477,7 @@
     "semestre": "ambos",
     "obligatoriaIngenieria1997": true,
     "obligatoriaAnalista1997": false,
-    "esOpcional": false,
+    "obligatoriaIngenieria2025": true,
     "esLibre": false,
     "seDa": true,
     "informacion": [

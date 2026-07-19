@@ -59,6 +59,13 @@ const Estado = Object.freeze({
   EXONERADA: 3
 });
 
+const MateriaEquivalentePorNombre = Object.freeze({
+  MD1: "FC",
+  FC: "MD1",
+  P1: "PI",
+  PI: "P1",
+});
+
 const TraduccionBloqueCreditos = Object.freeze({
   creditosEnM: "Matemática",
   creditosEnCE: "Ciencias Experimentales",
@@ -288,7 +295,6 @@ class Materia {
     reglaHabilitacion,
     nombreCompleto,
     semestre,
-    esOpcional,
     esLibre,
     area,
     informacion
@@ -301,7 +307,6 @@ class Materia {
     this.nombreCompleto = nombreCompleto;
     this.prioridad = 0;
     this.semestre = semestre;
-    this.esOpcional = esOpcional;
     this.esLibre = esLibre;
     this.area = area;
     this.peso = 0;
@@ -371,6 +376,8 @@ let IC;
 let CDIV;
 let MD1;
 let FC;
+let P1;
+let PI;
 let MI;
 let TRE;
 let AGI;
@@ -378,7 +385,7 @@ let Pasan;
 let PG;
 
 const materiasPorNombre = new Map();
-const nombresMateriasExcluidasInicialmente = new Set(["IC", "FC", "MI"]);
+const nombresMateriasExcluidasInicialmente = new Set(["IC", "MI"]);
 
 function reglaDesdeJson(regla) {
   if (!regla) return null;
@@ -410,7 +417,7 @@ function actualizarMateriaDesdeJson(materia, datos) {
   materia.semestre = datos.semestre;
   materia.obligatoriaIngenieria1997 = datos.obligatoriaIngenieria1997;
   materia.obligatoriaAnalista1997 = datos.obligatoriaAnalista1997;
-  materia.esOpcional = datos.esOpcional;
+  materia.obligatoriaIngenieria2025 = datos.obligatoriaIngenieria2025;
   materia.esLibre = datos.esLibre;
   materia.se_da = datos.seDa;
   materia.informacion = datos.informacion ?? [];
@@ -424,6 +431,8 @@ function guardarMateriasNecesarias() {
   CDIV = materiasPorNombre.get("CDIV");
   MD1 = materiasPorNombre.get("MD1");
   FC = materiasPorNombre.get("FC");
+  P1 = materiasPorNombre.get("P1");
+  PI = materiasPorNombre.get("PI");
   MI = materiasPorNombre.get("MI");
   TRE = materiasPorNombre.get("TRE");
   AGI = materiasPorNombre.get("AGI");
@@ -445,7 +454,6 @@ async function cargarMateriasDesdeJson() {
         null,
         datos.nombreCompleto,
         datos.semestre,
-        datos.esOpcional,
         datos.esLibre,
         area,
         datos.informacion ?? []
@@ -567,11 +575,8 @@ function toggleMI() {
 }
 
 function togglePlan() {
-  if (Materias.includes(FC)) {
-    Materias = Materias.filter(materia => materia !== FC)
+  if (Materias.includes(IC)) {
     Materias = Materias.filter(materia => materia !== IC)
-    historialAprobadas.delete(FC.nombre);
-    historialExoneradas.delete(FC.nombre);
     historialAprobadas.delete(IC.nombre);
     historialExoneradas.delete(IC.nombre);
     Materias.push(MD1)
@@ -579,13 +584,12 @@ function togglePlan() {
     Materias = Materias.filter(materia => materia !== MD1)
     historialAprobadas.delete(MD1.nombre);
     historialExoneradas.delete(MD1.nombre);
-    Materias.push(FC);
     Materias.push(IC);
   }
   rehacerPaginaSinEstado();
   mostrarBotonesDeMateriasQueCorresponda();
   mostrarSeccionesQueCorrespondan();
-  guardarLocalStorage(FC.nombre, Materias.includes(FC));
+  guardarLocalStorage(FC.nombre, Materias.includes(IC));
   reconstruirEstadoPagina();
   actualizarPlanificacionTrasCambioConfiguracion();
 }
@@ -602,6 +606,10 @@ function encontrarMateriaPorNombre(nombre) {
   return Materias.find((materia) => materia.nombre == nombre);
 }
 
+function obtenerNombreMateriaEquivalente(nombreMateria) {
+  return MateriaEquivalentePorNombre[nombreMateria] ?? null;
+}
+
 function toggleMateria(nombre) {
   let materiaActual = encontrarMateriaPorNombre(nombre);
   switch (materiaActual.estado) {
@@ -612,6 +620,11 @@ function toggleMateria(nombre) {
       historialAprobadas.add(materiaActual.nombre);
       break;
     case Estado.APROBADA:
+      const nombreEquivalente = obtenerNombreMateriaEquivalente(materiaActual.nombre);
+      if (nombreEquivalente) {
+        historialAprobadas.delete(nombreEquivalente);
+        historialExoneradas.delete(nombreEquivalente);
+      }
       historialExoneradas.add(materiaActual.nombre);
       break;
     case Estado.EXONERADA:
@@ -622,6 +635,7 @@ function toggleMateria(nombre) {
       break;
   }
   reconstruirEstadoPagina();
+  actualizarPlanificacionTrasCambioConfiguracion();
 }
 
 function obtenerIdNavbarValido(idBoton) {
@@ -1576,8 +1590,8 @@ function validarRegistrosImportados(datosImportados) {
   registrosImportados.forEach((registro, indice) => {
     const clavesRegistroValidas = new Set(["area", "creditos"]);
     exigirDatoImportado(
-      esObjetoImportado(registro) && areasValidas.has(registro.area) && Number.isFinite(registro.creditos),
-      `El registro de créditos número ${indice + 1} no tiene un formato válido.`
+      esObjetoImportado(registro) && areasValidas.has(registro.area) && Number.isInteger(registro.creditos),
+      `El registro de créditos número ${indice + 1} debe tener un área válida y una cantidad entera.`
     );
     Object.keys(registro).forEach((clave) => {
       exigirDatoImportado(
@@ -1592,8 +1606,8 @@ function validarRegistrosImportados(datosImportados) {
   const creditosPorAreaImportados = new Map();
   creditosImportados.forEach((entrada, indice) => {
     exigirDatoImportado(
-      Array.isArray(entrada) && entrada.length === 2 && areasValidas.has(entrada[0]) && Number.isFinite(entrada[1]),
-      `La entrada de créditos por área número ${indice + 1} no tiene un formato válido.`
+      Array.isArray(entrada) && entrada.length === 2 && areasValidas.has(entrada[0]) && Number.isInteger(entrada[1]),
+      `La entrada de créditos por área número ${indice + 1} debe tener un área válida y una cantidad entera.`
     );
     exigirDatoImportado(
       !creditosPorAreaImportados.has(entrada[0]),
@@ -1683,10 +1697,28 @@ function validarDatosImportados(datosImportados) {
 
   const usarMatematicaInicial = obtenerCampoBooleanoTextoImportado(datosImportados, MI?.nombre ?? "MI");
   const usarPlanAlternativo = obtenerCampoBooleanoTextoImportado(datosImportados, FC?.nombre ?? "FC");
-  const materiasEnEstadoImportado = new Set([...aprobadas, ...exoneradas, ...exoneradasBase]);
+  const planificacionUsaEstadoActualImportada = obtenerCampoJsonImportado(
+    datosImportados,
+    LocalStorageNombres.planificacionUsaEstadoActual,
+    true
+  );
+  const materiasEnEstadoImportado = new Set([...aprobadas, ...exoneradas]);
+  const exoneradasEstadoActual = new Set(exoneradas);
+  const exoneradasPlanificacion = new Set(
+    planificacionUsaEstadoActualImportada ? exoneradas : exoneradasBase
+  );
+  if (!planificacionUsaEstadoActualImportada) {
+    exoneradasBase.forEach((nombreMateria) => {
+      materiasEnEstadoImportado.add(nombreMateria);
+    });
+  }
   planificacion.forEach((periodo) => {
     periodo.materias.forEach((materiaPlanificada) => {
-      materiasEnEstadoImportado.add(obtenerNombreMateriaPlanificada(materiaPlanificada));
+      const nombreMateria = obtenerNombreMateriaPlanificada(materiaPlanificada);
+      materiasEnEstadoImportado.add(nombreMateria);
+      if (obtenerResultadoMateriaPlanificada(materiaPlanificada, periodo.semestre) === ResultadoPlanificado.EXONERADA) {
+        exoneradasPlanificacion.add(nombreMateria);
+      }
     });
   });
 
@@ -1695,8 +1727,20 @@ function validarDatosImportados(datosImportados) {
     `La materia "${MI.nombre}" requiere que su configuración esté activada.`
   );
   exigirDatoImportado(
-    usarPlanAlternativo || (!materiasEnEstadoImportado.has(FC.nombre) && !materiasEnEstadoImportado.has(IC.nombre)),
-    `Las materias "${FC.nombre}" e "${IC.nombre}" requieren que el plan alternativo esté activado.`
+    ![exoneradasEstadoActual, exoneradasPlanificacion].some((exoneradasContexto) => (
+      exoneradasContexto.has(FC.nombre) && exoneradasContexto.has(MD1.nombre)
+    )),
+    `Las materias "${FC.nombre}" y "${MD1.nombre}" no pueden figurar juntas como exoneradas.`
+  );
+  exigirDatoImportado(
+    ![exoneradasEstadoActual, exoneradasPlanificacion].some((exoneradasContexto) => (
+      exoneradasContexto.has(P1.nombre) && exoneradasContexto.has(PI.nombre)
+    )),
+    `Las materias "${P1.nombre}" y "${PI.nombre}" no pueden figurar juntas como exoneradas.`
+  );
+  exigirDatoImportado(
+    usarPlanAlternativo || !materiasEnEstadoImportado.has(IC.nombre),
+    `La materia "${IC.nombre}" requiere que el plan alternativo esté activado.`
   );
   exigirDatoImportado(
     !usarPlanAlternativo || !materiasEnEstadoImportado.has(MD1.nombre),
@@ -1915,51 +1959,95 @@ async function cargarDatosDesdeJson() {
 function esRegistroCreditoValido(registro) {
   return registro &&
     typeof registro.area === "string" &&
-    Number.isFinite(registro.creditos);
+    Object.values(BloqueCreditos).includes(registro.area) &&
+    Number.isInteger(registro.creditos);
 }
 
-function reconstruyoEstadoValido(){
-  let auxHistorialAprobadas = historialAprobadas;
-  let auxHistorialExoneradas = historialExoneradas;
-  historialAprobadas = new Set();
-  historialExoneradas = new Set();
-  let huboCambio = true;
-  while (huboCambio) {
-    calcularCreditos();
-    huboCambio = false;
-    const copiaAprobadas = new Set(auxHistorialAprobadas);
-    copiaAprobadas.forEach( (nombreMateria) => {
-      let materia = encontrarMateriaPorNombre(nombreMateria);
-      if (!materia) {
-        auxHistorialAprobadas.delete(nombreMateria);
-        auxHistorialExoneradas.delete(nombreMateria);
-        huboCambio = true;
-      } else {
+function normalizarEstadosMateriasEquivalentes() {
+  const exoneradasOriginales = Array.from(historialExoneradas);
+  const exoneradasConservadas = new Set();
+
+  exoneradasOriginales.forEach((nombreMateria) => {
+    const nombreEquivalente = obtenerNombreMateriaEquivalente(nombreMateria);
+    if (!nombreEquivalente) return;
+
+    if (exoneradasConservadas.has(nombreEquivalente)) {
+      historialExoneradas.delete(nombreMateria);
+      historialAprobadas.delete(nombreMateria);
+      return;
+    }
+
+    exoneradasConservadas.add(nombreMateria);
+    historialExoneradas.delete(nombreEquivalente);
+    historialAprobadas.delete(nombreEquivalente);
+  });
+}
+
+function reconstruyoEstadoValido(incluirCreditosActuales = true){
+  normalizarEstadosMateriasEquivalentes();
+  let candidatasAprobadas = new Set(historialAprobadas);
+  let candidatasExoneradas = new Set(historialExoneradas);
+  let huboDepuracion = true;
+
+  while (huboDepuracion) {
+    const auxHistorialAprobadas = new Set(candidatasAprobadas);
+    const auxHistorialExoneradas = new Set(candidatasExoneradas);
+    historialAprobadas = new Set();
+    historialExoneradas = new Set();
+    let huboCambio = true;
+
+    while (huboCambio) {
+      calcularCreditosParaEstado(incluirCreditosActuales);
+      huboCambio = false;
+      const copiaAprobadas = new Set(auxHistorialAprobadas);
+      copiaAprobadas.forEach( (nombreMateria) => {
+        let materia = encontrarMateriaPorNombre(nombreMateria);
+        if (!materia) {
+          auxHistorialAprobadas.delete(nombreMateria);
+          auxHistorialExoneradas.delete(nombreMateria);
+          huboCambio = true;
+        } else {
+          let {cumple} = evaluarRegla(materia.reglaHabilitacion);
+          if (cumple) {
+            huboCambio = true;
+            auxHistorialAprobadas.delete(nombreMateria);
+            historialAprobadas.add(nombreMateria);
+          }
+        }
+      })
+      if (huboCambio) continue;
+      const copiaExoneradas = new Set(auxHistorialExoneradas);
+      copiaExoneradas.forEach( (nombreMateria) => {
+        let materia = encontrarMateriaPorNombre(nombreMateria);
+        if (!materia) {
+          auxHistorialExoneradas.delete(nombreMateria);
+          huboCambio = true;
+          return;
+        }
         let {cumple} = evaluarRegla(materia.reglaHabilitacion);
         if (cumple) {
           huboCambio = true;
-          auxHistorialAprobadas.delete(nombreMateria);
-          historialAprobadas.add(nombreMateria);
+          auxHistorialExoneradas.delete(nombreMateria);
+          historialExoneradas.add(nombreMateria);
+          sumarCreditos(materia);
         }
-      }
-    })
-    if (huboCambio) continue;
-    const copiaExoneradas = new Set(auxHistorialExoneradas);
-    copiaExoneradas.forEach( (nombreMateria) => {
-      let materia = encontrarMateriaPorNombre(nombreMateria);
-      if (!materia) {
-        auxHistorialExoneradas.delete(nombreMateria);
-        huboCambio = true;
-        return;
-      }
-      let {cumple} = evaluarRegla(materia.reglaHabilitacion);
-      if (cumple) {
-        huboCambio = true;
-        auxHistorialExoneradas.delete(nombreMateria);
-        historialExoneradas.add(nombreMateria);
-        sumarCreditos(materia);
-      }
-    })
+      })
+    }
+
+    calcularCreditosParaEstado(incluirCreditosActuales);
+    const materiasInvalidas = new Set([...historialAprobadas, ...historialExoneradas].filter((nombreMateria) => {
+      const materia = encontrarMateriaPorNombre(nombreMateria);
+      return !materia || !evaluarRegla(materia.reglaHabilitacion).cumple;
+    }));
+    materiasInvalidas.forEach((nombreMateria) => {
+      historialAprobadas.delete(nombreMateria);
+      historialExoneradas.delete(nombreMateria);
+    });
+
+    huboDepuracion = historialAprobadas.size < candidatasAprobadas.size ||
+      historialExoneradas.size < candidatasExoneradas.size;
+    candidatasAprobadas = new Set(historialAprobadas);
+    candidatasExoneradas = new Set(historialExoneradas);
   }
 }
 
@@ -2056,11 +2144,17 @@ function calcularCreditosMateria(materia) {
   return obtenerAportesMateria(materia).reduce((total, { creditos }) => total + creditos, 0);
 }
 
+function plan2025Seleccionado() {
+  return Materias.includes(IC);
+}
+
 function materiaEsOpcional(materia) {
-  const obligatoria = tituloAvanceSeleccionado === TituloAvance.ANALISTA
-    ? materia.obligatoriaAnalista1997
-    : materia.obligatoriaIngenieria1997;
-  return typeof obligatoria === "boolean" ? !obligatoria : materia.esOpcional;
+  if (plan2025Seleccionado()) {
+    return !materia.obligatoriaIngenieria2025;
+  }
+  return tituloAvanceSeleccionado === TituloAvance.ANALISTA
+    ? !materia.obligatoriaAnalista1997
+    : !materia.obligatoriaIngenieria1997;
 }
 
 function textoBotonMateria(materia) {
@@ -2078,20 +2172,14 @@ function calcularCreditosMaterias(nombresMaterias) {
   }, 0);
 }
 
-function calcularCreditosBasePlanificacion() {
-  if (planificacionUsaEstadoActual) return creditosBloque.Total;
-  return calcularCreditosMaterias(Array.from(planificacionExoneradasBase.values()));
-}
-
 function calcularCreditosPlanHastaSemestre(indiceSemestre) {
-  let total = calcularCreditosBasePlanificacion();
-  for (let i = 0; i <= indiceSemestre; i++) {
-    const semestrePlanificado = planificacionSemestres[i];
-    total += calcularCreditosMaterias(
-      obtenerNombresExoneradasPlanificadas(semestrePlanificado?.materias ?? [], semestrePlanificado?.semestre)
-    );
-  }
-  return total;
+  const contexto = obtenerContextoPlanificacion(indiceSemestre + 1, false);
+  return ejecutarConEstadoTemporal(
+    contexto.aprobadas,
+    contexto.exoneradas,
+    planificacionUsaEstadoActual,
+    () => creditosBloque.Total
+  );
 }
 
 function calcularCreditosBasicas() {
@@ -2746,6 +2834,55 @@ function normalizarMateriaPlanificada(materiaPlanificada, semestre) {
   return crearMateriaPlanificada(nombre, semestre, obtenerResultadoMateriaPlanificada(materiaPlanificada, semestre));
 }
 
+function obtenerEquivalenciasExoneradasPlanificadas() {
+  const equivalentesExoneradas = new Set();
+  const equivalentesAExcluir = new Set();
+  const aprobadasBase = obtenerAprobadasBasePlanificacion();
+  const exoneradasBase = obtenerExoneradasBasePlanificacion();
+
+  for (let indicePeriodo = planificacionSemestres.length - 1; indicePeriodo >= 0; indicePeriodo--) {
+    const periodo = planificacionSemestres[indicePeriodo];
+    const materias = Array.isArray(periodo?.materias) ? periodo.materias : [];
+    for (let indiceMateria = materias.length - 1; indiceMateria >= 0; indiceMateria--) {
+      const materiaPlanificada = materias[indiceMateria];
+      const nombreMateria = obtenerNombreMateriaPlanificada(materiaPlanificada);
+      const nombreEquivalente = obtenerNombreMateriaEquivalente(nombreMateria);
+      const materia = encontrarMateriaPorNombre(nombreMateria);
+      if (
+        !nombreEquivalente ||
+        !materia ||
+        equivalentesAExcluir.has(nombreMateria) ||
+        obtenerResultadoMateriaPlanificada(materiaPlanificada, periodo?.semestre) !== ResultadoPlanificado.EXONERADA
+      ) {
+        continue;
+      }
+      if (esPeriodoExamenesPlanificado(periodo?.semestre)) {
+        const tieneCursoPrevio = aprobadasBase.has(nombreMateria) || planificacionSemestres
+          .slice(0, indicePeriodo)
+          .some((periodoPrevio) => (
+            Array.isArray(periodoPrevio?.materias) && periodoPrevio.materias.some((materiaPrevia) => (
+              obtenerNombreMateriaPlanificada(materiaPrevia) === nombreMateria &&
+              obtenerResultadoMateriaPlanificada(materiaPrevia, periodoPrevio?.semestre) === ResultadoPlanificado.CURSO
+            ))
+          ));
+        if (exoneradasBase.has(nombreMateria) || (!materia.esLibre && !tieneCursoPrevio)) {
+          continue;
+        }
+      }
+      equivalentesExoneradas.add(nombreMateria);
+      equivalentesAExcluir.add(nombreEquivalente);
+    }
+  }
+
+  return { equivalentesExoneradas, equivalentesAExcluir };
+}
+
+function filtrarMateriasEquivalentesPorExoneracion(materias = [], equivalentesAExcluir = new Set()) {
+  return materias.filter((materiaPlanificada) => (
+    !equivalentesAExcluir.has(obtenerNombreMateriaPlanificada(materiaPlanificada))
+  ));
+}
+
 function obtenerNombresMateriasPlanificadas(materias = []) {
   return materias.map(obtenerNombreMateriaPlanificada).filter(Boolean);
 }
@@ -2765,6 +2902,11 @@ function aplicarMateriaAlContextoPlanificacion(materiaPlanificada, semestre, apr
     aprobadas.add(nombreMateria);
   }
   if (resultado === ResultadoPlanificado.EXONERADA) {
+    const nombreEquivalente = obtenerNombreMateriaEquivalente(nombreMateria);
+    if (nombreEquivalente) {
+      aprobadas.delete(nombreEquivalente);
+      exoneradas.delete(nombreEquivalente);
+    }
     exoneradas.add(nombreMateria);
   }
   yaConsideradas?.add(nombreMateria);
@@ -2788,6 +2930,16 @@ function ejecutarConEstadoTemporal(aprobadas, exoneradas, incluirCreditosActuale
     historialExoneradas = historialExoneradasAnterior;
     creditosBloque = creditosBloqueAnterior;
   }
+}
+
+function obtenerEstadoTemporalValido(aprobadas, exoneradas, incluirCreditosActuales) {
+  return ejecutarConEstadoTemporal(aprobadas, exoneradas, incluirCreditosActuales, () => {
+    reconstruyoEstadoValido(incluirCreditosActuales);
+    return {
+      aprobadas: new Set(historialAprobadas),
+      exoneradas: new Set(historialExoneradas),
+    };
+  });
 }
 
 function materiaHabilitadaParaPlan(materia, aprobadas, exoneradas, incluirCreditosActuales = true) {
@@ -2814,37 +2966,27 @@ function obtenerExoneradasBasePlanificacion() {
 
 function normalizarExoneradasBasePlanificacion() {
   if (planificacionUsaEstadoActual) return;
-  const pendientes = new Set(planificacionExoneradasBase);
-  const aprobadas = new Set();
-  const exoneradas = new Set();
-  let huboCambio = true;
-
-  while (huboCambio) {
-    huboCambio = false;
-    Array.from(pendientes.values()).forEach((nombreMateria) => {
-      const materia = encontrarMateriaPorNombre(nombreMateria);
-      if (!materia) {
-        pendientes.delete(nombreMateria);
-        huboCambio = true;
-        return;
-      }
-      if (materiaHabilitadaParaPlan(materia, aprobadas, exoneradas, false)) {
-        aprobadas.add(nombreMateria);
-        exoneradas.add(nombreMateria);
-        pendientes.delete(nombreMateria);
-        huboCambio = true;
-      }
-    });
-  }
-
-  planificacionExoneradasBase = exoneradas;
+  const estadoValido = obtenerEstadoTemporalValido(
+    planificacionExoneradasBase,
+    planificacionExoneradasBase,
+    false
+  );
+  planificacionExoneradasBase = estadoValido.exoneradas;
 }
 
-function obtenerContextoPlanificacion(indiceSemestre) {
+function obtenerContextoPlanificacion(indiceSemestre, incluirEquivalenciasFuturas = true) {
   const aprobadas = obtenerAprobadasBasePlanificacion();
   const exoneradas = obtenerExoneradasBasePlanificacion();
   exoneradas.forEach((nombreMateria) => aprobadas.add(nombreMateria));
   const yaConsideradas = new Set([...aprobadas, ...exoneradas]);
+  if (incluirEquivalenciasFuturas) {
+    const { equivalentesExoneradas } = obtenerEquivalenciasExoneradasPlanificadas();
+    equivalentesExoneradas.forEach((nombreMateria) => {
+      aprobadas.add(nombreMateria);
+      exoneradas.add(nombreMateria);
+      yaConsideradas.add(nombreMateria);
+    });
+  }
 
   for (let i = 0; i < indiceSemestre; i++) {
     const semestrePlanificado = planificacionSemestres[i];
@@ -2853,20 +2995,31 @@ function obtenerContextoPlanificacion(indiceSemestre) {
     });
   }
 
-  return { aprobadas, exoneradas, yaConsideradas };
+  const estadoValido = obtenerEstadoTemporalValido(aprobadas, exoneradas, planificacionUsaEstadoActual);
+  return { ...estadoValido, yaConsideradas };
 }
 
-function normalizarPlanificacion() {
+function normalizarPlanificacionUnaVez() {
   const planificacionNormalizada = [];
   const aprobadas = obtenerAprobadasBasePlanificacion();
   const exoneradas = obtenerExoneradasBasePlanificacion();
   exoneradas.forEach((nombreMateria) => aprobadas.add(nombreMateria));
   const yaConsideradas = new Set([...aprobadas, ...exoneradas]);
+  const { equivalentesExoneradas, equivalentesAExcluir } = obtenerEquivalenciasExoneradasPlanificadas();
+  const exoneradasPrevias = new Set(exoneradas);
+  const equivalentesConCursoPrevio = new Set(
+    [...aprobadas].filter((nombreMateria) => equivalentesExoneradas.has(nombreMateria))
+  );
+  equivalentesExoneradas.forEach((nombreMateria) => {
+    aprobadas.add(nombreMateria);
+    exoneradas.add(nombreMateria);
+  });
   const incluirCreditosActuales = planificacionUsaEstadoActual;
 
   planificacionSemestres.forEach((semestrePlanificado) => {
     const semestre = normalizarSemestrePlanificado(semestrePlanificado?.semestre);
-    const materias = Array.isArray(semestrePlanificado?.materias) ? semestrePlanificado.materias : [];
+    const materiasOriginales = Array.isArray(semestrePlanificado?.materias) ? semestrePlanificado.materias : [];
+    const materias = filtrarMateriasEquivalentesPorExoneracion(materiasOriginales, equivalentesAExcluir);
     const materiasValidas = [];
     const nombresValidos = new Set();
 
@@ -2877,10 +3030,18 @@ function normalizarPlanificacion() {
       if (!materia || nombresValidos.has(nombreMateria)) {
         return;
       }
+      const aprobadasParaValidar = new Set(aprobadas);
+      const exoneradasParaValidar = new Set(exoneradas);
+      if (equivalentesExoneradas.has(nombreMateria)) {
+        exoneradasParaValidar.delete(nombreMateria);
+        if (!equivalentesConCursoPrevio.has(nombreMateria)) {
+          aprobadasParaValidar.delete(nombreMateria);
+        }
+      }
       const esExamen = esPeriodoExamenesPlanificado(semestre);
       const materiaValidaParaPeriodo = esExamen
-        ? !exoneradas.has(nombreMateria) && materiaHabilitadaParaExamen(materia, aprobadas, exoneradas, incluirCreditosActuales)
-        : !yaConsideradas.has(nombreMateria) && materiaHabilitadaParaPlan(materia, aprobadas, exoneradas, incluirCreditosActuales);
+        ? !exoneradasPrevias.has(nombreMateria) && materiaHabilitadaParaExamen(materia, aprobadasParaValidar, exoneradasParaValidar, incluirCreditosActuales)
+        : !yaConsideradas.has(nombreMateria) && materiaHabilitadaParaPlan(materia, aprobadasParaValidar, exoneradasParaValidar, incluirCreditosActuales);
       if (!materiaValidaParaPeriodo) {
         return;
       }
@@ -2890,6 +3051,18 @@ function normalizarPlanificacion() {
 
     materiasValidas.forEach((materiaPlanificada) => {
       aplicarMateriaAlContextoPlanificacion(materiaPlanificada, semestre, aprobadas, exoneradas, yaConsideradas);
+      const nombreMateria = obtenerNombreMateriaPlanificada(materiaPlanificada);
+      const resultado = obtenerResultadoMateriaPlanificada(materiaPlanificada, semestre);
+      if (
+        equivalentesExoneradas.has(nombreMateria) &&
+        (resultado === ResultadoPlanificado.CURSO || resultado === ResultadoPlanificado.EXONERADA)
+      ) {
+        equivalentesConCursoPrevio.add(nombreMateria);
+      }
+      if (resultado === ResultadoPlanificado.EXONERADA) {
+        exoneradasPrevias.delete(obtenerNombreMateriaEquivalente(nombreMateria));
+        exoneradasPrevias.add(nombreMateria);
+      }
     });
 
     planificacionNormalizada.push({
@@ -2903,7 +3076,41 @@ function normalizarPlanificacion() {
     });
   });
 
+  const aprobadasFinales = new Set(aprobadas);
+  equivalentesExoneradas.forEach((nombreMateria) => {
+    if (!equivalentesConCursoPrevio.has(nombreMateria)) {
+      aprobadasFinales.delete(nombreMateria);
+    }
+  });
+  const estadoFinal = obtenerEstadoTemporalValido(
+    aprobadasFinales,
+    exoneradasPrevias,
+    incluirCreditosActuales
+  );
+  ejecutarConEstadoTemporal(estadoFinal.aprobadas, estadoFinal.exoneradas, incluirCreditosActuales, () => {
+    planificacionNormalizada.forEach((periodo) => {
+      periodo.materias = periodo.materias.filter((materiaPlanificada) => {
+        const nombreMateria = obtenerNombreMateriaPlanificada(materiaPlanificada);
+        const materia = encontrarMateriaPorNombre(nombreMateria);
+        const resultado = obtenerResultadoMateriaPlanificada(materiaPlanificada, periodo.semestre);
+        if (!materia || !evaluarRegla(materia.reglaHabilitacion).cumple) return false;
+        if (resultado === ResultadoPlanificado.EXONERADA) {
+          return estadoFinal.exoneradas.has(nombreMateria);
+        }
+        return resultado !== ResultadoPlanificado.CURSO || estadoFinal.aprobadas.has(nombreMateria);
+      });
+    });
+  });
+
   planificacionSemestres = planificacionNormalizada;
+}
+
+function normalizarPlanificacion() {
+  let planificacionAnterior;
+  do {
+    planificacionAnterior = JSON.stringify(planificacionSemestres);
+    normalizarPlanificacionUnaVez();
+  } while (JSON.stringify(planificacionSemestres) !== planificacionAnterior);
 }
 
 function normalizarYGuardarPlanificacion() {
@@ -2915,12 +3122,19 @@ function normalizarYGuardarPlanificacion() {
 function obtenerMateriasDisponiblesParaPlan(indiceSemestre) {
   const semestrePlanificado = planificacionSemestres[indiceSemestre];
   const seleccionadasActuales = new Set(obtenerNombresMateriasPlanificadas(semestrePlanificado?.materias ?? []));
+  const exoneradasActuales = new Set(obtenerNombresExoneradasPlanificadas(
+    semestrePlanificado?.materias ?? [],
+    semestrePlanificado?.semestre
+  ));
   const { aprobadas, exoneradas, yaConsideradas } = obtenerContextoPlanificacion(indiceSemestre);
+  const { equivalentesAExcluir } = obtenerEquivalenciasExoneradasPlanificadas();
   const esExamen = esPeriodoExamenesPlanificado(semestrePlanificado?.semestre);
   const incluirCreditosActuales = planificacionUsaEstadoActual;
 
   return Materias.filter((materia) => (
     !seleccionadasActuales.has(materia.nombre) &&
+    !equivalentesAExcluir.has(materia.nombre) &&
+    !exoneradasActuales.has(obtenerNombreMateriaEquivalente(materia.nombre)) &&
     (
       esExamen
         ? !exoneradas.has(materia.nombre) && materiaHabilitadaParaExamen(materia, aprobadas, exoneradas, incluirCreditosActuales)
@@ -3544,6 +3758,14 @@ function asignarPesos() {
   Materias.forEach((materia) => {
     if (materia.peso === 0) asignarPesoMateria(materia);
   });
+
+  const ultimoPeso = Math.max(
+    0,
+    ...Materias
+      .filter((materia) => materia !== PG)
+      .map((materia) => materia.peso)
+  );
+  PG.peso = ultimoPeso + 1;
 }
 
 function reglaDependeDeMateria(regla, codigoMateria, tipoBuscado) {
@@ -3716,7 +3938,23 @@ function agregarCreditos() {
   openPopup(idPopupAjustarCreditos);
 }
 
+function reconstruirCreditosPorAreaDesdeRegistros() {
+  creditosPorArea.clear();
+  registros.forEach(({ area, creditos }) => {
+    creditosPorArea.set(area, (creditosPorArea.get(area) ?? 0) + creditos);
+  });
+}
+
+function calcularCreditosParaEstado(incluirCreditosActuales) {
+  if (incluirCreditosActuales) {
+    calcularCreditos();
+  } else {
+    calcularCreditosSinCreditosManuales();
+  }
+}
+
 function actualizarRegistros() {
+  reconstruirCreditosPorAreaDesdeRegistros();
   const columnaArea = document.getElementById("columna-area")
   const columnaCreditos = document.getElementById("columna-creditos")
   const columnaFecha = document.getElementById("columna-eliminar")
@@ -3753,10 +3991,9 @@ function actualizarRegistros() {
     botonEliminar.setAttribute("aria-label", `Eliminar ajuste de ${creditos} créditos en ${TraduccionBloqueCreditos[area]}`);
     botonEliminar.onclick = () => {
       registros.splice(index, 1);
-      creditosPorArea.set(area, (creditosPorArea.get(area) ?? 0) - creditos);
       actualizarRegistros();
       reconstruirEstadoPagina();
-      renderizarPlanificacionSiActiva();
+      actualizarPlanificacionTrasCambioConfiguracion();
     }
     const iconoBasura = document.createElement("img");
     iconoBasura.width = 15;
@@ -3783,11 +4020,10 @@ function eventoAjustarCreditos() {
       mostrarMensajeUsuario("Créditos debe ser un entero.");
       return;
     }
-    creditosPorArea.set(area, (creditosPorArea.get(area) ?? 0) + creditos);
     registros.push({ area, creditos });
     actualizarRegistros();
     reconstruirEstadoPagina();
-    renderizarPlanificacionSiActiva();
+    actualizarPlanificacionTrasCambioConfiguracion();
   }  
 }
 
@@ -3851,28 +4087,17 @@ async function firstLoad() {
   }
   if (leerLocalStorage(FC.nombre) == "true") {
     document.getElementById("mi-toggle-plan").checked = true;
-    if (Materias.includes(FC)) {
-      Materias = Materias.filter(materia => materia !== FC)
-      Materias = Materias.filter(materia => materia !== IC)
-      Materias.push(MD1)
-    } else {
-      Materias = Materias.filter(materia => materia !== MD1)
-      Materias.push(FC);
-      Materias.push(IC);
-    }
+    Materias = Materias.filter(materia => materia !== MD1)
+    Materias.push(IC);
   }
   const registrosGuardados = leerJsonLocalStorage("registros", []);
-  const creditosPorAreaGuardados = leerJsonLocalStorage("creditosPorArea", []);
-  const registrosValidos = Array.isArray(registrosGuardados) ? registrosGuardados.filter(esRegistroCreditoValido) : [];
+  const registrosValidos = Array.isArray(registrosGuardados)
+    ? registrosGuardados
+      .filter(esRegistroCreditoValido)
+      .map(({ area, creditos }) => ({ area, creditos }))
+    : [];
   registros.splice(0, registros.length, ...registrosValidos);
-  creditosPorArea.clear();
-  if (Array.isArray(creditosPorAreaGuardados)) {
-    creditosPorAreaGuardados.forEach((entrada) => {
-      if (Array.isArray(entrada) && typeof entrada[0] === "string" && Number.isFinite(entrada[1])) {
-        creditosPorArea.set(entrada[0], entrada[1]);
-      }
-    });
-  }
+  actualizarRegistros();
   rehacerPaginaSinEstado();
   reconstruirEstadoPagina();
   normalizarYGuardarPlanificacion();
