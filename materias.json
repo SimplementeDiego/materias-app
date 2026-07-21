@@ -413,7 +413,7 @@
     "obligatoriaAnalista1997": false,
     "obligatoriaIngenieria2025": false,
     "esLibre": true,
-    "seDa": false,
+    "seDa": true,
     "informacion": [
       {
         "nombre": "Eva",
