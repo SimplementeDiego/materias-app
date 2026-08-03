@@ -145,6 +145,41 @@ describe("Materias", () => {
         cy.get("#titulo-principal-texto").should("contain", "0");
     });
 
+    it("muestra GitHub y LinkedIn al pie de la barra lateral", () => {
+        cy.viewport(1280, 800);
+        cy.reload();
+
+        cy.get("#redes-sociales").should("be.visible").within(() => {
+            cy.get("#github-link")
+                .should("have.attr", "aria-label", "GitHub")
+                .find("img")
+                .should("be.visible")
+                .and(($imagen) => {
+                    expect($imagen[0].naturalWidth).to.be.greaterThan(0);
+                });
+            cy.get("#linkedin-link")
+                .should("have.attr", "aria-label", "LinkedIn")
+                .find("img")
+                .should("be.visible")
+                .and(($imagen) => {
+                    expect($imagen[0].naturalWidth).to.be.greaterThan(0);
+                });
+        });
+
+        cy.get("#cuenta-firebase").next().should("have.id", "redes-sociales");
+
+        cy.get("#navbar").then(($navbar) => {
+            cy.get("#redes-sociales").then(($redes) => {
+                const navbar = $navbar[0].getBoundingClientRect();
+                const redes = $redes[0].getBoundingClientRect();
+                expect(navbar.bottom - redes.bottom).to.be.closeTo(20, 1);
+            });
+        });
+
+        cy.get('label[for="mi-toggle-modo-oscuro"]').click();
+        cy.get("#github-link .red-social-icono").should("not.have.css", "filter", "none");
+    });
+
     it("muestra Proyecto de Grado solo en la ultima seccion", () => {
         materiaVisible("PG");
         cy.get("#secciones > .container-seccion").last().within(() => {
@@ -1011,6 +1046,47 @@ describe("Planificacion", () => {
             .and("have.class", "materia-fuera-semestre");
     });
 
+    it("solo usa resultados de periodos anteriores para ofrecer materias", () => {
+        estadoInicial({
+            planificacion: [
+                {
+                    semestre: "primero",
+                    materias: [{ nombre: "P2", resultado: "curso" }],
+                    abierto: true,
+                    elegirMateriasAbierto: true,
+                    mostrarMateriasNoDictadas: true,
+                },
+                {
+                    semestre: "segundo",
+                    materias: [
+                        { nombre: "PI", resultado: "exonerada" },
+                        { nombre: "P2", resultado: "curso" },
+                    ],
+                    abierto: true,
+                    elegirMateriasAbierto: true,
+                    mostrarMateriasNoDictadas: true,
+                },
+                {
+                    semestre: "primero",
+                    materias: [],
+                    abierto: true,
+                    elegirMateriasAbierto: true,
+                    mostrarMateriasNoDictadas: true,
+                },
+            ],
+        });
+        irAPlanificacion();
+
+        materiasSeleccionadasPeriodo(0).should("contain", "Sin materias seleccionadas");
+        materiasSeleccionadasPeriodo(1).should("not.contain", "Programación 2");
+        periodo(0).find(".planificador-elegir-materias").should("not.contain", "Programación 2");
+        periodo(1).find(".planificador-elegir-materias").should("not.contain", "Programación 2");
+        periodo(2).find(".planificador-elegir-materias")
+            .contains("button", /Programaci.n 2 \(12\)/)
+            .scrollIntoView()
+            .should("be.visible");
+    });
+
     it("normaliza la planificacion al cambiar el estado actual con la pestaña cerrada", () => {
         estadoInicial({
             aprobadas: ["P1"],
@@ -1033,7 +1109,7 @@ describe("Planificacion", () => {
         });
     });
 
-    it("elimina la equivalente exonerada y recalcula los periodos posteriores", () => {
+    it("mantiene independientes las materias equivalentes del mismo periodo", () => {
         estadoInicial({
             planificacion: [
                 {
@@ -1060,7 +1136,7 @@ describe("Planificacion", () => {
 
         materiasSeleccionadasPeriodo(0).contains("button", /Programaci.n Imperativa \(10\)/).click();
 
-        materiasSeleccionadasPeriodo(0).should("not.contain", "Programación 1");
+        materiasSeleccionadasPeriodo(0).should("contain", "Programación 1");
         materiasSeleccionadasPeriodo(0).contains("button", /Programaci.n Imperativa \(10\)/)
             .should("have.css", "background-color", COLOR.exonerada);
         materiasSeleccionadasPeriodo(1).should("contain", "Programación 2");
@@ -1069,17 +1145,20 @@ describe("Planificacion", () => {
 
         materiasSeleccionadasPeriodo(0).contains("button", /Programaci.n Imperativa \(10\)/).click();
 
-        materiasSeleccionadasPeriodo(1).should("contain", "Sin materias seleccionadas");
+        materiasSeleccionadasPeriodo(1).should("contain", "Programación 2");
         cy.window().then((win) => {
             const planificacion = JSON.parse(win.localStorage.getItem("planificacionSemestres"));
             expect(planificacion[0].materias).to.deep.equal([
+                { nombre: "P1", resultado: "curso" },
                 { nombre: "PI", resultado: "habilitada" },
             ]);
-            expect(planificacion[1].materias).to.deep.equal([]);
+            expect(planificacion[1].materias).to.deep.equal([
+                { nombre: "P2", resultado: "habilitada" },
+            ]);
         });
     });
 
-    it("al exonerar PI despues elimina solo el curso de P1 y conserva el de P2", () => {
+    it("una exoneracion posterior no modifica periodos anteriores", () => {
         estadoInicial({
             planificacion: [
                 {
@@ -1106,13 +1185,15 @@ describe("Planificacion", () => {
 
         materiasSeleccionadasPeriodo(2).contains("button", /Programaci.n Imperativa \(10\)/).click();
 
-        materiasSeleccionadasPeriodo(0).should("contain", "Sin materias seleccionadas");
+        materiasSeleccionadasPeriodo(0).should("contain", "Programación 1");
         materiasSeleccionadasPeriodo(1).should("contain", "Programación 2");
         materiasSeleccionadasPeriodo(2).contains("button", /Programaci.n Imperativa \(10\)/)
             .should("have.css", "background-color", COLOR.exonerada);
         cy.window().then((win) => {
             const planificacion = JSON.parse(win.localStorage.getItem("planificacionSemestres"));
-            expect(planificacion[0].materias).to.deep.equal([]);
+            expect(planificacion[0].materias).to.deep.equal([
+                { nombre: "P1", resultado: "curso" },
+            ]);
             expect(planificacion[1].materias).to.deep.equal([
                 { nombre: "P2", resultado: "curso" },
             ]);
@@ -1124,13 +1205,15 @@ describe("Planificacion", () => {
         cy.reload();
 
         cy.get("#planificacion").should("have.class", "activo");
-        materiasSeleccionadasPeriodo(0).should("contain", "Sin materias seleccionadas");
+        materiasSeleccionadasPeriodo(0).should("contain", "Programación 1");
         materiasSeleccionadasPeriodo(1).should("contain", "Programación 2");
         materiasSeleccionadasPeriodo(2).contains("button", /Programaci.n Imperativa \(10\)/)
             .should("have.css", "background-color", COLOR.exonerada);
         cy.window().then((win) => {
             const planificacion = JSON.parse(win.localStorage.getItem("planificacionSemestres"));
-            expect(planificacion[0].materias).to.deep.equal([]);
+            expect(planificacion[0].materias).to.deep.equal([
+                { nombre: "P1", resultado: "curso" },
+            ]);
             expect(planificacion[1].materias).to.deep.equal([
                 { nombre: "P2", resultado: "curso" },
             ]);
@@ -1141,10 +1224,10 @@ describe("Planificacion", () => {
 
         materiasSeleccionadasPeriodo(2).contains("button", /Programaci.n Imperativa \(10\)/).click();
 
-        materiasSeleccionadasPeriodo(1).should("contain", "Sin materias seleccionadas");
+        materiasSeleccionadasPeriodo(1).should("contain", "Programación 2");
     });
 
-    it("ofrece P2 en un periodo intermedio si PI queda exonerada despues", () => {
+    it("ofrece P2 en un periodo intermedio por el curso previo de P1", () => {
         estadoInicial({
             planificacion: [
                 {
@@ -1174,7 +1257,7 @@ describe("Planificacion", () => {
             .should("be.visible");
     });
 
-    it("reemplaza una exoneracion equivalente sin perder materias que siguen habilitadas", () => {
+    it("una exoneracion previa impide planificar su equivalente despues", () => {
         estadoInicial({
             planificacion: [
                 {
@@ -1201,33 +1284,33 @@ describe("Planificacion", () => {
         });
         irAPlanificacion();
 
-        materiasSeleccionadasPeriodo(0).should("contain", "Sin materias seleccionadas");
+        materiasSeleccionadasPeriodo(0).contains("button", /Programaci.n 1 \(10\)/)
+            .should("have.css", "background-color", COLOR.exonerada);
         materiasSeleccionadasPeriodo(1).contains("button", /Programaci.n 2 \(12\)/)
             .should("have.css", "background-color", COLOR.exonerada);
         materiasSeleccionadasPeriodo(2).contains("button", /Did.ctica de Algoritmos/)
             .should("have.css", "background-color", COLOR.aprobada);
-        materiasSeleccionadasPeriodo(3).contains("button", /Programaci.n Imperativa \(10\)/)
-            .should("have.css", "background-color", COLOR.exonerada);
+        materiasSeleccionadasPeriodo(3).should("contain", "Sin materias seleccionadas");
         cy.window().then((win) => {
             const planificacion = JSON.parse(win.localStorage.getItem("planificacionSemestres"));
-            expect(planificacion[0].materias).to.deep.equal([]);
+            expect(planificacion[0].materias).to.deep.equal([
+                { nombre: "P1", resultado: "exonerada" },
+            ]);
             expect(planificacion[1].materias).to.deep.equal([
                 { nombre: "P2", resultado: "exonerada" },
             ]);
             expect(planificacion[2].materias).to.deep.equal([
                 { nombre: "DAED", resultado: "curso" },
             ]);
-            expect(planificacion[3].materias).to.deep.equal([
-                { nombre: "PI", resultado: "exonerada" },
-            ]);
+            expect(planificacion[3].materias).to.deep.equal([]);
         });
 
         cy.reload();
 
-        materiasSeleccionadasPeriodo(0).should("contain", "Sin materias seleccionadas");
+        materiasSeleccionadasPeriodo(0).should("contain", "Programación 1");
         materiasSeleccionadasPeriodo(1).should("contain", "Programación 2");
         materiasSeleccionadasPeriodo(2).should("contain", "Didáctica de Algoritmos");
-        materiasSeleccionadasPeriodo(3).should("contain", "Programación Imperativa");
+        materiasSeleccionadasPeriodo(3).should("contain", "Sin materias seleccionadas");
     });
 
     it("descarta un examen invalido de P1 sin eliminar el curso planificado de PI", () => {
@@ -1303,7 +1386,7 @@ describe("Planificacion", () => {
             .should("have.css", "background-color", COLOR.exonerada);
     });
 
-    it("elimina de la planificacion una materia que deja de cumplir una regla negativa", () => {
+    it("conserva materias anteriores aunque una regla negativa cambie despues", () => {
         estadoInicial({
             planificacion: [
                 {
@@ -1325,14 +1408,14 @@ describe("Planificacion", () => {
         });
         irAPlanificacion();
 
-        materiasSeleccionadasPeriodo(0).should("contain", "Sin materias seleccionadas");
+        materiasSeleccionadasPeriodo(0).should("contain", "Herramientas de Modelización y Análisis");
         materiasSeleccionadasPeriodo(1).should("contain", "Matemática Discreta 1");
         materiasSeleccionadasPeriodo(2).should("contain", "Lógica");
         periodo(2).find("> summary").should("contain", "total 12");
 
         cy.reload();
 
-        materiasSeleccionadasPeriodo(0).should("contain", "Sin materias seleccionadas");
+        materiasSeleccionadasPeriodo(0).should("contain", "Herramientas de Modelización y Análisis");
         materiasSeleccionadasPeriodo(1).should("contain", "Matemática Discreta 1");
         materiasSeleccionadasPeriodo(2).should("contain", "Lógica");
     });
@@ -1787,5 +1870,31 @@ describe("Mobile", () => {
                 expect($actual[0].getBoundingClientRect().top).to.be.at.most(topAntes);
             });
         });
+    });
+
+    it("muestra ambas redes en una fila propia de la navbar", () => {
+        cy.get("#label-ham").click();
+
+        cy.get("#navbar").then(($navbar) => {
+            cy.get("#redes-sociales").should("be.visible").then(($redes) => {
+                const navbar = $navbar[0].getBoundingClientRect();
+                const redes = $redes[0].getBoundingClientRect();
+                expect(redes.width).to.be.closeTo(navbar.width, 1);
+            });
+        });
+
+        cy.get("#redes-sociales .red-social-link").should("have.length", 2).then(($links) => {
+            expect($links[0].getBoundingClientRect().width).to.be.closeTo($links[1].getBoundingClientRect().width, 1);
+        });
+    });
+
+    it("mantiene el comportamiento mobile en el limite de 675px", () => {
+        cy.viewport(675, 800);
+        cy.reload();
+
+        cy.get("#titulo-principal-checkbox-container").should("be.visible");
+        cy.get("#navbar").should("not.be.visible");
+        cy.get("#label-ham").click();
+        cy.get("#navbar").should("be.visible");
     });
 });

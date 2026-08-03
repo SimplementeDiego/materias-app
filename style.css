@@ -101,7 +101,8 @@ textarea {
 }
 
 body.modo-oscuro #img-ham,
-body.modo-oscuro .icono-basura {
+body.modo-oscuro .icono-basura,
+body.modo-oscuro #github-link .red-social-icono {
     filter: invert(1) brightness(1.1);
 }
 
@@ -171,11 +172,13 @@ header {
     align-items: center;
     max-width: 250px;
     min-width: 200px;
+    overflow-y: auto;
 }
 
 .navbar-boton {
     width: 80%;
     height: 40px;
+    flex: 0 0 40px;
     border: none;
     background-color: var(--color-boton-neutro);
     color: var(--color-texto);
@@ -248,6 +251,53 @@ header {
 .link-boton:focus {
     color: var(--color-texto) !important;
     text-decoration: none;
+}
+
+#redes-sociales {
+    width: 80%;
+    min-height: 40px;
+    margin-top: auto;
+    margin-bottom: 20px;
+    display: flex;
+    flex: 0 0 40px;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    background-color: var(--color-boton-neutro);
+    border-radius: 5px;
+    box-shadow: 0 1px 2px var(--color-sombra);
+}
+
+.red-social-link {
+    width: 50%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--color-texto);
+}
+
+.red-social-link + .red-social-link {
+    border-left: 1px solid var(--color-borde);
+}
+
+.red-social-link[href] {
+    cursor: pointer;
+}
+
+.red-social-link[href]:hover {
+    background-color: var(--color-superficie);
+}
+
+.red-social-link[href]:focus-visible {
+    outline: 3px solid var(--color-focus);
+    outline-offset: -3px;
+}
+
+.red-social-icono {
+    width: 22px;
+    height: 22px;
+    object-fit: contain;
 }
 
 
@@ -1142,6 +1192,13 @@ main {
 
     .navbar-boton:active {
         transform: none;
+    }
+
+    #redes-sociales {
+        width: 100%;
+        margin: 0;
+        border-radius: 0;
+        box-shadow: none;
     }
 
     main {

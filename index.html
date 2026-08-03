@@ -6,7 +6,7 @@
     <meta name="description" content="Materias Computación">
     <title>Materias</title>
     <link rel="icon" type="image/x-icon" href="/icons/bookmark.ico">
-    <link rel="stylesheet" href="style.css?v=2">
+    <link rel="stylesheet" href="style.css?v=3">
 </head>
 <body>
     
@@ -35,6 +35,14 @@
             <button onclick="copiarDatosAlClipboard()" id="copiar-datos" class="navbar-boton">Copiar datos</button>
             <button onclick="abrirImportarDatos()" id="importar-datos" class="navbar-boton">Cargar datos</button>
             <button onclick="abrirCuentaFirebase()" id="cuenta-firebase" class="navbar-boton">Cuenta (Opcional)</button>
+            <div id="redes-sociales" role="group" aria-label="Redes sociales">
+                <a id="github-link" class="red-social-link" aria-label="GitHub" title="GitHub" target="_blank" rel="noopener noreferrer" href="https://github.com/SimplementeDiego/materias-app">
+                    <img src="icons/github.webp" alt="" class="red-social-icono">
+                </a>
+                <a id="linkedin-link" class="red-social-link" aria-label="LinkedIn" title="LinkedIn" target="_blank" rel="noopener noreferrer" href="https://www.linkedin.com/in/diego-furrer-dellepiane/">
+                    <img src="icons/linkedin.webp" alt="" class="red-social-icono">
+                </a>
+            </div>
         </nav>
 
         <div id="secciones">
@@ -285,7 +293,7 @@
     </main>
 
     <script src="./firebase-config.js?v=2"></script>
-    <script src="./app.js?v=2"></script>
+    <script src="./app.js?v=3"></script>
 
 </body>
 </html>

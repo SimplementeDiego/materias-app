@@ -520,7 +520,7 @@ function popUpGeneral(nombreMateria, valor) {
 }
 
 function isMobileDevice(){
-  return !window.matchMedia("(min-width: 675px)").matches;
+  return !window.matchMedia("(min-width: 676px)").matches;
 }
 
 function isNavbarOpen() {
@@ -2974,9 +2974,9 @@ function normalizarExoneradasBasePlanificacion() {
   planificacionExoneradasBase = estadoValido.exoneradas;
 }
 
-function obtenerContextoPlanificacion(indiceSemestre, incluirEquivalenciasFuturas = true) {
-  const aprobadas = obtenerAprobadasBasePlanificacion();
-  const exoneradas = obtenerExoneradasBasePlanificacion();
+function obtenerContextoPlanificacion(indiceSemestre, incluirEquivalenciasFuturas = false) {
+  let aprobadas = obtenerAprobadasBasePlanificacion();
+  let exoneradas = obtenerExoneradasBasePlanificacion();
   exoneradas.forEach((nombreMateria) => aprobadas.add(nombreMateria));
   const yaConsideradas = new Set([...aprobadas, ...exoneradas]);
   if (incluirEquivalenciasFuturas) {
@@ -2987,39 +2987,34 @@ function obtenerContextoPlanificacion(indiceSemestre, incluirEquivalenciasFutura
       yaConsideradas.add(nombreMateria);
     });
   }
+  let estadoValido = obtenerEstadoTemporalValido(aprobadas, exoneradas, planificacionUsaEstadoActual);
+  aprobadas = estadoValido.aprobadas;
+  exoneradas = estadoValido.exoneradas;
 
   for (let i = 0; i < indiceSemestre; i++) {
     const semestrePlanificado = planificacionSemestres[i];
     (semestrePlanificado?.materias ?? []).forEach((materiaPlanificada) => {
       aplicarMateriaAlContextoPlanificacion(materiaPlanificada, semestrePlanificado?.semestre, aprobadas, exoneradas, yaConsideradas);
     });
+    estadoValido = obtenerEstadoTemporalValido(aprobadas, exoneradas, planificacionUsaEstadoActual);
+    aprobadas = estadoValido.aprobadas;
+    exoneradas = estadoValido.exoneradas;
   }
 
-  const estadoValido = obtenerEstadoTemporalValido(aprobadas, exoneradas, planificacionUsaEstadoActual);
-  return { ...estadoValido, yaConsideradas };
+  return { aprobadas, exoneradas, yaConsideradas };
 }
 
 function normalizarPlanificacionUnaVez() {
   const planificacionNormalizada = [];
-  const aprobadas = obtenerAprobadasBasePlanificacion();
-  const exoneradas = obtenerExoneradasBasePlanificacion();
+  let aprobadas = obtenerAprobadasBasePlanificacion();
+  let exoneradas = obtenerExoneradasBasePlanificacion();
   exoneradas.forEach((nombreMateria) => aprobadas.add(nombreMateria));
   const yaConsideradas = new Set([...aprobadas, ...exoneradas]);
-  const { equivalentesExoneradas, equivalentesAExcluir } = obtenerEquivalenciasExoneradasPlanificadas();
-  const exoneradasPrevias = new Set(exoneradas);
-  const equivalentesConCursoPrevio = new Set(
-    [...aprobadas].filter((nombreMateria) => equivalentesExoneradas.has(nombreMateria))
-  );
-  equivalentesExoneradas.forEach((nombreMateria) => {
-    aprobadas.add(nombreMateria);
-    exoneradas.add(nombreMateria);
-  });
   const incluirCreditosActuales = planificacionUsaEstadoActual;
 
   planificacionSemestres.forEach((semestrePlanificado) => {
     const semestre = normalizarSemestrePlanificado(semestrePlanificado?.semestre);
-    const materiasOriginales = Array.isArray(semestrePlanificado?.materias) ? semestrePlanificado.materias : [];
-    const materias = filtrarMateriasEquivalentesPorExoneracion(materiasOriginales, equivalentesAExcluir);
+    const materias = Array.isArray(semestrePlanificado?.materias) ? semestrePlanificado.materias : [];
     const materiasValidas = [];
     const nombresValidos = new Set();
 
@@ -3030,18 +3025,10 @@ function normalizarPlanificacionUnaVez() {
       if (!materia || nombresValidos.has(nombreMateria)) {
         return;
       }
-      const aprobadasParaValidar = new Set(aprobadas);
-      const exoneradasParaValidar = new Set(exoneradas);
-      if (equivalentesExoneradas.has(nombreMateria)) {
-        exoneradasParaValidar.delete(nombreMateria);
-        if (!equivalentesConCursoPrevio.has(nombreMateria)) {
-          aprobadasParaValidar.delete(nombreMateria);
-        }
-      }
       const esExamen = esPeriodoExamenesPlanificado(semestre);
       const materiaValidaParaPeriodo = esExamen
-        ? !exoneradasPrevias.has(nombreMateria) && materiaHabilitadaParaExamen(materia, aprobadasParaValidar, exoneradasParaValidar, incluirCreditosActuales)
-        : !yaConsideradas.has(nombreMateria) && materiaHabilitadaParaPlan(materia, aprobadasParaValidar, exoneradasParaValidar, incluirCreditosActuales);
+        ? !exoneradas.has(nombreMateria) && materiaHabilitadaParaExamen(materia, aprobadas, exoneradas, incluirCreditosActuales)
+        : !yaConsideradas.has(nombreMateria) && materiaHabilitadaParaPlan(materia, aprobadas, exoneradas, incluirCreditosActuales);
       if (!materiaValidaParaPeriodo) {
         return;
       }
@@ -3051,19 +3038,14 @@ function normalizarPlanificacionUnaVez() {
 
     materiasValidas.forEach((materiaPlanificada) => {
       aplicarMateriaAlContextoPlanificacion(materiaPlanificada, semestre, aprobadas, exoneradas, yaConsideradas);
-      const nombreMateria = obtenerNombreMateriaPlanificada(materiaPlanificada);
-      const resultado = obtenerResultadoMateriaPlanificada(materiaPlanificada, semestre);
-      if (
-        equivalentesExoneradas.has(nombreMateria) &&
-        (resultado === ResultadoPlanificado.CURSO || resultado === ResultadoPlanificado.EXONERADA)
-      ) {
-        equivalentesConCursoPrevio.add(nombreMateria);
-      }
-      if (resultado === ResultadoPlanificado.EXONERADA) {
-        exoneradasPrevias.delete(obtenerNombreMateriaEquivalente(nombreMateria));
-        exoneradasPrevias.add(nombreMateria);
-      }
     });
+    const estadoPosterior = obtenerEstadoTemporalValido(
+      aprobadas,
+      exoneradas,
+      incluirCreditosActuales
+    );
+    aprobadas = estadoPosterior.aprobadas;
+    exoneradas = estadoPosterior.exoneradas;
 
     planificacionNormalizada.push({
       semestre,
@@ -3073,32 +3055,6 @@ function normalizarPlanificacionUnaVez() {
       elegirMateriasAbierto: semestrePlanificado?.elegirMateriasAbierto === true,
       mostrarMateriasNoDictadas: semestrePlanificado?.mostrarMateriasNoDictadas === true,
       mostrarOpcionales: semestrePlanificado?.mostrarOpcionales !== false,
-    });
-  });
-
-  const aprobadasFinales = new Set(aprobadas);
-  equivalentesExoneradas.forEach((nombreMateria) => {
-    if (!equivalentesConCursoPrevio.has(nombreMateria)) {
-      aprobadasFinales.delete(nombreMateria);
-    }
-  });
-  const estadoFinal = obtenerEstadoTemporalValido(
-    aprobadasFinales,
-    exoneradasPrevias,
-    incluirCreditosActuales
-  );
-  ejecutarConEstadoTemporal(estadoFinal.aprobadas, estadoFinal.exoneradas, incluirCreditosActuales, () => {
-    planificacionNormalizada.forEach((periodo) => {
-      periodo.materias = periodo.materias.filter((materiaPlanificada) => {
-        const nombreMateria = obtenerNombreMateriaPlanificada(materiaPlanificada);
-        const materia = encontrarMateriaPorNombre(nombreMateria);
-        const resultado = obtenerResultadoMateriaPlanificada(materiaPlanificada, periodo.semestre);
-        if (!materia || !evaluarRegla(materia.reglaHabilitacion).cumple) return false;
-        if (resultado === ResultadoPlanificado.EXONERADA) {
-          return estadoFinal.exoneradas.has(nombreMateria);
-        }
-        return resultado !== ResultadoPlanificado.CURSO || estadoFinal.aprobadas.has(nombreMateria);
-      });
     });
   });
 
@@ -3122,19 +3078,12 @@ function normalizarYGuardarPlanificacion() {
 function obtenerMateriasDisponiblesParaPlan(indiceSemestre) {
   const semestrePlanificado = planificacionSemestres[indiceSemestre];
   const seleccionadasActuales = new Set(obtenerNombresMateriasPlanificadas(semestrePlanificado?.materias ?? []));
-  const exoneradasActuales = new Set(obtenerNombresExoneradasPlanificadas(
-    semestrePlanificado?.materias ?? [],
-    semestrePlanificado?.semestre
-  ));
   const { aprobadas, exoneradas, yaConsideradas } = obtenerContextoPlanificacion(indiceSemestre);
-  const { equivalentesAExcluir } = obtenerEquivalenciasExoneradasPlanificadas();
   const esExamen = esPeriodoExamenesPlanificado(semestrePlanificado?.semestre);
   const incluirCreditosActuales = planificacionUsaEstadoActual;
 
   return Materias.filter((materia) => (
     !seleccionadasActuales.has(materia.nombre) &&
-    !equivalentesAExcluir.has(materia.nombre) &&
-    !exoneradasActuales.has(obtenerNombreMateriaEquivalente(materia.nombre)) &&
     (
       esExamen
         ? !exoneradas.has(materia.nombre) && materiaHabilitadaParaExamen(materia, aprobadas, exoneradas, incluirCreditosActuales)
@@ -3905,7 +3854,7 @@ document.addEventListener("scroll", function() {
 // Funciones y eventos de manejo de tamaño de ventana
 
 function checkWidth() {
-  if (window.matchMedia("(min-width: 675px)").matches) {
+  if (window.matchMedia("(min-width: 676px)").matches) {
     displayNone(idHamContainer);
     displayFlex(idNavbar);
   } else {
