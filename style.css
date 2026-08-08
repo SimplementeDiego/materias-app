@@ -193,6 +193,13 @@ header {
     transform: scale(0.95);
 }
 
+.popup-materia-boton-barra-superior,
+#boton-agregar-creditos,
+#boton-cargar-datos {
+    background-color: var(--color-boton-neutro);
+    color: var(--color-texto);
+}
+
 .activo {
     background-color: var(--color-activo);
 }
