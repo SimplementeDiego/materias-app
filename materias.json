@@ -2316,6 +2316,50 @@
     ]
   },
   {
+    "id": "FCSID",
+    "nombreCompleto": "Fundamentos para la Construcción de Sistemas de Información Descentralizados",
+    "creditos": 8,
+    "creditosPorArea": [
+      {
+        "area": "creditosEnBD_SI",
+        "creditos": 8
+      }
+    ],
+    "reglaHabilitacion": {
+      "tipo": "todas",
+      "reglas": [
+        {
+          "tipo": "materiaAprobada",
+          "materia": "TP"
+        },
+        {
+          "tipo": "materiaExonerada",
+          "materia": "FBD"
+        },
+        {
+          "tipo": "materiaAprobada",
+          "materia": "RC"
+        }
+      ]
+    },
+    "semestre": "segundo",
+    "obligatoriaIngenieria1997": false,
+    "obligatoriaAnalista1997": false,
+    "obligatoriaIngenieria2025": false,
+    "esLibre": false,
+    "seDa": true,
+    "informacion": [
+      {
+        "nombre": "Eva",
+        "valor": "https://eva.fing.edu.uy/course/view.php?id=2080"
+      },
+      {
+        "nombre": "Programa",
+        "valor": "https://eva.fing.edu.uy/pluginfile.php/114602/mod_resource/content/1/Programa%20del%20curso.pdf"
+      }
+    ]
+  },
+  {
     "id": "TMPN",
     "nombreCompleto": "Taller de Minería de Procesos de Negocio",
     "creditos": 8,
