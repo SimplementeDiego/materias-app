@@ -737,6 +737,8 @@ main {
 .form-cuenta-firebase button,
 .decision-cuenta-firebase button,
 #boton-firebase-logout {
+    background-color: var(--color-boton-neutro);
+    color: var(--color-texto);
     cursor: pointer;
     padding: 8px;
     width: 100%;
