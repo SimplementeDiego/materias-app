@@ -2001,12 +2001,12 @@
         }
       ]
     },
-    "semestre": "primero",
+    "semestre": "segundo",
     "obligatoriaIngenieria1997": false,
     "obligatoriaAnalista1997": false,
     "obligatoriaIngenieria2025": false,
     "esLibre": false,
-    "seDa": false,
+    "seDa": true,
     "informacion": [
       {
         "nombre": "Eva",
