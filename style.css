@@ -218,6 +218,7 @@ header {
 
 #cuenta-firebase {
     background-color: var(--color-cuenta-firebase);
+    margin-bottom: 20px;
 }
 
 #avance {
