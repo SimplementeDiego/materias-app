@@ -1894,6 +1894,7 @@ describe("Mobile", () => {
         estadoInicial();
         cy.viewport(390, 800);
         cy.reload();
+        cy.get("#CDIV").should("exist");
     });
 
     it("abre el menu sin empujar el contenido", () => {
@@ -1928,6 +1929,7 @@ describe("Mobile", () => {
     it("mantiene el comportamiento mobile en el limite de 675px", () => {
         cy.viewport(675, 800);
         cy.reload();
+        cy.get("#CDIV").should("exist");
 
         cy.get("#titulo-principal-checkbox-container").should("be.visible");
         cy.get("#navbar").should("not.be.visible");

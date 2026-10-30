@@ -50,11 +50,10 @@ const comprobarLimitesMaximizado = (movil = false) => {
         });
         expect(header.contains(doc.elementFromPoint(encabezado.left + 20, encabezado.top + encabezado.height / 2)))
             .to.equal(true);
-        if (!movil) {
-            const boton = doc.getElementById("materias").getBoundingClientRect();
-            expect(doc.getElementById("navbar").contains(doc.elementFromPoint(boton.left + boton.width / 2, boton.top + boton.height / 2)))
-                .to.equal(true);
-        }
+        const contenedorNavegacion = doc.getElementById(movil ? "label-ham" : "navbar");
+        const boton = doc.getElementById(movil ? "label-ham" : "materias").getBoundingClientRect();
+        expect(contenedorNavegacion.contains(doc.elementFromPoint(boton.left + boton.width / 2, boton.top + boton.height / 2)))
+            .to.equal(true);
     });
 };
 
@@ -271,6 +270,9 @@ describe("Árbol de materias", () => {
     });
 
     it("permite aislar una rama y volver al árbol completo", () => {
+        let encuadreCompleto;
+        cy.get("#grafo-ajustar").click();
+        cy.get("#grafo-escena").invoke("attr", "transform").then((transform) => { encuadreCompleto = transform; });
         seleccionarMateria("P2", "P2");
         cy.get(".grafo-arista").then(($aristas) => {
             const rutas = new Map(Array.from($aristas, (elemento) => [claveArista(elemento), elemento.getAttribute("d")]));
@@ -287,6 +289,9 @@ describe("Árbol de materias", () => {
         cy.get("#grafo-ver-todo").click();
         cy.get("#grafo-solo-rama").should("not.be.checked");
         cy.get(".grafo-nodo").should("have.length", 103);
+        cy.get("#grafo-escena").should(($escena) => {
+            expect($escena.attr("transform")).to.equal(encuadreCompleto);
+        });
     });
 
     it("acerca, aleja y ajusta el grafo", () => {
@@ -550,45 +555,163 @@ describe("Árbol de materias", () => {
         cy.get("#vista-avance").should("be.visible");
     });
 
-    it("permite buscar, abrir Más info y maximizar sin tapar el encabezado en una pantalla móvil", () => {
+    it("en móvil abre Árbol desde el menú y restaura la sesión y el progreso al recargar", () => {
         cy.viewport(390, 844);
+        cy.visit("/", {
+            onBeforeLoad(win) {
+                win.localStorage.clear();
+                win.localStorage.setItem("materiasAprobadas", JSON.stringify(["CDIV"]));
+                win.localStorage.setItem("materiasExoneradas", JSON.stringify(["CDIV"]));
+                win.localStorage.setItem("seleccionOpcionales", "false");
+            },
+        });
+        cy.get("#materias").should("have.class", "activo");
+        cy.get("#CDIV").should("be.visible").and("have.css", "background-color", "rgb(144, 238, 144)");
+        cy.get("#label-ham").click();
+        cy.get("#navbar").should("be.visible");
+        cy.get("#grafo").should("be.visible").and("contain.text", "Árbol");
+        abrirGrafo();
+        cy.get("#navbar").should("not.be.visible");
+        cy.get(nodo("CDIV")).should("have.attr", "data-estado", "exonerada");
+        cy.get(nodo("PIS")).should("exist");
+        cy.get(nodo("F1")).should("not.exist");
+        cy.reload();
+        cy.get("#vista-grafo").should("be.visible");
+        cy.get("#grafo-svg").should("be.visible");
+        cy.get("#grafo").should("have.class", "activo");
+        cy.get("#navbar").should("not.be.visible");
+        cy.get(nodo("CDIV")).should("have.attr", "data-estado", "exonerada");
+        cy.get(nodo("F1")).should("not.exist");
+        capturarGrafo("grafo-mobile-normal", { capture: "viewport" });
+        cy.window().then((win) => {
+            expect(JSON.parse(win.localStorage.getItem("materiasAprobadas"))).to.deep.equal(["CDIV"]);
+            expect(JSON.parse(win.localStorage.getItem("materiasExoneradas"))).to.deep.equal(["CDIV"]);
+            expect(win.localStorage.getItem("seleccionOpcionales")).to.equal("false");
+            expect(win.localStorage.getItem("vistaSeleccionada")).to.equal("grafo");
+        });
+    });
+
+    it("en móvil busca y cambia la selección dentro del recorrido sin mover la cámara", () => {
+        cy.viewport(390, 844);
+        cy.reload();
+        cy.get("#grafo-svg").should("be.visible");
+        cy.get("#grafo-escena").invoke("attr", "transform").then((camara) => {
+            seleccionarMateria("P1", "P1");
+            cy.get("#grafo-escena").should("have.attr", "transform", camara);
+        });
+        cy.get(nodo("P1")).should("have.attr", "aria-pressed", "true");
+        cy.get("#grafo-solo-rama").check();
+        cy.get(nodo("F1")).should("not.exist");
+        cy.get(".grafo-nodo").its("length").should("be.lessThan", 103);
+        cy.document().then((doc) => {
+            const camara = doc.getElementById("grafo-escena").getAttribute("transform");
+            const zoom = doc.getElementById("grafo-zoom").textContent;
+            const rutas = new Map(Array.from(doc.querySelectorAll(".grafo-arista"), (elemento) => [claveArista(elemento), elemento.getAttribute("d")]));
+            seleccionarMateria("P2", "P2");
+            cy.get("#grafo-escena").should("have.attr", "transform", camara);
+            cy.get("#grafo-zoom").should("have.text", zoom);
+            comprobarRutasEstables(rutas);
+        });
+        cy.get(nodo("P2")).should("have.attr", "aria-pressed", "true");
+        cy.get("#grafo-solo-rama").should("be.checked");
+        cy.get("#grafo-ver-todo").click();
+        cy.get("#grafo-solo-rama").should("not.be.checked");
+        cy.get("#grafo-mas-info").should("not.be.visible");
+        cy.get(".grafo-nodo").should("have.length", 103);
+    });
+
+    it("en móvil muestra controles sin solaparlos, abre Más info y permite maximizar y restaurar", () => {
+        cy.viewport(390, 844);
+        cy.reload();
         cy.get("#grafo-svg").should("be.visible");
         seleccionarMateria("P2", "P2");
+        cy.document().then((doc) => {
+            const mapa = doc.querySelector(".grafo-lienzo").getBoundingClientRect();
+            const controles = ["#grafo-buscar", ".grafo-rama-control", "#grafo-ver-todo", "#grafo-mas-info", "#grafo-maximizar"]
+                .map((selector) => ({ selector, caja: doc.querySelector(selector).getBoundingClientRect() }));
+            controles.forEach(({ selector, caja }, indice) => {
+                expect(caja.left, `${selector} dentro del mapa`).to.be.at.least(mapa.left);
+                expect(caja.right, `${selector} dentro del mapa`).to.be.at.most(mapa.right);
+                controles.slice(indice + 1).forEach((otro) => {
+                    const ancho = Math.min(caja.right, otro.caja.right) - Math.max(caja.left, otro.caja.left);
+                    const alto = Math.min(caja.bottom, otro.caja.bottom) - Math.max(caja.top, otro.caja.top);
+                    expect(ancho > 1 && alto > 1, `${selector} no se superpone con ${otro.selector}`).to.equal(false);
+                });
+            });
+            expect(doc.documentElement.scrollWidth).to.be.at.most(doc.defaultView.innerWidth);
+            expect(doc.body.scrollWidth).to.be.at.most(doc.defaultView.innerWidth);
+        });
         abrirInformacionMateria("Programación 2");
         cerrarInformacionMateria();
-        cy.get("#grafo-acercar").scrollIntoView().click();
-        cy.document().then((doc) => {
-            expect(doc.documentElement.scrollWidth).to.be.at.most(390);
-        });
-        capturarGrafo("grafo-mobile-seleccion");
         cy.get("#grafo-maximizar").click();
         comprobarLimitesMaximizado(true);
         cy.get("#grafo-informacion").should("not.be.visible");
-        seleccionarMateria("CDIVV", "CDIVV");
-        abrirInformacionMateria("Cálculo DIVV");
-        cerrarInformacionMateria();
+        abrirInformacionMateria("Programación 2");
         cy.document().then((doc) => {
-            const controles = ["#grafo-buscar", "#grafo-solo-rama", "#grafo-ver-todo", "#grafo-mas-info", "#grafo-maximizar"]
-                .map((selector) => ({ selector, caja: doc.querySelector(selector).getBoundingClientRect() }));
-            controles.forEach((a, indice) => {
-                controles.slice(indice + 1).forEach((b) => {
-                    const seSuperponen = a.caja.left < b.caja.right && a.caja.right > b.caja.left
-                        && a.caja.top < b.caja.bottom && a.caja.bottom > b.caja.top;
-                    expect(seSuperponen, `${a.selector} no debe cubrir ${b.selector}`).to.equal(false);
-                });
-            });
+            const popup = doc.getElementById("popup");
+            const caja = popup.getBoundingClientRect();
+            expect(popup.contains(doc.elementFromPoint(caja.left + caja.width / 2, caja.top + caja.height / 2))).to.equal(true);
         });
+        cerrarInformacionMateria();
+        capturarGrafo("grafo-mobile-maximizado", { capture: "viewport" });
         cy.get("#label-ham").click();
         cy.get("#navbar").should("be.visible");
         cy.document().then((doc) => {
             const boton = doc.getElementById("materias").getBoundingClientRect();
-            expect(doc.getElementById("navbar").contains(doc.elementFromPoint(boton.left + boton.width / 2, boton.top + boton.height / 2)))
-                .to.equal(true);
+            expect(doc.getElementById("navbar").contains(doc.elementFromPoint(boton.left + boton.width / 2, boton.top + boton.height / 2))).to.equal(true);
         });
         cy.get("#label-ham").click();
-        comprobarLimitesMaximizado(true);
-        capturarGrafo("grafo-mobile-maximizado", { capture: "viewport" });
-        cy.get("#grafo-maximizar").click().should("have.attr", "aria-pressed", "false");
+        cy.get("#grafo-maximizar").click();
+        cy.get("#vista-grafo").should("not.have.class", "grafo-maximizado");
+        cy.get("#grafo-maximizar").should("have.attr", "aria-pressed", "false");
+        cy.get("body, #secciones").should("not.have.class", "grafo-mapa-expandido");
         cy.get("#grafo-informacion").should("be.visible");
+        cy.get(nodo("P2")).should("have.attr", "aria-pressed", "true");
     });
+
+    it("mantiene Árbol al redimensionar entre 675 y 676 px y libera el scroll al salir sin perder datos", () => {
+        cy.get("#materias").click();
+        cy.get("#CDIV").click();
+        abrirGrafo();
+        let progreso;
+        cy.window().then((win) => {
+            progreso = ["materiasAprobadas", "materiasExoneradas", "planificacionSemestres"].map((clave) => win.localStorage.getItem(clave));
+        });
+        seleccionarMateria("P1", "P1");
+        cy.get("#grafo-maximizar").click();
+        cy.viewport(675, 844);
+        comprobarLimitesMaximizado(true);
+        cy.get("#grafo").should("have.class", "activo");
+        cy.get(nodo("P1")).should("have.attr", "aria-pressed", "true");
+        cy.viewport(676, 844);
+        comprobarLimitesMaximizado();
+        cy.get("#grafo").should("have.class", "activo");
+        cy.get(nodo("P1")).should("have.attr", "aria-pressed", "true");
+        cy.viewport(390, 844);
+        comprobarLimitesMaximizado(true);
+        cy.get("#label-ham").click();
+        cy.get("#materias").click();
+        cy.get("#materias").should("have.class", "activo");
+        cy.get("#vista-grafo, #grafo-informacion").should("not.be.visible");
+        cy.get("#vista-grafo").should("not.have.class", "grafo-maximizado");
+        cy.get("#grafo-svg").should("not.have.attr", "data-propagando");
+        cy.get(".grafo-propagacion-trazo, #grafo-svg defs mask").should("not.exist");
+        cy.get("body, #secciones").should("not.have.class", "grafo-mapa-expandido");
+        cy.document().then((doc) => {
+            [doc.body, doc.getElementById("secciones")].forEach((elemento) => {
+                expect(doc.defaultView.getComputedStyle(elemento).overflowY).not.to.equal("hidden");
+            });
+        });
+        cy.get("#PG").scrollIntoView().should("be.visible");
+        cy.get("#CDIV").scrollIntoView().should("be.visible").and("have.css", "background-color", "rgb(173, 216, 230)");
+        cy.get("#label-ham").click();
+        abrirGrafo();
+        cy.get("#vista-grafo").should("not.have.class", "grafo-maximizado");
+        cy.get("#grafo-maximizar").should("have.attr", "aria-pressed", "false");
+        cy.window().then((win) => {
+            expect(["materiasAprobadas", "materiasExoneradas", "planificacionSemestres"].map((clave) => win.localStorage.getItem(clave)))
+                .to.deep.equal(progreso);
+        });
+    });
+
 });
