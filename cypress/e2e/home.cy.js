@@ -1041,6 +1041,77 @@ describe("Popups y datos guardados", () => {
         cy.get("#seccion-aviso-avance").should("not.be.visible");
         colorMateria("GAL1", COLOR.exonerada);
     });
+
+    it("importa una vista retirada como Materias y conserva progreso, filtros y planificacion", () => {
+        const materiasPlanificadas = [{ nombre: "P1", resultado: "exonerada" }];
+        const backup = {
+            aplicacion: "materias-app",
+            version: 1,
+            datos: {
+                materiasAprobadas: JSON.stringify(["CDIV", "GAL1"]),
+                materiasExoneradas: JSON.stringify(["CDIV"]),
+                seleccionOpcionales: "false",
+                vistaSeleccionada: "vista-retirada",
+                planificacionUsaEstadoActual: "true",
+                planificacionSemestres: JSON.stringify([
+                    { semestre: "primero", materias: materiasPlanificadas, abierto: true },
+                ]),
+            },
+        };
+
+        cy.get("#avance").click();
+        cy.get("#importar-datos").click();
+        cy.get("#textarea-importar-datos").invoke("val", JSON.stringify(backup)).trigger("input");
+        cy.get("#boton-cargar-datos").click();
+
+        cy.get("#popup-container").should("not.be.visible");
+        cy.get("#mensaje-usuario").should("contain", "Datos cargados");
+        cy.get("#materias").should("have.class", "activo");
+        cy.get("#avance").should("not.have.class", "activo");
+        colorMateria("CDIV", COLOR.exonerada);
+        colorMateria("GAL1", COLOR.aprobada);
+        cy.get("#mi-toggle-opcionales").should("not.be.checked");
+        cy.window().then((win) => {
+            expect(win.localStorage.getItem("vistaSeleccionada")).to.equal("materias");
+            expect(JSON.parse(win.localStorage.getItem("planificacionSemestres"))[0].materias)
+                .to.deep.equal(materiasPlanificadas);
+        });
+        cy.reload();
+        cy.get("#materias").should("have.class", "activo");
+        colorMateria("CDIV", COLOR.exonerada);
+        colorMateria("GAL1", COLOR.aprobada);
+        cy.get("#mi-toggle-opcionales").should("not.be.checked");
+        irAPlanificacion();
+        materiasSeleccionadas().should("contain", "Programación 1");
+    });
+
+    it("rechaza una vista importada que no sea texto sin cambiar los datos", () => {
+        let storageAnterior;
+        exonerarMateria("GAL1");
+        cy.window().then((win) => { storageAnterior = leerStorageCompleto(win); });
+        cy.get("#importar-datos").click();
+
+        [123, false, {}].forEach((vistaSeleccionada) => {
+            const backup = {
+                aplicacion: "materias-app",
+                version: 1,
+                datos: {
+                    materiasAprobadas: JSON.stringify(["CDIV"]),
+                    materiasExoneradas: JSON.stringify(["CDIV"]),
+                    vistaSeleccionada,
+                },
+            };
+            cy.get("#textarea-importar-datos").invoke("val", JSON.stringify(backup)).trigger("input");
+            cy.get("#boton-cargar-datos").click();
+            cy.get("#popup-container").should("be.visible");
+            cy.get("#mensaje-usuario").should("contain", "vistaSeleccionada").and("contain", "texto");
+            cy.window().then((win) => {
+                expect(leerStorageCompleto(win)).to.deep.equal(storageAnterior);
+            });
+            colorMateria("GAL1", COLOR.exonerada);
+            colorMateria("CDIV", COLOR.habilitada);
+        });
+    });
 });
 
 describe("Planificacion", () => {

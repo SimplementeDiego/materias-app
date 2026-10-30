@@ -25,12 +25,6 @@ No es una herramienta oficial de la UdelaR. La información de avance se debe ut
 9. Las materias opcionales y las que no muestran inscripción en Bedelías tienen un indicador propio.
 10. La página tiene modo oscuro.
 
-### Árbol de materias
-
-La vista **Árbol**, disponible en escritorio, muestra las materias y sus conexiones de previas, distinguiendo curso aprobado de exoneración. Las obligatorias se agrupan en el centro de cada nivel, con las opcionales arriba y abajo, según el plan y título seleccionados. Permite buscar por nombre o sigla, acercar, alejar, arrastrar el mapa y aislar la rama de una materia.
-
-Al seleccionar una materia se iluminan progresivamente sus conexiones y aparece **Más info**, que abre su ventana de previas e información. Otro clic en la misma materia quita la selección. La selección no modifica el progreso ni mueve el mapa. Los controles están dentro del mapa, que se puede maximizar conservando el encabezado y el menú lateral. Las leyendas de conexiones y estados están en una sección **Información** aparte. El árbol respeta el plan elegido, Matemática Inicial, la configuración de opcionales y el modo oscuro.
-
 ### Planificación
 
 1. La vista **Planificar** permite armar una planificación por semestres y períodos de exámenes.
