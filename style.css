@@ -1204,6 +1204,10 @@ main {
         transform: none;
     }
 
+    #cuenta-firebase {
+        margin-bottom: 0;
+    }
+
     #redes-sociales {
         width: 100%;
         margin: 0;
