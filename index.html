@@ -7,6 +7,7 @@
     <title>Materias</title>
     <link rel="icon" type="image/x-icon" href="/icons/bookmark.ico">
     <link rel="stylesheet" href="style.css?v=3">
+    <link rel="stylesheet" href="grafo.css?v=1">
 </head>
 <body>
     
@@ -26,6 +27,7 @@
 
         <nav id="navbar">
             <button onclick="verMaterias()" id="materias" class="navbar-boton activo">Materias</button>
+            <button onclick="verGrafo()" id="grafo" class="navbar-boton">Árbol</button>
             <button onclick="verPlanificacion()" id="planificacion" class="navbar-boton">Planificar</button>
             <button onclick="verAvance()" id="avance" class="navbar-boton">Avance</button>
             <a class="navbar-boton link-boton" id="sugerencia" href="https://forms.gle/jN9WEGE2hGvLxeNKA">Hacer sugerencia</a>
@@ -172,7 +174,7 @@
             </div>
 
             <div id="seccion-aviso-materias" class="container-seccion-estatico aviso-avance">
-                Actualizado 12/08/2026. Utilizar como guía. Puede contener errores y está sujeto a cambios.
+                Actualizado 30/10/2026. Utilizar como guía. Puede contener errores y está sujeto a cambios.
             </div>
 
             <details id="seccion-informacion" class="container-seccion-estatico" open>
@@ -262,6 +264,25 @@
             <div id="vista-planificacion" class="container-seccion-estatico">
             </div>
 
+            <details id="grafo-informacion" class="container-seccion-estatico" open>
+                <summary class="titulo-seccion">Información</summary>
+                <div class="seccion-contenido">
+                    <div class="grafo-leyenda" aria-label="Leyenda de conexiones">
+                        <span class="info"><i class="grafo-linea curso" aria-hidden="true"></i>Curso aprobado</span>
+                        <span class="info"><i class="grafo-linea exoneracion" aria-hidden="true"></i>Exoneración</span>
+                        <span class="info"><i class="grafo-linea alternativa" aria-hidden="true"></i>Alternativa</span>
+                    </div>
+                    <div class="grafo-estados-leyenda" aria-label="Estados de las materias">
+                        <span class="info"><i class="bloque-gris" aria-hidden="true"></i>No habilitada</span>
+                        <span class="info"><i class="bloque-rojo" aria-hidden="true"></i>Habilitada</span>
+                        <span class="info"><i class="bloque-azul" aria-hidden="true"></i>Curso aprobado</span>
+                        <span class="info"><i class="bloque-verde" aria-hidden="true"></i>Exonerada</span>
+                    </div>
+                </div>
+            </details>
+
+            <section id="vista-grafo" class="container-seccion-estatico" aria-label="Árbol de materias"></section>
+
             <div id="seccion-aviso-avance" class="container-seccion-estatico aviso-avance">
                 Utilizar como guía. Puede contener errores y está sujeto a cambios. Actualmente solo plan 1997.
             </div>
@@ -299,7 +320,8 @@
     </main>
 
     <script src="./firebase-config.js?v=2"></script>
-    <script src="./app.js?v=3"></script>
+    <script src="./grafo.js?v=1"></script>
+    <script src="./app.js?v=4"></script>
 
 </body>
 </html>

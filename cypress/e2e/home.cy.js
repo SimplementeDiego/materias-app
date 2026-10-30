@@ -370,6 +370,43 @@ describe("Configuracion y filtros", () => {
         cy.get("#MI").should("not.exist");
     });
 
+    [
+        { nombre: "Ingeniería 1997", plan2025: false, analista: false },
+        { nombre: "Analista 1997", plan2025: false, analista: true },
+        { nombre: "Ingeniería 2025", plan2025: true, analista: false },
+    ].forEach(({ nombre, plan2025, analista }) => {
+        it(`mantiene Matemática Inicial como obligatoria en lista y planificación para ${nombre}`, () => {
+            cy.get("#CDIV").should("exist");
+            if (plan2025) cy.get("#mi-toggle-plan").check({ force: true });
+            if (analista) cy.get("#toggle-titulo-avance").check({ force: true });
+            cy.get("#mi-toggle-MI").check({ force: true });
+            cy.get("#mi-toggle-opcionales").uncheck({ force: true });
+            materiaVisible("MI");
+            cy.get("#MI").should("have.text", "Matemática Inicial (4)");
+            cy.get("#AGI").should("not.be.visible");
+            cy.reload();
+            cy.get("#mi-toggle-MI").should("be.checked");
+            cy.get("#mi-toggle-opcionales").should("not.be.checked");
+            cy.get("#mi-toggle-plan").should(plan2025 ? "be.checked" : "not.be.checked");
+            cy.get("#toggle-titulo-avance").should(analista ? "be.checked" : "not.be.checked");
+            materiaVisible("MI");
+            cy.get("#MI").should("have.text", "Matemática Inicial (4)");
+
+            irAPlanificacion();
+            agregarPeriodo();
+            abrirElegirMaterias();
+            primerPeriodo().contains("label", "Mostrar opcionales").click();
+            materiasParaElegir().contains("button", /^Matemática Inicial \(4\)$/).should("be.visible");
+            cy.get("#mi-toggle-MI").uncheck({ force: true });
+            materiasParaElegir().should("not.contain", "Matemática Inicial");
+            cy.get("#materias").click();
+            cy.get("#MI").should("not.exist");
+            cy.reload();
+            cy.get("#mi-toggle-MI").should("not.be.checked");
+            cy.get("#MI").should("not.exist");
+        });
+    });
+
     it("activa y desactiva plan 2025", () => {
         cy.get('label[for="mi-toggle-plan"]').click();
         cy.get("#mi-toggle-plan").should("be.checked");

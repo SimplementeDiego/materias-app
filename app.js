@@ -210,6 +210,8 @@ const idPopupCuentaFirebase = "popup-cuenta-firebase";
 const idPopupReset = "popup-reset";
 const idVistaPlanificacion = "vista-planificacion";
 const idVistaAvance = "vista-avance";
+const idVistaGrafo = "vista-grafo";
+const idGrafoInformacion = "grafo-informacion";
 const idSeccionAvisoAvance = "seccion-aviso-avance";
 const idSeccionInformacion = "seccion-informacion";
 const idSeccionConfiguracion = "seccion-configuracion";
@@ -217,6 +219,7 @@ const idSeccionFiltros = "seccion-filtros";
 const idBotonMaterias = "materias";
 const idBotonPlanificacion = "planificacion";
 const idBotonAvance = "avance";
+const idBotonGrafo = "grafo";
 const idConfigMatematicaInicial = "config-matematica-inicial";
 const idConfigPlan2025 = "config-plan-2025";
 const idConfigOpcionales = "config-opcionales";
@@ -249,6 +252,7 @@ let seleccionSemestre = Semestre.AMBOS;
 let seleccionNavbar = idBotonMaterias;
 let vistaPlanificacionActiva = false;
 let vistaAvanceActiva = false;
+let vistaGrafoActiva = false;
 let tituloAvanceSeleccionado = TituloAvance.INGENIERIA;
 let avanceSoloFaltantes = false;
 let avancePlanificacionSeleccionada = AvancePlanificacion.ACTUAL;
@@ -600,6 +604,7 @@ function toggleOpcionales() {
   mostrarSeccionesQueCorrespondan();
   guardarLocalStorage(LocalStorageNombres.seleccionOpcionales, JSON.stringify(seleccionOpcionales));
   programarGuardadoFirebase();
+  renderizarGrafoSiActivo();
 }
 
 function encontrarMateriaPorNombre(nombre) {
@@ -640,7 +645,7 @@ function toggleMateria(nombre) {
 
 function obtenerIdNavbarValido(idBoton) {
   if (Object.values(Semestre).includes(idBoton)) return idBotonMaterias;
-  const idsValidos = [idBotonMaterias, idBotonPlanificacion, idBotonAvance];
+  const idsValidos = [idBotonMaterias, idBotonPlanificacion, idBotonAvance, idBotonGrafo];
   return idsValidos.includes(idBoton) ? idBoton : idBotonMaterias;
 }
 
@@ -671,6 +676,8 @@ function configurarTogglesConfiguracion({ planificacionActiva = false, avanceAct
 }
 
 function mostrarVistaPlanificacion(activar) {
+  grafoMaximizar(false);
+  vistaGrafoActiva = false;
   vistaPlanificacionActiva = activar;
   if (activar) vistaAvanceActiva = false;
   const vistaPlanificacion = document.getElementById(idVistaPlanificacion);
@@ -689,9 +696,13 @@ function mostrarVistaPlanificacion(activar) {
   if (!activar) {
     mostrarSeccionesQueCorrespondan();
   }
+  document.getElementById(idVistaGrafo).style.display = "none";
+  document.getElementById(idGrafoInformacion).style.display = "none";
 }
 
 function mostrarVistaAvance(activar) {
+  grafoMaximizar(false);
+  vistaGrafoActiva = false;
   vistaAvanceActiva = activar;
   if (activar) vistaPlanificacionActiva = false;
   const vistaAvance = document.getElementById(idVistaAvance);
@@ -710,6 +721,37 @@ function mostrarVistaAvance(activar) {
   if (!activar) {
     mostrarSeccionesQueCorrespondan();
   }
+  document.getElementById(idVistaGrafo).style.display = "none";
+  document.getElementById(idGrafoInformacion).style.display = "none";
+}
+
+function mostrarVistaGrafo(activar) {
+  vistaGrafoActiva = activar;
+  document.getElementById(idVistaGrafo).style.display = activar ? "flex" : "none";
+  document.getElementById(idGrafoInformacion).style.display = activar ? "flex" : "none";
+  if (!activar) {
+    grafoMaximizar(false);
+    return;
+  }
+  vistaPlanificacionActiva = false;
+  vistaAvanceActiva = false;
+  configurarTogglesConfiguracion();
+  const seccionesVisibles = new Set([idVistaGrafo, idGrafoInformacion, idSeccionConfiguracion, "seccion-aviso-materias"]);
+  document.querySelectorAll(`#${idSecciones} > .container-seccion, #${idSecciones} > .container-seccion-estatico`).forEach((seccion) => {
+    seccion.style.display = seccionesVisibles.has(seccion.id)
+      ? ([idVistaGrafo, idGrafoInformacion].includes(seccion.id) ? "flex" : "")
+      : "none";
+  });
+}
+
+function verGrafo() {
+  cambiarClaseActivaEnNav(idBotonGrafo);
+  mostrarVistaGrafo(true);
+  renderizarGrafo();
+  guardarLocalStorage(LocalStorageNombres.vistaSeleccionada, idBotonGrafo);
+  programarGuardadoFirebase();
+  closeNavIfMobile();
+  document.getElementById(idVistaGrafo).scrollIntoView({ block: "start" });
 }
 
 function seleccionarSemestre(idSemestre) {
@@ -1672,7 +1714,7 @@ function validarDatosImportados(datosImportados) {
     datosImportados,
     LocalStorageNombres.vistaSeleccionada,
     idBotonMaterias,
-    [idBotonMaterias, idBotonPlanificacion, idBotonAvance, ...Object.values(Semestre)]
+    [idBotonMaterias, idBotonPlanificacion, idBotonAvance, idBotonGrafo, ...Object.values(Semestre)]
   );
   obtenerCampoTextoImportado(
     datosImportados,
@@ -1859,6 +1901,7 @@ function reiniciarEstadoEnMemoria() {
   seleccionNavbar = idBotonMaterias;
   vistaPlanificacionActiva = false;
   vistaAvanceActiva = false;
+  vistaGrafoActiva = false;
   tituloAvanceSeleccionado = TituloAvance.INGENIERIA;
   avanceSoloFaltantes = false;
   avancePlanificacionSeleccionada = AvancePlanificacion.ACTUAL;
@@ -1880,6 +1923,7 @@ function reiniciarEstadoEnMemoria() {
   document.getElementById(idBotonMaterias).classList.remove(claseResaltarBotonEnNav);
   document.getElementById(idBotonPlanificacion).classList.remove(claseResaltarBotonEnNav);
   document.getElementById(idBotonAvance).classList.remove(claseResaltarBotonEnNav);
+  document.getElementById(idBotonGrafo).classList.remove(claseResaltarBotonEnNav);
   document.getElementById(BarraPopup.Previas).classList.remove(claseResaltarBotonEnNav);
   document.getElementById(BarraPopup.PreviaDe).classList.remove(claseResaltarBotonEnNav);
   document.getElementById(BarraPopup.Informacion).classList.remove(claseResaltarBotonEnNav);
@@ -2084,6 +2128,7 @@ function reconstruirEstadoPagina() {
   guardarLocalStorage(LocalStorageNombres.materiasAprobadas, JSON.stringify(Array.from(historialAprobadas.values())));
   programarGuardadoFirebase();
   renderizarAvanceSiActivo();
+  renderizarGrafoSiActivo();
 }
 
 function renderizarPlanificacionSiActiva() {
@@ -2149,6 +2194,7 @@ function plan2025Seleccionado() {
 }
 
 function materiaEsOpcional(materia) {
+  if (materia === MI && Materias.includes(MI)) return false;
   if (plan2025Seleccionado()) {
     return !materia.obligatoriaIngenieria2025;
   }
@@ -3979,7 +4025,7 @@ function eventoAjustarCreditos() {
 // Inicio de pagina
 
 function mostrarSeccionesQueCorrespondan() {
-  if (vistaPlanificacionActiva || vistaAvanceActiva) return;
+  if (vistaPlanificacionActiva || vistaAvanceActiva || vistaGrafoActiva) return;
   for (let index = 0; index < PG.peso; index++) {
     const interno = document.getElementById(`seccion-materias-${index+1}`);
     const externo = interno.closest(".container-seccion");
@@ -4001,6 +4047,8 @@ function rehacerPaginaSinEstado(){
   } else if (vistaAvanceActiva) {
     mostrarVistaAvance(true);
     renderizarAvance();
+  } else if (vistaGrafoActiva) {
+    mostrarVistaGrafo(true);
   } else {
     mostrarSeccionesQueCorrespondan();
   }
@@ -4058,6 +4106,8 @@ async function firstLoad() {
     verPlanificacion();
   } else if (vistaGuardadaRaw === idBotonAvance) {
     verAvance();
+  } else if (vistaGuardadaRaw === idBotonGrafo) {
+    verGrafo();
   } else {
     verMaterias();
   }
