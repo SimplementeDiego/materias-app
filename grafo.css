@@ -597,16 +597,9 @@ body.grafo-mapa-expandido #secciones>.container-seccion {
 }
 
 @media (max-width: 675px) {
-    #vista-grafo {
-        scroll-margin-top: 72px;
-    }
-
-    .grafo-barra-superior {
-        inset: 10px 10px auto;
-    }
-
-    .grafo-lienzo {
-        height: 70vh;
-        min-height: 440px;
+    #grafo,
+    #vista-grafo,
+    #grafo-informacion {
+        display: none !important;
     }
 }

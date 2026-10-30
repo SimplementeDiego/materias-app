@@ -745,6 +745,10 @@ function mostrarVistaGrafo(activar) {
 }
 
 function verGrafo() {
+  if (isMobileDevice()) {
+    verMaterias();
+    return;
+  }
   cambiarClaseActivaEnNav(idBotonGrafo);
   mostrarVistaGrafo(true);
   renderizarGrafo();
@@ -3900,6 +3904,10 @@ document.addEventListener("scroll", function() {
 // Funciones y eventos de manejo de tamaño de ventana
 
 function checkWidth() {
+  if (isMobileDevice() && vistaGrafoActiva) {
+    grafoCancelarPropagacion();
+    verMaterias();
+  }
   if (window.matchMedia("(min-width: 676px)").matches) {
     displayNone(idHamContainer);
     displayFlex(idNavbar);

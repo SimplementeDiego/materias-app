@@ -6,7 +6,6 @@ const grafoEstado = {
     x: 0,
     y: 0,
     modelo: null,
-    geometria: null,
     posiciones: new Map(),
     inicializado: false,
     firma: "",
@@ -415,7 +414,7 @@ function grafoInicializar() {
     document.getElementById("grafo-buscar").addEventListener("input", (event) => {
         grafoEstado.busqueda = event.target.value;
         grafoBuscar();
-        if (!grafoEstado.seleccion) grafoResaltar();
+        if (!grafoEstado.propagacion) grafoResaltar();
     });
     document
         .getElementById("grafo-buscar")
@@ -549,7 +548,7 @@ function renderizarGrafo() {
     grafoActualizarMasInfo();
 }
 
-function grafoDibujar(ajustar = false, animar = false) {
+function grafoDibujar(ajustar = false) {
     grafoCancelarPropagacion();
     const modelo = grafoEstado.modelo;
     const rama = grafoRama();
@@ -560,16 +559,8 @@ function grafoDibujar(ajustar = false, animar = false) {
     const aristas = modelo.aristas.filter(
         (a) => visibles.has(a.origen) && visibles.has(a.destino),
     );
-    if (grafoEstado.geometria?.firma !== grafoEstado.firma) {
-        const layout = grafoDistribuir(modelo.materias, modelo.aristas);
-        grafoEstado.geometria = {
-            firma: grafoEstado.firma,
-            layout,
-            rutas: grafoTrazarConexiones(layout, modelo.aristas),
-        };
-    }
-    const layout = { ...grafoEstado.geometria.layout };
-    const { rutas } = grafoEstado.geometria;
+    const layout = grafoDistribuir(modelo.materias, modelo.aristas);
+    const rutas = grafoTrazarConexiones(layout, modelo.aristas);
     if (grafoEstado.soloRama && materias.length) {
         const posiciones = materias.map((m) => layout.posiciones.get(m.nombre));
         const puntos = aristas.flatMap(
@@ -605,9 +596,9 @@ function grafoDibujar(ajustar = false, animar = false) {
     grafoEstado.posiciones = layout.posiciones;
     grafoEstado.layout = layout;
     const escena = document.getElementById("grafo-escena");
-    const fragmento = document.createDocumentFragment();
+    escena.replaceChildren();
     layout.niveles.forEach((nivel, i) => {
-        fragmento.append(
+        escena.append(
             grafoSvg(
                 "text",
                 { x: GRAFO.margen + i * GRAFO.pasoX, y: 28, class: "grafo-nivel" },
@@ -631,7 +622,7 @@ function grafoDibujar(ajustar = false, animar = false) {
                 `${a.origen} → ${a.destino}: ${a.tipo === "aprobada" ? "curso aprobado" : "exoneración"}${a.alternativa ? " (parte de una alternativa)" : ""}`,
             ),
         );
-        fragmento.append(path);
+        escena.append(path);
     });
     materias.forEach((m) => {
         const p = layout.posiciones.get(m.nombre);
@@ -685,14 +676,13 @@ function grafoDibujar(ajustar = false, animar = false) {
                 seleccionar();
             }
         });
-        fragmento.append(nodo);
+        escena.append(nodo);
     });
-    escena.replaceChildren(fragmento);
     document.getElementById("grafo-vacio").hidden = materias.length !== 0;
     const checkbox = document.getElementById("grafo-solo-rama");
     checkbox.disabled = !grafoEstado.seleccion;
     checkbox.checked = grafoEstado.soloRama;
-    grafoResaltar(animar);
+    grafoResaltar();
     if (ajustar) grafoAjustar();
     else grafoTransformar();
 }
@@ -762,26 +752,11 @@ function grafoAnimarPropagacion() {
     const siguientes = grafoDistancias(grafoEstado.seleccion, "siguientes");
     const { espera, tramo, pausa, extension, maxTramo, maxFrame } =
         GRAFO_PROPAGACION;
-    const aristas = [...escena.querySelectorAll(".grafo-arista")];
-    const conexiones = [];
-    aristas.forEach((arista) => {
-        const { origen, destino } = arista.dataset;
-        const haciaSiguientes = siguientes.has(origen) && siguientes.has(destino);
-        const haciaPrevias = previas.has(origen) && previas.has(destino);
-        if (!haciaSiguientes && !haciaPrevias) return;
-        const ruta = grafoEstado.geometria.rutas.get(grafoClaveArista(arista.dataset));
-        if (!ruta.medidas) {
-            const longitud = arista.getTotalLength();
-            const { x, y, width, height } = arista.getBBox();
-            ruta.medidas = { longitud, caja: { x, y, width, height } };
-        }
-        conexiones.push({ arista, inversa: !haciaSiguientes, ...ruta.medidas });
-    });
     const capa = grafoSvg("g", {
         class: "grafo-propagacion",
         "aria-hidden": "true",
     });
-    const mascaras = document.createDocumentFragment();
+    escena.insertBefore(capa, escena.querySelector(".grafo-nodo"));
     const animacion = {
         frame: null,
         ultimoFrame: null,
@@ -795,20 +770,23 @@ function grafoAnimarPropagacion() {
     grafoEstado.propagacion = animacion;
     svg.dataset.propagando = "true";
 
-    aristas.forEach((arista) => {
+    escena.querySelectorAll(".grafo-arista").forEach((arista, indice) => {
+        const { origen, destino } = arista.dataset;
+        const haciaSiguientes = siguientes.has(origen) && siguientes.has(destino);
+        const haciaPrevias = previas.has(origen) && previas.has(destino);
         arista.classList.remove("resaltada");
         arista.classList.add("atenuado");
-    });
-    conexiones.forEach(({ arista, inversa, longitud, caja }, indice) => {
-        const { origen, destino } = arista.dataset;
+        if (!haciaSiguientes && !haciaPrevias) return;
+        const inversa = !haciaSiguientes;
         const longitudRelativa = Math.max(
             1,
-            longitud / (GRAFO.pasoX - GRAFO.ancho),
+            arista.getTotalLength() / (GRAFO.pasoX - GRAFO.ancho),
         );
         const duracion = Math.min(
             maxTramo,
             tramo + extension * (Math.sqrt(longitudRelativa) - 1),
         );
+        const caja = arista.getBBox();
         const id = `grafo-propagacion-${numero}-${indice}`;
         const mascara = grafoSvg("mask", {
             id,
@@ -831,7 +809,7 @@ function grafoAnimarPropagacion() {
             "stroke-dashoffset": inversa ? -1 : 1,
         });
         mascara.append(revelado);
-        mascaras.append(mascara);
+        defs.append(mascara);
         animacion.mascaras.push(mascara);
         const trazo = arista.cloneNode(false);
         trazo.setAttribute(
@@ -853,8 +831,6 @@ function grafoAnimarPropagacion() {
             hasta: inversa ? origen : destino,
         });
     });
-    defs.append(mascaras);
-    escena.insertBefore(capa, escena.querySelector(".grafo-nodo"));
 
     const llegadas = new Map([[grafoEstado.seleccion, 0]]);
     const pendientes = new Set([grafoEstado.seleccion]);
@@ -991,8 +967,8 @@ function grafoSeleccionar(nombre) {
     const redibujar = grafoEstado.soloRama;
     grafoEstado.seleccion = deseleccionar ? null : nombre;
     if (deseleccionar) grafoEstado.soloRama = false;
-    if (redibujar) grafoDibujar(false, !deseleccionar);
-    else grafoResaltar(!deseleccionar);
+    if (redibujar) grafoDibujar(false);
+    grafoResaltar(!deseleccionar);
     const checkbox = document.getElementById("grafo-solo-rama");
     checkbox.disabled = deseleccionar;
     checkbox.checked = grafoEstado.soloRama;
